@@ -13,6 +13,7 @@
     "films:enrich": "bun run scripts/enrich-films.ts",
     "words:build": "bun run scripts/build-word-lists.ts",
     "words:schedule": "bun run scripts/schedule-words.ts",
+    "words:set": "bun run scripts/set-word.ts",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",

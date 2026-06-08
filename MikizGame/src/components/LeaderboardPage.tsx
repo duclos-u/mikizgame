@@ -106,13 +106,15 @@ function Podium({
 }
 
 // ── Game tab strip ────────────────────────────────────────────────────────────
+type TabItem = Pick<Game, 'id' | 'name' | 'icon' | 'accent'>
+
 function GameTabStrip({
   activeId,
   games,
   onChange,
 }: {
   activeId: string
-  games: Game[]
+  games: TabItem[]
   onChange: (id: string) => void
 }) {
   return (
@@ -137,7 +139,11 @@ function GameTabStrip({
 export function LeaderboardPage() {
   const { user } = useAuth()
   const liveGames = GAMES.filter((g) => g.status === 'live')
-  const [gameId, setGameId] = useState(liveGames[0]?.id ?? 'sutom')
+  const allTabs: TabItem[] = [
+    { id: 'general', name: 'Général', icon: '🏆', accent: 'oklch(0.74 0.16 55)' },
+    ...liveGames,
+  ]
+  const [gameId, setGameId] = useState('general')
   const [scope, setScope] = useState<'daily' | 'all'>('daily')
   const [friendsOnly, setFriendsOnly] = useState(false)
 
@@ -184,13 +190,14 @@ export function LeaderboardPage() {
   }, [])
 
   useEffect(() => {
-    if (scope !== 'all') return
+    if (gameId === 'general' || scope !== 'all') return
+    setAllTimeLoading(true)
     api.leaderboard
-      .getStats('sutom')
+      .getStats(gameId)
       .then(({ entries }) => setAllTimeEntries(entries))
       .catch(() => {})
       .finally(() => setAllTimeLoading(false))
-  }, [scope])
+  }, [scope, gameId])
 
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -214,26 +221,28 @@ export function LeaderboardPage() {
       <div className="lb-controls">
         <GameTabStrip
           activeId={gameId}
-          games={liveGames}
+          games={allTabs}
           onChange={setGameId}
         />
         <div className="lb-control-right">
-          <div className="seg">
-            <button
-              type="button"
-              className={`seg-btn${scope === 'daily' ? ' active' : ''}`}
-              onClick={() => setScope('daily')}
-            >
-              Quotidien
-            </button>
-            <button
-              type="button"
-              className={`seg-btn${scope === 'all' ? ' active' : ''}`}
-              onClick={() => setScope('all')}
-            >
-              Tous les temps
-            </button>
-          </div>
+          {gameId !== 'general' && (
+            <div className="seg">
+              <button
+                type="button"
+                className={`seg-btn${scope === 'daily' ? ' active' : ''}`}
+                onClick={() => setScope('daily')}
+              >
+                Quotidien
+              </button>
+              <button
+                type="button"
+                className={`seg-btn${scope === 'all' ? ' active' : ''}`}
+                onClick={() => setScope('all')}
+              >
+                Tous les temps
+              </button>
+            </div>
+          )}
           <button
             type="button"
             className={`friends-toggle${friendsOnly ? ' on' : ''}`}
@@ -244,54 +253,124 @@ export function LeaderboardPage() {
         </div>
       </div>
 
-      {/* Podium — shown for daily cross scores */}
-      {scope === 'daily' && crossEntries.length >= 2 && (
+      {/* Général tab — podium + cross-game total */}
+      {gameId === 'general' && crossEntries.length >= 2 && (
         <Podium rows={crossEntries} currentUser={currentUser} />
       )}
-
-      {/* Daily per-game table */}
-      {scope === 'daily' && (
-        <>
-          {/* Cross-game total */}
+      {gameId === 'general' && (
+        <div className="lb-table" style={{ marginBottom: '1.25rem' }}>
           <div
-            className="lb-table"
-            style={{ marginBottom: '1.25rem' }}
+            className="lb-head-row"
+            style={{
+              gridTemplateColumns: showBreakdown
+                ? '32px 1fr auto 70px'
+                : '32px 1fr 70px',
+            }}
           >
+            <span>#</span>
+            <span>Joueur</span>
+            {showBreakdown && <span>Détail</span>}
+            <span className="ta-r">Points</span>
+          </div>
+          <div>
+            {crossLoading ? (
+              <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
+                Chargement…
+              </div>
+            ) : crossEntries.length === 0 ? (
+              <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
+                Aucune partie terminée aujourd'hui.{' '}
+                {!user && <span>Connecte-toi pour apparaître ici.</span>}
+              </div>
+            ) : (
+              crossEntries.map((entry, i) => {
+                const isMe = currentUser === entry.username
+                return (
+                  <div
+                    key={entry.username}
+                    className={`lb-row${isMe ? ' is-me' : ''}`}
+                    style={{
+                      gridTemplateColumns: showBreakdown
+                        ? '32px 1fr auto 70px'
+                        : '32px 1fr 70px',
+                    }}
+                  >
+                    <span className={`lb-rank${i < 3 ? ' top' : ''}`}>
+                      {['🥇', '🥈', '🥉'][i] ?? i + 1}
+                    </span>
+                    <span className="lb-player">
+                      <Avatar name={entry.username} size={30} />
+                      <span className="lb-player-name">
+                        {entry.username}
+                        {isMe && <span className="you-tag">toi</span>}
+                      </span>
+                    </span>
+                    {showBreakdown && (
+                      <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                        {crossGames.map((g) => {
+                          const bd = entry.breakdown[g]
+                          return (
+                            <span
+                              key={g}
+                              className={`lb-chip${bd ? ' lb-chip-highlight' : ''}`}
+                              title={gameLabel(g)}
+                            >
+                              {gameShort(g)}: {bd ? bd.points : 0}
+                            </span>
+                          )
+                        })}
+                      </span>
+                    )}
+                    <span className="lb-total ta-r">{entry.total}</span>
+                  </div>
+                )
+              })
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Per-game daily table */}
+      {gameId !== 'general' && scope === 'daily' && (() => {
+        const entries = perGameEntries[gameId] ?? []
+        const label = gameLabel(gameId)
+        return (
+          <div className="lb-table" style={{ marginBottom: '1.25rem' }}>
             <div
               className="lb-head-row"
-              style={{
-                gridTemplateColumns: showBreakdown
-                  ? '32px 1fr auto 70px'
-                  : '32px 1fr 70px',
-              }}
+              style={{ background: 'var(--card-2)', padding: '0.55rem 1.25rem', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            >
+              <span>{label} — {today}</span>
+              <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, fontSize: '0.73rem', color: 'var(--muted)' }}>
+                plus de points = mieux
+              </span>
+            </div>
+            <div
+              className="lb-head-row"
+              style={{ gridTemplateColumns: '32px 1fr 70px 70px' }}
             >
               <span>#</span>
               <span>Joueur</span>
-              {showBreakdown && <span>Détail</span>}
               <span className="ta-r">Points</span>
+              <span className="ta-r">Essais</span>
             </div>
             <div>
-              {crossLoading ? (
+              {perGameLoading ? (
                 <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
                   Chargement…
                 </div>
-              ) : crossEntries.length === 0 ? (
+              ) : entries.length === 0 ? (
                 <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
-                  Aucune partie terminée aujourd'hui.{' '}
-                  {!user && <span>Connecte-toi pour apparaître ici.</span>}
+                  Aucune partie terminée aujourd'hui.
                 </div>
               ) : (
-                crossEntries.map((entry, i) => {
+                entries.map((entry, i) => {
                   const isMe = currentUser === entry.username
                   return (
                     <div
-                      key={entry.username}
+                      key={`${entry.username}-${i}`}
                       className={`lb-row${isMe ? ' is-me' : ''}`}
-                      style={{
-                        gridTemplateColumns: showBreakdown
-                          ? '32px 1fr auto 70px'
-                          : '32px 1fr 70px',
-                      }}
+                      style={{ gridTemplateColumns: '32px 1fr 70px 70px' }}
                     >
                       <span className={`lb-rank${i < 3 ? ' top' : ''}`}>
                         {['🥇', '🥈', '🥉'][i] ?? i + 1}
@@ -303,109 +382,19 @@ export function LeaderboardPage() {
                           {isMe && <span className="you-tag">toi</span>}
                         </span>
                       </span>
-                      {showBreakdown && (
-                        <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                          {crossGames.map((g) => {
-                            const bd = entry.breakdown[g]
-                            return (
-                              <span
-                                key={g}
-                                className={`lb-chip${bd ? ' lb-chip-highlight' : ''}`}
-                                title={gameLabel(g)}
-                              >
-                                {gameShort(g)}: {bd ? bd.points : 0}
-                              </span>
-                            )
-                          })}
-                        </span>
-                      )}
-                      <span className="lb-total ta-r">{entry.total}</span>
+                      <span className="lb-cell filled ta-r">{entry.points}</span>
+                      <span className="lb-cell ta-r">{entry.score ?? '—'}</span>
                     </div>
                   )
                 })
               )}
             </div>
           </div>
-
-          {/* Per-game breakdown */}
-          {crossGames.map((slug) => {
-            const entries = perGameEntries[slug] ?? []
-            const label = gameLabel(slug)
-            return (
-              <div
-                key={slug}
-                className="lb-table"
-                style={{ marginBottom: '1.25rem' }}
-              >
-                <div
-                  className="lb-head-row"
-                  style={{ gridTemplateColumns: '32px 1fr 70px 80px', background: 'var(--card-2)', padding: '0.55rem 1.25rem', fontSize: '0.75rem', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                >
-                  <span>{label} — {today}</span>
-                  <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, fontSize: '0.73rem', color: 'var(--muted)' }}>
-                    moins d'essais = mieux
-                  </span>
-                </div>
-                <div
-                  className="lb-head-row"
-                  style={{ gridTemplateColumns: '32px 1fr 70px 80px' }}
-                >
-                  <span>#</span>
-                  <span>Joueur</span>
-                  <span className="ta-r">Essais</span>
-                  <span className="ta-r">Résultat</span>
-                </div>
-                <div>
-                  {perGameLoading ? (
-                    <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
-                      Chargement…
-                    </div>
-                  ) : entries.length === 0 ? (
-                    <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
-                      Aucune partie terminée aujourd'hui.
-                    </div>
-                  ) : (
-                    entries.map((entry, i) => {
-                      const isMe = currentUser === entry.username
-                      return (
-                        <div
-                          key={`${entry.username}-${i}`}
-                          className={`lb-row${isMe ? ' is-me' : ''}`}
-                          style={{ gridTemplateColumns: '32px 1fr 70px 80px' }}
-                        >
-                          <span className={`lb-rank${i < 3 ? ' top' : ''}`}>
-                            {['🥇', '🥈', '🥉'][i] ?? i + 1}
-                          </span>
-                          <span className="lb-player">
-                            <Avatar name={entry.username} size={30} />
-                            <span className="lb-player-name">
-                              {entry.username}
-                              {isMe && <span className="you-tag">toi</span>}
-                            </span>
-                          </span>
-                          <span className="lb-cell filled ta-r">{entry.score ?? '—'}</span>
-                          <span
-                            className="lb-cell ta-r"
-                            style={{
-                              color: entry.score !== null ? 'var(--accent)' : 'var(--red)',
-                              fontWeight: 500,
-                            }}
-                          >
-                            {entry.score !== null ? 'Gagné' : 'Perdu'}
-                          </span>
-                        </div>
-                      )
-                    })
-                  )}
-                </div>
-              </div>
-            )
-          })}
-        </>
-      )}
+        )
+      })()}
 
       {/* All-time table */}
-      {scope === 'all' && (
+      {gameId !== 'general' && scope === 'all' && (
         <div className="lb-table">
           <div
             style={{
@@ -422,20 +411,20 @@ export function LeaderboardPage() {
               letterSpacing: '0.05em',
             }}
           >
-            <span>Sutom — moyenne d'essais</span>
+            <span>{gameLabel(gameId)} — tous les temps</span>
             <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--muted)' }}>
-              moins d'essais = mieux
+              plus de points = mieux
             </span>
           </div>
           <div
             className="lb-head-row"
-            style={{ gridTemplateColumns: '32px 1fr 70px 70px 90px' }}
+            style={{ gridTemplateColumns: '32px 1fr 70px 70px 80px' }}
           >
             <span>#</span>
             <span>Joueur</span>
-            <span className="ta-r">Parties</span>
             <span className="ta-r">Victoires</span>
             <span className="ta-r">Moy.</span>
+            <span className="ta-r">Points</span>
           </div>
           <div>
             {allTimeLoading ? (
@@ -454,7 +443,7 @@ export function LeaderboardPage() {
                   <div
                     key={entry.username}
                     className={`lb-row${isMe ? ' is-me' : ''}`}
-                    style={{ gridTemplateColumns: '32px 1fr 70px 70px 90px' }}
+                    style={{ gridTemplateColumns: '32px 1fr 70px 70px 80px' }}
                   >
                     <span className={`lb-rank${i < 3 ? ' top' : ''}`}>
                       {['🥇', '🥈', '🥉'][i] ?? i + 1}
@@ -466,11 +455,11 @@ export function LeaderboardPage() {
                         {isMe && <span className="you-tag">toi</span>}
                       </span>
                     </span>
-                    <span className="lb-cell ta-r">{entry.gamesPlayed}</span>
                     <span className="lb-cell ta-r">{entry.wins}</span>
-                    <span className="lb-cell filled ta-r">
+                    <span className="lb-cell ta-r">
                       {entry.avgAttempts !== null ? entry.avgAttempts : '—'}
                     </span>
+                    <span className="lb-cell filled ta-r">{entry.totalPoints}</span>
                   </div>
                 )
               })

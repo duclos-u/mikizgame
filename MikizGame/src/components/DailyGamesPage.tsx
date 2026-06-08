@@ -306,6 +306,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
   const { user } = useAuth()
   const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
   const [lbLoading, setLbLoading] = useState(true)
+  const [playerCounts, setPlayerCounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
     api.leaderboard
@@ -313,6 +314,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
       .then(({ entries }) => setCrossEntries(entries))
       .catch(() => setCrossEntries([]))
       .finally(() => setLbLoading(false))
+    api.leaderboard.getCounts().then(({ counts }) => setPlayerCounts(counts)).catch(() => {})
   }, [])
 
   const todayLabel = new Date().toLocaleDateString('fr-FR', {
@@ -322,7 +324,11 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
     year: 'numeric',
   })
 
-  const liveGames = GAMES.filter((g) => g.status === 'live')
+  const gamesWithCounts = GAMES.map((g) => ({
+    ...g,
+    players: playerCounts[g.id] ?? g.players,
+  }))
+  const liveGames = gamesWithCounts.filter((g) => g.status === 'live')
   const featuredGame = liveGames[0]
 
   return (
@@ -342,11 +348,11 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
             <h2 className="section-title">Tous les jeux</h2>
           </div>
           <span className="section-meta">
-            {liveGames.length} en ligne · {GAMES.filter((g) => g.status === 'soon').length} à venir
+            {liveGames.length} en ligne · {gamesWithCounts.filter((g) => g.status === 'soon').length} à venir
           </span>
         </div>
         <div className="game-grid">
-          {GAMES.map((g) => (
+          {gamesWithCounts.map((g) => (
             <GameCard
               key={g.id}
               game={g}

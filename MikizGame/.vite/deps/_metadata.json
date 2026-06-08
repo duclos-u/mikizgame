@@ -1,0 +1,49 @@
+{
+  "hash": "3d3467f7",
+  "configHash": "57eceda6",
+  "lockfileHash": "ab6ad3eb",
+  "browserHash": "5cdf8741",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "efca9d7e",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "c595be06",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "c7a77f48",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "1890a8b4",
+      "needsInterop": false
+    },
+    "canvas-confetti": {
+      "src": "../../node_modules/canvas-confetti/dist/confetti.module.mjs",
+      "file": "canvas-confetti.js",
+      "fileHash": "0f6ec525",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-PCGSG3X4": {
+      "file": "chunk-PCGSG3X4.js"
+    },
+    "chunk-QYXY6RWP": {
+      "file": "chunk-QYXY6RWP.js"
+    },
+    "chunk-5WRI5ZAA": {
+      "file": "chunk-5WRI5ZAA.js"
+    }
+  }
+}

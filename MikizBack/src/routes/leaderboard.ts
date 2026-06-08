@@ -59,7 +59,7 @@ leaderboard.get("/cross", async (c) => {
 /**
  * GET /api/leaderboard/:game/stats
  * Public. Returns all-time aggregate stats per user for a game.
- * Sorted by average attempts ASC (fewer = better), users with no wins rank last.
+ * Sorted by average points DESC (more = better), users with no wins rank last.
  */
 leaderboard.get("/:game/stats", async (c) => {
   const gameSlug = c.req.param("game");
@@ -71,26 +71,56 @@ leaderboard.get("/:game/stats", async (c) => {
   if (!game) return c.json({ error: "Game not found" }, 404);
   if (!game.active) return c.json({ error: "Game is inactive" }, 404);
 
+  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 10 WHEN 2 THEN 7 WHEN 3 THEN 5 WHEN 4 THEN 3 WHEN 5 THEN 2 WHEN 6 THEN 1 ELSE 0 END`;
+
   const entries = await db
     .select({
       username: users.username,
-      gamesPlayed: sql<number>`count(*)::int`,
       wins: sql<number>`count(${leaderboardEntries.score})::int`,
       avgAttempts: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 2)`,
+      totalPoints: sql<number>`sum(${pointsExpr})::int`,
     })
     .from(leaderboardEntries)
     .innerJoin(users, eq(leaderboardEntries.userId, users.id))
     .where(eq(leaderboardEntries.gameId, game.id))
     .groupBy(users.id, users.username)
-    .orderBy(sql`avg(${leaderboardEntries.score}) ASC NULLS LAST`);
+    .orderBy(sql`sum(${pointsExpr}) DESC`);
 
   return c.json({ game: gameSlug, total: entries.length, entries });
 });
 
 /**
+ * GET /api/leaderboard/counts?date=YYYY-MM-DD
+ * Public. Returns the number of players who completed each active game on the given date.
+ */
+leaderboard.get("/counts", async (c) => {
+  const date = c.req.query("date") ?? new Date().toISOString().slice(0, 10);
+
+  const activeGames = await db.query.games.findMany({
+    where: eq(games.active, true),
+  });
+
+  const counts = await Promise.all(
+    activeGames.map(async (game) => {
+      const [row] = await db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(leaderboardEntries)
+        .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
+      return { slug: game.slug, count: row?.count ?? 0 };
+    })
+  );
+
+  const result: Record<string, number> = {};
+  for (const { slug, count } of counts) result[slug] = count;
+
+  return c.json({ date, counts: result });
+});
+
+/**
  * GET /api/leaderboard/:game?date=YYYY-MM-DD
  * Public. Returns ranked entries for a game on a given date.
- * Wins are sorted by fewest attempts; losses appear last.
+ * Points awarded by attempts: 1→10, 2→7, 3→5, 4→3, 5→2, 6→1, loss→0.
+ * Sorted by points DESC, ties broken alphabetically.
  */
 leaderboard.get("/:game", async (c) => {
   const gameSlug = c.req.param("game");
@@ -103,18 +133,24 @@ leaderboard.get("/:game", async (c) => {
   if (!game) return c.json({ error: "Game not found" }, 404);
   if (!game.active) return c.json({ error: "Game is inactive" }, 404);
 
-  // PostgreSQL sorts NULLs last in ASC order — losses (score = NULL) rank below wins
-  const entries = await db
+  const rows = await db
     .select({
-      rank: leaderboardEntries.score,
       username: users.username,
       score: leaderboardEntries.score,
       completedAt: leaderboardEntries.createdAt,
     })
     .from(leaderboardEntries)
     .innerJoin(users, eq(leaderboardEntries.userId, users.id))
-    .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)))
-    .orderBy(asc(leaderboardEntries.score));
+    .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
+
+  const entries = rows
+    .map((row) => ({
+      username: row.username,
+      score: row.score,
+      points: row.score !== null ? (RANK_POINTS[row.score - 1] ?? 1) : 0,
+      completedAt: row.completedAt,
+    }))
+    .sort((a, b) => b.points - a.points || a.username.localeCompare(b.username));
 
   return c.json({ date, game: gameSlug, total: entries.length, entries });
 });

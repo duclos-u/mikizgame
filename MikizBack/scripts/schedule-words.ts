@@ -24,9 +24,10 @@ if (words.length === 0) {
 const startDate = startArg ? new Date(startArg) : new Date();
 
 // Shuffle with a fixed seed derived from the start date for reproducibility
+const seed = startDate.getTime();
 const shuffled = [...words].sort((a, b) => {
-  const h = (s: string) => s.split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), 0);
-  return h(a) - h(b);
+  const h = (s: string, n: number) => s.split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), n);
+  return h(a, seed) - h(b, seed);
 });
 
 const entries: { word: string; date: string }[] = [];

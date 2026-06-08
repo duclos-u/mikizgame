@@ -1,6 +1,6 @@
 const BASE = '/api'
 
-export type User = { id: string; username: string; email: string }
+export type User = { id: string; username: string; email: string; streak: number }
 export type AuthResponse = { user: User; token: string }
 
 export type TileResult = 'correct' | 'present' | 'absent'
@@ -22,9 +22,9 @@ export type GuessResponse = {
 }
 
 export type LeaderboardEntry = {
-  rank: number | null
   username: string
   score: number | null
+  points: number
   completedAt: string
 }
 
@@ -37,15 +37,20 @@ export type LeaderboardResponse = {
 
 export type SutomAllTimeEntry = {
   username: string
-  gamesPlayed: number
   wins: number
   avgAttempts: number | null
+  totalPoints: number
 }
 
 export type SutomAllTimeResponse = {
   game: string
   total: number
   entries: SutomAllTimeEntry[]
+}
+
+export type DailyCountsResponse = {
+  date: string
+  counts: Record<string, number>
 }
 
 export type CrossGameBreakdown = {
@@ -186,5 +191,7 @@ export const api = {
       request<SutomAllTimeResponse>(`/leaderboard/${game}/stats`),
     getCross: (date?: string) =>
       request<CrossLeaderboardResponse>(`/leaderboard/cross${date ? `?date=${date}` : ''}`),
+    getCounts: (date?: string) =>
+      request<DailyCountsResponse>(`/leaderboard/counts${date ? `?date=${date}` : ''}`),
   },
 }

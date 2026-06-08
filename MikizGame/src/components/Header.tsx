@@ -43,10 +43,12 @@ export function Header({ onLoginClick }: HeaderProps) {
         </nav>
 
         <div className="header-right">
-          <span className="streak-chip" title="Série en cours">
-            <span className="streak-flame">🔥</span>
-            <span className="streak-num">7</span>
-          </span>
+          {user && (
+            <span className="streak-chip" title="Série en cours">
+              <span className="streak-flame">🔥</span>
+              <span className="streak-num">{user.streak}</span>
+            </span>
+          )}
 
           {user ? (
             <>
