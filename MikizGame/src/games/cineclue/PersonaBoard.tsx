@@ -280,9 +280,7 @@ export function SlotActeurs({
     <Slot label="Acteurs">
       <div className="cineclue-acteurs">
         {liste.map((a) => {
-          const revele = filmCible
-            ? indicesActeurs.includes(a.nom) || filmCible !== null
-            : true
+          const revele = filmCible !== null ? true : indicesActeurs.includes(a.nom)
           const src = a.photo ? `${TMDB_IMG}${a.photo}` : null
           return (
             <div

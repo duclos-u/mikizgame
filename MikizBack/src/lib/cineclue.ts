@@ -40,6 +40,7 @@ export type IndicesReveles = {
 };
 
 const FILMS = filmsData as Film[];
+const FILMS_BY_ID = new Map<number, Film>(FILMS.map((f) => [f.id, f]));
 
 // Hash string → entier positif (pour la sélection déterministe)
 function hashCode(str: string): number {
@@ -63,7 +64,7 @@ export function getFilmDuJour(): Film {
 }
 
 export function getFilmById(id: number): Film | undefined {
-  return FILMS.find((f) => f.id === id);
+  return FILMS_BY_ID.get(id);
 }
 
 export function searchFilms(query: string, limit = 10): Film[] {

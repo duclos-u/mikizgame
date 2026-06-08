@@ -12,15 +12,20 @@ import {
   type Film,
   type IndicesReveles,
 } from "../lib/cineclue";
+import { todayDate } from "../lib/date";
 import { authMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 10;
 
-const filmdujour = new Hono();
-
-function todayDate(): string {
-  return new Date().toISOString().slice(0, 10);
+let cineclueGameId: string | null = null;
+async function getCineclueGameId(): Promise<string | null> {
+  if (cineclueGameId) return cineclueGameId;
+  const game = await db.query.games.findFirst({ where: eq(games.slug, "cineclue") });
+  if (game) cineclueGameId = game.id;
+  return cineclueGameId;
 }
+
+const filmdujour = new Hono();
 
 /**
  * GET /api/filmdujour/session
@@ -101,7 +106,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];
   const estPerdu = !correct && nouvellesTentatives.length >= MAX_TENTATIVES;
-  const nouveauStatut = correct ? "won" : estPerdu ? "lost" : "in_progress";
+  const nouveauStatut: "in_progress" | "won" | "lost" = correct ? "won" : estPerdu ? "lost" : "in_progress";
   const completedAt = nouveauStatut !== "in_progress" ? new Date() : null;
 
   if (!session) {
@@ -110,7 +115,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
       date: today,
       tentatives: nouvellesTentatives,
       indices: nouveauxIndices,
-      status: nouveauStatut as "in_progress" | "won" | "lost",
+      status: nouveauStatut,
       completedAt,
     });
   } else {
@@ -119,7 +124,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
       .set({
         tentatives: nouvellesTentatives,
         indices: nouveauxIndices,
-        status: nouveauStatut as "in_progress" | "won" | "lost",
+        status: nouveauStatut,
         completedAt,
       })
       .where(eq(cineclueSessions.id, session.id));
@@ -127,13 +132,11 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   // Enregistrement au classement en fin de partie
   if (nouveauStatut !== "in_progress") {
-    const game = await db.query.games.findFirst({
-      where: eq(games.slug, "cineclue"),
-    });
-    if (game) {
+    const gameId = await getCineclueGameId();
+    if (gameId) {
       await db.insert(leaderboardEntries).values({
         userId,
-        gameId: game.id,
+        gameId,
         date: today,
         score: correct ? nouvellesTentatives.length : null,
       });
@@ -170,14 +173,14 @@ filmdujour.delete("/session", authMiddleware, async (c) => {
       ),
     );
 
-  const game = await db.query.games.findFirst({ where: eq(games.slug, "cineclue") });
-  if (game) {
+  const gameId = await getCineclueGameId();
+  if (gameId) {
     await db
       .delete(leaderboardEntries)
       .where(
         and(
           eq(leaderboardEntries.userId, userId),
-          eq(leaderboardEntries.gameId, game.id),
+          eq(leaderboardEntries.gameId, gameId),
           eq(leaderboardEntries.date, today),
         ),
       );

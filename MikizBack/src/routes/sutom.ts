@@ -2,17 +2,22 @@ import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
 import { games, leaderboardEntries, sutomDailyWords, sutomSessions } from "../db/schema";
+import { todayDate } from "../lib/date";
 import { type GuessResult, evaluateGuess } from "../lib/sutom";
 import { isValidWord } from "../lib/words";
 import { authMiddleware } from "../middleware/auth";
 
 const MAX_ATTEMPTS = 6;
 
-const sutom = new Hono();
-
-function todayDate(): string {
-  return new Date().toISOString().slice(0, 10);
+let sutomGameId: string | null = null;
+async function getSutomGameId(): Promise<string | null> {
+  if (sutomGameId) return sutomGameId;
+  const game = await db.query.games.findFirst({ where: eq(games.slug, "sutom") });
+  if (game) sutomGameId = game.id;
+  return sutomGameId;
 }
+
+const sutom = new Hono();
 
 /**
  * GET /api/sutom/daily
@@ -129,11 +134,11 @@ sutom.post("/guess", authMiddleware, async (c) => {
   }
 
   if (newStatus !== "in_progress") {
-    const game = await db.query.games.findFirst({ where: eq(games.slug, "sutom") });
-    if (game) {
+    const gameId = await getSutomGameId();
+    if (gameId) {
       await db.insert(leaderboardEntries).values({
         userId,
-        gameId: game.id,
+        gameId,
         date: today,
         score: isWon ? updatedAttempts.length : null,
       });
@@ -166,16 +171,14 @@ sutom.delete("/session", authMiddleware, async (c) => {
       and(eq(sutomSessions.userId, userId), eq(sutomSessions.date, today))
     );
 
-  const game = await db.query.games.findFirst({
-    where: eq(games.slug, "sutom"),
-  });
-  if (game) {
+  const gameId = await getSutomGameId();
+  if (gameId) {
     await db
       .delete(leaderboardEntries)
       .where(
         and(
           eq(leaderboardEntries.userId, userId),
-          eq(leaderboardEntries.gameId, game.id),
+          eq(leaderboardEntries.gameId, gameId),
           eq(leaderboardEntries.date, today)
         )
       );

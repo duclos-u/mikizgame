@@ -35,17 +35,17 @@ export type LeaderboardResponse = {
   entries: LeaderboardEntry[]
 }
 
-export type SutomAllTimeEntry = {
+export type AllTimeEntry = {
   username: string
   wins: number
   avgAttempts: number | null
   totalPoints: number
 }
 
-export type SutomAllTimeResponse = {
+export type AllTimeResponse = {
   game: string
   total: number
-  entries: SutomAllTimeEntry[]
+  entries: AllTimeEntry[]
 }
 
 export type DailyCountsResponse = {
@@ -188,7 +188,7 @@ export const api = {
     get: (game: string, date?: string) =>
       request<LeaderboardResponse>(`/leaderboard/${game}${date ? `?date=${date}` : ''}`),
     getStats: (game: string) =>
-      request<SutomAllTimeResponse>(`/leaderboard/${game}/stats`),
+      request<AllTimeResponse>(`/leaderboard/${game}/stats`),
     getCross: (date?: string) =>
       request<CrossLeaderboardResponse>(`/leaderboard/cross${date ? `?date=${date}` : ''}`),
     getCounts: (date?: string) =>

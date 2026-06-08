@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import {
   api,
+  type AllTimeEntry,
   type CrossGameEntry,
   type LeaderboardEntry,
-  type SutomAllTimeEntry,
 } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
@@ -145,7 +145,6 @@ export function LeaderboardPage() {
   ]
   const [gameId, setGameId] = useState('general')
   const [scope, setScope] = useState<'daily' | 'all'>('daily')
-  const [friendsOnly, setFriendsOnly] = useState(false)
 
   const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
   const [crossGames, setCrossGames] = useState<string[]>([])
@@ -154,7 +153,7 @@ export function LeaderboardPage() {
   const [perGameEntries, setPerGameEntries] = useState<Record<string, LeaderboardEntry[]>>({})
   const [perGameLoading, setPerGameLoading] = useState(true)
 
-  const [allTimeEntries, setAllTimeEntries] = useState<SutomAllTimeEntry[]>([])
+  const [allTimeEntries, setAllTimeEntries] = useState<AllTimeEntry[]>([])
   const [allTimeLoading, setAllTimeLoading] = useState(true)
 
   useEffect(() => {
@@ -245,8 +244,9 @@ export function LeaderboardPage() {
           )}
           <button
             type="button"
-            className={`friends-toggle${friendsOnly ? ' on' : ''}`}
-            onClick={() => setFriendsOnly((v) => !v)}
+            className="friends-toggle"
+            disabled
+            title="Bientôt disponible"
           >
             <span className="ft-dot" /> Amis seulement
           </button>
@@ -469,10 +469,12 @@ export function LeaderboardPage() {
       )}
 
       {/* Sticky me bar */}
-      {meRow && currentUser && (
+      {meRow && currentUser && (() => {
+        const meIdx = crossEntries.findIndex((r) => r.username === currentUser)
+        return (
         <div className="lb-sticky-me">
-          <span className={`lb-rank${crossEntries.findIndex((r) => r.username === currentUser) < 3 ? ' top' : ''}`}>
-            {crossEntries.findIndex((r) => r.username === currentUser) + 1}
+          <span className={`lb-rank${meIdx < 3 ? ' top' : ''}`}>
+            {meIdx + 1}
           </span>
           <span className="lb-player">
             <Avatar name={currentUser} size={30} color="var(--accent)" />
@@ -500,7 +502,8 @@ export function LeaderboardPage() {
             Rejouer
           </button>
         </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

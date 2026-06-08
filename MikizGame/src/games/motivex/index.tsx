@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import confetti from 'canvas-confetti'
+import { useEffect, useMemo, useState } from 'react'
 import { GameHeader } from '../../components/GameHeader'
 
 type TileStatus = 'empty' | 'correct' | 'present' | 'absent'
 
 const TARGET_WORD = 'MOTIVE'
+const MAX_ATTEMPTS = 6
 const TILE_REVEAL_DELAY_MS = 120
 const TILE_REVEAL_DURATION_MS = 420
 const VALID_WORDS = new Set([
@@ -44,124 +46,20 @@ function scoreGuess(guess: string, target: string): TileStatus[] {
   return result
 }
 
-const Confetti = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const colors = ['#6aaa64', '#c9b458', '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#a29bfe', '#fd79a8', '#00b894']
-
-    type Particle = {
-      x: number; y: number
-      vx: number; vy: number
-      color: string
-      w: number; h: number
-      rotation: number; rotSpeed: number
-      opacity: number
-    }
-
-    const make = (x: number, y: number, vx: number, vy: number): Particle => ({
-      x, y, vx, vy,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      w: Math.random() * 10 + 5,
-      h: Math.random() * 5 + 3,
-      rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.18,
-      opacity: 1,
-    })
-
-    const cx = canvas.width / 2
-    const cy = canvas.height * 0.55
-
-    const particles: Particle[] = [
-      // left cannon
-      ...Array.from({ length: 80 }, () =>
-        make(cx * 0.5, cy,
-          Math.cos(-Math.PI / 4 - Math.random() * Math.PI / 5) * (Math.random() * 14 + 5),
-          Math.sin(-Math.PI / 4 - Math.random() * Math.PI / 5) * (Math.random() * 14 + 5),
-        )
-      ),
-      // right cannon
-      ...Array.from({ length: 80 }, () =>
-        make(cx * 1.5, cy,
-          Math.cos(-Math.PI * 3/4 + Math.random() * Math.PI / 5) * (Math.random() * 14 + 5),
-          Math.sin(-Math.PI * 3/4 + Math.random() * Math.PI / 5) * (Math.random() * 14 + 5),
-        )
-      ),
-      // top rain
-      ...Array.from({ length: 40 }, () =>
-        make(Math.random() * canvas.width, -20 - Math.random() * 150,
-          (Math.random() - 0.5) * 4, Math.random() * 2 + 1,
-        )
-      ),
-    ]
-
-    const startTime = Date.now()
-    let animId: number
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const elapsed = Date.now() - startTime
-      let alive = false
-
-      for (const p of particles) {
-        if (p.y > canvas.height + 30) continue
-        alive = true
-        p.x += p.vx
-        p.y += p.vy
-        p.vy += 0.3
-        p.vx *= 0.99
-        p.rotation += p.rotSpeed
-
-        if (elapsed > 2200) p.opacity = Math.max(0, 1 - (elapsed - 2200) / 1600)
-
-        ctx.save()
-        ctx.globalAlpha = p.opacity
-        ctx.translate(p.x, p.y)
-        ctx.rotate(p.rotation)
-        ctx.fillStyle = p.color
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
-        ctx.restore()
-      }
-
-      if (alive && elapsed < 4000) animId = requestAnimationFrame(draw)
-    }
-
-    animId = requestAnimationFrame(draw)
-    return () => cancelAnimationFrame(animId)
-  }, [])
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 999 }}
-    />
-  )
-}
-
 const Motivex = () => {
-  const maxAttempts = 6
   const wordSize = TARGET_WORD.length
-  const [guesses, setGuesses] = useState<string[]>(Array.from({ length: maxAttempts }, () => ''))
+  const [guesses, setGuesses] = useState<string[]>(Array.from({ length: MAX_ATTEMPTS }, () => ''))
   const [currentRow, setCurrentRow] = useState(0)
   const [message, setMessage] = useState('Tape un mot puis appuie sur Entrer.')
   const [shakingRow, setShakingRow] = useState<number | null>(null)
   const [revealingRow, setRevealingRow] = useState<number | null>(null)
   const [celebrateRowIndex, setCelebrateRowIndex] = useState<number | null>(null)
-  const [showConfetti, setShowConfetti] = useState(false)
 
   const gameState = useMemo(() => {
     const won = guesses.some((g, i) => g === TARGET_WORD && i < currentRow)
-    const lost = currentRow >= maxAttempts && !won
+    const lost = currentRow >= MAX_ATTEMPTS && !won
     return { won, lost, over: won || lost }
-  }, [currentRow, guesses, maxAttempts])
+  }, [currentRow, guesses])
 
   const displayMessage = gameState.won
     ? 'Bien joué, tu as trouvé le mot.'
@@ -182,9 +80,8 @@ const Motivex = () => {
       const word = guesses[submittedRowIndex]
       if (word === TARGET_WORD) {
         setCelebrateRowIndex(submittedRowIndex)
-        setShowConfetti(true)
+        confetti({ particleCount: 180, spread: 70, origin: { y: 0.6 } })
         window.setTimeout(() => setCelebrateRowIndex(null), 1600)
-        window.setTimeout(() => setShowConfetti(false), 4500)
       }
     }, flipDoneMs)
 
@@ -242,14 +139,13 @@ const Motivex = () => {
 
   return (
     <div className="game-shell">
-      {showConfetti && <Confetti key={String(showConfetti)} />}
       <GameHeader title="Motivex" subtitle="Trouve le mot du jour" />
       <main className="container">
         <div className="game-content">
           <div className="wordle-board">
             <p className="wordle-message">{displayMessage}</p>
             <div className="grid">
-            {Array.from({ length: maxAttempts }, (_, rowIndex) => {
+            {Array.from({ length: MAX_ATTEMPTS }, (_, rowIndex) => {
               const rowGuess = guesses[rowIndex]
               const rowSubmitted = rowGuess.length === wordSize && rowIndex < currentRow
               const rowStatuses = rowSubmitted

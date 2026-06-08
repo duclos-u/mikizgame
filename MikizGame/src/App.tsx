@@ -4,7 +4,6 @@ import { AuthModal } from './components/AuthModal'
 import { DailyGamesPage } from './components/DailyGamesPage'
 import { Header } from './components/Header'
 import { LeaderboardPage } from './components/LeaderboardPage'
-import { TeamModal } from './components/TeamModal'
 import { AuthProvider } from './context/AuthContext'
 import { useJdj2State } from './hooks/useJdj2State'
 import { GameRoutePage } from './routes/GameRoutePage'
@@ -42,7 +41,6 @@ function AppFooter() {
 
 export default function App() {
   const { state, markGameDone } = useJdj2State()
-  const [teamModalOpen, setTeamModalOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
 
   return (
@@ -57,7 +55,6 @@ export default function App() {
                 <DailyGamesPage doneIds={state.done} onPlayExternal={markGameDone} />
               </main>
               <AppFooter />
-              <TeamModal open={teamModalOpen} onClose={() => setTeamModalOpen(false)} />
               <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
             </div>
           }
@@ -71,7 +68,6 @@ export default function App() {
                 <LeaderboardPage />
               </main>
               <AppFooter />
-              <TeamModal open={teamModalOpen} onClose={() => setTeamModalOpen(false)} />
               <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
             </div>
           }

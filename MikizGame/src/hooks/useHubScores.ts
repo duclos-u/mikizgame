@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-export type HubScoreEntry = {
+type HubScoreEntry = {
   username: string
   score: number | null
   timestamp: number
@@ -27,9 +27,5 @@ export function useHubScores() {
     localStorage.setItem(key, JSON.stringify(entries))
   }, [])
 
-  const getMyScore = useCallback((gameId: string, username: string): HubScoreEntry | null => {
-    return readEntries(gameId).find((e) => e.username === username) ?? null
-  }, [])
-
-  return { saveScore, getMyScore }
+  return { saveScore }
 }

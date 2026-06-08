@@ -251,7 +251,7 @@ function MiniLeaderboard({
 }
 
 // ── Streak panel ──────────────────────────────────────────────────────────────
-function StreakPanel({ doneCount, total }: { doneCount: number; total: number }) {
+function StreakPanel({ doneCount, total, streak }: { doneCount: number; total: number; streak: number }) {
   const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
   const today = new Date().getDay()
   const todayIdx = today === 0 ? 6 : today - 1
@@ -262,7 +262,7 @@ function StreakPanel({ doneCount, total }: { doneCount: number; total: number })
       <div className="mini-lb-title" style={{ marginTop: '0.2rem' }}>Garde la série</div>
       <div className="streak-big">
         <span className="streak-flame-big">🔥</span>
-        <b>7</b>
+        <b>{streak}</b>
         <span>jours d'affilée</span>
       </div>
       <div className="streak-week">
@@ -363,7 +363,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           loading={lbLoading}
           currentUser={user?.username ?? null}
         />
-        <StreakPanel doneCount={doneIds.length} total={GAMES.length} />
+        <StreakPanel doneCount={doneIds.length} total={GAMES.length} streak={user?.streak ?? 0} />
       </section>
     </div>
   )
