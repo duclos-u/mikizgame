@@ -1,4 +1,4 @@
-const BASE = '/api'
+const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
 
 export type User = { id: string; username: string; email: string; streak: number }
 export type AuthResponse = { user: User; token: string }
