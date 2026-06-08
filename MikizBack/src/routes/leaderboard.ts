@@ -5,12 +5,12 @@ import { games, leaderboardEntries, users } from "../db/schema";
 
 const leaderboard = new Hono();
 
-const RANK_POINTS = [10, 7, 5, 3, 2, 1];
+const RANK_POINTS = [25, 18, 15, 12, 10, 8];
 
 /**
  * GET /api/leaderboard/cross?date=YYYY-MM-DD
  * Public. Returns a cross-game leaderboard for a given date.
- * Points awarded by rank within each game: 10/7/5/3/2/1 (1pt for rank 6+).
+ * Points awarded by attempts (F1 barème): 1→25, 2→18, 3→15, 4→12, 5→10, 6→8, loss→0.
  * Only players who completed at least one game appear.
  */
 leaderboard.get("/cross", async (c) => {
@@ -42,7 +42,7 @@ leaderboard.get("/cross", async (c) => {
   for (const { slug, entries } of gameResults) {
     entries.forEach((entry, idx) => {
       const rank = idx + 1;
-      const points = RANK_POINTS[idx] ?? 1;
+      const points = entry.score !== null ? (RANK_POINTS[entry.score - 1] ?? 0) : 0;
       if (!userMap[entry.username]) userMap[entry.username] = { total: 0, breakdown: {} };
       userMap[entry.username].breakdown[slug] = { rank, score: entry.score, points };
       userMap[entry.username].total += points;
@@ -71,7 +71,7 @@ leaderboard.get("/:game/stats", async (c) => {
   if (!game) return c.json({ error: "Game not found" }, 404);
   if (!game.active) return c.json({ error: "Game is inactive" }, 404);
 
-  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 10 WHEN 2 THEN 7 WHEN 3 THEN 5 WHEN 4 THEN 3 WHEN 5 THEN 2 WHEN 6 THEN 1 ELSE 0 END`;
+  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 ELSE 0 END`;
 
   const entries = await db
     .select({
@@ -119,7 +119,7 @@ leaderboard.get("/counts", async (c) => {
 /**
  * GET /api/leaderboard/:game?date=YYYY-MM-DD
  * Public. Returns ranked entries for a game on a given date.
- * Points awarded by attempts: 1→10, 2→7, 3→5, 4→3, 5→2, 6→1, loss→0.
+ * Points awarded by attempts (F1 barème): 1→25, 2→18, 3→15, 4→12, 5→10, 6→8, loss→0.
  * Sorted by points DESC, ties broken alphabetically.
  */
 leaderboard.get("/:game", async (c) => {

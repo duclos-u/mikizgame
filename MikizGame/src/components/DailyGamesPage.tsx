@@ -86,12 +86,6 @@ function HeroDaily({
               <Pill tone="live">EN LIGNE</Pill>
             </span>
           </div>
-          <p className="hero-card-blurb">{game.blurb}</p>
-          <div className="hero-thermo" />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span className="hero-thermo-label">froid</span>
-            <span className="hero-thermo-label hot">brûlant</span>
-          </div>
           <div className="hero-card-stats">
             <div>
               <b>{game.players.toLocaleString('fr-FR')}</b>
