@@ -1,0 +1,163 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Accueil MikizGame" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e11]: MikizGame
+      - navigation [ref=e12]:
+        - link "Accueil" [ref=e13] [cursor=pointer]:
+          - /url: /
+        - link "Jouer" [ref=e14] [cursor=pointer]:
+          - /url: /games/sutom
+        - link "Classement" [ref=e15] [cursor=pointer]:
+          - /url: /leaderboard
+      - generic [ref=e16]:
+        - generic "Série en cours" [ref=e17]:
+          - generic [ref=e18]: 🔥
+          - generic [ref=e19]: "7"
+        - button "Se connecter" [ref=e20] [cursor=pointer]
+  - main [ref=e21]:
+    - generic [ref=e22]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: ● Jeu du jour
+          - heading "Un nouveau défi chaque jour à minuit." [level=1] [ref=e27]:
+            - text: Un nouveau défi
+            - text: chaque jour à minuit.
+          - paragraph [ref=e28]: Mercredi 3 juin 2026. Joue, compare ton score avec tes amis et garde ta série en vie.
+          - generic [ref=e29]:
+            - link "Jouer à Sutom →" [ref=e30] [cursor=pointer]:
+              - /url: /games/sutom
+              - text: Jouer à Sutom
+              - generic [ref=e31]: →
+            - link "Voir le classement" [ref=e32] [cursor=pointer]:
+              - /url: /leaderboard
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - generic [ref=e35]: 🔤
+            - generic [ref=e36]:
+              - generic [ref=e37]: Sutom
+              - generic [ref=e38]: Mots · mots
+            - generic [ref=e40]: EN LIGNE
+          - paragraph [ref=e41]: Six essais pour retrouver le mot caché. Les lettres bien placées s'allument.
+          - generic [ref=e43]:
+            - generic [ref=e44]: froid
+            - generic [ref=e45]: brûlant
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic [ref=e48]: 6 390
+              - generic [ref=e49]: joueurs aujourd'hui
+            - generic [ref=e50]:
+              - generic [ref=e51]: "4"
+              - generic [ref=e52]: essais en moyenne
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]: La sélection
+            - heading "Tous les jeux" [level=2] [ref=e57]
+          - generic [ref=e58]: 2 en ligne · 2 à venir
+        - generic [ref=e59]:
+          - link "🔤 À jouer Sutom Devine le mot du jour en 6 essais. Mots 6 390 joueurs" [ref=e60] [cursor=pointer]:
+            - /url: /games/sutom
+            - generic [ref=e61]:
+              - generic [ref=e62]: 🔤
+              - generic [ref=e63]: À jouer
+            - generic [ref=e64]:
+              - heading "Sutom" [level=3] [ref=e65]
+              - paragraph [ref=e66]: Devine le mot du jour en 6 essais.
+            - generic [ref=e67]:
+              - generic [ref=e68]: Mots
+              - generic [ref=e69]: 6 390 joueurs
+          - link "🎬 À jouer CinéClue Devine le film du jour en 10 tentatives. Cinéma 3 517 joueurs" [ref=e70] [cursor=pointer]:
+            - /url: /games/cineclue
+            - generic [ref=e71]:
+              - generic [ref=e72]: 🎬
+              - generic [ref=e73]: À jouer
+            - generic [ref=e74]:
+              - heading "CinéClue" [level=3] [ref=e75]
+              - paragraph [ref=e76]: Devine le film du jour en 10 tentatives.
+            - generic [ref=e77]:
+              - generic [ref=e78]: Cinéma
+              - generic [ref=e79]: 3 517 joueurs
+          - button "🗺️ Bientôt Géodle Le pays mystère du jour. Géographie" [disabled] [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: 🗺️
+              - generic [ref=e83]: Bientôt
+            - generic [ref=e84]:
+              - heading "Géodle" [level=3] [ref=e85]
+              - paragraph [ref=e86]: Le pays mystère du jour.
+            - generic [ref=e88]: Géographie
+          - button "🎵 Bientôt Sondle Devine le titre à l'oreille. Musique" [disabled] [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: 🎵
+              - generic [ref=e92]: Bientôt
+            - generic [ref=e93]:
+              - heading "Sondle" [level=3] [ref=e94]
+              - paragraph [ref=e95]: Devine le titre à l'oreille.
+            - generic [ref=e97]: Musique
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: Entre amis
+              - generic [ref=e103]: Classement du jour
+            - link "Tout voir →" [ref=e104] [cursor=pointer]:
+              - /url: /leaderboard
+          - list [ref=e105]:
+            - listitem [ref=e106]: Chargement…
+        - generic [ref=e107]:
+          - generic [ref=e108]: Ta progression
+          - generic [ref=e109]: Garde la série
+          - generic [ref=e110]:
+            - generic [ref=e111]: 🔥
+            - generic [ref=e112]: "7"
+            - generic [ref=e113]: jours d'affilée
+          - generic [ref=e114]:
+            - generic [ref=e116]: L
+            - generic [ref=e118]: M
+            - generic [ref=e120]: M
+            - generic [ref=e122]: J
+            - generic [ref=e124]: V
+            - generic [ref=e126]: S
+            - generic [ref=e128]: D
+          - generic [ref=e129]: 0 / 4 jeux aujourd'hui
+          - paragraph [ref=e130]: Reviens chaque jour avant minuit pour ne pas perdre ta série.
+  - contentinfo [ref=e131]:
+    - generic [ref=e132]:
+      - link "Accueil MikizGame" [ref=e133] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e138]: MikizGame
+      - generic [ref=e139]: Fait maison · un jeu chaque jour à minuit · © 2026 MikizGame
+      - generic [ref=e140]:
+        - link "Accueil" [ref=e141] [cursor=pointer]:
+          - /url: /
+        - link "Classement" [ref=e142] [cursor=pointer]:
+          - /url: /leaderboard
+  - dialog "Rejoindre une équipe":
+    - heading "Rejoindre une équipe" [level=2]
+    - paragraph: Entre le code de ton équipe ou crée-en une nouvelle pour comparer vos scores chaque jour.
+    - generic: Ton prénom
+    - textbox "Ton prénom":
+      - /placeholder: "ex : Ulysse"
+    - generic: Code équipe
+    - textbox "Code équipe":
+      - /placeholder: "ex : BUREAU42 (laisser vide pour créer)"
+    - generic:
+      - button "Annuler"
+      - button "Rejoindre →"
+  - dialog "Connexion":
+    - heading "Connexion" [level=2]
+    - paragraph: Connecte-toi pour sauvegarder tes scores et apparaître au classement.
+    - generic:
+      - generic: Email
+      - textbox "Email":
+        - /placeholder: toi@example.com
+      - generic: Mot de passe
+      - textbox "Mot de passe":
+        - /placeholder: ""
+      - generic:
+        - button "Annuler"
+        - button "Se connecter →"
+    - paragraph:
+      - text: Pas encore de compte ?
+      - button "Créer un compte"

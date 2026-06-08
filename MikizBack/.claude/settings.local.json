@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun install *)",
+      "Bash(export PATH=\"$HOME/.bun/bin:$PATH\")",
+      "Bash(grep -E '^[A-Z]{5,9}$' /Users/ulysseduclos/Super_dossier/MikizBack/words/fr-words.txt)"
+    ]
+  }
+}

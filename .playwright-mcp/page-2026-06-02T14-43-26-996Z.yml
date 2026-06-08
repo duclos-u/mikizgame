@@ -1,0 +1,113 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "← Les jeux du jour" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - link "jourdejeu" [ref=e7] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e8]:
+      - heading "CinéClue" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Devine le film du jour en 10 tentatives
+    - generic [ref=e12]: mardi 2 juin
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: Titre
+          - generic [ref=e20]: — — —
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]: Genres
+            - generic [ref=e25]:
+              - generic: Drame
+              - generic: Romance
+          - generic [ref=e26]:
+            - generic [ref=e27]: Pays
+            - generic [ref=e29]:
+              - generic "États-Unis": 🇺🇸
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: Année
+            - generic [ref=e34]:
+              - text: Après
+              - strong [ref=e35]: "2005"
+          - generic [ref=e36]:
+            - generic [ref=e37]: Durée
+            - generic [ref=e39]:
+              - text: Moins de
+              - strong [ref=e40]: 2h03
+        - generic [ref=e41]:
+          - generic [ref=e42]: Acteurs
+          - generic [ref=e44]:
+            - generic "Jake Gyllenhaal":
+              - generic:
+                - generic: JG
+              - generic: Jake Gyllenhaal
+            - generic "Anne Hathaway":
+              - generic:
+                - generic: AH
+              - generic: Anne Hathaway
+        - generic [ref=e45]:
+          - generic [ref=e46]: Réalisateur
+          - generic [ref=e48]: "--"
+      - generic [ref=e49]:
+        - generic [ref=e50]: 8 tentative(s) restante(s).
+        - generic [ref=e51]: 2 / 10
+      - generic [ref=e53]:
+        - textbox "Tape un titre de film…" [ref=e55]
+        - button "Deviner" [disabled] [ref=e56]
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - generic [ref=e59]: Film
+          - generic [ref=e60]: Année
+          - generic [ref=e61]: Durée
+          - generic [ref=e62]: Genres
+          - generic [ref=e63]: Pays
+          - generic [ref=e64]: Réal.
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]: "#2"
+            - generic [ref=e68]: Le Secret de Brokeback Mountain
+          - generic [ref=e69]:
+            - generic [ref=e70]: "?"
+            - text: "2005"
+          - generic [ref=e71]:
+            - generic [ref=e72]: "?"
+            - text: 128min
+          - generic [ref=e73]:
+            - generic [ref=e74]: ✓
+            - generic [ref=e75]:
+              - generic [ref=e76]: Drame
+              - generic [ref=e77]: Romance
+          - generic [ref=e78]:
+            - generic [ref=e79]: ✓
+            - generic [ref=e80]: Canada, États-Unis
+          - generic [ref=e81]:
+            - generic [ref=e82]: ✗
+            - text: Ang Lee
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - generic [ref=e85]: "#1"
+            - generic [ref=e86]: Le Jour d'après
+          - generic [ref=e87]:
+            - generic [ref=e88]: "?"
+            - text: "2004"
+          - generic [ref=e89]:
+            - generic [ref=e90]: "?"
+            - text: 123min
+          - generic [ref=e91]:
+            - generic [ref=e92]: ✗
+            - generic [ref=e93]:
+              - generic [ref=e94]: Science-fiction
+              - generic [ref=e95]: Thriller
+              - generic [ref=e96]: Aventure
+          - generic [ref=e97]:
+            - generic [ref=e98]: ✓
+            - generic [ref=e99]: États-Unis
+          - generic [ref=e100]:
+            - generic [ref=e101]: ✗
+            - text: Roland Emmerich
+      - generic [ref=e102]:
+        - link "← Retour aux jeux" [ref=e103] [cursor=pointer]:
+          - /url: /
+        - button "[dev] réinitialiser" [ref=e104] [cursor=pointer]

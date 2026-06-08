@@ -1,0 +1,87 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "jourdejeu" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e5]:
+      - link "Classement" [ref=e6] [cursor=pointer]:
+        - /url: /leaderboard
+      - generic [ref=e7]: mardi 2 juin
+      - generic [ref=e75]: testcineclue
+      - button "Déconnexion" [ref=e76] [cursor=pointer]
+      - button "+ Rejoindre une équipe" [ref=e9] [cursor=pointer]
+  - generic [ref=e10]:
+    - generic [ref=e12]:
+      - heading "Les jeux du jour" [level=1] [ref=e13]
+      - paragraph [ref=e14]: Joue, compare ton score avec l'équipe, reviens demain.
+    - generic [ref=e15]:
+      - generic [ref=e16]: Progression du jour
+      - generic [ref=e18]: 0 / 2
+    - generic [ref=e19]:
+      - button "Tous" [ref=e20] [cursor=pointer]
+      - button "Mots" [ref=e21] [cursor=pointer]
+      - button "Géographie" [ref=e22] [cursor=pointer]
+      - button "Musique" [ref=e23] [cursor=pointer]
+      - button "Cinéma" [ref=e24] [cursor=pointer]
+      - button "Culture" [ref=e25] [cursor=pointer]
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]: Jeu
+        - generic [ref=e29]: Catégorie
+        - generic [ref=e30]: Statut
+      - generic [ref=e31]:
+        - link "Sutom Devine le mot du jour en 6 essais. Mots Jouer →" [ref=e32] [cursor=pointer]:
+          - /url: /games/sutom
+          - generic [ref=e33]:
+            - generic [ref=e34]: 🔤
+            - generic [ref=e35]:
+              - generic [ref=e36]: Sutom
+              - generic [ref=e37]: Devine le mot du jour en 6 essais.
+          - generic [ref=e38]: Mots
+          - generic [ref=e40]: Jouer →
+        - link "CinéClue Devine le film du jour en 10 tentatives. Cinéma Jouer →" [ref=e41] [cursor=pointer]:
+          - /url: /games/cineclue
+          - generic [ref=e42]:
+            - generic [ref=e43]: 🎬
+            - generic [ref=e44]:
+              - generic [ref=e45]: CinéClue
+              - generic [ref=e46]: Devine le film du jour en 10 tentatives.
+          - generic [ref=e47]: Cinéma
+          - generic [ref=e49]: Jouer →
+    - generic [ref=e51]:
+      - heading "Classement du jour" [level=2] [ref=e52]
+      - link "Voir le détail →" [ref=e53] [cursor=pointer]:
+        - /url: /leaderboard
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]: "#"
+        - generic [ref=e57]: Joueur
+        - generic [ref=e58]: Points
+      - generic [ref=e60]: Aucune partie terminée aujourd'hui.
+  - dialog "Rejoindre une équipe":
+    - heading "Rejoindre une équipe" [level=2]
+    - paragraph: Entre le code de ton équipe ou crée-en une nouvelle pour comparer vos scores chaque jour.
+    - generic: Ton prénom
+    - textbox "Ton prénom":
+      - /placeholder: "ex : Ulysse"
+    - generic: Code équipe
+    - textbox "Code équipe":
+      - /placeholder: "ex : BUREAU42 (laisser vide pour créer)"
+    - generic:
+      - button "Annuler"
+      - button "Rejoindre →"
+  - dialog "Connexion":
+    - heading "Connexion" [level=2]
+    - paragraph: Connecte-toi pour sauvegarder tes scores et apparaître au classement.
+    - generic:
+      - generic: Email
+      - textbox "Email":
+        - /placeholder: toi@example.com
+      - generic: Mot de passe
+      - textbox "Mot de passe":
+        - /placeholder: ""
+      - generic:
+        - button "Annuler"
+        - button "Se connecter →"
+    - paragraph:
+      - text: Pas encore de compte ?
+      - button "Créer un compte"

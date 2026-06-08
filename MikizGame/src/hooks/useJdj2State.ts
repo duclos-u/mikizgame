@@ -1,0 +1,41 @@
+import { useCallback, useEffect, useState } from 'react'
+
+const STORAGE_KEY = 'jdj2'
+
+export type Jdj2State = {
+  done: string[]
+}
+
+function loadState(): Jdj2State {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { done: [] }
+    const parsed = JSON.parse(raw) as Partial<Jdj2State>
+    return {
+      done: Array.isArray(parsed.done) ? parsed.done : [],
+    }
+  } catch {
+    return { done: [] }
+  }
+}
+
+function persistState(state: Jdj2State) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+}
+
+export function useJdj2State() {
+  const [state, setState] = useState<Jdj2State>(loadState)
+
+  useEffect(() => {
+    persistState(state)
+  }, [state])
+
+  const markGameDone = useCallback((id: string) => {
+    setState((s) => {
+      if (s.done.includes(id)) return s
+      return { done: [...s.done, id] }
+    })
+  }, [])
+
+  return { state, markGameDone }
+}

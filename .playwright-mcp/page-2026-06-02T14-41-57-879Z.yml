@@ -1,0 +1,13 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "← Les jeux du jour" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - link "jourdejeu" [ref=e7] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e8]:
+      - heading "CinéClue" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Devine le film du jour en 10 tentatives
+    - generic [ref=e12]: mardi 2 juin
+  - main [ref=e13]:
+    - paragraph [ref=e16]: Chargement…

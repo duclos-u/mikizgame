@@ -1,0 +1,148 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "← Les jeux du jour" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - link "jourdejeu" [ref=e7] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e8]:
+      - heading "CinéClue" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Devine le film du jour en 10 tentatives
+    - generic [ref=e12]: mardi 2 juin
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: Titre
+          - generic [ref=e20]: Love & autres drogues
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]: Genres
+            - generic [ref=e25]:
+              - generic [ref=e105]: Drame
+              - generic [ref=e106]: Comédie
+              - generic [ref=e107]: Romance
+          - generic [ref=e26]:
+            - generic [ref=e27]: Pays
+            - generic "États-Unis" [ref=e108]: 🇺🇸
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: Année
+            - generic [ref=e34]: "2010"
+          - generic [ref=e36]:
+            - generic [ref=e37]: Durée
+            - generic [ref=e39]: 1h52
+        - generic [ref=e41]:
+          - generic [ref=e42]: Acteurs
+          - generic [ref=e44]:
+            - generic "Jake Gyllenhaal" [ref=e109]:
+              - img "Jake Gyllenhaal" [ref=e111]
+              - generic [ref=e112]: Jake Gyllenhaal
+            - generic "Anne Hathaway" [ref=e113]:
+              - img "Anne Hathaway" [ref=e115]
+              - generic [ref=e116]: Anne Hathaway
+            - generic "Oliver Platt" [ref=e117]:
+              - img "Oliver Platt" [ref=e119]
+              - generic [ref=e120]: Oliver Platt
+            - generic "Hank Azaria" [ref=e121]:
+              - img "Hank Azaria" [ref=e123]
+              - generic [ref=e124]: Hank Azaria
+            - generic "Josh Gad" [ref=e125]:
+              - img "Josh Gad" [ref=e127]
+              - generic [ref=e128]: Josh Gad
+        - generic [ref=e45]:
+          - generic [ref=e46]: Réalisateur
+          - generic [ref=e129]:
+            - img "Edward Zwick" [ref=e130]
+            - generic [ref=e131]: Edward Zwick
+      - generic [ref=e50]: 8 tentative(s) restante(s).
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - generic [ref=e59]: Film
+          - generic [ref=e60]: Année
+          - generic [ref=e61]: Durée
+          - generic [ref=e62]: Genres
+          - generic [ref=e63]: Pays
+          - generic [ref=e64]: Réal.
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - generic [ref=e136]: "#3"
+            - generic [ref=e137]: Love & autres drogues
+          - generic [ref=e138]:
+            - generic [ref=e139]: ✓
+            - text: "2010"
+          - generic [ref=e140]:
+            - generic [ref=e141]: ✓
+            - text: 112min
+          - generic [ref=e142]:
+            - generic [ref=e143]: ✓
+            - generic [ref=e144]:
+              - generic [ref=e145]: Drame
+              - generic [ref=e146]: Comédie
+              - generic [ref=e147]: Romance
+          - generic [ref=e148]:
+            - generic [ref=e149]: ✓
+            - generic [ref=e150]: États-Unis
+          - generic [ref=e151]:
+            - generic [ref=e152]: ✓
+            - text: Edward Zwick
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e155]: "#2"
+            - generic [ref=e156]: Le Secret de Brokeback Mountain
+          - generic [ref=e157]:
+            - generic [ref=e158]: ↑
+            - text: "2005"
+          - generic [ref=e159]:
+            - generic [ref=e160]: ↓
+            - text: 128min
+          - generic [ref=e161]:
+            - generic [ref=e162]: ✓
+            - generic [ref=e163]:
+              - generic [ref=e164]: Drame
+              - generic [ref=e165]: Romance
+          - generic [ref=e166]:
+            - generic [ref=e167]: ✓
+            - generic [ref=e168]: Canada, États-Unis
+          - generic [ref=e169]:
+            - generic [ref=e170]: ✗
+            - text: Ang Lee
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - generic [ref=e173]: "#1"
+            - generic [ref=e174]: Le Jour d'après
+          - generic [ref=e175]:
+            - generic [ref=e176]: ↑
+            - text: "2004"
+          - generic [ref=e177]:
+            - generic [ref=e178]: ↓
+            - text: 123min
+          - generic [ref=e179]:
+            - generic [ref=e180]: ✗
+            - generic [ref=e181]:
+              - generic [ref=e182]: Science-fiction
+              - generic [ref=e183]: Thriller
+              - generic [ref=e184]: Aventure
+          - generic [ref=e185]:
+            - generic [ref=e186]: ✓
+            - generic [ref=e187]: États-Unis
+          - generic [ref=e188]:
+            - generic [ref=e189]: ✗
+            - text: Roland Emmerich
+      - generic [ref=e102]:
+        - link "← Retour aux jeux" [ref=e103] [cursor=pointer]:
+          - /url: /
+        - button "[dev] réinitialiser" [ref=e104] [cursor=pointer]
+      - dialog [ref=e191]:
+        - button "Fermer" [ref=e192] [cursor=pointer]: ✕
+        - generic [ref=e193]:
+          - generic [ref=e194]: 🎉
+          - heading "Bravo !" [level=2] [ref=e195]
+          - paragraph [ref=e196]: Trouvé en 3 tentatives
+        - generic [ref=e197]:
+          - strong [ref=e198]: Love & autres drogues
+          - generic [ref=e199]: 2010 · Edward Zwick · Drame, Comédie
+        - generic [ref=e200]: "CinéClue 🎬 — 02/06/2026 3/10 ⬛🟨✅ #CinéClue"
+        - generic [ref=e201]:
+          - button "Copier le résultat" [ref=e202] [cursor=pointer]
+          - button "Fermer" [ref=e203] [cursor=pointer]

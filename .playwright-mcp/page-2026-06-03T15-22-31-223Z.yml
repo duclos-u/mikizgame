@@ -1,0 +1,82 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Accueil MikizGame" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e11]: MikizGame
+      - navigation [ref=e12]:
+        - link "Accueil" [ref=e13] [cursor=pointer]:
+          - /url: /
+        - link "Jouer" [ref=e14] [cursor=pointer]:
+          - /url: /games/sutom
+        - link "Classement" [ref=e15] [cursor=pointer]:
+          - /url: /leaderboard
+      - generic [ref=e16]:
+        - generic "Série en cours" [ref=e17]:
+          - generic [ref=e18]: 🔥
+          - generic [ref=e19]: "7"
+        - button "Se connecter" [ref=e20] [cursor=pointer]
+  - main [ref=e21]:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]: Classement
+        - heading "Qui domine aujourd'hui ?" [level=1] [ref=e25]
+        - paragraph [ref=e26]: Compare tes scores par jeu, en quotidien ou sur tous les temps.
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - button "🔤 Sutom" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]: 🔤
+            - text: Sutom
+          - button "🎬 CinéClue" [ref=e31] [cursor=pointer]:
+            - generic [ref=e32]: 🎬
+            - text: CinéClue
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - button "Quotidien" [ref=e35] [cursor=pointer]
+            - button "Tous les temps" [ref=e36] [cursor=pointer]
+          - button "Amis seulement" [ref=e37] [cursor=pointer]: Amis seulement
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]: "#"
+          - generic [ref=e42]: Joueur
+          - generic [ref=e43]: Points
+        - generic [ref=e45]: Chargement…
+  - contentinfo [ref=e46]:
+    - generic [ref=e47]:
+      - link "Accueil MikizGame" [ref=e48] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e53]: MikizGame
+      - generic [ref=e54]: Fait maison · un jeu chaque jour à minuit · © 2026 MikizGame
+      - generic [ref=e55]:
+        - link "Accueil" [ref=e56] [cursor=pointer]:
+          - /url: /
+        - link "Classement" [ref=e57] [cursor=pointer]:
+          - /url: /leaderboard
+  - dialog "Rejoindre une équipe":
+    - heading "Rejoindre une équipe" [level=2]
+    - paragraph: Entre le code de ton équipe ou crée-en une nouvelle pour comparer vos scores chaque jour.
+    - generic: Ton prénom
+    - textbox "Ton prénom":
+      - /placeholder: "ex : Ulysse"
+    - generic: Code équipe
+    - textbox "Code équipe":
+      - /placeholder: "ex : BUREAU42 (laisser vide pour créer)"
+    - generic:
+      - button "Annuler"
+      - button "Rejoindre →"
+  - dialog "Connexion":
+    - heading "Connexion" [level=2]
+    - paragraph: Connecte-toi pour sauvegarder tes scores et apparaître au classement.
+    - generic:
+      - generic: Email
+      - textbox "Email":
+        - /placeholder: toi@example.com
+      - generic: Mot de passe
+      - textbox "Mot de passe":
+        - /placeholder: ""
+      - generic:
+        - button "Annuler"
+        - button "Se connecter →"
+    - paragraph:
+      - text: Pas encore de compte ?
+      - button "Créer un compte"

@@ -1,0 +1,32 @@
+{
+  "name": "mikiz-back",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "bun run scripts/seed.ts",
+    "films:enrich": "bun run scripts/enrich-films.ts",
+    "words:build": "bun run scripts/build-word-lists.ts",
+    "words:schedule": "bun run scripts/schedule-words.ts",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.4",
+    "hono": "^4.6.20",
+    "jose": "^5.9.6",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "latest",
+    "drizzle-kit": "^0.30.2"
+  }
+}

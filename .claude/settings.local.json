@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(bun run *)",
+      "Read(//Users/ulysseduclos/.bun/bin/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(~/.bun/bin/bun run *)",
+      "Bash(~/.bun/bin/bun scripts/seed.ts)",
+      "Bash(psql -U postgres -c '\\\\du')",
+      "Bash(psql -c '\\\\du')",
+      "Bash(psql *)",
+      "Bash(/Users/ulysseduclos/.bun/bin/bun run *)",
+      "Bash(npm install *)",
+      "Bash(npx vite *)",
+      "Bash(mkdir -p /Users/ulysseduclos/Super_dossier/MikizStack/MikizBack/src/data)",
+      "Bash(node -e ' *)",
+      "Bash(kill %1)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(/Users/ulysseduclos/.bun/bin/bun *)",
+      "Bash(TMDB_API_KEY=830601d35da6fefeb66af78bad41a01f /Users/ulysseduclos/.bun/bin/bun run *)",
+      "Bash(node *)",
+      "Bash(pkill -f \"bun run --watch src/index.ts\")",
+      "Bash(pkill -f \"vite\")",
+      "Bash(echo \"Back PID: $!\")",
+      "Bash(echo \"Front PID: $!\")",
+      "Read(//private/tmp/**)",
+      "Read(//tmp/**)",
+      "Bash(xargs kill -9)",
+      "Bash(curl -s http://localhost:3000/health)",
+      "Bash(curl -s \"http://localhost:3000/api/films/search?q=star\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'{len\\(d[\\\\\"films\\\\\"]\\)} films trouvés'\\); [print\\(f'  {f[\\\\\"titre\\\\\"]} \\({f[\\\\\"annee\\\\\"]}\\)'\\) for f in d['films'][:3]]\")",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(gunzip -c \"/Users/ulysseduclos/.claude/projects/-Users-ulysseduclos-Super-dossier-MikizStack/643281bf-9711-41aa-92cd-73c8eb13f0b4/tool-results/webfetch-1780913879203-tnq1sw.bin\")",
+      "Bash(mkdir -p mikizgame_extract)",
+      "Bash(tar -xzf \"/Users/ulysseduclos/.claude/projects/-Users-ulysseduclos-Super-dossier-MikizStack/643281bf-9711-41aa-92cd-73c8eb13f0b4/tool-results/webfetch-1780913879203-tnq1sw.bin\" -C mikizgame_extract)"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "← Les jeux du jour" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - link "jourdejeu" [ref=e7] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e8]:
+      - heading "CinéClue" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Devine le film du jour en 10 tentatives
+    - generic [ref=e12]: mardi 2 juin
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: Titre
+          - generic [ref=e20]: — — —
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]: Genres
+            - generic [ref=e87]: "--"
+          - generic [ref=e26]:
+            - generic [ref=e27]: Pays
+            - generic [ref=e88]: "--"
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: Année
+            - generic [ref=e34]: "--"
+          - generic [ref=e36]:
+            - generic [ref=e37]: Durée
+            - generic [ref=e39]: "--"
+        - generic [ref=e41]:
+          - generic [ref=e42]: Acteurs
+          - generic [ref=e44]: "--"
+        - generic [ref=e45]:
+          - generic [ref=e46]: Réalisateur
+          - generic [ref=e48]: "--"
+      - generic [ref=e49]:
+        - generic [ref=e50]: 10 tentatives pour trouver le film.
+        - generic [ref=e51]: 0 / 10
+      - generic [ref=e53]:
+        - textbox "Tape un titre de film…" [ref=e55]
+        - button "Deviner" [disabled] [ref=e56]
+      - generic [ref=e84]:
+        - link "← Retour aux jeux" [ref=e85] [cursor=pointer]:
+          - /url: /
+        - button "[dev] réinitialiser" [ref=e86] [cursor=pointer]

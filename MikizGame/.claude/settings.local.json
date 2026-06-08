@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node *)",
+      "Bash(npm run *)",
+      "Bash(xxd /Users/ulysseduclos/Super_dossier/MikizGame/web/src/routes/gameRegistry.tsx)",
+      "mcp__playwright__browser_navigate",
+      "Bash(npx playwright *)",
+      "Read(//Users/ulysseduclos/Library/Caches/ms-playwright/**)",
+      "Read(//Users/ulysseduclos/.cache/**)",
+      "Bash(PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=\"$HOME/Library/Caches/ms-playwright/chromium-1223/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing\" node *)",
+      "Bash(npm install *)",
+      "Bash(curl -s http://localhost:5174/)",
+      "Bash(curl -s http://localhost:5174/game/motivex)"
+    ]
+  }
+}

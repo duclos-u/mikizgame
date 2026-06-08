@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JourDeJeu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f6f3;
+  --white: #ffffff;
+  --border: #d8d5cf;
+  --text: #1a1a1a;
+  --muted: #6b6860;
+  --faint: #e8e6e1;
+  --accent: #2d6a4f;
+  --accent-light: #e8f5ef;
+  --accent-border: #b7d8c8;
+  --yellow: #f5a623;
+  --yellow-light: #fef7e8;
+  --red: #c0392b;
+  --font: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --radius: 6px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* NAV */
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.header-date {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.9rem;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover { background: var(--faint); border-color: #b8b5af; }
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #235a41; border-color: #235a41; }
+
+/* LAYOUT */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.topbar-left h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.topbar-left p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.streak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--yellow-light);
+  border: 1px solid #f0d49a;
+  border-radius: var(--radius);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #7a4f00;
+}
+
+/* PROGRESS BAR */
+.progress-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.progress-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.progress-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: var(--faint);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.progress-count {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { color: var(--text); border-color: #b8b5af; }
+
+.filter-btn.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* GAME TABLE */
+.games-table {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.table-head {
+  display: grid;
+  grid-template-columns: 1fr 80px 90px 100px;
+  padding: 0.6rem 1.25rem;
+  background: var(--faint);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.game-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 90px 100px;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background 0.12s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.game-row:last-child { border-bottom: none; }
+.game-row:hover { background: var(--faint); }
+.game-row.done { background: var(--accent-light); }
+.game-row.done:hover { background: #ddf0e8; }
+
+.game-info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.game-icon {
+  font-size: 1.1rem;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.game-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.game-desc {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.tag {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+  border: 1px solid;
+  width: fit-content;
+}
+
+.tag-mots { background: #e8f5ef; color: #2d6a4f; border-color: #b7d8c8; }
+.tag-geo { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+.tag-musique { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
+.tag-cinema { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+.tag-culture { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+
+.game-streak {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.game-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.status-done {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.status-todo {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* PLAY LINK */
+.play-link {
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
+
+/* BOTTOM GRID */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* LEADERBOARD */
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.panel-head {
+  padding: 0.75rem 1.25rem;
+  background: var(--faint);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lb-head-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 50px 50px 60px;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 50px 50px 60px;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 0.83rem;
+  transition: background 0.12s;
+}
+
+.lb-row:last-child { border-bottom: none; }
+.lb-row:hover { background: var(--faint); }
+.lb-row.me { background: var(--accent-light); }
+
+.lb-rank {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.lb-name {
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.me-tag {
+  font-size: 0.65rem;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  border-radius: 3px;
+  padding: 0px 4px;
+  font-weight: 600;
+}
+
+.lb-cell {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.lb-cell.filled { color: var(--text); font-weight: 500; }
+
+.lb-total {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+/* STREAK SIDEBAR */
+.streak-list { padding: 0.5rem 0; }
+
+.streak-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.83rem;
+}
+
+.streak-item:last-child { border-bottom: none; }
+
+.streak-name { color: var(--text); font-weight: 500; }
+.streak-name small { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 400; }
+
+.streak-val {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--yellow);
+  font-weight: 500;
+}
+
+/* INVITE BOX */
+.invite-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.invite-box p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.invite-box h3 { font-size: 0.9rem; font-weight: 600; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 400px;
+  transform: translateY(10px);
+  transition: transform 0.15s;
+}
+
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+.modal > p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.5; }
+
+label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.modal-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.modal-input:focus { border-color: var(--accent); }
+.modal-input::placeholder { color: #b0ada6; }
+
+.modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  header { padding: 0 1rem; }
+  .container { padding: 1.25rem 1rem; }
+  .bottom-grid { grid-template-columns: 1fr; }
+  .table-head,
+  .game-row { grid-template-columns: 1fr 80px 90px; }
+  .table-head > *:last-child,
+  .game-row > *:last-child { display: none; }
+  .lb-head-row,
+  .lb-row { grid-template-columns: 24px 1fr 50px 60px; }
+  .lb-head-row > *:nth-child(4),
+  .lb-row > *:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">jour<span>dejeu</span></a>
+  <div class="header-right">
+    <span class="header-date" id="header-date"></span>
+    <button class="btn btn-primary" onclick="openModal()">+ Rejoindre une équipe</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TOP -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Les jeux du jour</h1>
+      <p>Joue, compare ton score avec l'équipe, reviens demain.</p>
+    </div>
+    <div class="streak-chip">🔥 Série : <strong id="streak-val">4 jours</strong></div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <span class="progress-label">Progression du jour</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <span class="progress-count" id="progress-count">0 / 9</span>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterGames('all', this)">Tous</button>
+    <button class="filter-btn" onclick="filterGames('mots', this)">Mots</button>
+    <button class="filter-btn" onclick="filterGames('geo', this)">Géographie</button>
+    <button class="filter-btn" onclick="filterGames('musique', this)">Musique</button>
+    <button class="filter-btn" onclick="filterGames('cinema', this)">Cinéma</button>
+    <button class="filter-btn" onclick="filterGames('culture', this)">Culture</button>
+  </div>
+
+  <!-- GAMES TABLE -->
+  <div class="games-table" id="games-table">
+    <div class="table-head">
+      <span>Jeu</span>
+      <span>Catégorie</span>
+      <span>Streak perso</span>
+      <span style="text-align:right">Statut</span>
+    </div>
+    <div id="games-body"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- LEADERBOARD + STREAKS -->
+  <div class="section-header" style="margin-bottom:1rem">
+    <h2 style="font-size:1rem;font-weight:600">Classement du jour — Équipe Bureau</h2>
+  </div>
+
+  <div class="bottom-grid">
+
+    <div class="panel">
+      <div class="panel-head">
+        <span>Points du jour</span>
+        <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;color:var(--muted)">1 pt par jeu complété</span>
+      </div>
+      <div class="lb-head-row">
+        <span>#</span>
+        <span>Nom</span>
+        <span style="text-align:center">Mots</span>
+        <span style="text-align:center">Géo</span>
+        <span style="text-align:center">Total</span>
+      </div>
+      <div id="lb-body"></div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-head">🔥 Meilleures séries</div>
+        <div class="streak-list" id="streak-list"></div>
+      </div>
+
+      <div class="invite-box" style="margin-top:1rem">
+        <div>
+          <h3>Inviter un collègue</h3>
+          <p>Partage le code équipe pour comparer vos scores.</p>
+        </div>
+        <button class="btn" onclick="copyCode()">Copier le code</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h2>Rejoindre une équipe</h2>
+    <p>Entre le code de ton équipe ou crée-en une nouvelle pour comparer vos scores chaque jour.</p>
+    <label for="input-pseudo">Ton prénom</label>
+    <input class="modal-input" type="text" id="input-pseudo" placeholder="ex : Ulysse" />
+    <label for="input-code">Code équipe</label>
+    <input class="modal-input" type="text" id="input-code" placeholder="ex : BUREAU42 (laisser vide pour créer)" />
+    <div class="modal-footer">
+      <button class="btn" style="flex:1" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" style="flex:2" onclick="closeModal()">Rejoindre →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAMES = [
+  { id:'sutom',       name:'Sutom',       desc:'Devine le mot du jour en 6 essais.',            icon:'🔤', cat:'mots',    tag:'tag-mots',    tagLabel:'Mots',    url:'https://sutom.nocle.fr',                         streak:21 },
+  { id:'cemantix',    name:'Cemantix',    desc:'Trouve le mot par proximité sémantique.',        icon:'🧠', cat:'mots',    tag:'tag-mots',    tagLabel:'Mots',    url:'https://cemantix.certitudes.org',                 streak:14 },
+  { id:'tusmo',       name:'Tusmo',       desc:'Wordle avec la première lettre donnée.',         icon:'🔡', cat:'mots',    tag:'tag-mots',    tagLabel:'Mots',    url:'https://www.tusmo.xyz',                          streak:7  },
+  { id:'worldle',     name:'Worldle',     desc:'Devine le pays à partir de sa silhouette.',      icon:'🌍', cat:'geo',     tag:'tag-geo',     tagLabel:'Géo',     url:'https://worldle.teuteuf.fr',                     streak:9  },
+  { id:'globle',      name:'Globle',      desc:'Trouve le pays mystère par déduction.',          icon:'🌐', cat:'geo',     tag:'tag-geo',     tagLabel:'Géo',     url:'https://globle-game.com',                        streak:3  },
+  { id:'spottle',     name:'Spottle',     desc:'Reconnais la chanson à partir d\'un extrait.',   icon:'🎵', cat:'musique', tag:'tag-musique', tagLabel:'Musique', url:'https://spottle.info',                           streak:5  },
+  { id:'bandle',      name:'Bandle',      desc:'Identifie la chanson couche par couche.',        icon:'🎸', cat:'musique', tag:'tag-musique', tagLabel:'Musique', url:'https://bandle.app',                             streak:2  },
+  { id:'framed',      name:'Framed',      desc:'Devine le film à partir de captures d\'écran.',  icon:'🎬', cat:'cinema',  tag:'tag-cinema',  tagLabel:'Cinéma',  url:'https://framed.wtf',                             streak:11 },
+  { id:'connections', name:'Connections', desc:'Regroupe 16 mots en 4 catégories cachées.',      icon:'🔗', cat:'culture', tag:'tag-culture', tagLabel:'Culture', url:'https://www.nytimes.com/games/connections',      streak:6  },
+];
+
+const TEAM = [
+  { name:'Thomas',  scores:[true,true,false,true],  streak:12 },
+  { name:'Camille', scores:[true,false,true,true],  streak:8  },
+  { name:'Moi',     scores:[true,true,true,false],  streak:5,  me:true },
+  { name:'Raphaël', scores:[false,true,false,true], streak:3  },
+  { name:'Sophie',  scores:[false,false,true,false], streak:1  },
+];
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem('jdj2') || '{"done":[]}'); }
+  catch(e) { return { done:[] }; }
+}
+
+function saveState(s) {
+  localStorage.setItem('jdj2', JSON.stringify(s));
+}
+
+function updateProgress(done) {
+  const pct = Math.round((done.length / GAMES.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = done.length + ' / ' + GAMES.length;
+}
+
+let currentFilter = 'all';
+
+function renderGames(filter) {
+  currentFilter = filter;
+  const state = getState();
+  const body = document.getElementById('games-body');
+  body.innerHTML = '';
+  const list = filter === 'all' ? GAMES : GAMES.filter(g => g.cat === filter);
+  list.forEach(g => {
+    const done = state.done.includes(g.id);
+    const row = document.createElement('a');
+    row.href = g.url;
+    row.target = '_blank';
+    row.rel = 'noopener noreferrer';
+    row.className = 'game-row' + (done ? ' done' : '');
+    row.innerHTML = `
+      <div class="game-info">
+        <span class="game-icon">${g.icon}</span>
+        <div>
+          <div class="game-name">${g.name}</div>
+          <div class="game-desc">${g.desc}</div>
+        </div>
+      </div>
+      <div><span class="tag ${g.tag}">${g.tagLabel}</span></div>
+      <div class="game-streak">🔥 ${g.streak}j</div>
+      <div class="game-status" style="justify-content:flex-end">
+        ${done
+          ? `<div class="status-done"><div class="status-dot"></div> Fait aujourd'hui</div>`
+          : `<span class="play-link">Jouer →</span>`
+        }
+      </div>
+    `;
+    row.addEventListener('click', () => {
+      const s = getState();
+      if (!s.done.includes(g.id)) {
+        s.done.push(g.id);
+        saveState(s);
+        setTimeout(() => {
+          updateProgress(s.done);
+          renderGames(currentFilter);
+        }, 400);
+      }
+    });
+    body.appendChild(row);
+  });
+  updateProgress(state.done);
+}
+
+function filterGames(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGames(cat);
+}
+
+function renderLeaderboard() {
+  const sorted = [...TEAM].sort((a,b) => b.scores.filter(Boolean).length - a.scores.filter(Boolean).length);
+  const body = document.getElementById('lb-body');
+  body.innerHTML = '';
+  sorted.forEach((p, i) => {
+    const total = p.scores.filter(Boolean).length;
+    const mots = p.scores.slice(0,2);
+    const geo = p.scores.slice(2,4);
+    const row = document.createElement('div');
+    row.className = 'lb-row' + (p.me ? ' me' : '');
+    row.innerHTML = `
+      <span class="lb-rank">${i+1}</span>
+      <span class="lb-name">${p.name}${p.me ? ' <span class="me-tag">toi</span>' : ''}</span>
+      <span class="lb-cell ${mots.some(Boolean)?'filled':''}">${mots.filter(Boolean).length}/2</span>
+      <span class="lb-cell ${geo.some(Boolean)?'filled':''}">${geo.filter(Boolean).length}/2</span>
+      <span class="lb-total">${total} pt${total>1?'s':''}</span>
+    `;
+    body.appendChild(row);
+  });
+}
+
+function renderStreaks() {
+  const sorted = [...TEAM].sort((a,b) => b.streak - a.streak);
+  const list = document.getElementById('streak-list');
+  list.innerHTML = '';
+  sorted.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'streak-item';
+    item.innerHTML = `
+      <div class="streak-name">
+        ${i === 0 ? '🥇 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : ''}${p.name}
+        <small>${p.scores.filter(Boolean).length} jeu${p.scores.filter(Boolean).length>1?'x':''} aujourd'hui</small>
+      </div>
+      <span class="streak-val">🔥 ${p.streak}j</span>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function copyCode() {
+  navigator.clipboard.writeText('BUREAU42').catch(() => {});
+  const btn = event.target;
+  btn.textContent = 'Copié !';
+  setTimeout(() => btn.textContent = 'Copier le code', 2000);
+}
+
+// Date
+const now = new Date();
+document.getElementById('header-date').textContent = now.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+
+renderGames('all');
+renderLeaderboard();
+renderStreaks();
+</script>
+</body>
+</html>

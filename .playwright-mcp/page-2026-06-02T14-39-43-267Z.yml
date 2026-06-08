@@ -1,0 +1,83 @@
+- generic [ref=e132]:
+  - banner [ref=e133]:
+    - generic [ref=e134]:
+      - link "← Les jeux du jour" [ref=e135] [cursor=pointer]:
+        - /url: /
+      - link "jourdejeu" [ref=e136] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e137]:
+      - heading "CinéClue" [level=1] [ref=e138]
+      - paragraph [ref=e139]: Devine le film du jour en 10 tentatives
+    - generic [ref=e141]: mardi 2 juin
+  - main [ref=e142]:
+    - generic [ref=e144]:
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]: Titre
+          - generic [ref=e149]: — — —
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - generic [ref=e152]: Genres
+            - generic [ref=e154]: "--"
+          - generic [ref=e155]:
+            - generic [ref=e156]: Pays
+            - generic [ref=e187]:
+              - generic "États-Unis" [ref=e188]: 🇺🇸
+              - generic "États-Unis" [ref=e189]: 🇺🇸
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - generic [ref=e161]: Année
+            - generic [ref=e163]:
+              - text: Avant
+              - strong [ref=e190]: "2025"
+          - generic [ref=e164]:
+            - generic [ref=e165]: Durée
+            - generic [ref=e167]:
+              - text: Moins de
+              - strong [ref=e191]: 3h18
+        - generic [ref=e168]:
+          - generic [ref=e169]: Acteurs
+          - generic [ref=e171]: "--"
+        - generic [ref=e172]:
+          - generic [ref=e173]: Réalisateur
+          - generic [ref=e175]: "--"
+      - generic [ref=e176]:
+        - generic [ref=e177]: 9 tentative(s) restante(s).
+        - generic [ref=e178]: 1 / 10
+      - generic [ref=e180]:
+        - textbox "Tape un titre de film…" [active] [ref=e182]: TitanicTitanic
+        - button "Deviner" [disabled] [ref=e183]
+      - generic [ref=e192]:
+        - generic [ref=e193]:
+          - generic [ref=e194]: Film
+          - generic [ref=e195]: Année
+          - generic [ref=e196]: Durée
+          - generic [ref=e197]: Genres
+          - generic [ref=e198]: Pays
+          - generic [ref=e199]: Réal.
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]: "#1"
+            - generic [ref=e203]: "Avatar : De feu et de cendres"
+          - generic [ref=e204]:
+            - generic [ref=e205]: "?"
+            - text: "2025"
+          - generic [ref=e206]:
+            - generic [ref=e207]: "?"
+            - text: 198min
+          - generic [ref=e208]:
+            - generic [ref=e209]: ✗
+            - generic [ref=e210]:
+              - generic [ref=e211]: Science-fiction
+              - generic [ref=e212]: Aventure
+              - generic [ref=e213]: Fantastique
+          - generic [ref=e214]:
+            - generic [ref=e215]: ✓
+            - generic [ref=e216]: États-Unis
+          - generic [ref=e217]:
+            - generic [ref=e218]: ✗
+            - text: James Cameron
+      - generic [ref=e184]:
+        - link "← Retour aux jeux" [ref=e185] [cursor=pointer]:
+          - /url: /
+        - button "[dev] réinitialiser" [ref=e186] [cursor=pointer]
