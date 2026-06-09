@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   api,
   type AllTimeEntry,
+  type CrossAllTimeEntry,
   type CrossGameEntry,
   type LeaderboardEntry,
 } from '../api/client'
@@ -63,7 +64,7 @@ function Podium({
   rows,
   currentUser,
 }: {
-  rows: CrossGameEntry[]
+  rows: { username: string }[]
   currentUser: string | null
 }) {
   const top3 = rows.slice(0, 3)
@@ -72,7 +73,7 @@ function Podium({
   const order = [top3[1], top3[0], top3[2]].filter(Boolean) as CrossGameEntry[]
   const places = order.map((r) => top3.indexOf(r) + 1)
   const medals = ['🥇', '🥈', '🥉']
-  const heights = [78, 104, 58]
+  const heights = [104, 78, 58]
 
   return (
     <div className="podium">
@@ -156,6 +157,9 @@ export function LeaderboardPage() {
   const [allTimeEntries, setAllTimeEntries] = useState<AllTimeEntry[]>([])
   const [allTimeLoading, setAllTimeLoading] = useState(true)
 
+  const [crossAllTimeEntries, setCrossAllTimeEntries] = useState<CrossAllTimeEntry[]>([])
+  const [crossAllTimeLoading, setCrossAllTimeLoading] = useState(false)
+
   useEffect(() => {
     api.leaderboard
       .getCross()
@@ -198,6 +202,16 @@ export function LeaderboardPage() {
       .finally(() => setAllTimeLoading(false))
   }, [scope, gameId])
 
+  useEffect(() => {
+    if (gameId !== 'general' || scope !== 'all') return
+    setCrossAllTimeLoading(true)
+    api.leaderboard
+      .getCrossStats()
+      .then(({ entries }) => setCrossAllTimeEntries(entries))
+      .catch(() => {})
+      .finally(() => setCrossAllTimeLoading(false))
+  }, [scope, gameId])
+
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',
     day: 'numeric',
@@ -207,7 +221,6 @@ export function LeaderboardPage() {
   const currentGame = GAMES.find((g) => g.id === gameId) ?? liveGames[0]
   const showBreakdown = crossGames.length > 1
   const currentUser = user?.username ?? null
-  const meRow = crossEntries.find((r) => r.username === currentUser)
 
   return (
     <div className="page lb-page" style={{ '--g': currentGame?.accent } as React.CSSProperties}>
@@ -224,24 +237,22 @@ export function LeaderboardPage() {
           onChange={setGameId}
         />
         <div className="lb-control-right">
-          {gameId !== 'general' && (
-            <div className="seg">
-              <button
-                type="button"
-                className={`seg-btn${scope === 'daily' ? ' active' : ''}`}
-                onClick={() => setScope('daily')}
-              >
-                Quotidien
-              </button>
-              <button
-                type="button"
-                className={`seg-btn${scope === 'all' ? ' active' : ''}`}
-                onClick={() => setScope('all')}
-              >
-                Tous les temps
-              </button>
-            </div>
-          )}
+          <div className="seg">
+            <button
+              type="button"
+              className={`seg-btn${scope === 'daily' ? ' active' : ''}`}
+              onClick={() => setScope('daily')}
+            >
+              Quotidien
+            </button>
+            <button
+              type="button"
+              className={`seg-btn${scope === 'all' ? ' active' : ''}`}
+              onClick={() => setScope('all')}
+            >
+              Tous les temps
+            </button>
+          </div>
           <button
             type="button"
             className="friends-toggle"
@@ -253,11 +264,11 @@ export function LeaderboardPage() {
         </div>
       </div>
 
-      {/* Général tab — podium + cross-game total */}
-      {gameId === 'general' && crossEntries.length >= 2 && (
+      {/* Général tab — daily: podium + cross-game total */}
+      {gameId === 'general' && scope === 'daily' && crossEntries.length >= 2 && (
         <Podium rows={crossEntries} currentUser={currentUser} />
       )}
-      {gameId === 'general' && (
+      {gameId === 'general' && scope === 'daily' && (
         <div className="lb-table" style={{ marginBottom: '1.25rem' }}>
           <div
             className="lb-head-row"
@@ -330,6 +341,102 @@ export function LeaderboardPage() {
         </div>
       )}
 
+      {/* Général tab — all-time: podium + cumulative cross-game totals */}
+      {gameId === 'general' && scope === 'all' && crossAllTimeEntries.length >= 2 && (
+        <Podium rows={crossAllTimeEntries} currentUser={currentUser} />
+      )}
+      {gameId === 'general' && scope === 'all' && (
+        <div className="lb-table" style={{ marginBottom: '1.25rem' }}>
+          <div
+            style={{
+              background: 'var(--card-2)',
+              padding: '0.55rem 1.25rem',
+              borderBottom: '1px solid var(--border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--muted)',
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.05em',
+            }}
+          >
+            <span>Général — tous les temps</span>
+            <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--muted)' }}>
+            </span>
+          </div>
+          <div
+            className="lb-head-row"
+            style={{
+              gridTemplateColumns: showBreakdown
+                ? '32px 1fr auto 70px'
+                : '32px 1fr 70px',
+            }}
+          >
+            <span>#</span>
+            <span>Joueur</span>
+            {showBreakdown && <span>Détail</span>}
+            <span className="ta-r">Points</span>
+          </div>
+          <div>
+            {crossAllTimeLoading ? (
+              <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
+                Chargement…
+              </div>
+            ) : crossAllTimeEntries.length === 0 ? (
+              <div style={{ padding: '1.25rem', color: 'var(--muted)', fontSize: '0.82rem' }}>
+                Aucune partie enregistrée.{' '}
+                {!user && <span>Connecte-toi pour apparaître ici.</span>}
+              </div>
+            ) : (
+              crossAllTimeEntries.map((entry, i) => {
+                const isMe = currentUser === entry.username
+                return (
+                  <div
+                    key={entry.username}
+                    className={`lb-row${isMe ? ' is-me' : ''}`}
+                    style={{
+                      gridTemplateColumns: showBreakdown
+                        ? '32px 1fr auto 70px'
+                        : '32px 1fr 70px',
+                    }}
+                  >
+                    <span className={`lb-rank${i < 3 ? ' top' : ''}`}>
+                      {['🥇', '🥈', '🥉'][i] ?? i + 1}
+                    </span>
+                    <span className="lb-player">
+                      <Avatar name={entry.username} size={30} />
+                      <span className="lb-player-name">
+                        {entry.username}
+                        {isMe && <span className="you-tag">toi</span>}
+                      </span>
+                    </span>
+                    {showBreakdown && (
+                      <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                        {crossGames.map((g) => {
+                          const bd = entry.breakdown[g]
+                          return (
+                            <span
+                              key={g}
+                              className={`lb-chip${bd ? ' lb-chip-highlight' : ''}`}
+                              title={gameLabel(g)}
+                            >
+                              {gameShort(g)}: {bd ? bd.points : 0}
+                            </span>
+                          )
+                        })}
+                      </span>
+                    )}
+                    <span className="lb-total ta-r">{entry.total}</span>
+                  </div>
+                )
+              })
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Per-game daily table */}
       {gameId !== 'general' && scope === 'daily' && (() => {
         const entries = perGameEntries[gameId] ?? []
@@ -351,8 +458,8 @@ export function LeaderboardPage() {
             >
               <span>#</span>
               <span>Joueur</span>
-              <span className="ta-r">Points</span>
               <span className="ta-r">Essais</span>
+              <span className="ta-r">Points</span>
             </div>
             <div>
               {perGameLoading ? (
@@ -382,8 +489,8 @@ export function LeaderboardPage() {
                           {isMe && <span className="you-tag">toi</span>}
                         </span>
                       </span>
-                      <span className="lb-cell filled ta-r">{entry.points}</span>
                       <span className="lb-cell ta-r">{entry.score ?? '—'}</span>
+                      <span className="lb-cell filled ta-r">{entry.points}</span>
                     </div>
                   )
                 })
@@ -469,8 +576,12 @@ export function LeaderboardPage() {
       )}
 
       {/* Sticky me bar */}
-      {meRow && currentUser && (() => {
-        const meIdx = crossEntries.findIndex((r) => r.username === currentUser)
+      {currentUser && (() => {
+        const activeEntries =
+          gameId === 'general' && scope === 'all' ? crossAllTimeEntries : crossEntries
+        const meIdx = activeEntries.findIndex((r) => r.username === currentUser)
+        if (meIdx === -1) return null
+        const meEntry = activeEntries[meIdx]
         return (
         <div className="lb-sticky-me">
           <span className={`lb-rank${meIdx < 3 ? ' top' : ''}`}>
@@ -481,9 +592,9 @@ export function LeaderboardPage() {
             <span className="lb-player-name">Toi</span>
           </span>
           <span className="lb-me-note">
-            {scope === 'daily'
-              ? `${meRow.total} points aujourd'hui`
-              : 'Score global'}
+            {gameId === 'general' && scope === 'all'
+              ? `${meEntry.total} points au total`
+              : `${meEntry.total} points aujourd'hui`}
           </span>
           <button
             type="button"

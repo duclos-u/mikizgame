@@ -71,6 +71,16 @@ export type CrossLeaderboardResponse = {
   entries: CrossGameEntry[]
 }
 
+export type CrossAllTimeBreakdown = { points: number }
+
+export type CrossAllTimeEntry = {
+  username: string
+  total: number
+  breakdown: Record<string, CrossAllTimeBreakdown>
+}
+
+export type CrossAllTimeResponse = { games: string[]; entries: CrossAllTimeEntry[] }
+
 export type DailyInfo = {
   date: string
   wordLength: number
@@ -191,6 +201,8 @@ export const api = {
       request<AllTimeResponse>(`/leaderboard/${game}/stats`),
     getCross: (date?: string) =>
       request<CrossLeaderboardResponse>(`/leaderboard/cross${date ? `?date=${date}` : ''}`),
+    getCrossStats: () =>
+      request<CrossAllTimeResponse>('/leaderboard/cross/stats'),
     getCounts: (date?: string) =>
       request<DailyCountsResponse>(`/leaderboard/counts${date ? `?date=${date}` : ''}`),
   },

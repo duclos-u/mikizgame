@@ -57,6 +57,52 @@ leaderboard.get("/cross", async (c) => {
 });
 
 /**
+ * GET /api/leaderboard/cross/stats
+ * Public. Returns all-time cross-game leaderboard, aggregating F1 points across all active games.
+ */
+leaderboard.get("/cross/stats", async (c) => {
+  const activeGames = await db.query.games.findMany({
+    where: eq(games.active, true),
+  });
+
+  if (activeGames.length === 0) {
+    return c.json({ games: [], entries: [] });
+  }
+
+  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 ELSE 0 END`;
+
+  const gameResults = await Promise.all(
+    activeGames.map(async (game) => {
+      const entries = await db
+        .select({
+          username: users.username,
+          totalPoints: sql<number>`sum(${pointsExpr})::int`,
+        })
+        .from(leaderboardEntries)
+        .innerJoin(users, eq(leaderboardEntries.userId, users.id))
+        .where(eq(leaderboardEntries.gameId, game.id))
+        .groupBy(users.id, users.username);
+      return { slug: game.slug, entries };
+    })
+  );
+
+  const userMap: Record<string, { total: number; breakdown: Record<string, { points: number }> }> = {};
+  for (const { slug, entries } of gameResults) {
+    for (const e of entries) {
+      if (!userMap[e.username]) userMap[e.username] = { total: 0, breakdown: {} };
+      userMap[e.username].breakdown[slug] = { points: e.totalPoints };
+      userMap[e.username].total += e.totalPoints;
+    }
+  }
+
+  const result = Object.entries(userMap)
+    .map(([username, data]) => ({ username, ...data }))
+    .sort((a, b) => b.total - a.total || a.username.localeCompare(b.username));
+
+  return c.json({ games: activeGames.map((g) => g.slug), entries: result });
+});
+
+/**
  * GET /api/leaderboard/:game/stats
  * Public. Returns all-time aggregate stats per user for a game.
  * Sorted by average points DESC (more = better), users with no wins rank last.
