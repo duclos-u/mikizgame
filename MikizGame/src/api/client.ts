@@ -158,6 +158,17 @@ export type CineclueGuessResponse = {
   filmCible: CineclueFilm | null
 }
 
+export type TmdbFilmResult = {
+  tmdbId: number
+  titre: string
+  annee: number | null
+  poster: string | null
+}
+
+export function searchFilms(q: string): Promise<TmdbFilmResult[]> {
+  return request<TmdbFilmResult[]>(`/cineclue/search?q=${encodeURIComponent(q)}`)
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const api = {

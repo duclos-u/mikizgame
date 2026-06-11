@@ -1806,6 +1806,9 @@ $flip-duration: 400ms
   &:not(.cineclue-acteur-on)
     .cineclue-acteur-photo
       background: var(--card-2)
+      img
+        filter: grayscale(1)
+        opacity: 0.45
     .cineclue-acteur-nom
       color: var(--muted)
 
@@ -1929,7 +1932,7 @@ $flip-duration: 400ms
   border-radius: var(--radius)
   box-shadow: 0 4px 16px rgba(0,0,0,.25)
   list-style: none
-  max-height: 240px
+  max-height: 195px
   overflow-y: auto
   z-index: 100
 
@@ -1937,7 +1940,7 @@ $flip-duration: 400ms
   padding: 0.5rem 0.9rem
   cursor: pointer
   display: flex
-  align-items: baseline
+  align-items: center
   gap: 0.5rem
   font-size: 0.88rem
 
@@ -2022,6 +2025,18 @@ $flip-duration: 400ms
     grid-template-columns: 2fr 1fr 1fr 1.5fr
     > div:nth-child(5), > div:nth-child(6), > div:nth-child(7)
       display: none
+
+.cineclue-history-actors
+  display: flex
+  flex-wrap: wrap
+  gap: 0.5rem
+  padding: 0.5rem 0.9rem 0.7rem
+  border-top: 1px solid var(--border)
+  background: var(--card)
+
+  &:last-child
+    border-bottom-left-radius: var(--radius)
+    border-bottom-right-radius: var(--radius)
 
 .cineclue-history-titre
   display: flex

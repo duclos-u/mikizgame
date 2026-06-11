@@ -194,7 +194,7 @@ export default function FilmDuJour() {
   // ── Soumission d'un film ──────────────────────────────────────────────────
 
   const handleGuess = useCallback(
-    async (film: CineclueFilm) => {
+    async (film: { id: number }) => {
       if (gameOver || submitting) return
       setSubmitting(true)
       setMessage('')

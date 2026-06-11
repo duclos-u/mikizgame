@@ -1,4 +1,4 @@
-import { date, jsonb, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { date, integer, jsonb, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const cineclueSessionStatusEnum = pgEnum("cineclue_session_status", [
@@ -22,3 +22,8 @@ export const cineclueSessions = pgTable("cineclue_sessions", {
 });
 
 export type CineclueSession = typeof cineclueSessions.$inferSelect;
+
+export const cineclueDaily = pgTable("cineclue_daily", {
+  date: date("date").primaryKey(),
+  tmdbId: integer("tmdb_id").notNull(),
+});

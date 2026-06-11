@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { auth } from "./routes/auth";
-import { filmdujour, filmsSearch } from "./routes/filmdujour";
+import { cineclueSearch, filmdujour } from "./routes/filmdujour";
 import { leaderboard } from "./routes/leaderboard";
 import { sutom } from "./routes/sutom";
 
@@ -23,7 +23,7 @@ app.get("/health", (c) => c.json({ ok: true, ts: new Date().toISOString() }));
 app.route("/api/auth", auth);
 app.route("/api/sutom", sutom);
 app.route("/api/filmdujour", filmdujour);
-app.route("/api/films", filmsSearch);
+app.route("/api/cineclue", cineclueSearch);
 app.route("/api/leaderboard", leaderboard);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));

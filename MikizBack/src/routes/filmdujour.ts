@@ -1,21 +1,39 @@
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
-import { cineclueSessions, games, leaderboardEntries } from "../db/schema";
+import { cineclueDaily, cineclueSessions, games, leaderboardEntries } from "../db/schema";
 import {
   compareFilms,
-  getFilmById,
-  getFilmDuJour,
   indicesFinaux,
   indicesVides,
-  searchFilms,
   type Film,
   type IndicesReveles,
 } from "../lib/cineclue";
 import { todayDate } from "../lib/date";
+import { fetchFilmById } from "../lib/tmdb";
 import { authMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 10;
+
+// ─── Film du jour ─────────────────────────────────────────────────────────────
+
+let dailyCache: { dateStr: string; film: Film } | null = null;
+
+async function getDailyFilm(): Promise<Film | null> {
+  const dateStr = todayDate();
+  if (dailyCache?.dateStr === dateStr) return dailyCache.film;
+
+  const row = await db.query.cineclueDaily.findFirst({
+    where: eq(cineclueDaily.date, dateStr),
+  });
+  if (!row) return null;
+
+  const film = await fetchFilmById(row.tmdbId);
+  if (film) dailyCache = { dateStr, film };
+  return film;
+}
+
+// ─── Game ID helper ───────────────────────────────────────────────────────────
 
 let cineclueGameId: string | null = null;
 async function getCineclueGameId(): Promise<string | null> {
@@ -24,6 +42,8 @@ async function getCineclueGameId(): Promise<string | null> {
   if (game) cineclueGameId = game.id;
   return cineclueGameId;
 }
+
+// ─── Routes ───────────────────────────────────────────────────────────────────
 
 const filmdujour = new Hono();
 
@@ -35,6 +55,9 @@ filmdujour.get("/session", authMiddleware, async (c) => {
   const userId = c.get("userId") as string;
   const today = todayDate();
 
+  const cible = await getDailyFilm();
+  if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
+
   const session = await db.query.cineclueSessions.findFirst({
     where: and(
       eq(cineclueSessions.userId, userId),
@@ -43,8 +66,6 @@ filmdujour.get("/session", authMiddleware, async (c) => {
   });
 
   if (!session) return c.json({ session: null });
-
-  const cible = getFilmDuJour();
 
   return c.json({
     session: {
@@ -69,10 +90,13 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
   const body = await c.req.json<{ tmdbId?: number }>();
   if (!body.tmdbId) return c.json({ error: "tmdbId requis" }, 400);
 
-  const filmSoumis = getFilmById(body.tmdbId);
-  if (!filmSoumis) return c.json({ error: "Film introuvable dans la liste" }, 404);
+  const [filmSoumis, cible] = await Promise.all([
+    fetchFilmById(body.tmdbId),
+    getDailyFilm(),
+  ]);
 
-  const cible = getFilmDuJour();
+  if (!filmSoumis) return c.json({ error: "Film introuvable" }, 404);
+  if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
 
   const session = await db.query.cineclueSessions.findFirst({
     where: and(
@@ -94,7 +118,6 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   const correct = filmSoumis.id === cible.id;
 
-  // Révèle tout si correct, sinon calcule les indices communs
   const nouveauxIndices: IndicesReveles = correct
     ? indicesFinaux(cible)
     : compareFilms(filmSoumis, cible, indicesCourants);
@@ -106,7 +129,11 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];
   const estPerdu = !correct && nouvellesTentatives.length >= MAX_TENTATIVES;
-  const nouveauStatut: "in_progress" | "won" | "lost" = correct ? "won" : estPerdu ? "lost" : "in_progress";
+  const nouveauStatut: "in_progress" | "won" | "lost" = correct
+    ? "won"
+    : estPerdu
+      ? "lost"
+      : "in_progress";
   const completedAt = nouveauStatut !== "in_progress" ? new Date() : null;
 
   if (!session) {
@@ -130,7 +157,6 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
       .where(eq(cineclueSessions.id, session.id));
   }
 
-  // Enregistrement au classement en fin de partie
   if (nouveauStatut !== "in_progress") {
     const gameId = await getCineclueGameId();
     if (gameId) {
@@ -151,6 +177,32 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
     statut: nouveauStatut,
     filmCible: nouveauStatut !== "in_progress" ? cible : null,
   });
+});
+
+/**
+ * POST /api/filmdujour/daily
+ * Dev uniquement. Définit le film du jour. Body : { tmdbId: number; date?: string }
+ */
+filmdujour.post("/daily", async (c) => {
+  if (process.env.NODE_ENV === "production") {
+    return c.json({ error: "Indisponible en production" }, 403);
+  }
+
+  const { tmdbId, date } = await c.req.json<{ tmdbId: number; date?: string }>();
+  if (!tmdbId) return c.json({ error: "tmdbId requis" }, 400);
+
+  const targetDate = date ?? todayDate();
+
+  const film = await fetchFilmById(tmdbId);
+  if (!film) return c.json({ error: "Film TMDB introuvable" }, 404);
+
+  await db
+    .insert(cineclueDaily)
+    .values({ date: targetDate, tmdbId })
+    .onConflictDoUpdate({ target: cineclueDaily.date, set: { tmdbId } });
+
+  dailyCache = null;
+  return c.json({ ok: true, film });
 });
 
 /**
@@ -191,15 +243,49 @@ filmdujour.delete("/session", authMiddleware, async (c) => {
 
 export { filmdujour };
 
-// ─── Route search séparée ─────────────────────────────────────────────────────
+// ─── Route search TMDB ────────────────────────────────────────────────────────
 
 /**
- * GET /api/films/search?q=...
- * Public. Autocomplete sur la liste locale uniquement.
+ * GET /api/cineclue/search?q=...
+ * Public. Autocomplete via l'API TMDB (min 3 caractères, max 20 résultats).
  */
-export const filmsSearch = new Hono();
+export const cineclueSearch = new Hono();
 
-filmsSearch.get("/search", (c) => {
+cineclueSearch.get("/search", async (c) => {
   const q = c.req.query("q") ?? "";
-  return c.json({ films: searchFilms(q) });
+  if (q.length < 3) {
+    return c.json({ error: "q doit faire au moins 3 caractères" }, 400);
+  }
+
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) return c.json({ error: "TMDB non configuré" }, 502);
+
+  try {
+    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(q)}&language=fr-FR&page=1&api_key=${apiKey}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`TMDB HTTP ${res.status}`);
+
+    const data = (await res.json()) as {
+      results: Array<{
+        id: number;
+        title: string;
+        release_date: string;
+        poster_path: string | null;
+      }>;
+    };
+
+    const films = data.results.slice(0, 20).map((m) => ({
+      tmdbId: m.id,
+      titre: m.title,
+      annee: m.release_date ? Number(m.release_date.slice(0, 4)) : null,
+      poster: m.poster_path
+        ? `https://image.tmdb.org/t/p/w92${m.poster_path}`
+        : null,
+    }));
+
+    return c.json(films);
+  } catch (err) {
+    console.error("[cineclue/search] TMDB error:", err);
+    return c.json({ error: "Erreur TMDB" }, 502);
+  }
 });
