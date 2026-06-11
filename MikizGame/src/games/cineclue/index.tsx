@@ -58,6 +58,7 @@ const INDICES_VIDES: CineclueIndices = {
   anneeMax: null,
   dureeMin: null,
   dureeMax: null,
+  langue: null,
 }
 
 // ─── Shell ────────────────────────────────────────────────────────────────────

@@ -131,6 +131,7 @@ export type CineclueIndices = {
   anneeMax: number | null
   dureeMin: number | null
   dureeMax: number | null
+  langue: string | null
 }
 
 export type CineclueStatut = 'in_progress' | 'won' | 'lost'

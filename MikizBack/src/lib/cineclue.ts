@@ -37,6 +37,7 @@ export type IndicesReveles = {
   dureeMin: number | null;
   // Fourchette durée : borne supérieure (dernier soumis > cible)
   dureeMax: number | null;
+  langue: string | null;
 };
 
 const FILMS = filmsData as Film[];
@@ -83,6 +84,7 @@ export function indicesVides(): IndicesReveles {
     anneeMax: null,
     dureeMin: null,
     dureeMax: null,
+    langue: null,
   };
 }
 
@@ -139,7 +141,9 @@ export function compareFilms(
     }
   }
 
-  return { genres, pays, acteurs, realisateurRevele, anneeMin, anneeMax, dureeMin, dureeMax };
+  const langue = indicesCourants.langue ?? (soumis.langue === cible.langue ? cible.langue : null);
+
+  return { genres, pays, acteurs, realisateurRevele, anneeMin, anneeMax, dureeMin, dureeMax, langue };
 }
 
 /**
@@ -156,5 +160,6 @@ export function indicesFinaux(cible: Film): IndicesReveles {
     anneeMax: null,
     dureeMin: null,
     dureeMax: null,
+    langue: cible.langue,
   };
 }

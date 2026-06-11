@@ -164,6 +164,43 @@ export function SlotNationalite({
   )
 }
 
+// ─── Langue ──────────────────────────────────────────────────────────────────
+
+const LANGUES: Record<string, string> = {
+  en: '🇬🇧', fr: '🇫🇷', ja: '🇯🇵', ko: '🇰🇷',
+  de: '🇩🇪', it: '🇮🇹', es: '🇪🇸', zh: '🇨🇳',
+  pt: '🇵🇹', ru: '🇷🇺', sv: '🇸🇪', da: '🇩🇰',
+  no: '🇳🇴', fi: '🇫🇮', nl: '🇳🇱', pl: '🇵🇱',
+  hi: '🇮🇳', ar: '🇸🇦', he: '🇮🇱', tr: '🇹🇷',
+  fa: '🇮🇷', cs: '🇨🇿', ro: '🇷🇴', hu: '🇭🇺',
+  el: '🇬🇷',
+}
+
+export function SlotLangue({
+  langue,
+  filmCible,
+}: {
+  langue: string | null
+  filmCible: CineclueFilm | null
+}) {
+  const code = filmCible ? filmCible.langue : langue
+  if (!code) {
+    return (
+      <Slot label="Langue">
+        <span className="cineclue-hidden">--</span>
+      </Slot>
+    )
+  }
+  const flag = LANGUES[code] ?? '🏳️'
+  return (
+    <Slot label="Langue">
+      <span className="cineclue-revealed cineclue-flip">
+        {flag} {code.toUpperCase()}
+      </span>
+    </Slot>
+  )
+}
+
 // ─── Date (fourchette) ────────────────────────────────────────────────────────
 
 export function SlotDate({
@@ -359,7 +396,7 @@ export function PersonaBoard({ indices, filmCible }: Props) {
           ciblePays={filmCible?.pays}
         />
       </div>
-      <div className="cineclue-persona-row">
+      <div className="cineclue-persona-row-3">
         <SlotDate
           anneeMin={indices.anneeMin}
           anneeMax={indices.anneeMax}
@@ -370,6 +407,7 @@ export function PersonaBoard({ indices, filmCible }: Props) {
           dureeMax={indices.dureeMax}
           filmCible={filmCible}
         />
+        <SlotLangue langue={indices.langue} filmCible={filmCible} />
       </div>
       <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} />
       <SlotReal realisateurRevele={indices.realisateurRevele} filmCible={filmCible} />

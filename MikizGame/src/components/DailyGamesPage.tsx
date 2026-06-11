@@ -4,6 +4,27 @@ import { api, type CrossGameEntry } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
 
+const TODAY = new Date().toISOString().slice(0, 10)
+
+function isCineclueCompleteToday(): boolean {
+  try {
+    const raw = localStorage.getItem(`filmdujourstate_${TODAY}`)
+    if (!raw) return false
+    const parsed = JSON.parse(raw) as { statut?: string }
+    return parsed.statut === 'won' || parsed.statut === 'lost'
+  } catch {
+    return false
+  }
+}
+
+function isSutomCompleteToday(): boolean {
+  try {
+    return localStorage.getItem(`sutomstate_${TODAY}`) === '1'
+  } catch {
+    return false
+  }
+}
+
 // ── Pill ─────────────────────────────────────────────────────────────────────
 function Pill({
   children,
@@ -299,6 +320,15 @@ type DailyGamesPageProps = {
 export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps) {
   const { user } = useAuth()
   const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
+
+  const internalDone: Record<string, boolean> = {
+    cineclue: isCineclueCompleteToday(),
+    sutom: isSutomCompleteToday(),
+  }
+  const effectiveDoneIds = [
+    ...doneIds.filter((id) => !(id in internalDone)),
+    ...Object.entries(internalDone).filter(([, v]) => v).map(([id]) => id),
+  ]
   const [lbLoading, setLbLoading] = useState(true)
   const [playerCounts, setPlayerCounts] = useState<Record<string, number>>({})
 
@@ -330,7 +360,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
       {featuredGame && (
         <HeroDaily
           game={featuredGame}
-          done={doneIds.includes(featuredGame.id)}
+          done={effectiveDoneIds.includes(featuredGame.id)}
           todayLabel={todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1)}
         />
       )}
@@ -350,7 +380,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
             <GameCard
               key={g.id}
               game={g}
-              done={doneIds.includes(g.id)}
+              done={effectiveDoneIds.includes(g.id)}
               onPlay={() => onPlayExternal(g.id)}
             />
           ))}
@@ -363,7 +393,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           loading={lbLoading}
           currentUser={user?.username ?? null}
         />
-        <StreakPanel doneCount={doneIds.length} total={GAMES.length} streak={user?.streak ?? 0} />
+        <StreakPanel doneCount={effectiveDoneIds.length} total={GAMES.length} streak={user?.streak ?? 0} />
       </section>
     </div>
   )

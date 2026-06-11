@@ -44,6 +44,7 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
         <span>Genres</span>
         <span>Pays</span>
         <span>Réal.</span>
+        <span>Acteurs</span>
       </div>
       {[...tentatives].reverse().map((t, i) => {
         const f = t.filmSoumis
@@ -56,6 +57,10 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
               )
             : indicesCourants.realisateurRevele &&
               tentatives[tentatives.length - 1 - i].filmSoumis === t.filmSoumis
+
+        const acteurMatch = filmCible
+          ? f.acteurs.some((a) => filmCible.acteurs.some((ca) => ca.nom === a.nom))
+          : f.acteurs.some((a) => indicesCourants.acteurs.includes(a.nom))
 
         return (
           <div key={`${t.tmdbId}-${i}`} className="cineclue-history-row">
@@ -96,6 +101,24 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
               <BadgeMatch match={realMatch} />
               <span className="cineclue-history-val">
                 {f.realisateurs[0]?.nom ?? '—'}
+              </span>
+            </div>
+            <div>
+              <BadgeMatch match={acteurMatch} />
+              <span className="cineclue-history-tags">
+                {f.acteurs.slice(0, 3).map((a) => {
+                  const on = filmCible
+                    ? filmCible.acteurs.some((ca) => ca.nom === a.nom)
+                    : indicesCourants.acteurs.includes(a.nom)
+                  return (
+                    <span key={a.nom} className={`cineclue-hist-tag${on ? ' on' : ''}`}>
+                      {a.nom}
+                    </span>
+                  )
+                })}
+                {f.acteurs.length > 3 && (
+                  <span className="cineclue-hist-tag">+{f.acteurs.length - 3}</span>
+                )}
               </span>
             </div>
           </div>

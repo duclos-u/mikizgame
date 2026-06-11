@@ -6,6 +6,11 @@ import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
 import { useHubScores } from '../../hooks/useHubScores'
 
+const SUTOM_KEY = `sutomstate_${new Date().toISOString().slice(0, 10)}`
+function markSutomComplete() {
+  try { localStorage.setItem(SUTOM_KEY, '1') } catch { /* ignore */ }
+}
+
 const TILE_REVEAL_DELAY_MS = 120
 const TILE_REVEAL_DURATION_MS = 420
 const MAX_ATTEMPTS = 6
@@ -65,9 +70,13 @@ const Sutom = () => {
           setAttempts(session.attempts ?? [])
           setStatus(session.status)
           if (session.word) setRevealedWord(session.word)
-          if (session.status === 'won') setMessage('Bravo ! Tu as trouvé le mot.')
-          else if (session.status === 'lost')
+          if (session.status === 'won') {
+            markSutomComplete()
+            setMessage('Bravo ! Tu as trouvé le mot.')
+          } else if (session.status === 'lost') {
+            markSutomComplete()
             setMessage(`Perdu. Le mot était ${session.word ?? '?'}.`)
+          }
           else {
             setCurrentInput(dailyInfo.firstLetter.toUpperCase())
             setMessage(
@@ -116,8 +125,9 @@ const Sutom = () => {
         setRevealingRow(revIdx)
         setStatus(res.status)
         if (res.word) setRevealedWord(res.word)
-        if (res.status !== 'in_progress' && user) {
-          saveScore('sutom', user.username, res.status === 'won' ? newAttempts.length : null)
+        if (res.status !== 'in_progress') {
+          markSutomComplete()
+          if (user) saveScore('sutom', user.username, res.status === 'won' ? newAttempts.length : null)
         }
         if (res.status === 'won') {
           setMessage('Bravo ! Tu as trouvé le mot.')

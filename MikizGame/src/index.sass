@@ -1699,6 +1699,14 @@ $flip-duration: 400ms
   @media (max-width: 500px)
     grid-template-columns: 1fr
 
+.cineclue-persona-row-3
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 1rem
+
+  @media (max-width: 500px)
+    grid-template-columns: 1fr
+
 .cineclue-slot
   display: flex
   flex-direction: column
@@ -1982,7 +1990,7 @@ $flip-duration: 400ms
 
 .cineclue-history-head
   display: grid
-  grid-template-columns: 2fr 1fr 1fr 2fr 1.5fr 1.5fr
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr 1.5fr
   gap: 0.5rem
   padding: 0.5rem 0.75rem
   background: var(--card-2)
@@ -1993,13 +2001,13 @@ $flip-duration: 400ms
   color: var(--muted)
 
   @media (max-width: 600px)
-    grid-template-columns: 2fr 1fr 1fr 1fr
-    > span:nth-child(5), > span:nth-child(6)
+    grid-template-columns: 2fr 1fr 1fr 1.5fr
+    > span:nth-child(5), > span:nth-child(6), > span:nth-child(7)
       display: none
 
 .cineclue-history-row
   display: grid
-  grid-template-columns: 2fr 1fr 1fr 2fr 1.5fr 1.5fr
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr 1.5fr
   gap: 0.5rem
   padding: 0.6rem 0.75rem
   font-size: 0.82rem
@@ -2011,8 +2019,8 @@ $flip-duration: 400ms
     background: var(--card-2)
 
   @media (max-width: 600px)
-    grid-template-columns: 2fr 1fr 1fr 1fr
-    > div:nth-child(5), > div:nth-child(6)
+    grid-template-columns: 2fr 1fr 1fr 1.5fr
+    > div:nth-child(5), > div:nth-child(6), > div:nth-child(7)
       display: none
 
 .cineclue-history-titre
