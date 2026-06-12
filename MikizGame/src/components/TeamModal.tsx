@@ -45,7 +45,7 @@ export function TeamModal({ open, onClose }: TeamModalProps) {
           id={pseudoId}
           className="modal-input"
           type="text"
-          placeholder="ex : Ulysse"
+          placeholder="ex : steve"
           value={pseudo}
           onChange={(e) => setPseudo(e.target.value)}
           autoComplete="given-name"

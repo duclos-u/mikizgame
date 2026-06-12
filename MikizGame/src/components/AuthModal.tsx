@@ -85,7 +85,7 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
                 id={usernameId}
                 className="modal-input"
                 type="text"
-                placeholder="ex : ulysse"
+                placeholder="ex : steve"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required

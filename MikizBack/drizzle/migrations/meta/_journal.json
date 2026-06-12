@@ -36,6 +36,13 @@
       "when": 1781256090865,
       "tag": "0004_blushing_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1749686400000,
+      "tag": "0005_rename_sutom_slug",
+      "breakpoints": true
     }
   ]
 }
