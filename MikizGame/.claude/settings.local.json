@@ -11,7 +11,6 @@
       "Bash(PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=\"$HOME/Library/Caches/ms-playwright/chromium-1223/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing\" node *)",
       "Bash(npm install *)",
       "Bash(curl -s http://localhost:5174/)",
-      "Bash(curl -s http://localhost:5174/game/motivex)"
     ]
   }
 }

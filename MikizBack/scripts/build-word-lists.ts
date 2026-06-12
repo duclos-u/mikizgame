@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Downloads Lexique 3.83 and generates two word lists for Sutom:
+ * Downloads Lexique 3.83 and generates two word lists for Motivex:
  *   words/fr-daily-words.txt  — top 7300 common words (used as target words)
  *   words/fr-valid-words.txt  — broader dictionary (accepted as guesses only)
  *

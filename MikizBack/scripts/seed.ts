@@ -4,12 +4,12 @@
  * Run: bun run db:seed
  */
 import { db } from "../src/db";
-import { games, sutomDailyWords } from "../src/db/schema";
+import { games, motivexDailyWords } from "../src/db/schema";
 
 await db
   .insert(games)
   .values([
-    { slug: "sutom", name: "Sutom" },
+    { slug: "motivex", name: "Motivex" },
     { slug: "cineclue", name: "CinéClue" },
   ])
   .onConflictDoNothing();
@@ -17,10 +17,10 @@ await db
 const today = new Date().toISOString().slice(0, 10);
 
 await db
-  .insert(sutomDailyWords)
+  .insert(motivexDailyWords)
   .values({ word: "MONDE", date: today })
   .onConflictDoNothing();
 
-console.log(`Seeded: game 'sutom' + today's word MONDE (${today})`);
+console.log(`Seeded: game 'motivex' + today's word MONDE (${today})`);
 console.log("Run `bun words:schedule` to bulk-schedule words for upcoming days.");
 process.exit(0);

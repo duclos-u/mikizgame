@@ -17,9 +17,9 @@ function isCineclueCompleteToday(): boolean {
   }
 }
 
-function isSutomCompleteToday(): boolean {
+function isMotivexCompleteToday(): boolean {
   try {
-    return localStorage.getItem(`sutomstate_${TODAY}`) === '1'
+    return localStorage.getItem(`motivexstate_${TODAY}`) === '1'
   } catch {
     return false
   }
@@ -323,7 +323,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
 
   const internalDone: Record<string, boolean> = {
     cineclue: isCineclueCompleteToday(),
-    sutom: isSutomCompleteToday(),
+    motivex: isMotivexCompleteToday(),
   }
   const effectiveDoneIds = [
     ...doneIds.filter((id) => !(id in internalDone)),

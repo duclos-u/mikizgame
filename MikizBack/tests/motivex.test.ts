@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { evaluateGuess } from "../src/lib/sutom";
+import { evaluateGuess } from "../src/lib/motivex";
 
 describe("evaluateGuess", () => {
   test("all correct", () => {

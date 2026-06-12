@@ -6,7 +6,7 @@ export type AuthResponse = { user: User; token: string }
 export type TileResult = 'correct' | 'present' | 'absent'
 export type GuessResult = { guess: string; result: TileResult[] }
 
-export type SutomSession = {
+export type MotivexSession = {
   status: 'in_progress' | 'won' | 'lost'
   attempts: GuessResult[]
   wordLength: number
@@ -185,15 +185,15 @@ export const api = {
       }),
     me: () => request<{ user: User }>('/auth/me'),
   },
-  sutom: {
-    daily: () => request<DailyInfo>('/sutom/daily'),
-    session: () => request<{ session: SutomSession | null }>('/sutom/session'),
+  motivex: {
+    daily: () => request<DailyInfo>('/motivex/daily'),
+    session: () => request<{ session: MotivexSession | null }>('/motivex/session'),
     guess: (guess: string) =>
-      request<GuessResponse>('/sutom/guess', {
+      request<GuessResponse>('/motivex/guess', {
         method: 'POST',
         body: JSON.stringify({ guess }),
       }),
-    reset: () => request<{ ok: boolean }>('/sutom/session', { method: 'DELETE' }),
+    reset: () => request<{ ok: boolean }>('/motivex/session', { method: 'DELETE' }),
   },
   cineclue: {
     session: () => request<{ session: CineclueSession | null }>('/filmdujour/session'),

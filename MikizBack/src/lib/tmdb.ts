@@ -9,7 +9,7 @@ type TmdbDetails = {
   release_date: string;
   runtime: number | null;
   genres: { name: string }[];
-  production_countries: { name: string }[];
+  production_countries: { iso_3166_1: string; name: string }[];
   original_language: string;
 };
 
@@ -40,7 +40,7 @@ export async function fetchFilmById(id: number): Promise<Film | null> {
       annee: details.release_date ? Number(details.release_date.slice(0, 4)) : 0,
       duree: details.runtime ?? 0,
       genres: details.genres.map((g) => g.name),
-      pays: details.production_countries.map((c) => c.name),
+      pays: details.production_countries.map((c) => c.iso_3166_1),
       langue: details.original_language,
       realisateurs: credits.crew
         .filter((c) => c.job === "Director")

@@ -15,6 +15,7 @@
     "db:seed": "bun run scripts/seed.ts",
     "films:set": "bun run scripts/set-film.ts",
     "films:schedule": "bun run scripts/schedule-films.ts",
+    "films:delete": "bun run scripts/delete-films.ts",
     "words:build": "bun run scripts/build-word-lists.ts",
     "words:schedule": "bun run scripts/schedule-words.ts",
     "words:set": "bun run scripts/set-word.ts",

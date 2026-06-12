@@ -2,11 +2,9 @@ import { createElement } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import CineClue from '../games/cineclue'
 import Motivex from '../games/motivex'
-import Sutom from '../games/sutom'
 
 const GAME_COMPONENTS: Record<string, ComponentType> = {
   motivex: Motivex,
-  sutom: Sutom,
   cineclue: CineClue,
 }
 

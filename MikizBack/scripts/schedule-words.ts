@@ -9,7 +9,7 @@
  *   bun words:schedule 30 2026-06-01  # start from a specific date
  */
 import { db } from "../src/db";
-import { sutomDailyWords } from "../src/db/schema";
+import { motivexDailyWords } from "../src/db/schema";
 import { getDailyWordList } from "../src/lib/words";
 
 const daysArg = parseInt(process.argv[2] ?? "30", 10);
@@ -23,12 +23,11 @@ if (words.length === 0) {
 
 const startDate = startArg ? new Date(startArg) : new Date();
 
-// Shuffle with a fixed seed derived from the start date for reproducibility
-const seed = startDate.getTime();
-const shuffled = [...words].sort((a, b) => {
-  const h = (s: string, n: number) => s.split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), n);
-  return h(a, seed) - h(b, seed);
-});
+const shuffled = [...words];
+for (let i = shuffled.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
 
 const entries: { word: string; date: string }[] = [];
 for (let i = 0; i < Math.min(daysArg, shuffled.length); i++) {
@@ -37,7 +36,7 @@ for (let i = 0; i < Math.min(daysArg, shuffled.length); i++) {
   entries.push({ word: shuffled[i % shuffled.length], date: d.toISOString().slice(0, 10) });
 }
 
-const result = await db.insert(sutomDailyWords).values(entries).onConflictDoNothing().returning();
+const result = await db.insert(motivexDailyWords).values(entries).onConflictDoNothing().returning();
 
 console.log(`Scheduled ${result.length} new words (${entries.length - result.length} already existed).`);
 console.log(`Range: ${entries[0]?.date} → ${entries.at(-1)?.date}`);

@@ -1,5 +1,6 @@
 import React from 'react'
 import type { CineclueFilm, CineclueIndices, CineclueTentative } from '../../api/client'
+import { countryLabel } from './PersonaBoard'
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w185'
 
@@ -96,7 +97,7 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
               <div>
                 <BadgeMatch match={paysMatch} />
                 <span className="cineclue-history-tags">
-                  {f.pays.slice(0, 2).join(', ')}
+                  {f.pays.slice(0, 2).map(countryLabel).join(', ')}
                 </span>
               </div>
               <div>

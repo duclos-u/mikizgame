@@ -1,204 +1,373 @@
 import confetti from 'canvas-confetti'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { api, type GuessResult, type TileResult } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { useAuth } from '../../context/AuthContext'
+import { useHubScores } from '../../hooks/useHubScores'
 
-type TileStatus = 'empty' | 'correct' | 'present' | 'absent'
+const MOTIVEX_KEY = `motivexstate_${new Date().toISOString().slice(0, 10)}`
+function markMotivexComplete() {
+  try { localStorage.setItem(MOTIVEX_KEY, '1') } catch { /* ignore */ }
+}
 
-const TARGET_WORD = 'MOTIVE'
-const MAX_ATTEMPTS = 6
 const TILE_REVEAL_DELAY_MS = 120
 const TILE_REVEAL_DURATION_MS = 420
-const VALID_WORDS = new Set([
-  TARGET_WORD,
-  'AMENER',
-  'ANANAS',
-  'BONJOUR',
-  'CITRON',
-  'DEVANT',
-  'FLECHE',
-  'MUSCLE',
-  'NIVEAU',
-  'POULET',
-  'RANGER',
-  'VALISE',
-])
+const MAX_ATTEMPTS = 6
 
-function scoreGuess(guess: string, target: string): TileStatus[] {
-  const result: TileStatus[] = Array.from({ length: target.length }, () => 'absent')
-  const targetChars = target.split('')
+const KEYBOARD_ROWS = [
+  ['A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+  ['Q', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M'],
+  ['BACKSPACE', 'W', 'X', 'C', 'V', 'B', 'N', 'ENTER'],
+]
 
-  for (let i = 0; i < guess.length; i += 1) {
-    if (guess[i] === target[i]) {
-      result[i] = 'correct'
-      targetChars[i] = '#'
-    }
-  }
+type GameStatus = 'in_progress' | 'won' | 'lost'
 
-  for (let i = 0; i < guess.length; i += 1) {
-    if (result[i] === 'correct') continue
-    const idx = targetChars.indexOf(guess[i])
-    if (idx >= 0) {
-      result[i] = 'present'
-      targetChars[idx] = '#'
-    }
-  }
-
-  return result
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="game-shell">
+      <GameHeader title="Motivex" subtitle="Devine le mot du jour en 6 essais" />
+      <main className="container">
+        <div className="game-content">{children}</div>
+      </main>
+    </div>
+  )
 }
 
 const Motivex = () => {
-  const wordSize = TARGET_WORD.length
-  const [guesses, setGuesses] = useState<string[]>(Array.from({ length: MAX_ATTEMPTS }, () => ''))
-  const [currentRow, setCurrentRow] = useState(0)
-  const [message, setMessage] = useState('Tape un mot puis appuie sur Entrer.')
+  const { token, user } = useAuth()
+  const { saveScore } = useHubScores()
+  const [wordLength, setWordLength] = useState<number | null>(null)
+  const [firstLetter, setFirstLetter] = useState('')
+  const [attempts, setAttempts] = useState<GuessResult[]>([])
+  const [currentInput, setCurrentInput] = useState('')
+  const [status, setStatus] = useState<GameStatus>('in_progress')
+  const [revealedWord, setRevealedWord] = useState<string | null>(null)
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
   const [shakingRow, setShakingRow] = useState<number | null>(null)
   const [revealingRow, setRevealingRow] = useState<number | null>(null)
-  const [celebrateRowIndex, setCelebrateRowIndex] = useState<number | null>(null)
-
-  const gameState = useMemo(() => {
-    const won = guesses.some((g, i) => g === TARGET_WORD && i < currentRow)
-    const lost = currentRow >= MAX_ATTEMPTS && !won
-    return { won, lost, over: won || lost }
-  }, [currentRow, guesses])
-
-  const displayMessage = gameState.won
-    ? 'Bien joué, tu as trouvé le mot.'
-    : gameState.lost
-      ? `Perdu. Le mot était ${TARGET_WORD}.`
-      : message
+  const [submitting, setSubmitting] = useState(false)
+  const [resetting, setResetting] = useState(false)
+  const [pendingConfetti, setPendingConfetti] = useState(false)
 
   useEffect(() => {
-    if (revealingRow === null) return
-    const submittedRowIndex = revealingRow
-    /** End of flip on the last letter (matches CSS stagger + animation-duration). */
-    const flipDoneMs =
-      (wordSize - 1) * TILE_REVEAL_DELAY_MS + TILE_REVEAL_DURATION_MS + 50
+    if (!token) {
+      setLoading(false)
+      return
+    }
+    async function load() {
+      try {
+        const [dailyInfo, { session }] = await Promise.all([
+          api.motivex.daily(),
+          api.motivex.session(),
+        ])
+        setWordLength(dailyInfo.wordLength)
+        setFirstLetter(dailyInfo.firstLetter.toUpperCase())
 
-    const t = window.setTimeout(() => {
-      setRevealingRow(null)
-
-      const word = guesses[submittedRowIndex]
-      if (word === TARGET_WORD) {
-        setCelebrateRowIndex(submittedRowIndex)
-        confetti({ particleCount: 180, spread: 70, origin: { y: 0.6 } })
-        window.setTimeout(() => setCelebrateRowIndex(null), 1600)
-      }
-    }, flipDoneMs)
-
-    return () => window.clearTimeout(t)
-    // guesses[submittedRowIndex] already contains the submission when revealingRow is set
-  }, [guesses, revealingRow, wordSize])
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (gameState.over) return
-      if (revealingRow !== null) return
-
-      const key = event.key.toUpperCase()
-
-      if (key === 'BACKSPACE') {
-        setGuesses((prev) => {
-          const next = [...prev]
-          next[currentRow] = next[currentRow].slice(0, -1)
-          return next
-        })
-        return
-      }
-
-      if (key === 'ENTER') {
-        const currentGuess = guesses[currentRow]
-        if (currentGuess.length !== wordSize) {
-          setMessage(`Mot incomplet: ${wordSize} lettres requises.`)
-          return
+        if (session) {
+          setAttempts(session.attempts ?? [])
+          setStatus(session.status)
+          if (session.word) setRevealedWord(session.word)
+          if (session.status === 'won') {
+            markMotivexComplete()
+            setMessage('Bravo ! Tu as trouvé le mot.')
+          } else if (session.status === 'lost') {
+            markMotivexComplete()
+            setMessage(`Perdu. Le mot était ${session.word ?? '?'}.`)
+          }
+          else {
+            setCurrentInput(dailyInfo.firstLetter.toUpperCase())
+            setMessage(
+              `${MAX_ATTEMPTS - (session.attempts?.length ?? 0)} essai(s) restant(s).`,
+            )
+          }
+        } else {
+          setCurrentInput(dailyInfo.firstLetter.toUpperCase())
+          setMessage('Tape les lettres puis appuie sur Entrée.')
         }
-        if (!VALID_WORDS.has(currentGuess)) {
-          setMessage('Mot inconnu. Essaie un mot valide.')
-          setShakingRow(null)
-          window.requestAnimationFrame(() => setShakingRow(currentRow))
-          return
-        }
-        setRevealingRow(currentRow)
-        setCurrentRow((prev) => prev + 1)
-        setMessage('Nouvelle tentative.')
-        return
+      } catch (e) {
+        setLoadError(e instanceof Error ? e.message : 'Erreur de chargement')
+      } finally {
+        setLoading(false)
       }
+    }
+    load()
+  }, [token])
 
-      if (!/^[A-Z]$/.test(key)) return
-      if (guesses[currentRow].length >= wordSize) return
+  const gameOver = status !== 'in_progress'
 
-      setGuesses((prev) => {
-        const next = [...prev]
-        next[currentRow] = `${next[currentRow]}${key}`
-        return next
-      })
+  const handleKey = useCallback(async (key: string) => {
+    if (gameOver || loading || !wordLength || revealingRow !== null || submitting) return
+
+    if (key === 'BACKSPACE') {
+      setCurrentInput((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev))
+      return
     }
 
+    if (key === 'ENTER') {
+      if (currentInput.length !== wordLength) {
+        setMessage(`Mot incomplet : ${wordLength} lettres requises.`)
+        setShakingRow(null)
+        requestAnimationFrame(() => setShakingRow(attempts.length))
+        return
+      }
+      const guess = currentInput
+      setSubmitting(true)
+      try {
+        const res = await api.motivex.guess(guess)
+        const newAttempt: GuessResult = res.result
+        const newAttempts = [...attempts, newAttempt]
+        const revIdx = attempts.length
+        setAttempts(newAttempts)
+        setCurrentInput(firstLetter)
+        setRevealingRow(revIdx)
+        setStatus(res.status)
+        if (res.word) setRevealedWord(res.word)
+        if (res.status !== 'in_progress') {
+          markMotivexComplete()
+          if (user) saveScore('motivex', user.username, res.status === 'won' ? newAttempts.length : null)
+        }
+        if (res.status === 'won') {
+          setMessage('Bravo ! Tu as trouvé le mot.')
+          setPendingConfetti(true)
+        } else if (res.status === 'lost') setMessage(`Perdu. Le mot était ${res.word ?? '?'}.`)
+        else
+          setMessage(
+            `${res.attemptsLeft} essai${res.attemptsLeft > 1 ? 's' : ''} restant${res.attemptsLeft > 1 ? 's' : ''}.`,
+          )
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Erreur'
+        setMessage(msg)
+        setShakingRow(null)
+        requestAnimationFrame(() => setShakingRow(attempts.length))
+      } finally {
+        setSubmitting(false)
+      }
+      return
+    }
+
+    if (!/^[A-Z]$/.test(key)) return
+    if (currentInput.length >= wordLength) return
+    setCurrentInput((prev) => prev + key)
+  }, [gameOver, loading, wordLength, revealingRow, submitting, currentInput, firstLetter, attempts, user, saveScore])
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      handleKey(e.key.toUpperCase())
+    }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [currentRow, gameState.over, guesses, revealingRow, wordSize])
+  }, [handleKey])
+
+  const letterStatuses = useMemo(() => {
+    const priority: Record<TileResult, number> = { correct: 3, present: 2, absent: 1 }
+    const map: Record<string, TileResult> = {}
+    for (const attempt of attempts) {
+      attempt.guess.split('').forEach((ch, i) => {
+        const r = attempt.result[i]
+        if (!map[ch] || priority[r] > priority[map[ch]]) map[ch] = r
+      })
+    }
+    return map
+  }, [attempts])
+
+  // Clear revealingRow once flip animation ends
+  useEffect(() => {
+    if (revealingRow === null || !wordLength) return
+    const flipDoneMs = (wordLength - 1) * TILE_REVEAL_DELAY_MS + TILE_REVEAL_DURATION_MS + 50
+    const t = window.setTimeout(() => setRevealingRow(null), flipDoneMs)
+    return () => clearTimeout(t)
+  }, [revealingRow, wordLength])
+
+  // Fire confetti after the win animation completes (not on session reload)
+  useEffect(() => {
+    if (!pendingConfetti || revealingRow !== null) return
+    confetti({ particleCount: 180, spread: 70, origin: { y: 0.6 } })
+    setPendingConfetti(false)
+  }, [pendingConfetti, revealingRow])
+
+  if (!token) {
+    return (
+      <Shell>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--muted)', marginBottom: '1rem' }}>
+            Connecte-toi pour jouer et sauvegarder ton score.
+          </p>
+          <Link to="/" className="btn btn-primary">
+            ← Retour à l&apos;accueil
+          </Link>
+        </div>
+      </Shell>
+    )
+  }
+
+  if (loading) {
+    return (
+      <Shell>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--muted)' }}>Chargement…</p>
+        </div>
+      </Shell>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <Shell>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--red)', marginBottom: '1rem' }}>{loadError}</p>
+          <Link to="/" className="btn">
+            ← Retour
+          </Link>
+        </div>
+      </Shell>
+    )
+  }
+
+  async function handleReset() {
+    setResetting(true)
+    try {
+      await api.motivex.reset()
+      setAttempts([])
+      setCurrentInput(firstLetter)
+      setStatus('in_progress')
+      setRevealedWord(null)
+      setRevealingRow(null)
+      setShakingRow(null)
+      setPendingConfetti(false)
+      setMessage('Tape les lettres restantes puis appuie sur Entrée.')
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'Erreur reset')
+    } finally {
+      setResetting(false)
+    }
+  }
+
+  if (!wordLength) return null
+
+  const currentRow = attempts.length
+  const gridCols = `repeat(${wordLength}, 52px)`
 
   return (
-    <div className="game-shell">
-      <GameHeader title="Motivex" subtitle="Trouve le mot du jour" />
-      <main className="container">
-        <div className="game-content">
-          <div className="wordle-board">
-            <p className="wordle-message">{displayMessage}</p>
-            <div className="grid">
-            {Array.from({ length: MAX_ATTEMPTS }, (_, rowIndex) => {
-              const rowGuess = guesses[rowIndex]
-              const rowSubmitted = rowGuess.length === wordSize && rowIndex < currentRow
-              const rowStatuses = rowSubmitted
-                ? scoreGuess(rowGuess, TARGET_WORD)
-                : Array.from({ length: wordSize }, () => 'empty' as const)
-              const solvedRow = rowSubmitted && rowGuess === TARGET_WORD
-
-              return (
-                <div
-                  key={rowIndex}
-                  className={`grid-row${rowIndex === shakingRow ? ' grid-row-shake' : ''}${celebrateRowIndex === rowIndex ? ' grid-row-win' : ''}`}
-                  onAnimationEnd={() => {
-                    if (rowIndex === shakingRow) {
-                      setShakingRow(null)
-                    }
-                  }}
-                >
-                  {Array.from({ length: wordSize }, (_, colIndex) => {
-                    const letter = rowGuess[colIndex] ?? ''
-                    const isActiveCell = rowIndex === currentRow && colIndex === rowGuess.length
-                    const status = rowStatuses[colIndex]
-
-                    const perfectWord =
-                      solvedRow &&
-                      status === 'correct' &&
-                      rowIndex !== revealingRow
-                    const winPop =
-                      celebrateRowIndex === rowIndex && rowIndex !== revealingRow
-
-                    return (
-                      <div
-                        key={colIndex}
-                        className={`grid-cell grid-cell-${status}${isActiveCell ? ' grid-cell-active' : ''}${rowIndex === revealingRow ? ' grid-cell-reveal' : ''}${perfectWord ? ' grid-cell-perfect' : ''}${winPop ? ' grid-cell-win-pop' : ''}`}
-                        style={
-                          rowIndex === revealingRow || winPop
-                            ? {
-                                animationDelay: `${colIndex * TILE_REVEAL_DELAY_MS}ms`,
-                              }
-                            : undefined
-                        }
-                      >
-                        {letter}
-                      </div>
-                    )
-                  })}
-                </div>
-              )
-            })}
-            </div>
-          </div>
+    <Shell>
+      <div className="wordle-board">
+        <div className="wordle-message-wrapper">
+          <p className="wordle-message">{message}</p>
         </div>
-      </main>
-    </div>
+        <p
+          style={{
+            fontFamily: 'var(--mono)',
+            fontSize: '1.1rem',
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            marginBottom: '1rem',
+            color: status === 'won' ? 'var(--accent)' : 'var(--red)',
+            visibility: revealedWord ? 'visible' : 'hidden',
+          }}
+        >
+          {revealedWord ? revealedWord : 'placeholder'}
+        </p>
+        <div className="grid">
+          {Array.from({ length: MAX_ATTEMPTS }, (_, rowIndex) => {
+            const submitted = rowIndex < attempts.length
+            const isCurrentRow = rowIndex === currentRow && !gameOver
+            const isRevealing = rowIndex === revealingRow
+
+            return (
+              <div
+                key={rowIndex}
+                className={`grid-row${rowIndex === shakingRow ? ' grid-row-shake' : ''}`}
+                style={{ gridTemplateColumns: gridCols }}
+                onAnimationEnd={() => {
+                  if (rowIndex === shakingRow) setShakingRow(null)
+                }}
+              >
+                {Array.from({ length: wordLength }, (_, colIndex) => {
+                  let letter = ''
+                  let tileStatus: TileResult | 'empty' = 'empty'
+                  let classes = 'grid-cell'
+
+                  if (submitted) {
+                    letter = attempts[rowIndex].guess[colIndex] ?? ''
+                    tileStatus = attempts[rowIndex].result[colIndex]
+                    if (isRevealing) {
+                      classes += ` grid-cell-reveal grid-cell-${tileStatus}`
+                    } else {
+                      classes += ` grid-cell-${tileStatus}`
+                    }
+                  } else if (isCurrentRow) {
+                    letter = currentInput[colIndex] ?? ''
+                    if (colIndex === currentInput.length) {
+                      classes += ' grid-cell-active'
+                    }
+                  }
+
+                  return (
+                    <div
+                      key={colIndex}
+                      className={classes}
+                      style={
+                        isRevealing
+                          ? { animationDelay: `${colIndex * TILE_REVEAL_DELAY_MS}ms` }
+                          : undefined
+                      }
+                    >
+                      {letter}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+        <div className="motivex-keyboard">
+          {KEYBOARD_ROWS.map((row, ri) => (
+            <div key={ri} className="motivex-keyboard-row">
+              {row.map((key) => {
+                const st = letterStatuses[key]
+                const wide = key === 'BACKSPACE' || key === 'ENTER'
+                const cls = ['motivex-key', wide && 'motivex-key-wide', st && `motivex-key-${st}`]
+                  .filter(Boolean)
+                  .join(' ')
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className={cls}
+                    onClick={() => handleKey(key)}
+                    disabled={submitting || revealingRow !== null}
+                  >
+                    {key === 'BACKSPACE' ? '⌫' : key === 'ENTER' ? '↵' : key}
+                  </button>
+                )
+              })}
+            </div>
+          ))}
+        </div>
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={resetting}
+            style={{
+              marginTop: '1.5rem',
+              padding: '0.35rem 0.9rem',
+              fontSize: '0.75rem',
+              opacity: 0.5,
+              cursor: resetting ? 'not-allowed' : 'pointer',
+              border: '1px solid var(--muted)',
+              borderRadius: '4px',
+              background: 'transparent',
+              color: 'var(--muted)',
+            }}
+          >
+            {resetting ? '…' : '[dev] réinitialiser'}
+          </button>
+        )}
+      </div>
+    </Shell>
   )
 }
 

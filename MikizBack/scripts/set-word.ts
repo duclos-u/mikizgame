@@ -6,7 +6,7 @@
  *   bun words:set 2026-06-08 MOTEUR
  */
 import { db } from "../src/db";
-import { sutomDailyWords } from "../src/db/schema";
+import { motivexDailyWords } from "../src/db/schema";
 import { eq } from "drizzle-orm";
 
 const [dateArg, wordArg] = process.argv.slice(2);
@@ -19,9 +19,9 @@ if (!dateArg || !wordArg) {
 const word = wordArg.toUpperCase();
 
 await db
-  .insert(sutomDailyWords)
+  .insert(motivexDailyWords)
   .values({ word, date: dateArg })
-  .onConflictDoUpdate({ target: sutomDailyWords.date, set: { word } });
+  .onConflictDoUpdate({ target: motivexDailyWords.date, set: { word } });
 
 console.log(`Set word for ${dateArg}: ${word}`);
 process.exit(0);

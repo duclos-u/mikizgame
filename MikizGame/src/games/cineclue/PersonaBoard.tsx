@@ -80,44 +80,21 @@ export function SlotGenre({
 
 // ─── Nationalités / Langues ───────────────────────────────────────────────────
 
-const DRAPEAUX: Record<string, string> = {
-  'États-Unis': '🇺🇸',
-  France: '🇫🇷',
-  'Royaume-Uni': '🇬🇧',
-  Allemagne: '🇩🇪',
-  Italie: '🇮🇹',
-  Espagne: '🇪🇸',
-  Japon: '🇯🇵',
-  'Corée du Sud': '🇰🇷',
-  Australie: '🇦🇺',
-  Canada: '🇨🇦',
-  Inde: '🇮🇳',
-  Chine: '🇨🇳',
-  Mexique: '🇲🇽',
-  Russie: '🇷🇺',
-  Suède: '🇸🇪',
-  Danemark: '🇩🇰',
-  Norvège: '🇳🇴',
-  Finlande: '🇫🇮',
-  Autriche: '🇦🇹',
-  Belgique: '🇧🇪',
-  Suisse: '🇨🇭',
-  Portugal: '🇵🇹',
-  'Pays-Bas': '🇳🇱',
-  Pologne: '🇵🇱',
-  Brésil: '🇧🇷',
-  Argentine: '🇦🇷',
-  Ireland: '🇮🇪',
-  'Nouvelle-Zélande': '🇳🇿',
-  Hongkong: '🇭🇰',
-  'Hong Kong': '🇭🇰',
-  Israël: '🇮🇱',
-  'République tchèque': '🇨🇿',
-  Hongrie: '🇭🇺',
-  Roumanie: '🇷🇴',
-  Grèce: '🇬🇷',
-  Turquie: '🇹🇷',
-  Iran: '🇮🇷',
+const countryNames = new Intl.DisplayNames(['fr'], { type: 'region' })
+
+function isoToFlag(code: string): string {
+  if (!/^[A-Za-z]{2}$/.test(code)) return '🏳️'
+  return [...code.toUpperCase()]
+    .map((c) => String.fromCodePoint(0x1f1e6 - 65 + c.charCodeAt(0)))
+    .join('')
+}
+
+export function countryLabel(code: string): string {
+  try {
+    return countryNames.of(code) ?? code
+  } catch {
+    return code
+  }
 }
 
 export function SlotNationalite({
@@ -143,20 +120,19 @@ export function SlotNationalite({
         {ciblePays
           ? ciblePays.map((p) => {
               const revele = indicesPays.includes(p)
-              const flag = DRAPEAUX[p] ?? '🏳️'
               return (
                 <span
                   key={p}
-                  title={revele ? p : '?'}
+                  title={revele ? countryLabel(p) : '?'}
                   className={`cineclue-flag${revele ? ' cineclue-flag-on cineclue-flip' : ''}`}
                 >
-                  {revele ? flag : '🏴'}
+                  {revele ? isoToFlag(p) : '🏴'}
                 </span>
               )
             })
           : indicesPays.map((p) => (
-              <span key={p} title={p} className="cineclue-flag cineclue-flag-on cineclue-flip">
-                {DRAPEAUX[p] ?? '🏳️'}
+              <span key={p} title={countryLabel(p)} className="cineclue-flag cineclue-flag-on cineclue-flip">
+                {isoToFlag(p)}
               </span>
             ))}
       </div>

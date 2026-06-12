@@ -29,6 +29,13 @@
       "when": 1781189991292,
       "tag": "0003_curved_patch",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781256090865,
+      "tag": "0004_blushing_solo",
+      "breakpoints": true
     }
   ]
 }

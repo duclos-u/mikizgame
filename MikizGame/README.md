@@ -1,73 +1,101 @@
-# React + TypeScript + Vite
+# MikizGame
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React SPA front-end for Mikiz — a platform hosting French daily mini games. Built with Vite, React 19, and TypeScript.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+| Layer | Tool |
+|---|---|
+| Framework | React 19 |
+| Routing | React Router 7 |
+| Build | Vite 5 |
+| Language | TypeScript 5 |
+| Styling | Sass (single global stylesheet) |
+| Validation | Zod |
+| Linter | ESLint 9 |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Local Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node ≥ 20.0.0
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 2. Install dependencies
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 3. Configure environment (optional)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+By default the API client points to `/api`. Override for local development:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# .env.local
+VITE_API_BASE_URL=http://localhost:3000/api
 ```
+
+### 4. Start the dev server
+
+```bash
+npm run dev
+```
+
+The app runs on `http://localhost:5173` by default.
+
+---
+
+## Project Structure
+
+```
+src/
+  App.tsx                   # root layout, routing, auth modal state
+  main.tsx                  # entry point
+  index.sass                # single global stylesheet (OKLCH color tokens)
+  api/
+    client.ts               # typed API client, auto-injects Bearer token
+  context/
+    AuthContext.tsx          # user/token state, login/register/logout
+  components/
+    Header.tsx              # top navigation bar
+    DailyGamesPage.tsx      # home hub — game cards grid
+    GameHeader.tsx          # header for individual game pages
+    LeaderboardPage.tsx     # full leaderboard view
+    AuthModal.tsx           # login / register modal
+    TeamModal.tsx           # team management modal
+  data/
+    games.ts                # static game definitions (id, name, route/url)
+  hooks/
+    useJdj2State.ts         # localStorage: which games marked done today
+    useHubScores.ts         # fetches leaderboard data for the hub
+  routes/
+    GameRoutePage.tsx       # route wrapper for internal games
+    gameRegistry.tsx        # maps gameId → React component
+  games/
+    cineclue/               # Film du Jour — film guessing game
+    motivex/                  # Motivex — French Wordle variant
+```
+
+---
+
+## Commands
+
+```bash
+npm run dev      # start dev server with HMR
+npm run build    # type-check + Vite build → dist/
+npm run preview  # serve the dist/ build locally
+npm run lint     # ESLint
+```
+
+---
+
+## Games
+
+| Game | Type | Description |
+|---|---|---|
+| Motivex | Internal | Guess a French word in 6 tries (Wordle variant) |
+| CinéClue | Internal | Guess a film in 10 tries with progressive hints |

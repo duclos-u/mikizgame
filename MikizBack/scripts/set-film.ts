@@ -1,14 +1,18 @@
 #!/usr/bin/env bun
 /**
- * Usage: bun films:set <YYYY-MM-DD> <tmdbId>
- * Ex:    bun films:set 2026-06-15 872585
+ * Force un film spécifique à une date donnée.
+ *
+ * Usage:
+ *   bun films:set 2026-06-15 872585
  */
 import { db } from "../src/db";
 import { cineclueDaily } from "../src/db/schema";
 
 const [dateArg, tmdbIdArg] = process.argv.slice(2);
+
 if (!dateArg || !tmdbIdArg) {
   console.error("Usage: bun films:set <YYYY-MM-DD> <tmdbId>");
+  console.error("  ex: bun films:set 2026-06-15 872585");
   process.exit(1);
 }
 

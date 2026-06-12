@@ -4,7 +4,7 @@ import { logger } from "hono/logger";
 import { auth } from "./routes/auth";
 import { cineclueSearch, filmdujour } from "./routes/filmdujour";
 import { leaderboard } from "./routes/leaderboard";
-import { sutom } from "./routes/sutom";
+import { motivex } from "./routes/motivex";
 
 const app = new Hono();
 
@@ -21,7 +21,7 @@ app.use(
 app.get("/health", (c) => c.json({ ok: true, ts: new Date().toISOString() }));
 
 app.route("/api/auth", auth);
-app.route("/api/sutom", sutom);
+app.route("/api/motivex", motivex);
 app.route("/api/filmdujour", filmdujour);
 app.route("/api/cineclue", cineclueSearch);
 app.route("/api/leaderboard", leaderboard);

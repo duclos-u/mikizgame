@@ -10,9 +10,8 @@ import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
 
 const GAME_LABELS: Record<string, string> = {
-  sutom: 'Sutom',
-  cineclue: 'CinéClue',
   motivex: 'Motivex',
+  cineclue: 'CinéClue',
 }
 
 function gameLabel(slug: string) {

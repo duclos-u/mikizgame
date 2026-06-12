@@ -1,32 +1,32 @@
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
-import { games, leaderboardEntries, sutomDailyWords, sutomSessions } from "../db/schema";
+import { games, leaderboardEntries, motivexDailyWords, motivexSessions } from "../db/schema";
 import { todayDate } from "../lib/date";
-import { type GuessResult, evaluateGuess } from "../lib/sutom";
+import { type GuessResult, evaluateGuess } from "../lib/motivex";
 import { isValidWord } from "../lib/words";
 import { authMiddleware } from "../middleware/auth";
 
 const MAX_ATTEMPTS = 6;
 
-let sutomGameId: string | null = null;
-async function getSutomGameId(): Promise<string | null> {
-  if (sutomGameId) return sutomGameId;
-  const game = await db.query.games.findFirst({ where: eq(games.slug, "sutom") });
-  if (game) sutomGameId = game.id;
-  return sutomGameId;
+let motivexGameId: string | null = null;
+async function getMotivexGameId(): Promise<string | null> {
+  if (motivexGameId) return motivexGameId;
+  const game = await db.query.games.findFirst({ where: eq(games.slug, "motivex") });
+  if (game) motivexGameId = game.id;
+  return motivexGameId;
 }
 
-const sutom = new Hono();
+const motivex = new Hono();
 
 /**
- * GET /api/sutom/daily
+ * GET /api/motivex/daily
  * Public. Returns today's word length and first letter.
  */
-sutom.get("/daily", async (c) => {
+motivex.get("/daily", async (c) => {
   const today = todayDate();
-  const daily = await db.query.sutomDailyWords.findFirst({
-    where: eq(sutomDailyWords.date, today),
+  const daily = await db.query.motivexDailyWords.findFirst({
+    where: eq(motivexDailyWords.date, today),
   });
 
   if (!daily) return c.json({ error: "No word scheduled for today" }, 404);
@@ -39,21 +39,21 @@ sutom.get("/daily", async (c) => {
 });
 
 /**
- * GET /api/sutom/session
+ * GET /api/motivex/session
  * Protected. Returns the user's session for today.
  */
-sutom.get("/session", authMiddleware, async (c) => {
+motivex.get("/session", authMiddleware, async (c) => {
   const userId = c.get("userId") as string;
   const today = todayDate();
 
-  const session = await db.query.sutomSessions.findFirst({
-    where: and(eq(sutomSessions.userId, userId), eq(sutomSessions.date, today)),
+  const session = await db.query.motivexSessions.findFirst({
+    where: and(eq(motivexSessions.userId, userId), eq(motivexSessions.date, today)),
   });
 
   if (!session) return c.json({ session: null });
 
-  const daily = await db.query.sutomDailyWords.findFirst({
-    where: eq(sutomDailyWords.id, session.wordId),
+  const daily = await db.query.motivexDailyWords.findFirst({
+    where: eq(motivexDailyWords.id, session.wordId),
   });
 
   return c.json({
@@ -69,12 +69,12 @@ sutom.get("/session", authMiddleware, async (c) => {
 });
 
 /**
- * POST /api/sutom/guess
+ * POST /api/motivex/guess
  * Protected. Submit a guess for today's word.
  * Body: { guess: string }
  * Returns: { result: GuessResult, status, attemptsLeft, word? }
  */
-sutom.post("/guess", authMiddleware, async (c) => {
+motivex.post("/guess", authMiddleware, async (c) => {
   const userId = c.get("userId") as string;
   const today = todayDate();
 
@@ -83,8 +83,8 @@ sutom.post("/guess", authMiddleware, async (c) => {
 
   if (!guess) return c.json({ error: "guess is required" }, 400);
 
-  const daily = await db.query.sutomDailyWords.findFirst({
-    where: eq(sutomDailyWords.date, today),
+  const daily = await db.query.motivexDailyWords.findFirst({
+    where: eq(motivexDailyWords.date, today),
   });
 
   if (!daily) return c.json({ error: "No word scheduled for today" }, 404);
@@ -97,8 +97,8 @@ sutom.post("/guess", authMiddleware, async (c) => {
     return c.json({ error: "Not a valid French word" }, 422);
   }
 
-  const existing = await db.query.sutomSessions.findFirst({
-    where: and(eq(sutomSessions.userId, userId), eq(sutomSessions.date, today)),
+  const existing = await db.query.motivexSessions.findFirst({
+    where: and(eq(motivexSessions.userId, userId), eq(motivexSessions.date, today)),
   });
 
   if (existing && existing.status !== "in_progress") {
@@ -118,7 +118,7 @@ sutom.post("/guess", authMiddleware, async (c) => {
   const completedAt = newStatus !== "in_progress" ? new Date() : null;
 
   if (!existing) {
-    await db.insert(sutomSessions).values({
+    await db.insert(motivexSessions).values({
       userId,
       wordId: daily.id,
       date: today,
@@ -128,13 +128,13 @@ sutom.post("/guess", authMiddleware, async (c) => {
     });
   } else {
     await db
-      .update(sutomSessions)
+      .update(motivexSessions)
       .set({ attempts: updatedAttempts, status: newStatus, completedAt })
-      .where(eq(sutomSessions.id, existing.id));
+      .where(eq(motivexSessions.id, existing.id));
   }
 
   if (newStatus !== "in_progress") {
-    const gameId = await getSutomGameId();
+    const gameId = await getMotivexGameId();
     if (gameId) {
       await db.insert(leaderboardEntries).values({
         userId,
@@ -154,10 +154,10 @@ sutom.post("/guess", authMiddleware, async (c) => {
 });
 
 /**
- * DELETE /api/sutom/session
+ * DELETE /api/motivex/session
  * Dev-only. Wipes the authenticated user's session and leaderboard entry for today.
  */
-sutom.delete("/session", authMiddleware, async (c) => {
+motivex.delete("/session", authMiddleware, async (c) => {
   if (process.env.NODE_ENV === "production") {
     return c.json({ error: "Not available in production" }, 403);
   }
@@ -166,12 +166,12 @@ sutom.delete("/session", authMiddleware, async (c) => {
   const today = todayDate();
 
   await db
-    .delete(sutomSessions)
+    .delete(motivexSessions)
     .where(
-      and(eq(sutomSessions.userId, userId), eq(sutomSessions.date, today))
+      and(eq(motivexSessions.userId, userId), eq(motivexSessions.date, today))
     );
 
-  const gameId = await getSutomGameId();
+  const gameId = await getMotivexGameId();
   if (gameId) {
     await db
       .delete(leaderboardEntries)
@@ -187,4 +187,4 @@ sutom.delete("/session", authMiddleware, async (c) => {
   return c.json({ ok: true });
 });
 
-export { sutom };
+export { motivex };

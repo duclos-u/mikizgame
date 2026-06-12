@@ -23,8 +23,8 @@ export function internalGamePath(gameId: string) {
 
 export const GAMES: Game[] = [
   {
-    id: 'sutom',
-    name: 'Sutom',
+    id: 'motivex',
+    name: 'Motivex',
     desc: 'Devine le mot du jour en 6 essais.',
     icon: '🔤',
     cat: 'mots',
@@ -34,7 +34,7 @@ export const GAMES: Game[] = [
     status: 'live',
     players: 6390,
     avgTries: 4,
-    route: internalGamePath('sutom'),
+    route: internalGamePath('motivex'),
   },
   {
     id: 'cineclue',
