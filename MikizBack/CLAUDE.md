@@ -19,6 +19,7 @@ bun db:push                        # push schema directly (dev only)
 bun db:studio                      # open Drizzle Studio
 
 bun words:schedule [days] [start]  # bulk-schedule daily words
+bun words:delete <from> [to]       # delete scheduled words in date range
 bun words:set <date> <word>        # set a single word for a date
 
 bun films:schedule [days] [start]  # bulk-schedule daily films via TMDB
