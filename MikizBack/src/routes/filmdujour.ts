@@ -129,6 +129,8 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
   const nouvelleTentative = {
     tmdbId: filmSoumis.id,
     filmSoumis: filmSoumis satisfies Film,
+    anneeProche: Math.abs(filmSoumis.annee - cible.annee) <= 5,
+    dureeProche: cible.duree > 0 && filmSoumis.duree > 0 && Math.abs(filmSoumis.duree - cible.duree) <= 15,
   };
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];

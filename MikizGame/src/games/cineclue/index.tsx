@@ -282,14 +282,19 @@ export default function FilmDuJour() {
         {/* Persona épinglée en haut */}
         <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} />
 
-        {/* Message + compteur */}
+        {/* Message + compteur + dots */}
         <div className="cineclue-status">
           <span className="cineclue-message">{message}</span>
-          {!gameOver && (
+          <div className="cineclue-status-right">
+            <div className="cineclue-dots">
+              {Array.from({ length: MAX_TENTATIVES }, (_, i) => (
+                <span key={i} className={`cineclue-dot${i < tentatives.length ? ' used' : ''}`} />
+              ))}
+            </div>
             <span className="cineclue-counter">
               {tentatives.length} / {MAX_TENTATIVES}
             </span>
-          )}
+          </div>
         </div>
 
         {/* Barre de recherche */}
@@ -310,6 +315,32 @@ export default function FilmDuJour() {
             >
               Voir le résultat
             </button>
+          </div>
+        )}
+
+        {/* Légende */}
+        {tentatives.length > 0 && (
+          <div className="cineclue-legend">
+            <span className="cineclue-legend-item">
+              <span className="cineclue-legend-swatch match" />
+              Correct
+            </span>
+            <span className="cineclue-legend-item">
+              <span className="cineclue-legend-swatch close" />
+              Proche
+            </span>
+            <span className="cineclue-legend-item">
+              <span className="cineclue-legend-swatch miss" />
+              Incorrect
+            </span>
+            <span className="cineclue-legend-item">
+              <span className="cineclue-legend-arrow">↑↓</span>
+              direction de la réponse
+            </span>
+            <span className="cineclue-legend-item">
+              <span className="cineclue-legend-actor-dot" />
+              acteur en commun
+            </span>
           </div>
         )}
 

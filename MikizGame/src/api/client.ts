@@ -146,6 +146,8 @@ export type CineclueTotaux = {
 export type CineclueTentative = {
   tmdbId: number
   filmSoumis: CineclueFilm
+  anneeProche?: boolean
+  dureeProche?: boolean
 }
 
 export type CineclueSession = {

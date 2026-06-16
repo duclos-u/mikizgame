@@ -203,17 +203,22 @@ export function SlotDate({
   anneeMax: number | null
   filmCible: CineclueFilm | null
 }) {
+  const currentYear = new Date().getFullYear()
   let texte: React.ReactNode
 
   if (filmCible) {
-    // Partie terminée : on affiche l'année exacte
     texte = <span className="cineclue-revealed">{filmCible.annee}</span>
   } else if (anneeMin !== null && anneeMax !== null) {
-    texte = (
-      <span className="cineclue-fourchette">
-        Entre <strong>{anneeMin}</strong> et <strong>{anneeMax}</strong>
-      </span>
-    )
+    if (anneeMax - anneeMin === 2) {
+      // Only one year possible between the two bounds
+      texte = <span className="cineclue-revealed cineclue-flip">{anneeMin + 1}</span>
+    } else {
+      texte = (
+        <span className="cineclue-fourchette">
+          Entre <strong>{anneeMin}</strong> et <strong>{anneeMax}</strong>
+        </span>
+      )
+    }
   } else if (anneeMax !== null) {
     texte = (
       <span className="cineclue-fourchette">
@@ -221,11 +226,16 @@ export function SlotDate({
       </span>
     )
   } else if (anneeMin !== null) {
-    texte = (
-      <span className="cineclue-fourchette">
-        Après <strong>{anneeMin}</strong>
-      </span>
-    )
+    if (anneeMin + 1 >= currentYear) {
+      // "After last year" in the current year uniquely identifies the target
+      texte = <span className="cineclue-revealed cineclue-flip">{anneeMin + 1}</span>
+    } else {
+      texte = (
+        <span className="cineclue-fourchette">
+          Après <strong>{anneeMin}</strong>
+        </span>
+      )
+    }
   } else {
     texte = <span className="cineclue-hidden">--</span>
   }
@@ -377,13 +387,17 @@ export function SlotReal({
     <Slot label="Réalisateur">
       {real ? (
         <div className="cineclue-real cineclue-flip">
-          {real.photo && (
+          {real.photo ? (
             <img
               src={`${TMDB_IMG}${real.photo}`}
               alt={real.nom}
               className="cineclue-real-photo"
               loading="lazy"
             />
+          ) : (
+            <span className="cineclue-real-initials">
+              {real.nom.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
+            </span>
           )}
           <span className="cineclue-revealed">{real.nom}</span>
         </div>
