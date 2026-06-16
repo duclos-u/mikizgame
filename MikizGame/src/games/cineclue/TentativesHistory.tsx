@@ -10,14 +10,6 @@ type Props = {
   indicesCourants: CineclueIndices
 }
 
-function BadgeMatch({ match }: { match: boolean }) {
-  return (
-    <span className={`cineclue-badge ${match ? 'cineclue-badge-match' : 'cineclue-badge-no'}`}>
-      {match ? '✓' : '✗'}
-    </span>
-  )
-}
-
 function DirectionBadge({
   soumis,
   cible,
@@ -46,23 +38,15 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
         <span>Genres</span>
         <span>Pays</span>
         <span>Réal.</span>
-        <span>Acteurs</span>
       </div>
       {[...tentatives].reverse().map((t, i) => {
         const f = t.filmSoumis
-        const genresMatch = f.genres.some((g) => indicesCourants.genres.includes(g))
-        const paysMatch = f.pays.some((p) => indicesCourants.pays.includes(p))
-        const realMatch =
-          filmCible
-            ? f.realisateurs.some((r) =>
-                filmCible.realisateurs.some((cr) => cr.nom === r.nom),
-              )
-            : indicesCourants.realisateurRevele &&
-              tentatives[tentatives.length - 1 - i].filmSoumis === t.filmSoumis
-
-        const acteurMatch = filmCible
-          ? f.acteurs.some((a) => filmCible.acteurs.some((ca) => ca.nom === a.nom))
-          : f.acteurs.some((a) => indicesCourants.acteurs.includes(a.nom))
+        const realMatch = filmCible
+          ? f.realisateurs.some((r) =>
+              filmCible.realisateurs.some((cr) => cr.nom === r.nom),
+            )
+          : indicesCourants.realisateurRevele &&
+            tentatives[tentatives.length - 1 - i].filmSoumis === t.filmSoumis
 
         return (
           <React.Fragment key={`${t.tmdbId}-${i}`}>
@@ -82,7 +66,6 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
                 </span>
               </div>
               <div>
-                <BadgeMatch match={genresMatch} />
                 <span className="cineclue-history-tags">
                   {f.genres.map((g) => (
                     <span
@@ -95,21 +78,22 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
                 </span>
               </div>
               <div>
-                <BadgeMatch match={paysMatch} />
                 <span className="cineclue-history-tags">
-                  {f.pays.slice(0, 2).map(countryLabel).join(', ')}
+                  {f.pays.slice(0, 2).map((p) => (
+                    <span
+                      key={p}
+                      className={`cineclue-hist-tag${indicesCourants.pays.includes(p) ? ' on' : ''}`}
+                    >
+                      {countryLabel(p)}
+                    </span>
+                  ))}
                 </span>
               </div>
               <div>
-                <BadgeMatch match={realMatch} />
-                <span className="cineclue-history-val">
-                  {f.realisateurs[0]?.nom ?? '—'}
-                </span>
-              </div>
-              <div>
-                <BadgeMatch match={acteurMatch} />
-                <span className="cineclue-history-val">
-                  {f.acteurs.length} acteur{f.acteurs.length > 1 ? 's' : ''}
+                <span className="cineclue-history-tags">
+                  <span className={`cineclue-hist-tag${realMatch ? ' on' : ''}`}>
+                    {f.realisateurs[0]?.nom ?? '—'}
+                  </span>
                 </span>
               </div>
             </div>

@@ -1,10 +1,11 @@
-import type { CineclueFilm, CineclueIndices } from '../../api/client'
+import type { CineclueFilm, CineclueIndices, CineclueTotaux } from '../../api/client'
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w185'
 
 type Props = {
   indices: CineclueIndices
   filmCible: CineclueFilm | null
+  totalIndices?: CineclueTotaux
 }
 
 // ─── Slot générique ──────────────────────────────────────────────────────────
@@ -37,13 +38,16 @@ function SlotTitre({ film }: { film: CineclueFilm | null }) {
 export function SlotGenre({
   indicesGenres,
   cibleGenres,
+  totalGenres = 0,
 }: {
   indicesGenres: string[]
   cibleGenres?: string[]
+  totalGenres?: number
 }) {
-  const genres = cibleGenres ?? indicesGenres
+  const hiddenCount = cibleGenres ? 0 : Math.max(0, totalGenres - indicesGenres.length)
+  const hasAny = (cibleGenres ?? indicesGenres).length > 0 || hiddenCount > 0
 
-  if (genres.length === 0 && indicesGenres.length === 0) {
+  if (!hasAny) {
     return (
       <Slot label="Genres">
         <span className="cineclue-hidden">--</span>
@@ -55,8 +59,7 @@ export function SlotGenre({
     <Slot label="Genres">
       <div className="cineclue-tags">
         {cibleGenres
-          ? // Fin de partie : on affiche tous les genres cibles, révélés ou non
-            cibleGenres.map((g) => {
+          ? cibleGenres.map((g) => {
               const revele = indicesGenres.includes(g)
               return (
                 <span
@@ -67,12 +70,16 @@ export function SlotGenre({
                 </span>
               )
             })
-          : // En cours : on affiche uniquement les genres déjà révélés
-            indicesGenres.map((g) => (
-              <span key={g} className="cineclue-tag cineclue-tag-on cineclue-flip">
-                {g}
-              </span>
-            ))}
+          : <>
+              {indicesGenres.map((g) => (
+                <span key={g} className="cineclue-tag cineclue-tag-on cineclue-flip">
+                  {g}
+                </span>
+              ))}
+              {Array.from({ length: hiddenCount }, (_, i) => (
+                <span key={`hidden-genre-${i}`} className="cineclue-tag">?</span>
+              ))}
+            </>}
       </div>
     </Slot>
   )
@@ -100,13 +107,16 @@ export function countryLabel(code: string): string {
 export function SlotNationalite({
   indicesPays,
   ciblePays,
+  totalPays = 0,
 }: {
   indicesPays: string[]
   ciblePays?: string[]
+  totalPays?: number
 }) {
-  const pays = ciblePays ?? indicesPays
+  const hiddenCount = ciblePays ? 0 : Math.max(0, totalPays - indicesPays.length)
+  const hasAny = (ciblePays ?? indicesPays).length > 0 || hiddenCount > 0
 
-  if (pays.length === 0 && indicesPays.length === 0) {
+  if (!hasAny) {
     return (
       <Slot label="Pays">
         <span className="cineclue-hidden">--</span>
@@ -130,11 +140,16 @@ export function SlotNationalite({
                 </span>
               )
             })
-          : indicesPays.map((p) => (
-              <span key={p} title={countryLabel(p)} className="cineclue-flag cineclue-flag-on cineclue-flip">
-                {isoToFlag(p)}
-              </span>
-            ))}
+          : <>
+              {indicesPays.map((p) => (
+                <span key={p} title={countryLabel(p)} className="cineclue-flag cineclue-flag-on cineclue-flip">
+                  {isoToFlag(p)}
+                </span>
+              ))}
+              {Array.from({ length: hiddenCount }, (_, i) => (
+                <span key={`hidden-pays-${i}`} className="cineclue-flag" title="Pays inconnu">🏴</span>
+              ))}
+            </>}
       </div>
     </Slot>
   )
@@ -269,13 +284,47 @@ export function SlotDuree({
 export function SlotActeurs({
   indicesActeurs,
   filmCible,
+  totalActeurs = 0,
 }: {
   indicesActeurs: string[]
   filmCible: CineclueFilm | null
+  totalActeurs?: number
 }) {
-  const acteurs = filmCible?.acteurs ?? []
+  if (filmCible) {
+    if (filmCible.acteurs.length === 0) {
+      return (
+        <Slot label="Acteurs">
+          <span className="cineclue-hidden">--</span>
+        </Slot>
+      )
+    }
+    return (
+      <Slot label="Acteurs">
+        <div className="cineclue-acteurs">
+          {filmCible.acteurs.map((a) => {
+            const src = a.photo ? `${TMDB_IMG}${a.photo}` : null
+            return (
+              <div key={a.nom} className="cineclue-acteur cineclue-acteur-on cineclue-flip" title={a.nom}>
+                <div className="cineclue-acteur-photo">
+                  {src ? (
+                    <img src={src} alt={a.nom} loading="lazy" />
+                  ) : (
+                    <span className="cineclue-acteur-initiales">
+                      {a.nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+                    </span>
+                  )}
+                </div>
+                <span className="cineclue-acteur-nom">{a.nom}</span>
+              </div>
+            )
+          })}
+        </div>
+      </Slot>
+    )
+  }
 
-  const hasAny = acteurs.length > 0 || indicesActeurs.length > 0
+  const hiddenCount = Math.max(0, totalActeurs - indicesActeurs.length)
+  const hasAny = indicesActeurs.length > 0 || hiddenCount > 0
 
   if (!hasAny) {
     return (
@@ -285,39 +334,27 @@ export function SlotActeurs({
     )
   }
 
-  const liste = filmCible
-    ? acteurs
-    : indicesActeurs.map((nom) => ({ nom, photo: null }))
-
   return (
     <Slot label="Acteurs">
       <div className="cineclue-acteurs">
-        {liste.map((a) => {
-          const revele = filmCible !== null ? true : indicesActeurs.includes(a.nom)
-          const src = a.photo ? `${TMDB_IMG}${a.photo}` : null
-          return (
-            <div
-              key={a.nom}
-              className={`cineclue-acteur${revele ? ' cineclue-acteur-on cineclue-flip' : ''}`}
-              title={a.nom}
-            >
-              <div className="cineclue-acteur-photo">
-                {src && revele ? (
-                  <img src={src} alt={a.nom} loading="lazy" />
-                ) : (
-                  <span className="cineclue-acteur-initiales">
-                    {a.nom
-                      .split(' ')
-                      .map((w) => w[0])
-                      .join('')
-                      .slice(0, 2)}
-                  </span>
-                )}
-              </div>
-              <span className="cineclue-acteur-nom">{revele ? a.nom : '?'}</span>
+        {indicesActeurs.map((nom) => (
+          <div key={nom} className="cineclue-acteur cineclue-acteur-on cineclue-flip" title={nom}>
+            <div className="cineclue-acteur-photo">
+              <span className="cineclue-acteur-initiales">
+                {nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+              </span>
             </div>
-          )
-        })}
+            <span className="cineclue-acteur-nom">{nom}</span>
+          </div>
+        ))}
+        {Array.from({ length: hiddenCount }, (_, i) => (
+          <div key={`hidden-acteur-${i}`} className="cineclue-acteur" title="Acteur non découvert">
+            <div className="cineclue-acteur-photo">
+              <span className="cineclue-acteur-initiales">?</span>
+            </div>
+            <span className="cineclue-acteur-nom">?</span>
+          </div>
+        ))}
       </div>
     </Slot>
   )
@@ -327,17 +364,18 @@ export function SlotActeurs({
 
 export function SlotReal({
   realisateurRevele,
+  realisateurInfo,
   filmCible,
 }: {
   realisateurRevele: boolean
+  realisateurInfo?: { nom: string; photo: string | null } | null
   filmCible: CineclueFilm | null
 }) {
-  const real = filmCible?.realisateurs[0] ?? null
-  const shown = realisateurRevele || filmCible !== null
+  const real = filmCible?.realisateurs[0] ?? (realisateurRevele ? realisateurInfo : null) ?? null
 
   return (
     <Slot label="Réalisateur">
-      {shown && real ? (
+      {real ? (
         <div className="cineclue-real cineclue-flip">
           {real.photo && (
             <img
@@ -358,7 +396,7 @@ export function SlotReal({
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-export function PersonaBoard({ indices, filmCible }: Props) {
+export function PersonaBoard({ indices, filmCible, totalIndices }: Props) {
   return (
     <div className="cineclue-persona">
       <SlotTitre film={filmCible} />
@@ -366,10 +404,12 @@ export function PersonaBoard({ indices, filmCible }: Props) {
         <SlotGenre
           indicesGenres={indices.genres}
           cibleGenres={filmCible?.genres}
+          totalGenres={totalIndices?.genres}
         />
         <SlotNationalite
           indicesPays={indices.pays}
           ciblePays={filmCible?.pays}
+          totalPays={totalIndices?.pays}
         />
       </div>
       <div className="cineclue-persona-row-3">
@@ -385,8 +425,8 @@ export function PersonaBoard({ indices, filmCible }: Props) {
         />
         <SlotLangue langue={indices.langue} filmCible={filmCible} />
       </div>
-      <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} />
-      <SlotReal realisateurRevele={indices.realisateurRevele} filmCible={filmCible} />
+      <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} totalActeurs={totalIndices?.acteurs} />
+      <SlotReal realisateurRevele={indices.realisateurRevele} realisateurInfo={indices.realisateurInfo} filmCible={filmCible} />
     </div>
   )
 }

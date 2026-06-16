@@ -7,6 +7,7 @@ import {
   type CineclueIndices,
   type CineclueStatut,
   type CineclueTentative,
+  type CineclueTotaux,
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
@@ -29,6 +30,7 @@ type LocalState = {
   indices: CineclueIndices
   statut: CineclueStatut
   filmCible: CineclueFilm | null
+  totalIndices?: CineclueTotaux
 }
 
 function loadLocal(): LocalState | null {
@@ -45,15 +47,18 @@ function saveLocal(state: LocalState) {
   try {
     localStorage.setItem(todayKey(), JSON.stringify(state))
   } catch {
-    // localStorage peut être indisponible en navigation privée
+    // localStorage indisponible en navigation privée
   }
 }
+
+const TOTAUX_VIDES: CineclueTotaux = { genres: 0, pays: 0, acteurs: 0 }
 
 const INDICES_VIDES: CineclueIndices = {
   genres: [],
   pays: [],
   acteurs: [],
   realisateurRevele: false,
+  realisateurInfo: null,
   anneeMin: null,
   anneeMax: null,
   dureeMin: null,
@@ -83,6 +88,7 @@ export default function FilmDuJour() {
   const [indices, setIndices] = useState<CineclueIndices>(INDICES_VIDES)
   const [statut, setStatut] = useState<CineclueStatut>('in_progress')
   const [filmCible, setFilmCible] = useState<CineclueFilm | null>(null)
+  const [totalIndices, setTotalIndices] = useState<CineclueTotaux>(TOTAUX_VIDES)
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -101,8 +107,9 @@ export default function FilmDuJour() {
       i: CineclueIndices,
       s: CineclueStatut,
       fc: CineclueFilm | null,
+      ti?: CineclueTotaux,
     ) => {
-      saveLocal({ tentatives: t, indices: i, statut: s, filmCible: fc })
+      saveLocal({ tentatives: t, indices: i, statut: s, filmCible: fc, totalIndices: ti })
     },
     [],
   )
@@ -120,6 +127,7 @@ export default function FilmDuJour() {
       setIndices(local.indices)
       setStatut(local.statut)
       setFilmCible(local.filmCible)
+      if (local.totalIndices) setTotalIndices(local.totalIndices)
       if (local.statut === 'won') setMessage('Bravo, tu as trouvé le film !')
       else if (local.statut === 'lost')
         setMessage(`Perdu. Le film était : ${local.filmCible?.titre ?? '?'}`)
@@ -133,18 +141,14 @@ export default function FilmDuJour() {
       if (token) {
         api.cineclue
           .session()
-          .then(({ session }) => {
+          .then(({ session, totalIndices: ti }) => {
+            setTotalIndices(ti)
             if (!session) return
             setTentatives(session.tentatives)
             setIndices(session.indices)
             setStatut(session.statut)
             setFilmCible(session.filmCible)
-            persist(
-              session.tentatives,
-              session.indices,
-              session.statut,
-              session.filmCible,
-            )
+            persist(session.tentatives, session.indices, session.statut, session.filmCible, ti)
           })
           .catch(() => {
             // On reste sur localStorage en cas d'erreur réseau
@@ -157,7 +161,8 @@ export default function FilmDuJour() {
     if (token) {
       api.cineclue
         .session()
-        .then(({ session }) => {
+        .then(({ session, totalIndices: ti }) => {
+          setTotalIndices(ti)
           if (!session) {
             setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
           } else {
@@ -165,12 +170,7 @@ export default function FilmDuJour() {
             setIndices(session.indices)
             setStatut(session.statut)
             setFilmCible(session.filmCible)
-            persist(
-              session.tentatives,
-              session.indices,
-              session.statut,
-              session.filmCible,
-            )
+            persist(session.tentatives, session.indices, session.statut, session.filmCible, ti)
             if (session.statut === 'won') setMessage('Bravo, tu as trouvé le film !')
             else if (session.statut === 'lost')
               setMessage(`Perdu. Le film était : ${session.filmCible?.titre ?? '?'}`)
@@ -222,7 +222,8 @@ export default function FilmDuJour() {
       setIndices(result.indicesReveles)
       setStatut(result.statut)
       setFilmCible(result.filmCible)
-      persist(newTentatives, result.indicesReveles, result.statut, result.filmCible)
+      setTotalIndices(result.totalIndices)
+      persist(newTentatives, result.indicesReveles, result.statut, result.filmCible, result.totalIndices)
 
       if (result.statut === 'won') {
         setMessage('Bravo, tu as trouvé le film !')
@@ -251,6 +252,7 @@ export default function FilmDuJour() {
       setIndices(INDICES_VIDES)
       setStatut('in_progress')
       setFilmCible(null)
+      setTotalIndices(TOTAUX_VIDES)
       setShowModal(false)
       setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
     } catch (e) {
@@ -278,7 +280,7 @@ export default function FilmDuJour() {
     <Shell>
       <div className="cineclue-game">
         {/* Persona épinglée en haut */}
-        <PersonaBoard indices={indices} filmCible={filmCible} />
+        <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} />
 
         {/* Message + compteur */}
         <div className="cineclue-status">

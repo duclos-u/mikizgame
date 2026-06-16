@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { db } from "../db";
 import { cineclueDaily, cineclueSessions, games, leaderboardEntries } from "../db/schema";
 import {
+  applyTimeGatedClues,
   compareFilms,
   indicesFinaux,
   indicesVides,
@@ -65,7 +66,13 @@ filmdujour.get("/session", authMiddleware, async (c) => {
     ),
   });
 
-  if (!session) return c.json({ session: null });
+  const totalIndices = {
+    genres: cible.genres.length,
+    pays: cible.pays.length,
+    acteurs: cible.acteurs.length,
+  };
+
+  if (!session) return c.json({ session: null, totalIndices });
 
   return c.json({
     session: {
@@ -76,6 +83,7 @@ filmdujour.get("/session", authMiddleware, async (c) => {
         MAX_TENTATIVES - (session.tentatives as unknown[]).length,
       filmCible: session.status !== "in_progress" ? cible : null,
     },
+    totalIndices,
   });
 });
 
@@ -118,16 +126,20 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   const correct = filmSoumis.id === cible.id;
 
-  const nouveauxIndices: IndicesReveles = correct
-    ? indicesFinaux(cible)
-    : compareFilms(filmSoumis, cible, indicesCourants);
-
   const nouvelleTentative = {
     tmdbId: filmSoumis.id,
     filmSoumis: filmSoumis satisfies Film,
   };
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];
+
+  const nouveauxIndices: IndicesReveles = correct
+    ? indicesFinaux(cible)
+    : applyTimeGatedClues(
+        compareFilms(filmSoumis, cible, indicesCourants),
+        cible,
+        nouvellesTentatives.length,
+      );
   const estPerdu = !correct && nouvellesTentatives.length >= MAX_TENTATIVES;
   const nouveauStatut: "in_progress" | "won" | "lost" = correct
     ? "won"
@@ -176,6 +188,11 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
     tentativesRestantes: MAX_TENTATIVES - nouvellesTentatives.length,
     statut: nouveauStatut,
     filmCible: nouveauStatut !== "in_progress" ? cible : null,
+    totalIndices: {
+      genres: cible.genres.length,
+      pays: cible.pays.length,
+      acteurs: cible.acteurs.length,
+    },
   });
 });
 

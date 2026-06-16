@@ -5,7 +5,7 @@ import { games, leaderboardEntries, users } from "../db/schema";
 
 const leaderboard = new Hono();
 
-const RANK_POINTS = [25, 18, 15, 12, 10, 8];
+const RANK_POINTS = [25, 18, 15, 12, 10, 8, 6, 5, 4, 3];
 
 /**
  * GET /api/leaderboard/cross?date=YYYY-MM-DD
@@ -69,7 +69,7 @@ leaderboard.get("/cross/stats", async (c) => {
     return c.json({ games: [], entries: [] });
   }
 
-  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 ELSE 0 END`;
+  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 WHEN 7 THEN 6 WHEN 8 THEN 5 WHEN 9 THEN 4 WHEN 10 THEN 3 ELSE 0 END`;
 
   const gameResults = await Promise.all(
     activeGames.map(async (game) => {
@@ -117,7 +117,7 @@ leaderboard.get("/:game/stats", async (c) => {
   if (!game) return c.json({ error: "Game not found" }, 404);
   if (!game.active) return c.json({ error: "Game is inactive" }, 404);
 
-  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 ELSE 0 END`;
+  const pointsExpr = sql`CASE ${leaderboardEntries.score} WHEN 1 THEN 25 WHEN 2 THEN 18 WHEN 3 THEN 15 WHEN 4 THEN 12 WHEN 5 THEN 10 WHEN 6 THEN 8 WHEN 7 THEN 6 WHEN 8 THEN 5 WHEN 9 THEN 4 WHEN 10 THEN 3 ELSE 0 END`;
 
   const entries = await db
     .select({

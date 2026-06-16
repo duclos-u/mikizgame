@@ -53,3 +53,7 @@ The CinéClue game (`src/games/cineclue/index.tsx`) persists its daily state in 
 ### Styling
 
 Single global stylesheet at `src/index.sass` — no CSS-in-JS or component-scoped styles. Class names are BEM-ish strings applied directly in JSX. Colors use OKLCH tokens (`--bg`, `--card`, `--accent`, `--text`, `--border`). Typography: Hanken Grotesk (body), Baloo 2 (display).
+
+## Language Convention
+
+All code identifiers (variable names, function names, component names, CSS class names) and comments must be written in **English**. User-facing content (UI labels, game text, messages displayed to users) may be in French.

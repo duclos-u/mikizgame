@@ -127,6 +127,7 @@ export type CineclueIndices = {
   pays: string[]
   acteurs: string[]
   realisateurRevele: boolean
+  realisateurInfo?: { nom: string; photo: string | null } | null
   anneeMin: number | null
   anneeMax: number | null
   dureeMin: number | null
@@ -135,6 +136,12 @@ export type CineclueIndices = {
 }
 
 export type CineclueStatut = 'in_progress' | 'won' | 'lost'
+
+export type CineclueTotaux = {
+  genres: number
+  pays: number
+  acteurs: number
+}
 
 export type CineclueTentative = {
   tmdbId: number
@@ -156,6 +163,7 @@ export type CineclueGuessResponse = {
   tentativesRestantes: number
   statut: CineclueStatut
   filmCible: CineclueFilm | null
+  totalIndices: CineclueTotaux
 }
 
 export type TmdbFilmResult = {
@@ -196,7 +204,7 @@ export const api = {
     reset: () => request<{ ok: boolean }>('/motivex/session', { method: 'DELETE' }),
   },
   cineclue: {
-    session: () => request<{ session: CineclueSession | null }>('/filmdujour/session'),
+    session: () => request<{ session: CineclueSession | null; totalIndices: CineclueTotaux }>('/filmdujour/session'),
     guess: (tmdbId: number) =>
       request<CineclueGuessResponse>('/filmdujour/guess', {
         method: 'POST',

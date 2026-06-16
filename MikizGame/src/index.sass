@@ -1682,7 +1682,6 @@ $flip-duration: 400ms
   display: flex
   flex-direction: column
   gap: 1rem
-  position: sticky
   top: 56px
   z-index: 8
   box-shadow: 0 2px 8px rgba(0,0,0,.12)
@@ -1993,7 +1992,7 @@ $flip-duration: 400ms
 
 .cineclue-history-head
   display: grid
-  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr 1.5fr
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr
   gap: 0.5rem
   padding: 0.5rem 0.75rem
   background: var(--card-2)
@@ -2010,7 +2009,7 @@ $flip-duration: 400ms
 
 .cineclue-history-row
   display: grid
-  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr 1.5fr
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr
   gap: 0.5rem
   padding: 0.6rem 0.75rem
   font-size: 0.82rem
@@ -2063,7 +2062,6 @@ $flip-duration: 400ms
   flex-wrap: wrap
   gap: 0.2rem
   font-size: 0.72rem
-  margin-left: 0.25rem
 
 .cineclue-badge
   display: inline-flex
@@ -2089,11 +2087,21 @@ $flip-duration: 400ms
     color: var(--yellow)
     border: 1px solid color-mix(in oklch, var(--yellow) 28%, var(--border))
 
+@keyframes hist-sweep
+  from
+    text-decoration-color: transparent
+  to
+    text-decoration-color: color-mix(in oklch, var(--muted) 50%, transparent)
+
 .cineclue-hist-tag
   padding: 0.1rem 0.3rem
   border-radius: 2px
   background: var(--card-2)
   color: var(--muted)
+
+  &:not(.on):not(.cineclue-hist-tag-more)
+    text-decoration: line-through
+    animation: hist-sweep 0.3s ease-out forwards
 
   &.on
     background: color-mix(in oklch, var(--accent) 14%, var(--card))

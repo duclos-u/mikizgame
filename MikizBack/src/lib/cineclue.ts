@@ -24,6 +24,7 @@ export type IndicesReveles = {
   pays: string[];
   acteurs: string[];
   realisateurRevele: boolean;
+  realisateurInfo: Realisateur | null;
   anneeMin: number | null;
   anneeMax: number | null;
   dureeMin: number | null;
@@ -37,6 +38,7 @@ export function indicesVides(): IndicesReveles {
     pays: [],
     acteurs: [],
     realisateurRevele: false,
+    realisateurInfo: null,
     anneeMin: null,
     anneeMax: null,
     dureeMin: null,
@@ -66,11 +68,14 @@ export function compareFilms(
     .map((a) => a.nom);
   const acteurs = Array.from(new Set([...indicesCourants.acteurs, ...acteursCommuns]));
 
-  const realisateurRevele =
-    indicesCourants.realisateurRevele ||
+  const directorMatched =
+    !indicesCourants.realisateurRevele &&
     soumis.realisateurs.some((r) =>
       cible.realisateurs.some((cr) => cr.nom === r.nom),
     );
+  const realisateurRevele = indicesCourants.realisateurRevele || directorMatched;
+  const realisateurInfo =
+    indicesCourants.realisateurInfo ?? (directorMatched ? (cible.realisateurs[0] ?? null) : null);
 
   let { anneeMin, anneeMax } = indicesCourants;
   if (soumis.annee > cible.annee) {
@@ -96,12 +101,42 @@ export function compareFilms(
     pays,
     acteurs,
     realisateurRevele,
+    realisateurInfo,
     anneeMin,
     anneeMax,
     dureeMin,
     dureeMax,
     langue,
   };
+}
+
+/**
+ * Garantit des révélations progressives indépendamment des correspondances :
+ * - ≥3 tentatives : langue révélée
+ * - ≥5 tentatives : au moins un genre révélé
+ * - ≥7 tentatives : réalisateur révélé
+ */
+export function applyTimeGatedClues(
+  indices: IndicesReveles,
+  cible: Film,
+  attemptCount: number,
+): IndicesReveles {
+  const updated = { ...indices }
+
+  if (attemptCount >= 3 && updated.langue === null) {
+    updated.langue = cible.langue
+  }
+
+  if (attemptCount >= 5 && updated.genres.length === 0 && cible.genres.length > 0) {
+    updated.genres = [cible.genres[0]]
+  }
+
+  if (attemptCount >= 7 && !updated.realisateurRevele) {
+    updated.realisateurRevele = true
+    updated.realisateurInfo = cible.realisateurs[0] ?? null
+  }
+
+  return updated
 }
 
 /**
@@ -113,6 +148,7 @@ export function indicesFinaux(cible: Film): IndicesReveles {
     pays: [...cible.pays],
     acteurs: cible.acteurs.map((a) => a.nom),
     realisateurRevele: true,
+    realisateurInfo: cible.realisateurs[0] ?? null,
     anneeMin: null,
     anneeMax: null,
     dureeMin: null,

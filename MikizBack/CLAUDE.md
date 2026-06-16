@@ -58,6 +58,10 @@ Hono app with 5 route groups mounted in `src/index.ts`:
 | `DATABASE_SSL` | Set to `true` for SSL DB connections |
 | `TMDB_API_KEY` | Required for CinéClue — get one at themoviedb.org |
 
+## Language Convention
+
+All code identifiers (variable names, function names, route names) and comments must be written in **English**. User-facing content (API response messages, game text, error messages shown to users) may be in French.
+
 ## Adding a New Game
 
 1. `src/db/schema/<game>.ts` — define tables with Drizzle
