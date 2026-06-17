@@ -135,13 +135,16 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];
 
-  const nouveauxIndices: IndicesReveles = correct
-    ? indicesFinaux(cible)
-    : applyTimeGatedClues(
-        compareFilms(filmSoumis, cible, indicesCourants),
-        cible,
-        nouvellesTentatives.length,
-      );
+  const afterCompare = compareFilms(filmSoumis, cible, indicesCourants);
+  const afterPity = applyTimeGatedClues(afterCompare, cible, nouvellesTentatives.length);
+
+  const pityCluesRevealed: string[] = [];
+  if (afterPity.langue !== null && afterCompare.langue === null) pityCluesRevealed.push("langue");
+  if (afterPity.genres.length > afterCompare.genres.length) pityCluesRevealed.push("genre");
+  if (afterPity.realisateurRevele && !afterCompare.realisateurRevele)
+    pityCluesRevealed.push("realisateur");
+
+  const nouveauxIndices: IndicesReveles = correct ? indicesFinaux(cible) : afterPity;
   const estPerdu = !correct && nouvellesTentatives.length >= MAX_TENTATIVES;
   const nouveauStatut: "in_progress" | "won" | "lost" = correct
     ? "won"
@@ -195,6 +198,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
       pays: cible.pays.length,
       acteurs: cible.acteurs.length,
     },
+    pityCluesRevealed,
   });
 });
 

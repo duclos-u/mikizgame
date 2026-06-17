@@ -13,6 +13,7 @@ import {
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
 import { PersonaBoard } from './PersonaBoard'
+import { PityCluePopup, isPityPopupDismissed } from './PityCluePopup'
 import { ResultModal } from './ResultModal'
 import { SearchBar } from './SearchBar'
 import { TentativesHistory } from './TentativesHistory'
@@ -94,6 +95,8 @@ export default function FilmDuJour() {
   const [submitting, setSubmitting] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [resetting, setResetting] = useState(false)
+  const [pitySlots, setPitySlots] = useState<Set<string>>(new Set())
+  const [showPityPopup, setShowPityPopup] = useState(false)
 
   // Ref pour éviter le double-chargement en strict mode
   const initialized = useRef(false)
@@ -225,6 +228,15 @@ export default function FilmDuJour() {
       setTotalIndices(result.totalIndices)
       persist(newTentatives, result.indicesReveles, result.statut, result.filmCible, result.totalIndices)
 
+      if (result.pityCluesRevealed?.length > 0) {
+        setPitySlots(new Set(result.pityCluesRevealed))
+        if (!isPityPopupDismissed()) {
+          setTimeout(() => setShowPityPopup(true), 400)
+        }
+      } else {
+        setPitySlots(new Set())
+      }
+
       if (result.statut === 'won') {
         setMessage('Bravo, tu as trouvé le film !')
         confetti({ particleCount: 180, spread: 70, origin: { y: 0.6 } })
@@ -280,7 +292,7 @@ export default function FilmDuJour() {
     <Shell>
       <div className="cineclue-game">
         {/* Persona épinglée en haut */}
-        <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} />
+        <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} pitySlots={pitySlots} />
 
         {/* Message + compteur + dots */}
         <div className="cineclue-status">
@@ -376,6 +388,11 @@ export default function FilmDuJour() {
             tentatives={tentatives}
             onClose={() => setShowModal(false)}
           />
+        )}
+
+        {/* Popup indice de pitié */}
+        {showPityPopup && (
+          <PityCluePopup onClose={() => setShowPityPopup(false)} />
         )}
       </div>
     </Shell>

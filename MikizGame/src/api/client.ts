@@ -166,6 +166,7 @@ export type CineclueGuessResponse = {
   statut: CineclueStatut
   filmCible: CineclueFilm | null
   totalIndices: CineclueTotaux
+  pityCluesRevealed: string[]
 }
 
 export type TmdbFilmResult = {
@@ -177,6 +178,66 @@ export type TmdbFilmResult = {
 
 export function searchFilms(q: string): Promise<TmdbFilmResult[]> {
   return request<TmdbFilmResult[]>(`/cineclue/search?q=${encodeURIComponent(q)}`)
+}
+
+// ─── Spotle ───────────────────────────────────────────────────────────────────
+
+export type SpotleMatchStatus = 'match' | 'close' | 'miss' | 'info' | 'unknown'
+
+export type SpotleClue = {
+  key: string
+  label: string
+  value: string
+  status: SpotleMatchStatus
+  direction?: 'up' | 'down'
+}
+
+export type SpotleArtist = {
+  id: string
+  name: string
+  imageUrl: string | null
+  creationYear: number | null
+  memberCount: number
+  spotifyFollowers: number
+  genres: string[]
+  country: string | null
+  vocalType: string | null
+  primaryLanguage: string | null
+  mostFamousSong: { title: string; spotifyStreams: number } | null
+  instrumentation: string | null
+  appearsOnSoundtracksWith: string[]
+}
+
+export type SpotleGuess = {
+  artist: SpotleArtist
+  clues: SpotleClue[]
+}
+
+export type SpotleStatus = 'in_progress' | 'won' | 'lost'
+
+export type SpotleGuessResponse = {
+  guess: SpotleGuess
+  status: SpotleStatus
+  guessesLeft: number
+  targetArtist: SpotleArtist | null
+}
+
+export type SpotleSessionResponse = {
+  session: {
+    guesses: SpotleGuess[]
+    status: SpotleStatus
+    guessesLeft: number
+    targetArtist: SpotleArtist | null
+  } | null
+}
+
+export type SpotleSearchResult = {
+  id: string
+  name: string
+  imageUrl: string | null
+  genres: string[]
+  followers: number
+  inPool: boolean
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -215,6 +276,17 @@ export const api = {
     reset: () => request<{ ok: boolean }>('/filmdujour/session', { method: 'DELETE' }),
     search: (q: string) =>
       request<{ films: CineclueFilm[] }>(`/films/search?q=${encodeURIComponent(q)}`),
+  },
+  spotle: {
+    session: () => request<SpotleSessionResponse>('/spotle/session'),
+    guess: (artistId: string) =>
+      request<SpotleGuessResponse>('/spotle/guess', {
+        method: 'POST',
+        body: JSON.stringify({ artistId }),
+      }),
+    search: (q: string) =>
+      request<SpotleSearchResult[]>(`/spotle/search?q=${encodeURIComponent(q)}`),
+    reset: () => request<{ ok: boolean }>('/spotle/session', { method: 'DELETE' }),
   },
   leaderboard: {
     get: (game: string, date?: string) =>

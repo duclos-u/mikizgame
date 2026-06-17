@@ -33,7 +33,11 @@
       "WebFetch(domain:api.anthropic.com)",
       "Bash(gunzip -c \"/Users/ulysseduclos/.claude/projects/-Users-ulysseduclos-Super-dossier-MikizStack/643281bf-9711-41aa-92cd-73c8eb13f0b4/tool-results/webfetch-1780913879203-tnq1sw.bin\")",
       "Bash(mkdir -p mikizgame_extract)",
-      "Bash(tar -xzf \"/Users/ulysseduclos/.claude/projects/-Users-ulysseduclos-Super-dossier-MikizStack/643281bf-9711-41aa-92cd-73c8eb13f0b4/tool-results/webfetch-1780913879203-tnq1sw.bin\" -C mikizgame_extract)"
+      "Bash(tar -xzf \"/Users/ulysseduclos/.claude/projects/-Users-ulysseduclos-Super-dossier-MikizStack/643281bf-9711-41aa-92cd-73c8eb13f0b4/tool-results/webfetch-1780913879203-tnq1sw.bin\" -C mikizgame_extract)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
+      "Bash(bun db:generate)",
+      "Bash(bun db:migrate *)",
+      "Bash(bun *)"
     ]
   }
 }
