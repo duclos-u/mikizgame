@@ -117,7 +117,7 @@ export default function FilmDuJour() {
         return
       }
 
-      const newTentative: CineclueTentative = { tmdbId: film.id, filmSoumis: result.filmSoumis }
+      const newTentative: CineclueTentative = { tmdbId: film.id, filmSoumis: result.filmSoumis, anneeProche: result.anneeProche, dureeProche: result.dureeProche }
       const updatedSession: CineclueSession = {
         statut: result.statut,
         tentatives: [...tentatives, newTentative],

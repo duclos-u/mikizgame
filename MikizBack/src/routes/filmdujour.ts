@@ -195,6 +195,8 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
   return c.json({
     correct,
     filmSoumis: nouvelleTentative.filmSoumis,
+    anneeProche: nouvelleTentative.anneeProche,
+    dureeProche: nouvelleTentative.dureeProche,
     indicesReveles: nouveauxIndices,
     tentativesRestantes: MAX_TENTATIVES - nouvellesTentatives.length,
     statut: nouveauStatut,

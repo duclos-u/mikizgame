@@ -82,6 +82,10 @@ export function compareFilms(
     anneeMax = anneeMax === null ? soumis.annee : Math.min(anneeMax, soumis.annee);
   } else if (soumis.annee < cible.annee) {
     anneeMin = anneeMin === null ? soumis.annee : Math.max(anneeMin, soumis.annee);
+  } else {
+    // same year: pin both bounds so SlotDate detects the unique year (anneeMax - anneeMin === 2)
+    anneeMin = anneeMin === null ? soumis.annee - 1 : Math.max(anneeMin, soumis.annee - 1);
+    anneeMax = anneeMax === null ? soumis.annee + 1 : Math.min(anneeMax, soumis.annee + 1);
   }
 
   let { dureeMin, dureeMax } = indicesCourants;
@@ -90,6 +94,10 @@ export function compareFilms(
       dureeMax = dureeMax === null ? soumis.duree : Math.min(dureeMax, soumis.duree);
     } else if (soumis.duree < cible.duree) {
       dureeMin = dureeMin === null ? soumis.duree : Math.max(dureeMin, soumis.duree);
+    } else {
+      // same duration: pin both bounds so SlotDuree detects the unique value (dureeMax - dureeMin === 2)
+      dureeMin = dureeMin === null ? soumis.duree - 1 : Math.max(dureeMin, soumis.duree - 1);
+      dureeMax = dureeMax === null ? soumis.duree + 1 : Math.min(dureeMax, soumis.duree + 1);
     }
   }
 

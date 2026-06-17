@@ -89,6 +89,8 @@ export type CineclueSession = {
 export type CineclueGuessResponse = {
   correct: boolean;
   filmSoumis: CineclueFilm;
+  anneeProche: boolean;
+  dureeProche: boolean;
   indicesReveles: CineclueIndices;
   tentativesRestantes: number;
   statut: CineclueStatut;
