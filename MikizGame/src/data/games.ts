@@ -34,6 +34,8 @@ export function internalGamePath(gameId: string) {
 import Motivex from '../games/motivex'
 // eslint-disable-next-line import/no-cycle
 import CineClue from '../games/cineclue'
+// eslint-disable-next-line import/no-cycle
+import Spotle from '../games/spotle'
 
 export const GAMES: Game[] = [
   {
@@ -100,6 +102,7 @@ export const GAMES: Game[] = [
     players: 0,
     avgTries: 0,
     route: internalGamePath('spotle'),
+    component: Spotle,
   },
   {
     id: 'geodle',
