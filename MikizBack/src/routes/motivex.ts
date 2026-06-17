@@ -1,5 +1,7 @@
+import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { z } from "zod";
 import { db } from "../db";
 import { games, leaderboardEntries, motivexDailyWords, motivexSessions } from "../db/schema";
 import { todayDate } from "../lib/date";
@@ -18,6 +20,10 @@ async function getMotivexGameId(): Promise<string | null> {
 }
 
 const motivex = new Hono();
+
+const guessSchema = z.object({
+  guess: z.string().min(1).max(20),
+});
 
 /**
  * GET /api/motivex/daily
@@ -74,14 +80,12 @@ motivex.get("/session", authMiddleware, async (c) => {
  * Body: { guess: string }
  * Returns: { result: GuessResult, status, attemptsLeft, word? }
  */
-motivex.post("/guess", authMiddleware, async (c) => {
+motivex.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c) => {
   const userId = c.get("userId") as string;
   const today = todayDate();
 
-  const body = await c.req.json<{ guess?: string }>();
-  const guess = body.guess?.toUpperCase().trim();
-
-  if (!guess) return c.json({ error: "guess is required" }, 400);
+  const { guess: rawGuess } = c.req.valid("json");
+  const guess = rawGuess.toUpperCase().trim();
 
   const daily = await db.query.motivexDailyWords.findFirst({
     where: eq(motivexDailyWords.date, today),
@@ -136,12 +140,15 @@ motivex.post("/guess", authMiddleware, async (c) => {
   if (newStatus !== "in_progress") {
     const gameId = await getMotivexGameId();
     if (gameId) {
-      await db.insert(leaderboardEntries).values({
-        userId,
-        gameId,
-        date: today,
-        score: isWon ? updatedAttempts.length : null,
-      });
+      await db
+        .insert(leaderboardEntries)
+        .values({
+          userId,
+          gameId,
+          date: today,
+          score: isWon ? updatedAttempts.length : null,
+        })
+        .onConflictDoNothing();
     }
   }
 
@@ -167,9 +174,7 @@ motivex.delete("/session", authMiddleware, async (c) => {
 
   await db
     .delete(motivexSessions)
-    .where(
-      and(eq(motivexSessions.userId, userId), eq(motivexSessions.date, today))
-    );
+    .where(and(eq(motivexSessions.userId, userId), eq(motivexSessions.date, today)));
 
   const gameId = await getMotivexGameId();
   if (gameId) {
@@ -179,8 +184,8 @@ motivex.delete("/session", authMiddleware, async (c) => {
         and(
           eq(leaderboardEntries.userId, userId),
           eq(leaderboardEntries.gameId, gameId),
-          eq(leaderboardEntries.date, today)
-        )
+          eq(leaderboardEntries.date, today),
+        ),
       );
   }
 

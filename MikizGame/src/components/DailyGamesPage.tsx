@@ -4,27 +4,6 @@ import { api, type CrossGameEntry } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
 
-const TODAY = new Date().toISOString().slice(0, 10)
-
-function isCineclueCompleteToday(): boolean {
-  try {
-    const raw = localStorage.getItem(`filmdujourstate_${TODAY}`)
-    if (!raw) return false
-    const parsed = JSON.parse(raw) as { statut?: string }
-    return parsed.statut === 'won' || parsed.statut === 'lost'
-  } catch {
-    return false
-  }
-}
-
-function isMotivexCompleteToday(): boolean {
-  try {
-    return localStorage.getItem(`motivexstate_${TODAY}`) === '1'
-  } catch {
-    return false
-  }
-}
-
 // ── Pill ─────────────────────────────────────────────────────────────────────
 function Pill({
   children,
@@ -321,10 +300,9 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
   const { user } = useAuth()
   const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
 
-  const internalDone: Record<string, boolean> = {
-    cineclue: isCineclueCompleteToday(),
-    motivex: isMotivexCompleteToday(),
-  }
+  const internalDone: Record<string, boolean> = Object.fromEntries(
+    GAMES.filter((g) => g.checkDoneToday).map((g) => [g.id, g.checkDoneToday!()]),
+  )
   const effectiveDoneIds = [
     ...doneIds.filter((id) => !(id in internalDone)),
     ...Object.entries(internalDone).filter(([, v]) => v).map(([id]) => id),

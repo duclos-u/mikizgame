@@ -1,4 +1,6 @@
 import { useCallback } from 'react'
+import { STORAGE_KEYS } from '../constants/storage'
+import { today } from '../utils/date'
 
 type HubScoreEntry = {
   username: string
@@ -6,14 +8,9 @@ type HubScoreEntry = {
   timestamp: number
 }
 
-function storageKey(gameId: string) {
-  const date = new Date().toISOString().slice(0, 10)
-  return `hub_scores_${gameId}_${date}`
-}
-
 function readEntries(gameId: string): HubScoreEntry[] {
   try {
-    return JSON.parse(localStorage.getItem(storageKey(gameId)) ?? '[]') as HubScoreEntry[]
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.HUB_SCORES(gameId, today())) ?? '[]') as HubScoreEntry[]
   } catch {
     return []
   }
@@ -21,7 +18,7 @@ function readEntries(gameId: string): HubScoreEntry[] {
 
 export function useHubScores() {
   const saveScore = useCallback((gameId: string, username: string, score: number | null) => {
-    const key = storageKey(gameId)
+    const key = STORAGE_KEYS.HUB_SCORES(gameId, today())
     const entries = readEntries(gameId).filter((e) => e.username !== username)
     entries.push({ username, score, timestamp: Date.now() })
     localStorage.setItem(key, JSON.stringify(entries))

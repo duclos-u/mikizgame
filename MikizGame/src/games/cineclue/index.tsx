@@ -5,13 +5,16 @@ import {
   type CineclueFilm,
   type CineclueGuessResponse,
   type CineclueIndices,
+  type CineclueSession,
   type CineclueStatut,
   type CineclueTentative,
   type CineclueTotaux,
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
-import { useAuth } from '../../context/AuthContext'
+import { STORAGE_KEYS } from '../../constants/storage'
+import { today } from '../../utils/date'
+import { useGameSession } from '../../hooks/useGameSession'
 import { PersonaBoard } from './PersonaBoard'
 import { ResultModal } from './ResultModal'
 import { SearchBar } from './SearchBar'
@@ -19,37 +22,7 @@ import { TentativesHistory } from './TentativesHistory'
 
 const MAX_TENTATIVES = 10
 
-// ─── Persistance localStorage ─────────────────────────────────────────────────
-
-function todayKey() {
-  return `filmdujourstate_${new Date().toISOString().slice(0, 10)}`
-}
-
-type LocalState = {
-  tentatives: CineclueTentative[]
-  indices: CineclueIndices
-  statut: CineclueStatut
-  filmCible: CineclueFilm | null
-  totalIndices?: CineclueTotaux
-}
-
-function loadLocal(): LocalState | null {
-  try {
-    const raw = localStorage.getItem(todayKey())
-    if (!raw) return null
-    return JSON.parse(raw) as LocalState
-  } catch {
-    return null
-  }
-}
-
-function saveLocal(state: LocalState) {
-  try {
-    localStorage.setItem(todayKey(), JSON.stringify(state))
-  } catch {
-    // localStorage indisponible en navigation privée
-  }
-}
+// ─── Empty state constants ────────────────────────────────────────────────────
 
 const TOTAUX_VIDES: CineclueTotaux = { genres: 0, pays: 0, acteurs: 0 }
 
@@ -64,6 +37,13 @@ const INDICES_VIDES: CineclueIndices = {
   dureeMin: null,
   dureeMax: null,
   langue: null,
+}
+
+// ─── Data type managed by the session hook ────────────────────────────────────
+
+type CineclueData = {
+  session: CineclueSession | null
+  totalIndices: CineclueTotaux
 }
 
 // ─── Shell ────────────────────────────────────────────────────────────────────
@@ -82,116 +62,45 @@ function Shell({ children }: { children: React.ReactNode }) {
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function FilmDuJour() {
-  const { token } = useAuth()
+  // ── Session hook: localStorage-first + API refresh when authed ────────────
+  const { data, setData, loading } = useGameSession<CineclueData>({
+    cacheKey: STORAGE_KEYS.CINECLUE_STATE(today()),
+    fetch: () => api.cineclue.session(),
+  })
 
-  const [tentatives, setTentatives] = useState<CineclueTentative[]>([])
-  const [indices, setIndices] = useState<CineclueIndices>(INDICES_VIDES)
-  const [statut, setStatut] = useState<CineclueStatut>('in_progress')
-  const [filmCible, setFilmCible] = useState<CineclueFilm | null>(null)
-  const [totalIndices, setTotalIndices] = useState<CineclueTotaux>(TOTAUX_VIDES)
+  // Derive game state from loaded data
+  const tentatives: CineclueTentative[] = data?.session?.tentatives ?? []
+  const indices: CineclueIndices = data?.session?.indices ?? INDICES_VIDES
+  const statut: CineclueStatut = data?.session?.statut ?? 'in_progress'
+  const filmCible: CineclueFilm | null = data?.session?.filmCible ?? null
+  const totalIndices: CineclueTotaux = data?.totalIndices ?? TOTAUX_VIDES
+
+  const gameOver = statut !== 'in_progress'
+
+  // ── UI-only state (not part of game session) ──────────────────────────────
   const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [resetting, setResetting] = useState(false)
 
-  // Ref pour éviter le double-chargement en strict mode
-  const initialized = useRef(false)
-
-  const gameOver = statut !== 'in_progress'
-
-  // Synchronise l'état interne vers localStorage
-  const persist = useCallback(
-    (
-      t: CineclueTentative[],
-      i: CineclueIndices,
-      s: CineclueStatut,
-      fc: CineclueFilm | null,
-      ti?: CineclueTotaux,
-    ) => {
-      saveLocal({ tentatives: t, indices: i, statut: s, filmCible: fc, totalIndices: ti })
-    },
-    [],
-  )
-
-  // ── Chargement initial ────────────────────────────────────────────────────
-
+  // Initialize message once when session data first arrives
+  const messageInitialized = useRef(false)
   useEffect(() => {
-    if (initialized.current) return
-    initialized.current = true
+    if (messageInitialized.current) return
+    if (loading) return  // wait until load resolves
+    messageInitialized.current = true
 
-    // 1. Tenter de restaurer depuis localStorage (immédiat, sans réseau)
-    const local = loadLocal()
-    if (local) {
-      setTentatives(local.tentatives)
-      setIndices(local.indices)
-      setStatut(local.statut)
-      setFilmCible(local.filmCible)
-      if (local.totalIndices) setTotalIndices(local.totalIndices)
-      if (local.statut === 'won') setMessage('Bravo, tu as trouvé le film !')
-      else if (local.statut === 'lost')
-        setMessage(`Perdu. Le film était : ${local.filmCible?.titre ?? '?'}`)
-      else
-        setMessage(
-          `${MAX_TENTATIVES - local.tentatives.length} tentative(s) restante(s).`,
-        )
-      setLoading(false)
-
-      // Si connecté, on rafraîchit silencieusement depuis l'API
-      if (token) {
-        api.cineclue
-          .session()
-          .then(({ session, totalIndices: ti }) => {
-            setTotalIndices(ti)
-            if (!session) return
-            setTentatives(session.tentatives)
-            setIndices(session.indices)
-            setStatut(session.statut)
-            setFilmCible(session.filmCible)
-            persist(session.tentatives, session.indices, session.statut, session.filmCible, ti)
-          })
-          .catch(() => {
-            // On reste sur localStorage en cas d'erreur réseau
-          })
-      }
-      return
-    }
-
-    // 2. Pas de localStorage → charger depuis l'API si connecté
-    if (token) {
-      api.cineclue
-        .session()
-        .then(({ session, totalIndices: ti }) => {
-          setTotalIndices(ti)
-          if (!session) {
-            setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
-          } else {
-            setTentatives(session.tentatives)
-            setIndices(session.indices)
-            setStatut(session.statut)
-            setFilmCible(session.filmCible)
-            persist(session.tentatives, session.indices, session.statut, session.filmCible, ti)
-            if (session.statut === 'won') setMessage('Bravo, tu as trouvé le film !')
-            else if (session.statut === 'lost')
-              setMessage(`Perdu. Le film était : ${session.filmCible?.titre ?? '?'}`)
-            else
-              setMessage(
-                `${session.tentativesRestantes} tentative(s) restante(s).`,
-              )
-          }
-        })
-        .catch(() => {
-          setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
-        })
-        .finally(() => setLoading(false))
+    if (statut === 'won') {
+      setMessage('Bravo, tu as trouvé le film !')
+    } else if (statut === 'lost') {
+      setMessage(`Perdu. Le film était : ${filmCible?.titre ?? '?'}`)
     } else {
-      // Mode invité sans état préexistant
-      setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
-      setLoading(false)
+      const remaining = data?.session?.tentativesRestantes ?? MAX_TENTATIVES
+      setMessage(`${remaining} tentative(s) restante(s).`)
     }
-  }, [token, persist])
+  }, [loading, statut])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Soumission d'un film ──────────────────────────────────────────────────
+  // ── Guess handler ─────────────────────────────────────────────────────────
 
   const handleGuess = useCallback(
     async (film: { id: number }) => {
@@ -200,30 +109,23 @@ export default function FilmDuJour() {
       setMessage('')
 
       let result: CineclueGuessResponse
-
-      if (token) {
-        // Mode connecté : appel API
-        try {
-          result = await api.cineclue.guess(film.id)
-        } catch (err) {
-          setMessage(err instanceof Error ? err.message : 'Erreur réseau')
-          setSubmitting(false)
-          return
-        }
-      } else {
-        // Mode invité : calcul local simplifié (pas d'accès au film cible)
-        setMessage('Connecte-toi pour que tes réponses soient sauvegardées.')
+      try {
+        result = await api.cineclue.guess(film.id)
+      } catch (err) {
+        setMessage(err instanceof Error ? err.message : 'Erreur réseau')
         setSubmitting(false)
         return
       }
 
-      const newTentatives = [...tentatives, { tmdbId: film.id, filmSoumis: result.filmSoumis }]
-      setTentatives(newTentatives)
-      setIndices(result.indicesReveles)
-      setStatut(result.statut)
-      setFilmCible(result.filmCible)
-      setTotalIndices(result.totalIndices)
-      persist(newTentatives, result.indicesReveles, result.statut, result.filmCible, result.totalIndices)
+      const newTentative: CineclueTentative = { tmdbId: film.id, filmSoumis: result.filmSoumis }
+      const updatedSession: CineclueSession = {
+        statut: result.statut,
+        tentatives: [...tentatives, newTentative],
+        indices: result.indicesReveles,
+        tentativesRestantes: result.tentativesRestantes,
+        filmCible: result.filmCible,
+      }
+      setData({ session: updatedSession, totalIndices: result.totalIndices })
 
       if (result.statut === 'won') {
         setMessage('Bravo, tu as trouvé le film !')
@@ -238,22 +140,18 @@ export default function FilmDuJour() {
 
       setSubmitting(false)
     },
-    [gameOver, submitting, token, tentatives, persist],
+    [gameOver, submitting, tentatives, setData],
   )
 
-  // ── Reset dev ─────────────────────────────────────────────────────────────
+  // ── Dev reset ─────────────────────────────────────────────────────────────
 
   async function handleReset() {
     setResetting(true)
     try {
       await api.cineclue.reset()
-      localStorage.removeItem(todayKey())
-      setTentatives([])
-      setIndices(INDICES_VIDES)
-      setStatut('in_progress')
-      setFilmCible(null)
-      setTotalIndices(TOTAUX_VIDES)
+      setData(null)  // clears localStorage and resets derived state
       setShowModal(false)
+      messageInitialized.current = false
       setMessage(`${MAX_TENTATIVES} tentatives pour trouver le film.`)
     } catch (e) {
       setMessage(e instanceof Error ? e.message : 'Erreur reset')

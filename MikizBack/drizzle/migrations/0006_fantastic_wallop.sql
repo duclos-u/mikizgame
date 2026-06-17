@@ -1,0 +1,2 @@
+CREATE INDEX "idx_lb_game_date" ON "leaderboard_entries" USING btree ("game_id","date");--> statement-breakpoint
+CREATE UNIQUE INDEX "uq_lb_user_game_date" ON "leaderboard_entries" USING btree ("user_id","game_id","date");
