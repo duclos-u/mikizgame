@@ -270,11 +270,15 @@ export function SlotDuree({
   if (filmCible && filmCible.duree > 0) {
     texte = <span className="cineclue-revealed">{formatMin(filmCible.duree)}</span>
   } else if (dureeMin !== null && dureeMax !== null) {
-    texte = (
-      <span className="cineclue-fourchette">
-        Entre <strong>{formatMin(dureeMin)}</strong> et <strong>{formatMin(dureeMax)}</strong>
-      </span>
-    )
+    if (dureeMax - dureeMin === 2) {
+      texte = <span className="cineclue-revealed cineclue-flip">{formatMin(dureeMin + 1)}</span>
+    } else {
+      texte = (
+        <span className="cineclue-fourchette">
+          Entre <strong>{formatMin(dureeMin)}</strong> et <strong>{formatMin(dureeMax)}</strong>
+        </span>
+      )
+    }
   } else if (dureeMax !== null) {
     texte = (
       <span className="cineclue-fourchette">

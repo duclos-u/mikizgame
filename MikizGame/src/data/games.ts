@@ -1,3 +1,7 @@
+import type { ComponentType } from 'react'
+import { STORAGE_KEYS } from '../constants/storage'
+import { today } from '../utils/date'
+
 export type GameCategory = 'mots' | 'geo' | 'musique' | 'cinema' | 'culture'
 export type GameStatus = 'live' | 'soon'
 
@@ -15,11 +19,21 @@ export type Game = {
   avgTries: number
   url?: string
   route?: string
+  // Per-game config (only present for live games)
+  maxAttempts?: number
+  checkDoneToday?: () => boolean
+  component?: ComponentType
 }
 
 export function internalGamePath(gameId: string) {
   return `/games/${gameId}`
 }
+
+// Imports are at the bottom to avoid circular-dependency confusion.
+// eslint-disable-next-line import/no-cycle
+import Motivex from '../games/motivex'
+// eslint-disable-next-line import/no-cycle
+import CineClue from '../games/cineclue'
 
 export const GAMES: Game[] = [
   {
@@ -35,6 +49,15 @@ export const GAMES: Game[] = [
     players: 8,
     avgTries: 4,
     route: internalGamePath('motivex'),
+    maxAttempts: 6,
+    component: Motivex,
+    checkDoneToday: () => {
+      try {
+        return localStorage.getItem(STORAGE_KEYS.MOTIVEX_STATE(today())) === '1'
+      } catch {
+        return false
+      }
+    },
   },
   {
     id: 'cineclue',
@@ -49,6 +72,20 @@ export const GAMES: Game[] = [
     players: 9,
     avgTries: 5,
     route: internalGamePath('cineclue'),
+    maxAttempts: 10,
+    component: CineClue,
+    checkDoneToday: () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.CINECLUE_STATE(today()))
+        if (!raw) return false
+        // Stored as { session: CineclueSession | null; totalIndices: ... }
+        const parsed = JSON.parse(raw) as { session?: { statut?: string } }
+        const statut = parsed.session?.statut
+        return statut === 'won' || statut === 'lost'
+      } catch {
+        return false
+      }
+    },
   },
   {
     id: 'spotle',
@@ -80,7 +117,7 @@ export const GAMES: Game[] = [
   {
     id: 'sondle',
     name: 'Sondle',
-    desc: 'Devine le titre à l\'oreille.',
+    desc: "Devine le titre à l'oreille.",
     icon: '🎵',
     cat: 'musique',
     tag: 'tag-musique',

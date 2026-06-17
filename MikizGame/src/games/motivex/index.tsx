@@ -1,14 +1,16 @@
 import confetti from 'canvas-confetti'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type GuessResult, type TileResult } from '../../api/client'
+import { api, type DailyInfo, type GuessResult, type MotivexSession, type TileResult } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
+import { STORAGE_KEYS } from '../../constants/storage'
+import { today } from '../../utils/date'
+import { useGameSession } from '../../hooks/useGameSession'
 import { useHubScores } from '../../hooks/useHubScores'
 
-const MOTIVEX_KEY = `motivexstate_${new Date().toISOString().slice(0, 10)}`
 function markMotivexComplete() {
-  try { localStorage.setItem(MOTIVEX_KEY, '1') } catch { /* ignore */ }
+  try { localStorage.setItem(STORAGE_KEYS.MOTIVEX_STATE(today()), '1') } catch { /* ignore */ }
 }
 
 const TILE_REVEAL_DELAY_MS = 120
@@ -22,6 +24,7 @@ const KEYBOARD_ROWS = [
 ]
 
 type GameStatus = 'in_progress' | 'won' | 'lost'
+type MotivexLoadData = { daily: DailyInfo; session: MotivexSession | null }
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -35,69 +38,64 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 const Motivex = () => {
-  const { token, user } = useAuth()
+  const { user } = useAuth()
   const { saveScore } = useHubScores()
-  const [wordLength, setWordLength] = useState<number | null>(null)
-  const [firstLetter, setFirstLetter] = useState('')
+
+  // ── Session loading ───────────────────────────────────────────────────────
+  const { data, loading, error: loadError, authenticated } = useGameSession<MotivexLoadData>({
+    fetch: async () => {
+      const [daily, { session }] = await Promise.all([api.motivex.daily(), api.motivex.session()])
+      return { daily, session }
+    },
+    requireAuth: true,
+  })
+
+  // Stable daily info derived from loaded data (doesn't change after load)
+  const wordLength = data?.daily.wordLength ?? null
+  const firstLetter = data?.daily.firstLetter.toUpperCase() ?? ''
+
+  // ── Game-play state ───────────────────────────────────────────────────────
   const [attempts, setAttempts] = useState<GuessResult[]>([])
   const [currentInput, setCurrentInput] = useState('')
   const [status, setStatus] = useState<GameStatus>('in_progress')
   const [revealedWord, setRevealedWord] = useState<string | null>(null)
   const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [loadError, setLoadError] = useState('')
   const [shakingRow, setShakingRow] = useState<number | null>(null)
   const [revealingRow, setRevealingRow] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [resetting, setResetting] = useState(false)
   const [pendingConfetti, setPendingConfetti] = useState(false)
 
+  // Initialize game state once from loaded session (fires on first non-null data)
+  const gameInitialized = useRef(false)
   useEffect(() => {
-    if (!token) {
-      setLoading(false)
-      return
-    }
-    async function load() {
-      try {
-        const [dailyInfo, { session }] = await Promise.all([
-          api.motivex.daily(),
-          api.motivex.session(),
-        ])
-        setWordLength(dailyInfo.wordLength)
-        setFirstLetter(dailyInfo.firstLetter.toUpperCase())
+    if (!data || gameInitialized.current) return
+    gameInitialized.current = true
 
-        if (session) {
-          setAttempts(session.attempts ?? [])
-          setStatus(session.status)
-          if (session.word) setRevealedWord(session.word)
-          if (session.status === 'won') {
-            markMotivexComplete()
-            setMessage('Bravo ! Tu as trouvé le mot.')
-          } else if (session.status === 'lost') {
-            markMotivexComplete()
-            setMessage(`Perdu. Le mot était ${session.word ?? '?'}.`)
-          }
-          else {
-            setCurrentInput(dailyInfo.firstLetter.toUpperCase())
-            setMessage(
-              `${MAX_ATTEMPTS - (session.attempts?.length ?? 0)} essai(s) restant(s).`,
-            )
-          }
-        } else {
-          setCurrentInput(dailyInfo.firstLetter.toUpperCase())
-          setMessage('Tape les lettres puis appuie sur Entrée.')
-        }
-      } catch (e) {
-        setLoadError(e instanceof Error ? e.message : 'Erreur de chargement')
-      } finally {
-        setLoading(false)
+    const { daily, session } = data
+    setCurrentInput(daily.firstLetter.toUpperCase())
+
+    if (session) {
+      setAttempts(session.attempts ?? [])
+      setStatus(session.status)
+      if (session.word) setRevealedWord(session.word)
+      if (session.status === 'won') {
+        markMotivexComplete()
+        setMessage('Bravo ! Tu as trouvé le mot.')
+      } else if (session.status === 'lost') {
+        markMotivexComplete()
+        setMessage(`Perdu. Le mot était ${session.word ?? '?'}.`)
+      } else {
+        setMessage(`${MAX_ATTEMPTS - (session.attempts?.length ?? 0)} essai(s) restant(s).`)
       }
+    } else {
+      setMessage('Tape les lettres puis appuie sur Entrée.')
     }
-    load()
-  }, [token])
+  }, [data])
 
   const gameOver = status !== 'in_progress'
 
+  // ── Keyboard handler ──────────────────────────────────────────────────────
   const handleKey = useCallback(async (key: string) => {
     if (gameOver || loading || !wordLength || revealingRow !== null || submitting) return
 
@@ -132,11 +130,11 @@ const Motivex = () => {
         if (res.status === 'won') {
           setMessage('Bravo ! Tu as trouvé le mot.')
           setPendingConfetti(true)
-        } else if (res.status === 'lost') setMessage(`Perdu. Le mot était ${res.word ?? '?'}.`)
-        else
-          setMessage(
-            `${res.attemptsLeft} essai${res.attemptsLeft > 1 ? 's' : ''} restant${res.attemptsLeft > 1 ? 's' : ''}.`,
-          )
+        } else if (res.status === 'lost') {
+          setMessage(`Perdu. Le mot était ${res.word ?? '?'}.`)
+        } else {
+          setMessage(`${res.attemptsLeft} essai${res.attemptsLeft > 1 ? 's' : ''} restant${res.attemptsLeft > 1 ? 's' : ''}.`)
+        }
       } catch (e) {
         const msg = e instanceof Error ? e.message : 'Erreur'
         setMessage(msg)
@@ -161,6 +159,7 @@ const Motivex = () => {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [handleKey])
 
+  // ── Letter status map for keyboard coloring ───────────────────────────────
   const letterStatuses = useMemo(() => {
     const priority: Record<TileResult, number> = { correct: 3, present: 2, absent: 1 }
     const map: Record<string, TileResult> = {}
@@ -188,7 +187,8 @@ const Motivex = () => {
     setPendingConfetti(false)
   }, [pendingConfetti, revealingRow])
 
-  if (!token) {
+  // ── Render guards ─────────────────────────────────────────────────────────
+  if (!authenticated) {
     return (
       <Shell>
         <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
@@ -250,6 +250,7 @@ const Motivex = () => {
   const currentRow = attempts.length
   const gridCols = `repeat(${wordLength}, 52px)`
 
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <Shell>
       <div className="wordle-board">

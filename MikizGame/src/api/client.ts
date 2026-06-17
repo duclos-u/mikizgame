@@ -1,91 +1,53 @@
+export type {
+  User,
+  AuthResponse,
+  TileResult,
+  GuessResult,
+  MotivexSession,
+  GuessResponse,
+  DailyInfo,
+  CineclueActeur,
+  CineclueReal,
+  CineclueFilm,
+  CineclueIndices,
+  CineclueStatut,
+  CineclueTotaux,
+  CineclueTentative,
+  CineclueSession,
+  CineclueGuessResponse,
+  TmdbFilmResult,
+  LeaderboardEntry,
+  LeaderboardResponse,
+  AllTimeEntry,
+  AllTimeResponse,
+  DailyCountsResponse,
+  CrossGameBreakdown,
+  CrossGameEntry,
+  CrossLeaderboardResponse,
+  CrossAllTimeBreakdown,
+  CrossAllTimeEntry,
+  CrossAllTimeResponse,
+} from './shared-types'
+
+import type {
+  User,
+  AuthResponse,
+  MotivexSession,
+  GuessResponse,
+  DailyInfo,
+  CineclueFilm,
+  CineclueSession,
+  CineclueGuessResponse,
+  CineclueTotaux,
+  TmdbFilmResult,
+  LeaderboardResponse,
+  AllTimeResponse,
+  DailyCountsResponse,
+  CrossLeaderboardResponse,
+  CrossAllTimeResponse,
+} from './shared-types'
+
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
-
-export type User = { id: string; username: string; email: string; streak: number }
-export type AuthResponse = { user: User; token: string }
-
-export type TileResult = 'correct' | 'present' | 'absent'
-export type GuessResult = { guess: string; result: TileResult[] }
-
-export type MotivexSession = {
-  status: 'in_progress' | 'won' | 'lost'
-  attempts: GuessResult[]
-  wordLength: number
-  firstLetter: string
-  word?: string
-}
-
-export type GuessResponse = {
-  result: GuessResult
-  status: 'in_progress' | 'won' | 'lost'
-  attemptsLeft: number
-  word?: string
-}
-
-export type LeaderboardEntry = {
-  username: string
-  score: number | null
-  points: number
-  completedAt: string
-}
-
-export type LeaderboardResponse = {
-  date: string
-  game: string
-  total: number
-  entries: LeaderboardEntry[]
-}
-
-export type AllTimeEntry = {
-  username: string
-  wins: number
-  avgAttempts: number | null
-  totalPoints: number
-}
-
-export type AllTimeResponse = {
-  game: string
-  total: number
-  entries: AllTimeEntry[]
-}
-
-export type DailyCountsResponse = {
-  date: string
-  counts: Record<string, number>
-}
-
-export type CrossGameBreakdown = {
-  rank: number
-  score: number | null
-  points: number
-}
-
-export type CrossGameEntry = {
-  username: string
-  total: number
-  breakdown: Record<string, CrossGameBreakdown>
-}
-
-export type CrossLeaderboardResponse = {
-  date: string
-  games: string[]
-  entries: CrossGameEntry[]
-}
-
-export type CrossAllTimeBreakdown = { points: number }
-
-export type CrossAllTimeEntry = {
-  username: string
-  total: number
-  breakdown: Record<string, CrossAllTimeBreakdown>
-}
-
-export type CrossAllTimeResponse = { games: string[]; entries: CrossAllTimeEntry[] }
-
-export type DailyInfo = {
-  date: string
-  wordLength: number
-  firstLetter: string
-}
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('auth_token')
@@ -267,7 +229,8 @@ export const api = {
     reset: () => request<{ ok: boolean }>('/motivex/session', { method: 'DELETE' }),
   },
   cineclue: {
-    session: () => request<{ session: CineclueSession | null; totalIndices: CineclueTotaux }>('/filmdujour/session'),
+    session: () =>
+      request<{ session: CineclueSession | null; totalIndices: CineclueTotaux }>('/filmdujour/session'),
     guess: (tmdbId: number) =>
       request<CineclueGuessResponse>('/filmdujour/guess', {
         method: 'POST',

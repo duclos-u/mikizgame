@@ -1,11 +1,24 @@
+import { zValidator } from "@hono/zod-validator";
 import { eq, or } from "drizzle-orm";
 import { Hono } from "hono";
+import { z } from "zod";
 import { db } from "../db";
 import { users } from "../db/schema";
 import { signToken } from "../lib/jwt";
 import { authMiddleware } from "../middleware/auth";
 
 const auth = new Hono();
+
+const registerSchema = z.object({
+  username: z.string().min(1).max(50),
+  email: z.string().email(),
+  password: z.string().min(8).max(100),
+});
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
 
 function computeStreak(
   currentStreak: number,
@@ -27,16 +40,8 @@ function computeStreak(
  * Body: { username, email, password }
  * Returns: { user: { id, username, email }, token }
  */
-auth.post("/register", async (c) => {
-  const body = await c.req.json<{ username?: string; email?: string; password?: string }>();
-  const { username, email, password } = body;
-
-  if (!username || !email || !password) {
-    return c.json({ error: "username, email and password are required" }, 400);
-  }
-  if (password.length < 8) {
-    return c.json({ error: "Password must be at least 8 characters" }, 400);
-  }
+auth.post("/register", zValidator("json", registerSchema), async (c) => {
+  const { username, email, password } = c.req.valid("json");
 
   const existing = await db.query.users.findFirst({
     where: or(eq(users.username, username), eq(users.email, email)),
@@ -61,13 +66,8 @@ auth.post("/register", async (c) => {
  * Body: { email, password }
  * Returns: { user: { id, username, email }, token }
  */
-auth.post("/login", async (c) => {
-  const body = await c.req.json<{ email?: string; password?: string }>();
-  const { email, password } = body;
-
-  if (!email || !password) {
-    return c.json({ error: "email and password are required" }, 400);
-  }
+auth.post("/login", zValidator("json", loginSchema), async (c) => {
+  const { email, password } = c.req.valid("json");
 
   const user = await db.query.users.findFirst({ where: eq(users.email, email) });
 
@@ -76,13 +76,16 @@ auth.post("/login", async (c) => {
   }
 
   const todayDate = new Date().toISOString().slice(0, 10);
-  const { streakCount, lastLoginDate: newLastLogin, changed } = computeStreak(
-    user.streakCount,
-    user.lastLoginDate,
-    todayDate,
-  );
+  const {
+    streakCount,
+    lastLoginDate: newLastLogin,
+    changed,
+  } = computeStreak(user.streakCount, user.lastLoginDate, todayDate);
   if (changed) {
-    await db.update(users).set({ streakCount, lastLoginDate: newLastLogin }).where(eq(users.id, user.id));
+    await db
+      .update(users)
+      .set({ streakCount, lastLoginDate: newLastLogin })
+      .where(eq(users.id, user.id));
   }
 
   const token = await signToken({ sub: user.id, username: user.username });
@@ -100,23 +103,39 @@ auth.get("/me", authMiddleware, async (c) => {
   const userId = c.get("userId") as string;
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
-    columns: { id: true, username: true, email: true, createdAt: true, lastLoginDate: true, streakCount: true },
+    columns: {
+      id: true,
+      username: true,
+      email: true,
+      createdAt: true,
+      lastLoginDate: true,
+      streakCount: true,
+    },
   });
 
   if (!user) return c.json({ error: "User not found" }, 404);
 
   const todayDate = new Date().toISOString().slice(0, 10);
-  const { streakCount, lastLoginDate: newLastLogin, changed } = computeStreak(
-    user.streakCount,
-    user.lastLoginDate,
-    todayDate,
-  );
+  const {
+    streakCount,
+    lastLoginDate: newLastLogin,
+    changed,
+  } = computeStreak(user.streakCount, user.lastLoginDate, todayDate);
   if (changed) {
-    await db.update(users).set({ streakCount, lastLoginDate: newLastLogin }).where(eq(users.id, userId));
+    await db
+      .update(users)
+      .set({ streakCount, lastLoginDate: newLastLogin })
+      .where(eq(users.id, userId));
   }
 
   return c.json({
-    user: { id: user.id, username: user.username, email: user.email, createdAt: user.createdAt, streak: streakCount },
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      streak: streakCount,
+    },
   });
 });
 

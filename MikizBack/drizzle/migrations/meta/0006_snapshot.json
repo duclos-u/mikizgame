@@ -1,5 +1,5 @@
 {
-  "id": "2cce1161-4685-4f02-a2cf-e8e8def60d54",
+  "id": "f3dc4a0e-ead5-4b0f-8dcf-bda855006a8d",
   "prevId": "fbbf4c62-9521-4387-a7c2-c6b8b0be80ba",
   "version": "7",
   "dialect": "postgresql",
@@ -193,7 +193,56 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_lb_game_date": {
+          "name": "idx_lb_game_date",
+          "columns": [
+            {
+              "expression": "game_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "uq_lb_user_game_date": {
+          "name": "uq_lb_user_game_date",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "game_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "leaderboard_entries_user_id_users_id_fk": {
           "name": "leaderboard_entries_user_id_users_id_fk",

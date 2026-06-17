@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import { api, type User } from '../api/client'
+import { STORAGE_KEYS } from '../constants/storage'
 
 type AuthState = {
   user: User | null
@@ -19,7 +20,7 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | null>(null)
 
-const TOKEN_KEY = 'auth_token'
+const TOKEN_KEY = STORAGE_KEYS.AUTH_TOKEN
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
