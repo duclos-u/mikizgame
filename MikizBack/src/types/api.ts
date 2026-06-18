@@ -96,6 +96,7 @@ export type CineclueGuessResponse = {
   statut: CineclueStatut;
   filmCible: CineclueFilm | null;
   totalIndices: CineclueTotaux;
+  pityCluesRevealed: string[];
 };
 
 export type TmdbFilmResult = {

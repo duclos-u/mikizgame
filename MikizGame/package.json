@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "sync-types": "cp ../MikizBack/src/types/api.ts ./src/api/shared-types.ts",
+    "sync-types": "[ -f ../MikizBack/src/types/api.ts ] && cp ../MikizBack/src/types/api.ts ./src/api/shared-types.ts || echo 'sync-types: source not found, using committed version'",
     "predev": "npm run sync-types",
     "prebuild": "npm run sync-types",
     "dev": "vite",
