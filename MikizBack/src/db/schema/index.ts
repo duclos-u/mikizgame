@@ -2,4 +2,5 @@ export * from "./cineclue";
 export * from "./games";
 export * from "./leaderboard";
 export * from "./motivex";
+export * from "./vinymix";
 export * from "./users";

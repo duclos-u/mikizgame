@@ -6,15 +6,16 @@ type Props = {
   indices: CineclueIndices
   filmCible: CineclueFilm | null
   totalIndices?: CineclueTotaux
+  pitySlots?: Set<string>
 }
 
 // ─── Slot générique ──────────────────────────────────────────────────────────
 
-function Slot({ label, children }: { label: string; children: React.ReactNode }) {
+function Slot({ label, pity, children }: { label: string; pity?: boolean; children: React.ReactNode }) {
   return (
     <div className="cineclue-slot">
       <span className="cineclue-slot-label">{label}</span>
-      <div className="cineclue-slot-body">{children}</div>
+      <div className={`cineclue-slot-body${pity ? ' cineclue-pity-slot' : ''}`}>{children}</div>
     </div>
   )
 }
@@ -39,24 +40,26 @@ export function SlotGenre({
   indicesGenres,
   cibleGenres,
   totalGenres = 0,
+  pity,
 }: {
   indicesGenres: string[]
   cibleGenres?: string[]
   totalGenres?: number
+  pity?: boolean
 }) {
   const hiddenCount = cibleGenres ? 0 : Math.max(0, totalGenres - indicesGenres.length)
   const hasAny = (cibleGenres ?? indicesGenres).length > 0 || hiddenCount > 0
 
   if (!hasAny) {
     return (
-      <Slot label="Genres">
+      <Slot label="Genres" pity={pity}>
         <span className="cineclue-hidden">--</span>
       </Slot>
     )
   }
 
   return (
-    <Slot label="Genres">
+    <Slot label="Genres" pity={pity}>
       <div className="cineclue-tags">
         {cibleGenres
           ? cibleGenres.map((g) => {
@@ -170,21 +173,23 @@ const LANGUES: Record<string, string> = {
 export function SlotLangue({
   langue,
   filmCible,
+  pity,
 }: {
   langue: string | null
   filmCible: CineclueFilm | null
+  pity?: boolean
 }) {
   const code = filmCible ? filmCible.langue : langue
   if (!code) {
     return (
-      <Slot label="Langue">
+      <Slot label="Langue" pity={pity}>
         <span className="cineclue-hidden">--</span>
       </Slot>
     )
   }
   const flag = LANGUES[code] ?? '🏳️'
   return (
-    <Slot label="Langue">
+    <Slot label="Langue" pity={pity}>
       <span className="cineclue-revealed cineclue-flip">
         {flag} {code.toUpperCase()}
       </span>
@@ -265,11 +270,15 @@ export function SlotDuree({
   if (filmCible && filmCible.duree > 0) {
     texte = <span className="cineclue-revealed">{formatMin(filmCible.duree)}</span>
   } else if (dureeMin !== null && dureeMax !== null) {
-    texte = (
-      <span className="cineclue-fourchette">
-        Entre <strong>{formatMin(dureeMin)}</strong> et <strong>{formatMin(dureeMax)}</strong>
-      </span>
-    )
+    if (dureeMax - dureeMin === 2) {
+      texte = <span className="cineclue-revealed cineclue-flip">{formatMin(dureeMin + 1)}</span>
+    } else {
+      texte = (
+        <span className="cineclue-fourchette">
+          Entre <strong>{formatMin(dureeMin)}</strong> et <strong>{formatMin(dureeMax)}</strong>
+        </span>
+      )
+    }
   } else if (dureeMax !== null) {
     texte = (
       <span className="cineclue-fourchette">
@@ -362,7 +371,7 @@ export function SlotActeurs({
             <div className="cineclue-acteur-photo">
               <span className="cineclue-acteur-initiales">?</span>
             </div>
-            <span className="cineclue-acteur-nom">?</span>
+            <span className="cineclue-acteur-nom">&nbsp;</span>
           </div>
         ))}
       </div>
@@ -376,15 +385,17 @@ export function SlotReal({
   realisateurRevele,
   realisateurInfo,
   filmCible,
+  pity,
 }: {
   realisateurRevele: boolean
   realisateurInfo?: { nom: string; photo: string | null } | null
   filmCible: CineclueFilm | null
+  pity?: boolean
 }) {
   const real = filmCible?.realisateurs[0] ?? (realisateurRevele ? realisateurInfo : null) ?? null
 
   return (
-    <Slot label="Réalisateur">
+    <Slot label="Réalisateur" pity={pity}>
       {real ? (
         <div className="cineclue-real cineclue-flip">
           {real.photo ? (
@@ -410,7 +421,7 @@ export function SlotReal({
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-export function PersonaBoard({ indices, filmCible, totalIndices }: Props) {
+export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots }: Props) {
   return (
     <div className="cineclue-persona">
       <SlotTitre film={filmCible} />
@@ -419,6 +430,7 @@ export function PersonaBoard({ indices, filmCible, totalIndices }: Props) {
           indicesGenres={indices.genres}
           cibleGenres={filmCible?.genres}
           totalGenres={totalIndices?.genres}
+          pity={pitySlots?.has('genre')}
         />
         <SlotNationalite
           indicesPays={indices.pays}
@@ -437,10 +449,15 @@ export function PersonaBoard({ indices, filmCible, totalIndices }: Props) {
           dureeMax={indices.dureeMax}
           filmCible={filmCible}
         />
-        <SlotLangue langue={indices.langue} filmCible={filmCible} />
+        <SlotLangue langue={indices.langue} filmCible={filmCible} pity={pitySlots?.has('langue')} />
       </div>
       <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} totalActeurs={totalIndices?.acteurs} />
-      <SlotReal realisateurRevele={indices.realisateurRevele} realisateurInfo={indices.realisateurInfo} filmCible={filmCible} />
+      <SlotReal
+        realisateurRevele={indices.realisateurRevele}
+        realisateurInfo={indices.realisateurInfo}
+        filmCible={filmCible}
+        pity={pitySlots?.has('realisateur')}
+      />
     </div>
   )
 }

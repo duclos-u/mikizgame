@@ -5,6 +5,7 @@ import { auth } from "./routes/auth";
 import { cineclueSearch, filmdujour } from "./routes/filmdujour";
 import { leaderboard } from "./routes/leaderboard";
 import { motivex } from "./routes/motivex";
+import { vinymix } from "./routes/vinymix";
 
 const app = new Hono();
 
@@ -24,6 +25,7 @@ app.route("/api/auth", auth);
 app.route("/api/motivex", motivex);
 app.route("/api/filmdujour", filmdujour);
 app.route("/api/cineclue", cineclueSearch);
+app.route("/api/vinymix", vinymix);
 app.route("/api/leaderboard", leaderboard);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));

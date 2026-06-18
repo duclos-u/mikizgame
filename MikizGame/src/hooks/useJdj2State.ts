@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-
-const STORAGE_KEY = 'jdj2'
+import { STORAGE_KEYS } from '../constants/storage'
 
 export type Jdj2State = {
   done: string[]
@@ -8,7 +7,7 @@ export type Jdj2State = {
 
 function loadState(): Jdj2State {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(STORAGE_KEYS.JDJ2_STATE)
     if (!raw) return { done: [] }
     const parsed = JSON.parse(raw) as Partial<Jdj2State>
     return {
@@ -20,7 +19,7 @@ function loadState(): Jdj2State {
 }
 
 function persistState(state: Jdj2State) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  localStorage.setItem(STORAGE_KEYS.JDJ2_STATE, JSON.stringify(state))
 }
 
 export function useJdj2State() {

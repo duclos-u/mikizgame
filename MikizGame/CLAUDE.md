@@ -26,13 +26,15 @@ Three routes, defined in `src/App.tsx`:
 - `/leaderboard` → `LeaderboardPage`
 - `/games/:gameId` → `GameRoutePage`, which delegates to `src/routes/gameRegistry.tsx`
 
-`gameRegistry.tsx` is the single place that maps a `gameId` string to a React component. To add a new built-in game, add an entry there and create a component under `src/games/<name>/`.
+`gameRegistry.tsx` is a thin adapter — it reads `GAMES` from `src/data/games.ts` and calls `createElement` on the matching `game.component`. It has no component map of its own.
 
 ### Game types: external vs internal
 
 Games are defined in `src/data/games.ts` as `Game` objects. A game is either:
 - **External** — has a `url`, opens in a new tab.
-- **Internal** — has a `route` (e.g. `/games/cineclue`), rendered inside the SPA.
+- **Internal** — has a `route` (e.g. `/games/cineclue`) and a `component` field pointing to its React component, rendered inside the SPA.
+
+**To add a new internal game:** add a `Game` entry to `GAMES` in `src/data/games.ts` (with `route`, `component`, and optionally `checkDoneToday`), then create the component under `src/games/<name>/`. No other file needs updating.
 
 `DailyGamesPage` uses `<Link>` for internal games and `<a target="_blank">` for external games.
 
@@ -46,9 +48,13 @@ Games are defined in `src/data/games.ts` as `Game` objects. A game is either:
 
 ### State persistence
 
-`src/hooks/useJdj2State.ts` stores which games the user marked done today in localStorage under the key `jdj2`.
+All localStorage keys are centralized in `src/constants/storage.ts` (`STORAGE_KEYS`). Use those constants — never write raw key strings.
 
-The CinéClue game (`src/games/cineclue/index.tsx`) persists its daily state in localStorage under `filmdujourstate_{YYYY-MM-DD}`, then syncs with the API when the user is authenticated.
+`src/hooks/useJdj2State.ts` stores which games the user marked done today under `STORAGE_KEYS.JDJ2_STATE`.
+
+Game sessions use `src/hooks/useGameSession.ts` — a generic hook that reads from localStorage first, then silently refreshes from the API when authenticated. Pass a `cacheKey` from `STORAGE_KEYS` and a `fetch` function. Set `requireAuth: true` for games that need a login to play.
+
+`src/utils/date.ts` exports `today()` — use it instead of inline `new Date().toISOString().slice(0, 10)` calls.
 
 ### Styling
 

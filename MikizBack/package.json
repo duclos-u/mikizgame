@@ -13,6 +13,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun run scripts/seed.ts",
+    "artists:schedule": "bun run scripts/schedule-artists.ts",
     "films:set": "bun run scripts/set-film.ts",
     "films:schedule": "bun run scripts/schedule-films.ts",
     "films:delete": "bun run scripts/delete-films.ts",
@@ -26,10 +27,12 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.8.0",
     "drizzle-orm": "^0.38.4",
     "hono": "^4.6.20",
     "jose": "^5.9.6",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

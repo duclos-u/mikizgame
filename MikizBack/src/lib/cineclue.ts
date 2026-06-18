@@ -63,16 +63,12 @@ export function compareFilms(
   const pays = Array.from(new Set([...indicesCourants.pays, ...paysCommuns]));
 
   const nomsCible = new Set(cible.acteurs.map((a) => a.nom));
-  const acteursCommuns = soumis.acteurs
-    .filter((a) => nomsCible.has(a.nom))
-    .map((a) => a.nom);
+  const acteursCommuns = soumis.acteurs.filter((a) => nomsCible.has(a.nom)).map((a) => a.nom);
   const acteurs = Array.from(new Set([...indicesCourants.acteurs, ...acteursCommuns]));
 
   const directorMatched =
     !indicesCourants.realisateurRevele &&
-    soumis.realisateurs.some((r) =>
-      cible.realisateurs.some((cr) => cr.nom === r.nom),
-    );
+    soumis.realisateurs.some((r) => cible.realisateurs.some((cr) => cr.nom === r.nom));
   const realisateurRevele = indicesCourants.realisateurRevele || directorMatched;
   const realisateurInfo =
     indicesCourants.realisateurInfo ?? (directorMatched ? (cible.realisateurs[0] ?? null) : null);
@@ -82,6 +78,10 @@ export function compareFilms(
     anneeMax = anneeMax === null ? soumis.annee : Math.min(anneeMax, soumis.annee);
   } else if (soumis.annee < cible.annee) {
     anneeMin = anneeMin === null ? soumis.annee : Math.max(anneeMin, soumis.annee);
+  } else {
+    // same year: pin both bounds so SlotDate detects the unique year (anneeMax - anneeMin === 2)
+    anneeMin = anneeMin === null ? soumis.annee - 1 : Math.max(anneeMin, soumis.annee - 1);
+    anneeMax = anneeMax === null ? soumis.annee + 1 : Math.min(anneeMax, soumis.annee + 1);
   }
 
   let { dureeMin, dureeMax } = indicesCourants;
@@ -90,11 +90,14 @@ export function compareFilms(
       dureeMax = dureeMax === null ? soumis.duree : Math.min(dureeMax, soumis.duree);
     } else if (soumis.duree < cible.duree) {
       dureeMin = dureeMin === null ? soumis.duree : Math.max(dureeMin, soumis.duree);
+    } else {
+      // same duration: pin both bounds so SlotDuree detects the unique value (dureeMax - dureeMin === 2)
+      dureeMin = dureeMin === null ? soumis.duree - 1 : Math.max(dureeMin, soumis.duree - 1);
+      dureeMax = dureeMax === null ? soumis.duree + 1 : Math.min(dureeMax, soumis.duree + 1);
     }
   }
 
-  const langue =
-    indicesCourants.langue ?? (soumis.langue === cible.langue ? cible.langue : null);
+  const langue = indicesCourants.langue ?? (soumis.langue === cible.langue ? cible.langue : null);
 
   return {
     genres,
@@ -121,22 +124,22 @@ export function applyTimeGatedClues(
   cible: Film,
   attemptCount: number,
 ): IndicesReveles {
-  const updated = { ...indices }
+  const updated = { ...indices };
 
   if (attemptCount >= 3 && updated.langue === null) {
-    updated.langue = cible.langue
+    updated.langue = cible.langue;
   }
 
   if (attemptCount >= 5 && updated.genres.length === 0 && cible.genres.length > 0) {
-    updated.genres = [cible.genres[0]]
+    updated.genres = [cible.genres[0]];
   }
 
   if (attemptCount >= 7 && !updated.realisateurRevele) {
-    updated.realisateurRevele = true
-    updated.realisateurInfo = cible.realisateurs[0] ?? null
+    updated.realisateurRevele = true;
+    updated.realisateurInfo = cible.realisateurs[0] ?? null;
   }
 
-  return updated
+  return updated;
 }
 
 /**

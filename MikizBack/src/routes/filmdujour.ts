@@ -1,14 +1,16 @@
+import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { z } from "zod";
 import { db } from "../db";
 import { cineclueDaily, cineclueSessions, games, leaderboardEntries } from "../db/schema";
 import {
+  type Film,
+  type IndicesReveles,
   applyTimeGatedClues,
   compareFilms,
   indicesFinaux,
   indicesVides,
-  type Film,
-  type IndicesReveles,
 } from "../lib/cineclue";
 import { todayDate } from "../lib/date";
 import { fetchFilmById } from "../lib/tmdb";
@@ -44,6 +46,20 @@ async function getCineclueGameId(): Promise<string | null> {
   return cineclueGameId;
 }
 
+// ─── Schemas ──────────────────────────────────────────────────────────────────
+
+const guessSchema = z.object({
+  tmdbId: z.number().int().positive(),
+});
+
+const dailySchema = z.object({
+  tmdbId: z.number().int().positive(),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+});
+
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 const filmdujour = new Hono();
@@ -60,10 +76,7 @@ filmdujour.get("/session", authMiddleware, async (c) => {
   if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
 
   const session = await db.query.cineclueSessions.findFirst({
-    where: and(
-      eq(cineclueSessions.userId, userId),
-      eq(cineclueSessions.date, today),
-    ),
+    where: and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)),
   });
 
   const totalIndices = {
@@ -79,8 +92,7 @@ filmdujour.get("/session", authMiddleware, async (c) => {
       statut: session.status,
       tentatives: session.tentatives,
       indices: session.indices,
-      tentativesRestantes:
-        MAX_TENTATIVES - (session.tentatives as unknown[]).length,
+      tentativesRestantes: MAX_TENTATIVES - (session.tentatives as unknown[]).length,
       filmCible: session.status !== "in_progress" ? cible : null,
     },
     totalIndices,
@@ -91,26 +103,19 @@ filmdujour.get("/session", authMiddleware, async (c) => {
  * POST /api/filmdujour/guess
  * Protégé. Soumet un film. Body : { tmdbId: number }
  */
-filmdujour.post("/guess", authMiddleware, async (c) => {
+filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c) => {
   const userId = c.get("userId") as string;
   const today = todayDate();
 
-  const body = await c.req.json<{ tmdbId?: number }>();
-  if (!body.tmdbId) return c.json({ error: "tmdbId requis" }, 400);
+  const { tmdbId } = c.req.valid("json");
 
-  const [filmSoumis, cible] = await Promise.all([
-    fetchFilmById(body.tmdbId),
-    getDailyFilm(),
-  ]);
+  const [filmSoumis, cible] = await Promise.all([fetchFilmById(tmdbId), getDailyFilm()]);
 
   if (!filmSoumis) return c.json({ error: "Film introuvable" }, 404);
   if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
 
   const session = await db.query.cineclueSessions.findFirst({
-    where: and(
-      eq(cineclueSessions.userId, userId),
-      eq(cineclueSessions.date, today),
-    ),
+    where: and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)),
   });
 
   if (session && session.status !== "in_progress") {
@@ -120,7 +125,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
   const tentativesPrev = (session?.tentatives ?? []) as Array<{ tmdbId: number }>;
   const indicesCourants = (session?.indices ?? indicesVides()) as IndicesReveles;
 
-  if (tentativesPrev.some((t) => t.tmdbId === body.tmdbId)) {
+  if (tentativesPrev.some((t) => t.tmdbId === tmdbId)) {
     return c.json({ error: "Film déjà soumis" }, 400);
   }
 
@@ -130,18 +135,22 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
     tmdbId: filmSoumis.id,
     filmSoumis: filmSoumis satisfies Film,
     anneeProche: Math.abs(filmSoumis.annee - cible.annee) <= 5,
-    dureeProche: cible.duree > 0 && filmSoumis.duree > 0 && Math.abs(filmSoumis.duree - cible.duree) <= 15,
+    dureeProche:
+      cible.duree > 0 && filmSoumis.duree > 0 && Math.abs(filmSoumis.duree - cible.duree) <= 15,
   };
 
   const nouvellesTentatives = [...tentativesPrev, nouvelleTentative];
 
-  const nouveauxIndices: IndicesReveles = correct
-    ? indicesFinaux(cible)
-    : applyTimeGatedClues(
-        compareFilms(filmSoumis, cible, indicesCourants),
-        cible,
-        nouvellesTentatives.length,
-      );
+  const afterCompare = compareFilms(filmSoumis, cible, indicesCourants);
+  const afterPity = applyTimeGatedClues(afterCompare, cible, nouvellesTentatives.length);
+
+  const pityCluesRevealed: string[] = [];
+  if (afterPity.langue !== null && afterCompare.langue === null) pityCluesRevealed.push("langue");
+  if (afterPity.genres.length > afterCompare.genres.length) pityCluesRevealed.push("genre");
+  if (afterPity.realisateurRevele && !afterCompare.realisateurRevele)
+    pityCluesRevealed.push("realisateur");
+
+  const nouveauxIndices: IndicesReveles = correct ? indicesFinaux(cible) : afterPity;
   const estPerdu = !correct && nouvellesTentatives.length >= MAX_TENTATIVES;
   const nouveauStatut: "in_progress" | "won" | "lost" = correct
     ? "won"
@@ -174,18 +183,23 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
   if (nouveauStatut !== "in_progress") {
     const gameId = await getCineclueGameId();
     if (gameId) {
-      await db.insert(leaderboardEntries).values({
-        userId,
-        gameId,
-        date: today,
-        score: correct ? nouvellesTentatives.length : null,
-      });
+      await db
+        .insert(leaderboardEntries)
+        .values({
+          userId,
+          gameId,
+          date: today,
+          score: correct ? nouvellesTentatives.length : null,
+        })
+        .onConflictDoNothing();
     }
   }
 
   return c.json({
     correct,
     filmSoumis: nouvelleTentative.filmSoumis,
+    anneeProche: nouvelleTentative.anneeProche,
+    dureeProche: nouvelleTentative.dureeProche,
     indicesReveles: nouveauxIndices,
     tentativesRestantes: MAX_TENTATIVES - nouvellesTentatives.length,
     statut: nouveauStatut,
@@ -195,6 +209,7 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
       pays: cible.pays.length,
       acteurs: cible.acteurs.length,
     },
+    pityCluesRevealed,
   });
 });
 
@@ -202,14 +217,12 @@ filmdujour.post("/guess", authMiddleware, async (c) => {
  * POST /api/filmdujour/daily
  * Dev uniquement. Définit le film du jour. Body : { tmdbId: number; date?: string }
  */
-filmdujour.post("/daily", async (c) => {
+filmdujour.post("/daily", zValidator("json", dailySchema), async (c) => {
   if (process.env.NODE_ENV === "production") {
     return c.json({ error: "Indisponible en production" }, 403);
   }
 
-  const { tmdbId, date } = await c.req.json<{ tmdbId: number; date?: string }>();
-  if (!tmdbId) return c.json({ error: "tmdbId requis" }, 400);
-
+  const { tmdbId, date } = c.req.valid("json");
   const targetDate = date ?? todayDate();
 
   const film = await fetchFilmById(tmdbId);
@@ -237,12 +250,7 @@ filmdujour.delete("/session", authMiddleware, async (c) => {
 
   await db
     .delete(cineclueSessions)
-    .where(
-      and(
-        eq(cineclueSessions.userId, userId),
-        eq(cineclueSessions.date, today),
-      ),
-    );
+    .where(and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)));
 
   const gameId = await getCineclueGameId();
   if (gameId) {
@@ -297,9 +305,7 @@ cineclueSearch.get("/search", async (c) => {
       tmdbId: m.id,
       titre: m.title,
       annee: m.release_date ? Number(m.release_date.slice(0, 4)) : null,
-      poster: m.poster_path
-        ? `https://image.tmdb.org/t/p/w92${m.poster_path}`
-        : null,
+      poster: m.poster_path ? `https://image.tmdb.org/t/p/w92${m.poster_path}` : null,
     }));
 
     return c.json(films);

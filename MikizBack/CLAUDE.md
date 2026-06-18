@@ -22,6 +22,8 @@ bun words:schedule [days] [start]  # bulk-schedule daily words
 bun words:delete <from> [to]       # delete scheduled words in date range
 bun words:set <date> <word>        # set a single word for a date
 
+bun artists:schedule [days] [start] # bulk-schedule daily artists via Last.fm
+
 bun films:schedule [days] [start]  # bulk-schedule daily films via TMDB
 bun films:set <date> <tmdbId>      # set a single film for a date
 ```
@@ -57,6 +59,7 @@ Hono app with 5 route groups mounted in `src/index.ts`:
 | `CORS_ORIGIN` | Allowed CORS origin (e.g. `http://localhost:5173`) |
 | `DATABASE_SSL` | Set to `true` for SSL DB connections |
 | `TMDB_API_KEY` | Required for CinéClue — get one at themoviedb.org |
+| `LASTFM_API_KEY` | Required for VinyMix search & scheduling — get one at last.fm/api |
 
 ## Language Convention
 

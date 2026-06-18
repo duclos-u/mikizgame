@@ -7,6 +7,9 @@
     "node": ">=20.0.0"
   },
   "scripts": {
+    "sync-types": "cp ../MikizBack/src/types/api.ts ./src/api/shared-types.ts",
+    "predev": "npm run sync-types",
+    "prebuild": "npm run sync-types",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

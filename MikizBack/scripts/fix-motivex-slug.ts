@@ -1,6 +1,6 @@
+import { eq } from "drizzle-orm";
 import { db } from "../src/db";
 import { games, leaderboardEntries } from "../src/db/schema";
-import { eq } from "drizzle-orm";
 
 const allGames = await db.select().from(games);
 console.log("Current games table:", allGames);
@@ -13,7 +13,9 @@ if (!sutom && !motivex) {
   await db.insert(games).values({ slug: "motivex", name: "Motivex", active: true });
   console.log("Done.");
 } else if (sutom && motivex) {
-  console.log(`Both exist. Migrating leaderboard entries from sutom (${sutom.id}) to motivex (${motivex.id})`);
+  console.log(
+    `Both exist. Migrating leaderboard entries from sutom (${sutom.id}) to motivex (${motivex.id})`,
+  );
   const result = await db
     .update(leaderboardEntries)
     .set({ gameId: motivex.id })
