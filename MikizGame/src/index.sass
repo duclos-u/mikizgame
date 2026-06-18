@@ -1792,8 +1792,12 @@ $flip-duration: 400ms
 
 .cineclue-acteurs
   display: flex
-  flex-wrap: wrap
+  flex-wrap: nowrap
+  overflow-x: auto
   gap: 0.6rem
+  padding-bottom: 4px
+  scrollbar-width: thin
+  scrollbar-color: var(--border) transparent
 
 .cineclue-acteur
   display: flex
@@ -1801,6 +1805,7 @@ $flip-duration: 400ms
   align-items: center
   gap: 0.25rem
   width: 60px
+  flex-shrink: 0
 
   &:not(.cineclue-acteur-on)
     .cineclue-acteur-photo
@@ -2373,20 +2378,25 @@ $flip-duration: 400ms
 .cineclue-guess-actor-list
   display: flex
   gap: 12px
-  flex-wrap: wrap
+  flex-wrap: nowrap
+  overflow-x: auto
   border-top: 1px solid var(--line-soft)
   padding-top: 12px
+  padding-bottom: 4px
+  scrollbar-width: thin
+  scrollbar-color: var(--border) transparent
 
 .cineclue-guess-actor
   display: flex
   flex-direction: column
   align-items: center
   gap: 4px
-  width: 52px
+  width: 64px
+  flex-shrink: 0
 
 .cineclue-guess-actor-av
-  width: 32px
-  height: 32px
+  width: 58px
+  height: 58px
   border-radius: 50%
   background: var(--card-2)
   color: var(--muted)
@@ -2403,19 +2413,24 @@ $flip-duration: 400ms
     color: var(--accent)
     box-shadow: 0 0 0 2px var(--accent)
 
+  &.target-only
+    box-shadow: 0 0 0 2px var(--border)
+    opacity: 0.6
+
 .cineclue-guess-actor-name
-  font-size: 0.58rem
+  font-size: 0.7rem
   font-weight: 500
   color: var(--muted)
   text-align: center
   max-width: 52px
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
+  text-overflow: clip
 
   &.on
     font-weight: 700
     color: var(--accent)
+
+  &.target-only
+    font-style: italic
 
 // ─── Pity clue glow animation ─────────────────────────────────────────────────
 
@@ -2493,130 +2508,224 @@ $flip-duration: 400ms
   font-weight: 700
   flex-shrink: 0
 
-// ─── SPOTLE ───────────────────────────────────────────────────────────────────
+// ─── VINYMIX ───────────────────────────────────────────────────────────────────
 
-$spotle-accent: oklch(0.62 0.18 290)
-$spotle-match-bg: oklch(0.82 0.14 152)
-$spotle-match-text: oklch(0.28 0.10 152)
-$spotle-close-bg: oklch(0.88 0.12 75)
-$spotle-close-text: oklch(0.32 0.09 75)
-$spotle-miss-bg: oklch(0.88 0.04 60)
-$spotle-miss-text: oklch(0.45 0.04 60)
-$spotle-info-bg: oklch(0.88 0.06 240)
-$spotle-info-text: oklch(0.35 0.10 240)
-$spotle-unknown-bg: var(--card-2)
-$spotle-unknown-text: var(--muted)
+$vinymix-accent: oklch(0.62 0.18 42)
+$vinymix-match-bg: oklch(0.93 0.05 150)
+$vinymix-match-text: oklch(0.45 0.11 150)
+$vinymix-close-bg: oklch(0.955 0.07 82)
+$vinymix-close-text: oklch(0.55 0.11 66)
+$vinymix-miss-bg: oklch(0.955 0.006 80)
+$vinymix-miss-text: oklch(0.58 0.012 64)
+$vinymix-info-bg: oklch(0.95 0.025 250)
+$vinymix-info-text: oklch(0.52 0.06 255)
 
-.spotle-game
-  display: flex
-  flex-direction: column
-  gap: 1.25rem
-  max-width: 860px
-  margin: 0 auto
-  padding: 1.25rem 0 3rem
+@keyframes vmix-spin
+  to
+    transform: rotate(360deg)
 
-// ─── Status bar ───────────────────────────────────────────────────────────────
-.spotle-status
-  display: flex
-  align-items: center
-  justify-content: space-between
-  gap: 0.5rem
+@keyframes vmix-rowin
+  from
+    opacity: 0
+    transform: translateY(8px)
+  to
+    opacity: 1
+    transform: none
 
-.spotle-message
-  font-size: 0.88rem
-  color: var(--muted)
+@keyframes vmix-pop
+  0%
+    opacity: 0
+    transform: scale(0.94)
+  60%
+    transform: scale(1.01)
+  100%
+    opacity: 1
+    transform: none
 
-.spotle-status-right
-  display: flex
-  align-items: center
-  gap: 0.75rem
-
-.spotle-dots
-  display: flex
-  gap: 4px
-
-.spotle-dot
-  width: 10px
-  height: 10px
-  border-radius: 50%
-  background: var(--border)
-  transition: background 0.25s
-
-  &.used
-    background: var(--muted)
-
-  &.won
-    background: $spotle-accent
-
-.spotle-counter
-  font-size: 0.82rem
-  color: var(--muted)
-  font-variant-numeric: tabular-nums
-
-// ─── Search ───────────────────────────────────────────────────────────────────
-.spotle-search
-  position: relative
-
-.spotle-search-row
-  display: flex
-  gap: 0.5rem
-  align-items: flex-start
-
-.spotle-search-wrap
-  position: relative
-  flex: 1
-
-.spotle-input
-  width: 100%
-  padding: 0.65rem 1rem
-  border: 1.5px solid var(--border)
-  border-radius: 10px
-  font-family: var(--font)
-  font-size: 0.95rem
-  color: var(--text)
-  background: var(--card)
-  outline: none
-  transition: border-color 0.15s, box-shadow 0.15s
-
-  &:focus
-    border-color: $spotle-accent
-    box-shadow: 0 0 0 3px oklch(0.62 0.18 290 / 0.12)
-
-  &:disabled
-    opacity: 0.5
-    cursor: not-allowed
-
-.spotle-search-spinner
-  position: absolute
-  right: 0.75rem
-  top: 50%
-  transform: translateY(-50%)
-  width: 16px
-  height: 16px
-  border: 2px solid var(--border)
-  border-top-color: $spotle-accent
-  border-radius: 50%
-  animation: spin 0.7s linear infinite
+@keyframes vmix-eq
+  0%, 100%
+    height: 5px
+  50%
+    height: 17px
 
 @keyframes spin
   to
     transform: translateY(-50%) rotate(360deg)
 
-.spotle-btn-submit
-  padding: 0.65rem 1.25rem
-  background: $spotle-accent
+.vinymix-game
+  display: flex
+  flex-direction: column
+  gap: 1.25rem
+  max-width: 760px
+  margin: 0 auto
+  padding: 1.5rem 0 4rem
+
+// ─── Hero card ────────────────────────────────────────────────────────────────
+.vinymix-hero
+  display: flex
+  align-items: center
+  gap: 1.5rem
+  padding: 1.75rem
+  border-radius: 22px
+  background: linear-gradient(120deg, oklch(0.72 0.15 50) 0%, oklch(0.65 0.18 36) 100%)
+  color: #fff
+  box-shadow: 0 12px 34px -14px oklch(0.62 0.16 42 / 0.6)
+  overflow: hidden
+
+.vinymix-hero-vinyl
+  width: 104px
+  height: 104px
+  border-radius: 50%
+  flex-shrink: 0
+  position: relative
+  display: grid
+  place-items: center
+  background: repeating-radial-gradient(circle at 50% 50%, oklch(0.17 0.01 60) 0 2px, oklch(0.27 0.01 60) 2px 4px)
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.06)
+  animation: vmix-spin 5s linear infinite
+
+.vinymix-hero-vinyl-label
+  width: 42px
+  height: 42px
+  border-radius: 50%
+  display: grid
+  place-items: center
+  font-family: var(--font-display)
+  font-size: 1.5rem
+  font-weight: 800
+
+.vinymix-hero-content
+  flex: 1
+  min-width: 0
+
+.vinymix-hero-kicker
+  font-size: 0.75rem
+  font-weight: 700
+  letter-spacing: 0.18em
+  text-transform: uppercase
+  opacity: 0.85
+
+.vinymix-hero-title
+  margin: 0.5rem 0 0.9rem
+  font-family: var(--font-display)
+  font-size: 1.65rem
+  font-weight: 800
+  line-height: 1.05
+  letter-spacing: -0.02em
+
+.vinymix-hero-bottom
+  display: flex
+  align-items: center
+  gap: 1rem
+
+.vinymix-hero-pips
+  display: flex
+  gap: 5px
+
+.vinymix-hero-pip
+  width: 28px
+  height: 7px
+  border-radius: 99px
+  flex-shrink: 0
+
+.vinymix-hero-counter
+  font-family: var(--font-display)
+  font-size: 0.95rem
+  font-weight: 800
+  font-variant-numeric: tabular-nums
+  white-space: nowrap
+
+.vinymix-hero-counter-max
+  opacity: 0.75
+  font-weight: 600
+
+.vinymix-hero-eq
+  display: flex
+  align-items: flex-end
+  gap: 3px
+  height: 18px
+  margin-left: auto
+
+.vinymix-hero-eq-bar
+  width: 4px
+  border-radius: 2px
+  background: rgba(255,255,255,0.9)
+  height: 14px
+  animation: vmix-eq 0.9s ease-in-out infinite
+
+// ─── Search ───────────────────────────────────────────────────────────────────
+.vinymix-search
+  position: relative
+
+.vinymix-search-row
+  display: flex
+  gap: 0.65rem
+  align-items: flex-start
+
+.vinymix-search-wrap
+  position: relative
+  flex: 1
+  display: flex
+  align-items: center
+  gap: 0.6rem
+  background: var(--card)
+  border: 2px solid var(--border)
+  border-radius: 14px
+  padding: 0 1rem
+
+  &:focus-within
+    border-color: $vinymix-accent
+    box-shadow: 0 0 0 3px oklch(0.62 0.18 42 / 0.12)
+
+.vinymix-search-icon
+  color: var(--muted)
+  flex-shrink: 0
+  pointer-events: none
+
+.vinymix-input
+  flex: 1
+  border: none
+  outline: none
+  background: none
+  font-family: var(--font)
+  font-size: 0.95rem
+  font-weight: 600
+  color: var(--text)
+  padding: 0.8rem 0
+
+  &::placeholder
+    font-weight: 400
+    color: var(--muted)
+
+  &:disabled
+    opacity: 0.5
+    cursor: not-allowed
+
+.vinymix-search-spinner
+  width: 16px
+  height: 16px
+  border: 2px solid var(--border)
+  border-top-color: $vinymix-accent
+  border-radius: 50%
+  flex-shrink: 0
+  animation: spin 0.7s linear infinite
+
+.vinymix-btn-submit
+  padding: 0.8rem 1.75rem
+  background: $vinymix-accent
   color: white
   border: none
-  border-radius: 10px
-  font-family: var(--font)
-  font-size: 0.9rem
-  font-weight: 600
+  border-radius: 14px
+  font-family: var(--font-display)
+  font-size: 0.95rem
+  font-weight: 800
   cursor: pointer
   white-space: nowrap
+  box-shadow: 0 3px 0 oklch(0.48 0.16 40)
   transition: filter 0.15s, transform 0.1s
 
   &:hover:not(:disabled)
-    filter: brightness(1.08)
+    filter: brightness(1.06)
     transform: translateY(-1px)
 
   &:disabled
@@ -2624,65 +2733,63 @@ $spotle-unknown-text: var(--muted)
     cursor: not-allowed
 
 // ─── Dropdown ────────────────────────────────────────────────────────────────
-.spotle-dropdown
+.vinymix-dropdown
   position: absolute
-  top: calc(100% + 4px)
+  top: calc(100% + 8px)
   left: 0
   right: 0
   background: var(--card)
   border: 1px solid var(--border)
-  border-radius: 10px
-  box-shadow: var(--shadow-lift)
-  z-index: 20
+  border-radius: 14px
+  box-shadow: 0 12px 30px -8px rgba(60,40,20,0.3)
+  z-index: 30
   list-style: none
-  max-height: 280px
+  max-height: 300px
   overflow-y: auto
+  padding: 6px
 
-.spotle-dropdown-item
+.vinymix-dropdown-item
   display: flex
   align-items: center
-  gap: 0.6rem
-  padding: 0.55rem 0.75rem
+  gap: 0.7rem
+  padding: 0.55rem 0.6rem
+  border-radius: 10px
   cursor: pointer
   transition: background 0.1s
 
   &:hover,
-  &.spotle-dropdown-active
+  &.vinymix-dropdown-active
     background: var(--bg-2)
 
-  &.spotle-dropdown-deja
-    opacity: 0.5
-
-  &.spotle-dropdown-unavailable
+  &.vinymix-dropdown-deja
     opacity: 0.45
-    cursor: not-allowed
 
-.spotle-dropdown-avatar
-  width: 36px
-  height: 36px
+
+.vinymix-dropdown-avatar
+  width: 34px
+  height: 34px
   border-radius: 50%
   object-fit: cover
   flex-shrink: 0
 
-  &.spotle-dropdown-avatar-placeholder
-    background: var(--card-2)
+  &.vinymix-dropdown-avatar-placeholder
     display: inline-flex
     align-items: center
     justify-content: center
-    font-size: 0.9rem
-    font-weight: 700
-    color: var(--muted)
+    font-family: var(--font-display)
+    font-size: 0.82rem
+    font-weight: 800
 
-.spotle-dropdown-name
+.vinymix-dropdown-name
   font-size: 0.9rem
-  font-weight: 600
+  font-weight: 700
   color: var(--text)
   flex: 1
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
 
-.spotle-dropdown-genres
+.vinymix-dropdown-genres
   font-size: 0.74rem
   color: var(--muted)
   white-space: nowrap
@@ -2690,211 +2797,212 @@ $spotle-unknown-text: var(--muted)
   text-overflow: ellipsis
   max-width: 140px
 
-.spotle-dropdown-badge
-  font-size: 0.7rem
-  font-weight: 600
-  padding: 2px 6px
-  border-radius: 99px
-  background: var(--border)
+.vinymix-dropdown-badge
+  font-size: 0.68rem
+  font-weight: 700
+  letter-spacing: 0.04em
+  text-transform: uppercase
+  padding: 3px 7px
+  border-radius: 6px
+  background: var(--card-2)
   color: var(--muted)
   white-space: nowrap
   flex-shrink: 0
 
 // ─── Legend ───────────────────────────────────────────────────────────────────
-.spotle-legend
+.vinymix-legend
   display: flex
   flex-wrap: wrap
-  gap: 0.75rem 1.25rem
+  gap: 0.5rem 1rem
   align-items: center
 
-.spotle-legend-item
+.vinymix-legend-item
   display: flex
   align-items: center
-  gap: 0.35rem
+  gap: 0.4rem
   font-size: 0.78rem
   color: var(--muted)
 
-.spotle-legend-swatch
-  width: 12px
-  height: 12px
-  border-radius: 3px
+.vinymix-legend-swatch
+  width: 11px
+  height: 11px
+  border-radius: 99px
   flex-shrink: 0
 
   &.match
-    background: $spotle-match-bg
+    background: $vinymix-match-bg
 
   &.close
-    background: $spotle-close-bg
+    background: $vinymix-close-bg
 
   &.miss
-    background: $spotle-miss-bg
+    background: $vinymix-miss-bg
 
-.spotle-legend-arrow
+.vinymix-legend-arrow
   font-size: 0.82rem
-  color: var(--muted)
-
-// ─── Guess history table ──────────────────────────────────────────────────────
-.spotle-table-wrap
-  overflow-x: auto
-  border: 1px solid var(--border)
-  border-radius: var(--radius)
-  box-shadow: var(--shadow-soft)
-
-.spotle-table
-  width: 100%
-  border-collapse: collapse
-  font-size: 0.82rem
-  min-width: 700px
-
-.spotle-th
-  padding: 0.5rem 0.6rem
-  text-align: center
-  font-size: 0.72rem
   font-weight: 700
-  text-transform: uppercase
-  letter-spacing: 0.05em
-  color: var(--muted)
-  background: var(--card-2)
-  border-bottom: 1px solid var(--border)
-  white-space: nowrap
+  color: var(--text-2)
 
-  &.spotle-th-artist
-    text-align: left
-    min-width: 160px
-    position: sticky
-    left: 0
-    z-index: 2
-    background: var(--card-2)
-
-.spotle-row
-  &:not(:last-child)
-    border-bottom: 1px solid var(--line-soft)
-
-  &:hover
-    background: var(--bg-2)
-
-.spotle-cell-artist
-  display: flex
-  align-items: center
-  gap: 0.5rem
-  padding: 0.5rem 0.6rem
-  min-width: 160px
-  max-width: 200px
-  position: sticky
-  left: 0
-  background: var(--card)
-  border-right: 1px solid var(--line-soft)
-
-  .spotle-row:hover &
-    background: var(--bg-2)
-
-.spotle-artist-avatar
-  width: 32px
-  height: 32px
-  border-radius: 50%
-  object-fit: cover
-  flex-shrink: 0
-
-  &.spotle-artist-avatar-placeholder
-    background: var(--card-2)
-    display: inline-flex
-    align-items: center
-    justify-content: center
-    font-size: 0.85rem
-    font-weight: 700
-    color: var(--muted)
-
-.spotle-artist-name
-  font-size: 0.82rem
-  font-weight: 600
-  color: var(--text)
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
+// ─── Card-based guess history ─────────────────────────────────────────────────
+.vinymix-cards
   display: flex
   flex-direction: column
-  gap: 1px
+  gap: 0.65rem
 
-.spotle-artist-num
-  font-size: 0.65rem
-  font-weight: 500
+.vinymix-card
+  display: flex
+  gap: 0.9rem
+  background: var(--card)
+  border: 1px solid var(--line-soft)
+  border-left: 4px solid var(--border)
+  border-radius: 14px
+  padding: 0.9rem
+  box-shadow: 0 1px 2px rgba(60,50,40,0.05)
+  animation: vmix-rowin 0.32s ease both
+
+.vinymix-card-left
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 6px
+  width: 58px
+  flex-shrink: 0
+
+.vinymix-card-vinyl
+  width: 54px
+  height: 54px
+  border-radius: 50%
+  position: relative
+  display: grid
+  place-items: center
+  background: repeating-radial-gradient(circle at 50% 50%, oklch(0.20 0.01 60) 0 1.5px, oklch(0.30 0.01 60) 1.5px 3px)
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3)
+  animation: vmix-spin 5s linear infinite
+  flex-shrink: 0
+
+.vinymix-card-vinyl-label
+  width: 24px
+  height: 24px
+  border-radius: 50%
+  display: grid
+  place-items: center
+  font-family: var(--font-display)
+  font-size: 0.75rem
+  font-weight: 800
+
+.vinymix-card-num
+  font-size: 0.68rem
+  font-weight: 700
+  font-variant-numeric: tabular-nums
   color: var(--muted)
 
-.spotle-cell
-  padding: 0.45rem 0.6rem
-  text-align: center
-  vertical-align: middle
+.vinymix-card-content
+  flex: 1
+  min-width: 0
 
-  &-match
-    background: $spotle-match-bg
+.vinymix-card-header
+  display: flex
+  align-items: baseline
+  gap: 0.5rem
+  margin-bottom: 0.55rem
+  flex-wrap: wrap
 
-    .spotle-cell-value,
-    .spotle-cell-arrow
-      color: $spotle-match-text
+.vinymix-card-name
+  font-family: var(--font-display)
+  font-size: 1rem
+  font-weight: 700
+  letter-spacing: -0.01em
+  color: var(--text)
 
-  &-close
-    background: $spotle-close-bg
-
-    .spotle-cell-value,
-    .spotle-cell-arrow
-      color: $spotle-close-text
-
-  &-miss
-    background: $spotle-miss-bg
-
-    .spotle-cell-value,
-    .spotle-cell-arrow
-      color: $spotle-miss-text
-
-  &-info
-    background: $spotle-info-bg
-
-    .spotle-cell-value
-      color: $spotle-info-text
-
-  &-unknown
-    background: $spotle-unknown-bg
-
-    .spotle-cell-value
-      color: $spotle-unknown-text
-
-.spotle-cell-emoji
-  display: block
-  font-size: 0.9rem
-  line-height: 1.2
-
-.spotle-cell-value
-  display: block
-  font-size: 0.72rem
-  font-weight: 500
-  line-height: 1.2
-  margin-top: 1px
-  max-width: 90px
+.vinymix-card-meta
+  font-size: 0.75rem
+  color: var(--muted)
+  white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  white-space: nowrap
-  margin-left: auto
-  margin-right: auto
 
-.spotle-cell-arrow
+.vinymix-card-clues
+  display: flex
+  flex-wrap: wrap
+  gap: 5px
+
+.vinymix-clue-pill
+  display: inline-flex
+  align-items: center
+  gap: 4px
+  border-radius: 99px
+  padding: 4px 10px
   font-size: 0.75rem
+  font-weight: 600
+  border: 1px solid transparent
+
+.vinymix-clue-pill-label
   font-weight: 700
+  opacity: 0.7
+  font-size: 0.65rem
+  letter-spacing: 0.03em
+  text-transform: uppercase
+
+.vinymix-clue-pill-value
+  // inherits pill styles
+
+.vinymix-clue-pill-arrow
+  font-weight: 800
+
+// ─── Empty state ──────────────────────────────────────────────────────────────
+.vinymix-empty
+  display: flex
+  flex-direction: column
+  align-items: center
+  text-align: center
+  gap: 0.9rem
+  padding: 2.75rem 1.5rem
+  border: 2px dashed var(--border)
+  border-radius: 18px
+  background: var(--card)
+
+.vinymix-empty-vinyl
+  width: 66px
+  height: 66px
+  border-radius: 50%
+  display: grid
+  place-items: center
+  background: repeating-radial-gradient(circle at 50% 50%, oklch(0.78 0.01 80) 0 2px, oklch(0.86 0.01 80) 2px 4px)
+  opacity: 0.7
+
+.vinymix-empty-vinyl-hole
+  width: 24px
+  height: 24px
+  border-radius: 50%
+  background: var(--bg)
+
+.vinymix-empty-title
+  font-family: var(--font-display)
+  font-size: 1.1rem
+  font-weight: 800
+  color: var(--text-2)
+
+.vinymix-empty-sub
+  font-size: 0.85rem
+  color: var(--muted)
+  margin-top: 0.3rem
+  max-width: 36ch
 
 // ─── Game over actions ────────────────────────────────────────────────────────
-.spotle-gameover-actions
+.vinymix-gameover-actions
   display: flex
   justify-content: center
   padding: 0.5rem 0
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
-.spotle-footer
+.vinymix-footer
   display: flex
   align-items: center
   justify-content: space-between
   gap: 1rem
   padding-top: 0.5rem
 
-.spotle-back-link
+.vinymix-back-link
   font-size: 0.85rem
   color: var(--muted)
   text-decoration: none
@@ -2902,7 +3010,7 @@ $spotle-unknown-text: var(--muted)
   &:hover
     color: var(--text)
 
-.spotle-dev-reset
+.vinymix-dev-reset
   font-size: 0.78rem
   color: var(--muted)
   background: none
@@ -2910,98 +3018,179 @@ $spotle-unknown-text: var(--muted)
   cursor: pointer
   text-decoration: underline
 
+// ─── Shared buttons ───────────────────────────────────────────────────────────
+.vinymix-btn-primary
+  border: none
+  border-radius: 12px
+  padding: 0.8rem 1.25rem
+  font-family: var(--font-display)
+  font-size: 0.9rem
+  font-weight: 800
+  color: #fff
+  background: $vinymix-accent
+  cursor: pointer
+  box-shadow: 0 3px 0 oklch(0.48 0.16 40)
+  transition: filter 0.15s
+
+  &:hover
+    filter: brightness(1.06)
+
+.vinymix-btn-secondary
+  border: 1px solid var(--border)
+  border-radius: 12px
+  padding: 0.8rem 1.1rem
+  font-family: var(--font)
+  font-size: 0.88rem
+  font-weight: 700
+  color: var(--text-2)
+  background: var(--card)
+  cursor: pointer
+  transition: background 0.15s
+
+  &:hover
+    background: var(--bg-2)
+
 // ─── Result modal ─────────────────────────────────────────────────────────────
-.spotle-modal-overlay
+.vinymix-modal-overlay
   position: fixed
   inset: 0
-  background: oklch(0.2 0.01 60 / 0.55)
-  z-index: 100
+  background: oklch(0.25 0.01 60 / 0.5)
+  backdrop-filter: blur(3px)
+  z-index: 200
   display: flex
   align-items: center
   justify-content: center
-  padding: 1rem
+  padding: 1.25rem
 
-.spotle-modal
+.vinymix-modal
   background: var(--card)
-  border-radius: var(--radius)
-  box-shadow: var(--shadow-lift)
-  padding: 2rem
-  max-width: 440px
+  border: 1px solid var(--line-soft)
+  border-radius: 22px
+  box-shadow: 0 24px 60px -18px rgba(60,30,10,0.5)
+  padding: 1.75rem 1.6rem
+  max-width: 430px
   width: 100%
   position: relative
+  animation: vmix-pop 0.26s ease both
 
-.spotle-modal-close
+.vinymix-modal-close
   position: absolute
-  top: 1rem
-  right: 1rem
-  background: none
+  top: 0.875rem
+  right: 0.875rem
+  width: 32px
+  height: 32px
+  background: var(--card-2)
   border: none
-  font-size: 1.1rem
+  border-radius: 50%
+  font-size: 0.94rem
   cursor: pointer
-  color: var(--muted)
-  line-height: 1
+  color: var(--text-2)
+  display: grid
+  place-items: center
 
   &:hover
-    color: var(--text)
+    background: var(--border)
 
-.spotle-modal-header
+.vinymix-modal-header
   text-align: center
-  margin-bottom: 1.25rem
+  margin-bottom: 1.1rem
 
   h2
     font-family: var(--font-display)
-    font-size: 1.6rem
-    font-weight: 700
-    margin: 0.35rem 0 0.25rem
+    font-size: 1.5rem
+    font-weight: 800
+    margin: 0.4rem 0 0.2rem
+    color: var(--text)
 
   p
     color: var(--muted)
-    font-size: 0.9rem
+    font-size: 0.88rem
 
-.spotle-modal-emoji
+.vinymix-modal-emoji
   font-size: 2.5rem
   line-height: 1
 
-.spotle-modal-artist
+// ─── Artist banner in modal ────────────────────────────────────────────────────
+.vinymix-modal-artist-banner
   display: flex
   align-items: center
-  gap: 0.75rem
-  padding: 0.85rem 1rem
-  background: var(--card-2)
-  border-radius: 10px
-  margin-bottom: 1rem
+  gap: 0.875rem
+  padding: 0.875rem 1rem
+  border-radius: 14px
+  background: linear-gradient(120deg, oklch(0.72 0.15 50) 0%, oklch(0.65 0.18 36) 100%)
+  color: #fff
+  margin-bottom: 1.1rem
 
-.spotle-modal-artist-img
+.vinymix-modal-artist-vinyl
   width: 52px
   height: 52px
   border-radius: 50%
-  object-fit: cover
   flex-shrink: 0
+  position: relative
+  display: grid
+  place-items: center
+  background: repeating-radial-gradient(circle at 50% 50%, oklch(0.17 0.01 60) 0 1.5px, oklch(0.27 0.01 60) 1.5px 3px)
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4)
 
-.spotle-modal-artist-name
-  display: block
-  font-size: 1.05rem
-  font-weight: 700
-  color: var(--text)
+.vinymix-modal-artist-vinyl-label
+  width: 22px
+  height: 22px
+  border-radius: 50%
+  display: grid
+  place-items: center
+  font-family: var(--font-display)
+  font-size: 0.7rem
+  font-weight: 800
 
-.spotle-modal-artist-meta
+.vinymix-modal-artist-info
+  flex: 1
+  min-width: 0
+
+.vinymix-modal-artist-name
   display: block
-  font-size: 0.8rem
-  color: var(--muted)
+  font-family: var(--font-display)
+  font-size: 1.12rem
+  font-weight: 800
+  letter-spacing: -0.01em
+
+.vinymix-modal-artist-meta
+  display: block
+  font-size: 0.78rem
+  opacity: 0.9
   margin-top: 2px
 
-.spotle-modal-share-text
-  font-family: var(--mono)
-  font-size: 0.78rem
-  background: var(--card-2)
-  border-radius: 8px
-  padding: 0.75rem 1rem
-  margin-bottom: 1rem
-  white-space: pre-wrap
-  color: var(--text-2)
-  overflow: hidden
-
-.spotle-modal-actions
+// ─── Share grid in modal ───────────────────────────────────────────────────────
+.vinymix-modal-share-grid
   display: flex
-  gap: 0.75rem
-  justify-content: center
+  flex-direction: column
+  gap: 5px
+  padding: 0.875rem
+  border-radius: 12px
+  background: var(--card-2)
+  margin-bottom: 1.1rem
+
+.vinymix-modal-share-row
+  display: flex
+  align-items: center
+  gap: 6px
+
+.vinymix-modal-share-num
+  font-size: 0.68rem
+  font-weight: 700
+  color: var(--muted)
+  width: 20px
+  font-variant-numeric: tabular-nums
+
+.vinymix-modal-share-squares
+  display: flex
+  gap: 3px
+  flex-wrap: wrap
+
+.vinymix-modal-share-sq
+  width: 15px
+  height: 15px
+  border-radius: 3px
+
+.vinymix-modal-actions
+  display: flex
+  gap: 0.625rem

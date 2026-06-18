@@ -46,9 +46,7 @@ function sleep(ms: number) {
 async function enrichFilm(film: FilmRaw): Promise<FilmRaw> {
   // Film déjà enrichi si annee > 1000 et duree > 0 et au moins une photo d'acteur
   const dejàEnrichi =
-    film.annee > 1000 &&
-    film.duree > 0 &&
-    film.acteurs.some((a) => a.photo !== null);
+    film.annee > 1000 && film.duree > 0 && film.acteurs.some((a) => a.photo !== null);
   if (dejàEnrichi) return film;
 
   try {
@@ -76,9 +74,7 @@ async function enrichFilm(film: FilmRaw): Promise<FilmRaw> {
 
     // Croiser avec nos réalisateurs connus (pour garder les noms FR si différents)
     const realisateurs = film.realisateurs.map((r) => {
-      const match = realisateursTMDB.find(
-        (d) => d.nom.toLowerCase() === r.nom.toLowerCase(),
-      );
+      const match = realisateursTMDB.find((d) => d.nom.toLowerCase() === r.nom.toLowerCase());
       return match ?? r;
     });
     // Ajouter ceux non présents dans notre liste
@@ -87,14 +83,10 @@ async function enrichFilm(film: FilmRaw): Promise<FilmRaw> {
     }
 
     // Acteurs avec photo (les 8 premiers du casting)
-    const castTMDB = (credits.cast ?? [])
-      .sort((a, b) => a.order - b.order)
-      .slice(0, 8);
+    const castTMDB = (credits.cast ?? []).sort((a, b) => a.order - b.order).slice(0, 8);
 
     const acteurs = film.acteurs.map((a) => {
-      const match = castTMDB.find(
-        (c) => c.name.toLowerCase() === a.nom.toLowerCase(),
-      );
+      const match = castTMDB.find((c) => c.name.toLowerCase() === a.nom.toLowerCase());
       return match ? { nom: a.nom, photo: match.profile_path ?? null } : a;
     });
 

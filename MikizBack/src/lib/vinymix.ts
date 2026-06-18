@@ -1,4 +1,4 @@
-export type SpotleArtist = {
+export type VinymixArtist = {
   id: string;
   name: string;
   imageUrl: string | null;
@@ -24,8 +24,8 @@ export type ClueResult = {
   direction?: "up" | "down";
 };
 
-export type SpotleGuess = {
-  artist: SpotleArtist;
+export type VinymixGuess = {
+  artist: VinymixArtist;
   clues: ClueResult[];
 };
 
@@ -34,7 +34,7 @@ const FOLLOWER_TIERS = [
   { max: 5_000_000, label: "1M–5M" },
   { max: 10_000_000, label: "5M–10M" },
   { max: 50_000_000, label: "10M–50M" },
-  { max: Infinity, label: "50M+" },
+  { max: Number.POSITIVE_INFINITY, label: "50M+" },
 ];
 
 export function followerTier(n: number): number {
@@ -48,10 +48,7 @@ export function followerTierLabel(n: number): string {
   return FOLLOWER_TIERS[followerTier(n)].label;
 }
 
-export function compareArtists(
-  guess: SpotleArtist,
-  target: SpotleArtist,
-): ClueResult[] {
+export function compareArtists(guess: VinymixArtist, target: VinymixArtist): ClueResult[] {
   const clues: ClueResult[] = [];
 
   // 1. Creation Year
@@ -64,9 +61,7 @@ export function compareArtists(
       label: "Année",
       value: String(guess.creationYear),
       status:
-        diff === null ? "unknown" :
-        diff === 0 ? "match" :
-        Math.abs(diff) <= 2 ? "close" : "miss",
+        diff === null ? "unknown" : diff === 0 ? "match" : Math.abs(diff) <= 2 ? "close" : "miss",
       direction: diff !== null && diff !== 0 ? (diff > 0 ? "up" : "down") : undefined,
     });
   }
@@ -107,7 +102,8 @@ export function compareArtists(
     key: "country",
     label: "Pays",
     value: guess.country ?? "?",
-    status: guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
+    status:
+      guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
   });
 
   // 6. Vocal Type
@@ -115,7 +111,12 @@ export function compareArtists(
     key: "vocalType",
     label: "Voix",
     value: guess.vocalType ?? "?",
-    status: guess.vocalType === null ? "unknown" : guess.vocalType === target.vocalType ? "match" : "miss",
+    status:
+      guess.vocalType === null
+        ? "unknown"
+        : guess.vocalType === target.vocalType
+          ? "match"
+          : "miss",
   });
 
   // 7. Primary Language
@@ -124,16 +125,20 @@ export function compareArtists(
     label: "Langue",
     value: guess.primaryLanguage ?? "?",
     status:
-      guess.primaryLanguage === null ? "unknown" :
-      guess.primaryLanguage === target.primaryLanguage ? "match" : "miss",
+      guess.primaryLanguage === null
+        ? "unknown"
+        : guess.primaryLanguage === target.primaryLanguage
+          ? "match"
+          : "miss",
   });
 
   // 8. Same Soundtrack / collaboration
-  const bothHaveData = target.appearsOnSoundtracksWith.length > 0 || guess.appearsOnSoundtracksWith.length > 0;
-  const sharedCollab = bothHaveData && (
-    target.appearsOnSoundtracksWith.includes(guess.id) ||
-    guess.appearsOnSoundtracksWith.includes(target.id)
-  );
+  const bothHaveData =
+    target.appearsOnSoundtracksWith.length > 0 || guess.appearsOnSoundtracksWith.length > 0;
+  const sharedCollab =
+    bothHaveData &&
+    (target.appearsOnSoundtracksWith.includes(guess.id) ||
+      guess.appearsOnSoundtracksWith.includes(target.id));
   clues.push({
     key: "soundtrack",
     label: "Collab",
@@ -155,9 +160,11 @@ export function compareArtists(
     label: "Son",
     value: guess.instrumentation ?? "?",
     status:
-      guess.instrumentation === null ? "unknown" :
-      guess.instrumentation === target.instrumentation ? "match" :
-      "miss",
+      guess.instrumentation === null
+        ? "unknown"
+        : guess.instrumentation === target.instrumentation
+          ? "match"
+          : "miss",
   });
 
   return clues;
@@ -166,6 +173,6 @@ export function compareArtists(
 export function dailySeed(dateStr: string, artistIds: string[]): string | null {
   if (artistIds.length === 0) return null;
   let hash = 0;
-  for (const ch of dateStr) hash = ((hash * 31) + ch.charCodeAt(0)) >>> 0;
+  for (const ch of dateStr) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
   return artistIds[hash % artistIds.length];
 }

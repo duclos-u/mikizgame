@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { join } from "path";
 /**
  * Downloads Lexique 3.83 and generates two word lists for Motivex:
  *   words/fr-daily-words.txt  — top 7300 common words (used as target words)
@@ -7,11 +8,9 @@
  * Usage: bun run words:build
  */
 import { $ } from "bun";
-import { join } from "path";
 import { normalizeWord } from "../src/lib/normalize";
 
-const ZIP_URL =
-  "http://www.lexique.org/databases/Lexique383/Lexique383.zip";
+const ZIP_URL = "http://www.lexique.org/databases/Lexique383/Lexique383.zip";
 const TMP_DIR = "/tmp/lexique-build";
 const OUT_DIR = join(import.meta.dir, "../words");
 const DAILY_WORDS_COUNT = 7300;
@@ -24,8 +23,7 @@ console.log("Downloading Lexique 3.83 (~25 MB)...");
 await $`curl -sL ${ZIP_URL} -o ${TMP_DIR}/Lexique383.zip`;
 
 console.log("Extracting TSV...");
-const tsvContent =
-  await $`unzip -p ${TMP_DIR}/Lexique383.zip Lexique383.tsv`.text();
+const tsvContent = await $`unzip -p ${TMP_DIR}/Lexique383.zip Lexique383.tsv`.text();
 
 console.log("Parsing entries...");
 const lines = tsvContent.split("\n");
@@ -58,8 +56,7 @@ for (const line of lines.slice(1)) {
   if (normalized.length < 5 || normalized.length > 9) continue;
 
   const freq =
-    (parseFloat(parts[iFreqFilms]) || 0) +
-    (parseFloat(parts[iFreqLivres]) || 0);
+    (Number.parseFloat(parts[iFreqFilms]) || 0) + (Number.parseFloat(parts[iFreqLivres]) || 0);
 
   const current = wordFreq.get(normalized) ?? 0;
   if (freq > current) wordFreq.set(normalized, freq);
@@ -77,14 +74,8 @@ const validWords = sorted
   .filter(([word, freq]) => freq >= MIN_VALID_FREQ && !dailySet.has(word))
   .map(([word]) => word);
 
-await Bun.write(
-  join(OUT_DIR, "fr-daily-words.txt"),
-  dailyWords.join("\n") + "\n"
-);
-await Bun.write(
-  join(OUT_DIR, "fr-valid-words.txt"),
-  validWords.join("\n") + "\n"
-);
+await Bun.write(join(OUT_DIR, "fr-daily-words.txt"), dailyWords.join("\n") + "\n");
+await Bun.write(join(OUT_DIR, "fr-valid-words.txt"), validWords.join("\n") + "\n");
 
 console.log(`Daily words written:  ${dailyWords.length}`);
 console.log(`Valid words written:  ${validWords.length}`);

@@ -90,14 +90,28 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
             f.realisateurs.some((r) => r.nom === indicesCourants.realisateurInfo!.nom)
         const dirName = f.realisateurs[0]?.nom ?? '—'
 
-        const actors = f.acteurs.map((a) => ({
-          name: a.nom,
-          inits: toInitials(a.nom),
-          src: a.photo ? `${TMDB_IMG}${a.photo}` : null,
-          on: filmCible
-            ? filmCible.acteurs.some((ca) => ca.nom === a.nom)
-            : indicesCourants.acteurs.includes(a.nom),
-        }))
+        const guessedActorNames = new Set(f.acteurs.map((a) => a.nom))
+        const targetActors = filmCible ? filmCible.acteurs : []
+        const targetOnlyActors = targetActors.filter((a) => !guessedActorNames.has(a.nom))
+
+        const actors = [
+          ...f.acteurs.map((a) => ({
+            name: a.nom,
+            inits: toInitials(a.nom),
+            src: a.photo ? `${TMDB_IMG}${a.photo}` : null,
+            on: filmCible
+              ? filmCible.acteurs.some((ca) => ca.nom === a.nom)
+              : indicesCourants.acteurs.includes(a.nom),
+            targetOnly: false,
+          })),
+          ...targetOnlyActors.map((a) => ({
+            name: a.nom,
+            inits: toInitials(a.nom),
+            src: a.photo ? `${TMDB_IMG}${a.photo}` : null,
+            on: false,
+            targetOnly: true,
+          })),
+        ]
 
         return (
           <div key={`${t.tmdbId}-${i}`} className="cineclue-guess-card">
@@ -148,8 +162,8 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
             {actors.length > 0 && (
               <div className="cineclue-guess-actor-list">
                 {actors.map((a) => (
-                  <div key={a.name} className="cineclue-guess-actor">
-                    <span className={`cineclue-guess-actor-av${a.on ? ' on' : ''}`}>
+                  <div key={a.name} className={`cineclue-guess-actor${a.targetOnly ? ' target-only' : ''}`}>
+                    <span className={`cineclue-guess-actor-av${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>
                       {a.src ? (
                         <img
                           src={a.src}
@@ -161,7 +175,7 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
                         a.inits
                       )}
                     </span>
-                    <span className={`cineclue-guess-actor-name${a.on ? ' on' : ''}`}>{a.name}</span>
+                    <span className={`cineclue-guess-actor-name${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>{a.name}</span>
                   </div>
                 ))}
               </div>

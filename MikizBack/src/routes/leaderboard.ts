@@ -1,4 +1,4 @@
-import { asc, and, eq, sql } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
 import { games, leaderboardEntries, users } from "../db/schema";
@@ -33,10 +33,13 @@ leaderboard.get("/cross", async (c) => {
         .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)))
         .orderBy(asc(leaderboardEntries.score));
       return { slug: game.slug, entries };
-    })
+    }),
   );
 
-  type UserData = { total: number; breakdown: Record<string, { rank: number; score: number | null; points: number }> };
+  type UserData = {
+    total: number;
+    breakdown: Record<string, { rank: number; score: number | null; points: number }>;
+  };
   const userMap: Record<string, UserData> = {};
 
   for (const { slug, entries } of gameResults) {
@@ -83,10 +86,11 @@ leaderboard.get("/cross/stats", async (c) => {
         .where(eq(leaderboardEntries.gameId, game.id))
         .groupBy(users.id, users.username);
       return { slug: game.slug, entries };
-    })
+    }),
   );
 
-  const userMap: Record<string, { total: number; breakdown: Record<string, { points: number }> }> = {};
+  const userMap: Record<string, { total: number; breakdown: Record<string, { points: number }> }> =
+    {};
   for (const { slug, entries } of gameResults) {
     for (const e of entries) {
       if (!userMap[e.username]) userMap[e.username] = { total: 0, breakdown: {} };
@@ -153,7 +157,7 @@ leaderboard.get("/counts", async (c) => {
         .from(leaderboardEntries)
         .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
       return { slug: game.slug, count: row?.count ?? 0 };
-    })
+    }),
   );
 
   const result: Record<string, number> = {};

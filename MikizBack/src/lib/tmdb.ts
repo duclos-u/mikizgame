@@ -47,7 +47,6 @@ export async function fetchFilmById(id: number): Promise<Film | null> {
         .map((c) => ({ nom: c.name, photo: c.profile_path ?? null })),
       acteurs: credits.cast
         .sort((a, b) => a.order - b.order)
-        .slice(0, 8)
         .map((c) => ({ nom: c.name, photo: c.profile_path ?? null })),
       recompenses: [],
     };

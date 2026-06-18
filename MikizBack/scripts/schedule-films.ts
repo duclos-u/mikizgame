@@ -16,7 +16,7 @@ import { and, gte, lte } from "drizzle-orm";
 import { db } from "../src/db";
 import { cineclueDaily } from "../src/db/schema";
 
-const daysArg = parseInt(process.argv[2] ?? "30", 10);
+const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
 const startArg = process.argv[3];
 
 const apiKey = process.env.TMDB_API_KEY;
@@ -66,7 +66,9 @@ async function fetchRecentFilms(needed: number): Promise<TmdbResult[]> {
   const pagesNeeded = Math.ceil(needed / 20) + 2;
   const collected: TmdbResult[] = [];
 
-  console.log(`[Récents] Récupération de ${pagesNeeded} pages (sorties FR ${dateFrom} → ${today})…`);
+  console.log(
+    `[Récents] Récupération de ${pagesNeeded} pages (sorties FR ${dateFrom} → ${today})…`,
+  );
 
   for (let page = 1; page <= pagesNeeded; page++) {
     const res = await fetch(
@@ -133,7 +135,9 @@ const popularNeeded = Math.round(daysArg * 0.5);
 const recentNeeded = Math.round(daysArg * 0.4);
 const ratedNeeded = daysArg - popularNeeded - recentNeeded;
 
-console.log(`\nObjectif : ${daysArg} jours (${popularNeeded} populaires + ${recentNeeded} récents + ${ratedNeeded} notés)\n`);
+console.log(
+  `\nObjectif : ${daysArg} jours (${popularNeeded} populaires + ${recentNeeded} récents + ${ratedNeeded} notés)\n`,
+);
 
 const [rawPopular, rawRecent, rawRated] = await Promise.all([
   fetchPopularFilms(popularNeeded),
@@ -179,10 +183,14 @@ const eligibleRated = ratedFilms.filter((m) => !excludedIds.has(m.id));
 const shuffledPopular = eligiblePopular.sort(() => Math.random() - 0.5).slice(0, popularNeeded);
 const shuffledRecent = eligibleRecent.sort(() => Math.random() - 0.5).slice(0, recentNeeded);
 const shuffledRated = eligibleRated.sort(() => Math.random() - 0.5).slice(0, ratedNeeded);
-const combined = [...shuffledPopular, ...shuffledRecent, ...shuffledRated].sort(() => Math.random() - 0.5);
+const combined = [...shuffledPopular, ...shuffledRecent, ...shuffledRated].sort(
+  () => Math.random() - 0.5,
+);
 
 if (combined.length < daysArg) {
-  console.warn(`\n⚠  Seulement ${combined.length} films uniques récupérés pour ${daysArg} jours demandés.`);
+  console.warn(
+    `\n⚠  Seulement ${combined.length} films uniques récupérés pour ${daysArg} jours demandés.`,
+  );
 }
 
 const count = Math.min(daysArg, combined.length);
@@ -192,13 +200,11 @@ const entries = Array.from({ length: count }, (_, i) => {
   return { tmdbId: combined[i].id, date: d.toISOString().slice(0, 10) };
 });
 
-const inserted = await db
-  .insert(cineclueDaily)
-  .values(entries)
-  .onConflictDoNothing()
-  .returning();
+const inserted = await db.insert(cineclueDaily).values(entries).onConflictDoNothing().returning();
 
-console.log(`\nPlanifié ${inserted.length} film(s) (${entries.length - inserted.length} déjà existants).`);
+console.log(
+  `\nPlanifié ${inserted.length} film(s) (${entries.length - inserted.length} déjà existants).`,
+);
 console.log(`Période : ${entries[0]?.date} → ${entries.at(-1)?.date}\n`);
 
 for (const row of inserted) {

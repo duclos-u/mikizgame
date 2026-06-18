@@ -30,12 +30,9 @@ export function internalGamePath(gameId: string) {
 }
 
 // Imports are at the bottom to avoid circular-dependency confusion.
-// eslint-disable-next-line import/no-cycle
 import Motivex from '../games/motivex'
-// eslint-disable-next-line import/no-cycle
 import CineClue from '../games/cineclue'
-// eslint-disable-next-line import/no-cycle
-import Spotle from '../games/spotle'
+import Vinymix from '../games/vinymix'
 
 export const GAMES: Game[] = [
   {
@@ -90,19 +87,19 @@ export const GAMES: Game[] = [
     },
   },
   {
-    id: 'spotle',
-    name: 'Spotle',
+    id: 'vinymix',
+    name: 'Vinymix',
     desc: 'Devine l\'artiste du jour en 6 essais.',
     icon: '🎵',
     cat: 'musique',
     tag: 'tag-musique',
     tagLabel: 'Musique',
     accent: 'oklch(0.62 0.18 290)',
-    status: 'live',
+    status: 'soon',
     players: 0,
     avgTries: 0,
-    route: internalGamePath('spotle'),
-    component: Spotle,
+    route: internalGamePath('vinymix'),
+    component: Vinymix,
   },
   {
     id: 'geodle',
@@ -113,19 +110,6 @@ export const GAMES: Game[] = [
     tag: 'tag-geo',
     tagLabel: 'Géographie',
     accent: 'oklch(0.62 0.15 232)',
-    status: 'soon',
-    players: 0,
-    avgTries: 0,
-  },
-  {
-    id: 'sondle',
-    name: 'Sondle',
-    desc: "Devine le titre à l'oreille.",
-    icon: '🎵',
-    cat: 'musique',
-    tag: 'tag-musique',
-    tagLabel: 'Musique',
-    accent: 'oklch(0.66 0.18 352)',
     status: 'soon',
     players: 0,
     avgTries: 0,

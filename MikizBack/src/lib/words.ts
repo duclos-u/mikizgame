@@ -17,16 +17,10 @@ function load(): void {
 
   const wordsDir = join(import.meta.dir, "../../words");
 
-  const dailyContent = readFileSync(
-    join(wordsDir, "fr-daily-words.txt"),
-    "utf-8"
-  );
+  const dailyContent = readFileSync(join(wordsDir, "fr-daily-words.txt"), "utf-8");
   dailyWords = parse(dailyContent);
 
-  const validContent = readFileSync(
-    join(wordsDir, "fr-valid-words.txt"),
-    "utf-8"
-  );
+  const validContent = readFileSync(join(wordsDir, "fr-valid-words.txt"), "utf-8");
   const validList = parse(validContent);
 
   validWordSet = new Set([...dailyWords, ...validList]);

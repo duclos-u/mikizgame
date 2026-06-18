@@ -1,6 +1,6 @@
+import { and, eq, ne } from "drizzle-orm";
 import { db } from "../src/db";
 import { games, leaderboardEntries, motivexSessions } from "../src/db/schema";
-import { and, eq, ne } from "drizzle-orm";
 
 const motivexGame = await db
   .select()
@@ -34,7 +34,7 @@ for (const session of completedSessions) {
         eq(leaderboardEntries.userId, session.userId),
         eq(leaderboardEntries.gameId, gameId),
         eq(leaderboardEntries.date, session.date),
-      )
+      ),
     );
 
   if (existing.length > 0) {
@@ -52,7 +52,9 @@ for (const session of completedSessions) {
     score,
   });
 
-  console.log(`  INSERT userId=${session.userId} date=${session.date} score=${score ?? "null (loss)"}`);
+  console.log(
+    `  INSERT userId=${session.userId} date=${session.date} score=${score ?? "null (loss)"}`,
+  );
   inserted++;
 }
 

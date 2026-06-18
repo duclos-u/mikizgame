@@ -142,19 +142,19 @@ export function searchFilms(q: string): Promise<TmdbFilmResult[]> {
   return request<TmdbFilmResult[]>(`/cineclue/search?q=${encodeURIComponent(q)}`)
 }
 
-// ─── Spotle ───────────────────────────────────────────────────────────────────
+// ─── Vinymix ───────────────────────────────────────────────────────────────────
 
-export type SpotleMatchStatus = 'match' | 'close' | 'miss' | 'info' | 'unknown'
+export type VinymixMatchStatus = 'match' | 'close' | 'miss' | 'info' | 'unknown'
 
-export type SpotleClue = {
+export type VinymixClue = {
   key: string
   label: string
   value: string
-  status: SpotleMatchStatus
+  status: VinymixMatchStatus
   direction?: 'up' | 'down'
 }
 
-export type SpotleArtist = {
+export type VinymixArtist = {
   id: string
   name: string
   imageUrl: string | null
@@ -170,36 +170,35 @@ export type SpotleArtist = {
   appearsOnSoundtracksWith: string[]
 }
 
-export type SpotleGuess = {
-  artist: SpotleArtist
-  clues: SpotleClue[]
+export type VinymixGuess = {
+  artist: VinymixArtist
+  clues: VinymixClue[]
 }
 
-export type SpotleStatus = 'in_progress' | 'won' | 'lost'
+export type VinymixStatus = 'in_progress' | 'won' | 'lost'
 
-export type SpotleGuessResponse = {
-  guess: SpotleGuess
-  status: SpotleStatus
+export type VinymixGuessResponse = {
+  guess: VinymixGuess
+  status: VinymixStatus
   guessesLeft: number
-  targetArtist: SpotleArtist | null
+  targetArtist: VinymixArtist | null
 }
 
-export type SpotleSessionResponse = {
+export type VinymixSessionResponse = {
   session: {
-    guesses: SpotleGuess[]
-    status: SpotleStatus
+    guesses: VinymixGuess[]
+    status: VinymixStatus
     guessesLeft: number
-    targetArtist: SpotleArtist | null
+    targetArtist: VinymixArtist | null
   } | null
 }
 
-export type SpotleSearchResult = {
+export type VinymixSearchResult = {
   id: string
   name: string
   imageUrl: string | null
   genres: string[]
   followers: number
-  inPool: boolean
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -240,16 +239,16 @@ export const api = {
     search: (q: string) =>
       request<{ films: CineclueFilm[] }>(`/films/search?q=${encodeURIComponent(q)}`),
   },
-  spotle: {
-    session: () => request<SpotleSessionResponse>('/spotle/session'),
+  vinymix: {
+    session: () => request<VinymixSessionResponse>('/vinymix/session'),
     guess: (artistId: string) =>
-      request<SpotleGuessResponse>('/spotle/guess', {
+      request<VinymixGuessResponse>('/vinymix/guess', {
         method: 'POST',
         body: JSON.stringify({ artistId }),
       }),
     search: (q: string) =>
-      request<SpotleSearchResult[]>(`/spotle/search?q=${encodeURIComponent(q)}`),
-    reset: () => request<{ ok: boolean }>('/spotle/session', { method: 'DELETE' }),
+      request<VinymixSearchResult[]>(`/vinymix/search?q=${encodeURIComponent(q)}`),
+    reset: () => request<{ ok: boolean }>('/vinymix/session', { method: 'DELETE' }),
   },
   leaderboard: {
     get: (game: string, date?: string) =>

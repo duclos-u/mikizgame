@@ -13,6 +13,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun run scripts/seed.ts",
+    "artists:schedule": "bun run scripts/schedule-artists.ts",
     "films:set": "bun run scripts/set-film.ts",
     "films:schedule": "bun run scripts/schedule-films.ts",
     "films:delete": "bun run scripts/delete-films.ts",

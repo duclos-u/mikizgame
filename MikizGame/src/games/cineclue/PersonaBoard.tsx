@@ -371,7 +371,7 @@ export function SlotActeurs({
             <div className="cineclue-acteur-photo">
               <span className="cineclue-acteur-initiales">?</span>
             </div>
-            <span className="cineclue-acteur-nom">?</span>
+            <span className="cineclue-acteur-nom">&nbsp;</span>
           </div>
         ))}
       </div>

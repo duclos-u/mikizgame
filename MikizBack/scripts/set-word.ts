@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { eq } from "drizzle-orm";
 /**
  * Overwrite (or insert) the word for a specific date.
  *
@@ -7,7 +8,6 @@
  */
 import { db } from "../src/db";
 import { motivexDailyWords } from "../src/db/schema";
-import { eq } from "drizzle-orm";
 
 const [dateArg, wordArg] = process.argv.slice(2);
 

@@ -63,16 +63,12 @@ export function compareFilms(
   const pays = Array.from(new Set([...indicesCourants.pays, ...paysCommuns]));
 
   const nomsCible = new Set(cible.acteurs.map((a) => a.nom));
-  const acteursCommuns = soumis.acteurs
-    .filter((a) => nomsCible.has(a.nom))
-    .map((a) => a.nom);
+  const acteursCommuns = soumis.acteurs.filter((a) => nomsCible.has(a.nom)).map((a) => a.nom);
   const acteurs = Array.from(new Set([...indicesCourants.acteurs, ...acteursCommuns]));
 
   const directorMatched =
     !indicesCourants.realisateurRevele &&
-    soumis.realisateurs.some((r) =>
-      cible.realisateurs.some((cr) => cr.nom === r.nom),
-    );
+    soumis.realisateurs.some((r) => cible.realisateurs.some((cr) => cr.nom === r.nom));
   const realisateurRevele = indicesCourants.realisateurRevele || directorMatched;
   const realisateurInfo =
     indicesCourants.realisateurInfo ?? (directorMatched ? (cible.realisateurs[0] ?? null) : null);
@@ -101,8 +97,7 @@ export function compareFilms(
     }
   }
 
-  const langue =
-    indicesCourants.langue ?? (soumis.langue === cible.langue ? cible.langue : null);
+  const langue = indicesCourants.langue ?? (soumis.langue === cible.langue ? cible.langue : null);
 
   return {
     genres,
@@ -129,22 +124,22 @@ export function applyTimeGatedClues(
   cible: Film,
   attemptCount: number,
 ): IndicesReveles {
-  const updated = { ...indices }
+  const updated = { ...indices };
 
   if (attemptCount >= 3 && updated.langue === null) {
-    updated.langue = cible.langue
+    updated.langue = cible.langue;
   }
 
   if (attemptCount >= 5 && updated.genres.length === 0 && cible.genres.length > 0) {
-    updated.genres = [cible.genres[0]]
+    updated.genres = [cible.genres[0]];
   }
 
   if (attemptCount >= 7 && !updated.realisateurRevele) {
-    updated.realisateurRevele = true
-    updated.realisateurInfo = cible.realisateurs[0] ?? null
+    updated.realisateurRevele = true;
+    updated.realisateurInfo = cible.realisateurs[0] ?? null;
   }
 
-  return updated
+  return updated;
 }
 
 /**

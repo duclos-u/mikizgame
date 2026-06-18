@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { type SpotleSearchResult, api } from '../../api/client'
+import { type VinymixSearchResult, api } from '../../api/client'
+import { artistColors } from '../../utils/artistColors'
 
 type Props = {
   onGuess: (artistId: string) => void
@@ -9,8 +10,8 @@ type Props = {
 
 export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = [] }: Props) {
   const [query, setQuery] = useState('')
-  const [suggestions, setSuggestions] = useState<SpotleSearchResult[]>([])
-  const [selected, setSelected] = useState<SpotleSearchResult | null>(null)
+  const [suggestions, setSuggestions] = useState<VinymixSearchResult[]>([])
+  const [selected, setSelected] = useState<VinymixSearchResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [activeIdx, setActiveIdx] = useState(-1)
@@ -30,7 +31,7 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
     debounceRef.current = setTimeout(async () => {
       setLoading(true)
       try {
-        const results = await api.spotle.search(query)
+        const results = await api.vinymix.search(query)
         setSuggestions(results)
         setOpen(true)
         setActiveIdx(-1)
@@ -47,8 +48,7 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
     }
   }, [query, selected])
 
-  function pick(artist: SpotleSearchResult) {
-    if (!artist.inPool) return
+  function pick(artist: VinymixSearchResult) {
     setSelected(artist)
     setQuery(artist.name)
     setSuggestions([])
@@ -67,7 +67,7 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
   function handleKey(e: React.KeyboardEvent) {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (open && activeIdx >= 0 && suggestions[activeIdx]?.inPool) {
+      if (open && activeIdx >= 0 && suggestions[activeIdx]) {
         pick(suggestions[activeIdx])
       } else {
         submit()
@@ -87,13 +87,17 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
   }
 
   return (
-    <div className="spotle-search">
-      <div className="spotle-search-row">
-        <div className="spotle-search-wrap">
+    <div className="vinymix-search">
+      <div className="vinymix-search-row">
+        <div className="vinymix-search-wrap">
+          <svg className="vinymix-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
           <input
             ref={inputRef}
             type="text"
-            className="spotle-input"
+            className="vinymix-input"
             placeholder="Cherche un artiste…"
             value={query}
             disabled={disabled}
@@ -105,47 +109,50 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
             onKeyDown={handleKey}
             onBlur={() => setTimeout(() => setOpen(false), 150)}
           />
-          {loading && <span className="spotle-search-spinner" />}
+          {loading && <span className="vinymix-search-spinner" />}
 
           {open && suggestions.length > 0 && (
-            <ul className="spotle-dropdown" role="listbox">
+            <ul className="vinymix-dropdown" role="listbox">
               {suggestions.map((artist, i) => {
                 const deja = alreadyGuessed.includes(artist.id)
-                const notAvailable = !artist.inPool
                 return (
                   <li
                     key={artist.id}
                     role="option"
                     aria-selected={i === activeIdx}
                     className={[
-                      'spotle-dropdown-item',
-                      i === activeIdx ? 'spotle-dropdown-active' : '',
-                      deja ? 'spotle-dropdown-deja' : '',
-                      notAvailable ? 'spotle-dropdown-unavailable' : '',
+                      'vinymix-dropdown-item',
+                      i === activeIdx ? 'vinymix-dropdown-active' : '',
+                      deja ? 'vinymix-dropdown-deja' : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    onMouseDown={() => !notAvailable && pick(artist)}
+                    onMouseDown={() => pick(artist)}
                   >
                     {artist.imageUrl ? (
                       <img
                         src={artist.imageUrl}
                         alt=""
-                        className="spotle-dropdown-avatar"
+                        className="vinymix-dropdown-avatar"
                         width={36}
                         height={36}
                       />
-                    ) : (
-                      <span className="spotle-dropdown-avatar spotle-dropdown-avatar-placeholder">
-                        {artist.name[0]}
-                      </span>
-                    )}
-                    <span className="spotle-dropdown-name">{artist.name}</span>
-                    <span className="spotle-dropdown-genres">
+                    ) : (() => {
+                      const { avBg, avFg } = artistColors(artist.name)
+                      return (
+                        <span
+                          className="vinymix-dropdown-avatar vinymix-dropdown-avatar-placeholder"
+                          style={{ background: avBg, color: avFg }}
+                        >
+                          {artist.name[0]}
+                        </span>
+                      )
+                    })()}
+                    <span className="vinymix-dropdown-name">{artist.name}</span>
+                    <span className="vinymix-dropdown-genres">
                       {artist.genres.slice(0, 2).join(', ')}
                     </span>
-                    {deja && <span className="spotle-dropdown-badge">Déjà joué</span>}
-                    {notAvailable && <span className="spotle-dropdown-badge">Non disponible</span>}
+                    {deja && <span className="vinymix-dropdown-badge">Déjà joué</span>}
                   </li>
                 )
               })}
@@ -155,7 +162,7 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
 
         <button
           type="button"
-          className="spotle-btn-submit"
+          className="vinymix-btn-submit"
           disabled={!selected || disabled}
           onClick={submit}
         >

@@ -16,7 +16,7 @@ if (!dateArg || !tmdbIdArg) {
   process.exit(1);
 }
 
-const tmdbId = parseInt(tmdbIdArg, 10);
+const tmdbId = Number.parseInt(tmdbIdArg, 10);
 if (isNaN(tmdbId)) {
   console.error("tmdbId doit être un entier");
   process.exit(1);

@@ -16,10 +16,7 @@ await db
 
 const today = new Date().toISOString().slice(0, 10);
 
-await db
-  .insert(motivexDailyWords)
-  .values({ word: "MONDE", date: today })
-  .onConflictDoNothing();
+await db.insert(motivexDailyWords).values({ word: "MONDE", date: today }).onConflictDoNothing();
 
 console.log(`Seeded: game 'motivex' + today's word MONDE (${today})`);
 console.log("Run `bun words:schedule` to bulk-schedule words for upcoming days.");

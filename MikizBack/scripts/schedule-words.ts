@@ -12,7 +12,7 @@ import { db } from "../src/db";
 import { motivexDailyWords } from "../src/db/schema";
 import { getDailyWordList } from "../src/lib/words";
 
-const daysArg = parseInt(process.argv[2] ?? "30", 10);
+const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
 const startArg = process.argv[3];
 
 const words = getDailyWordList();
@@ -38,6 +38,8 @@ for (let i = 0; i < Math.min(daysArg, shuffled.length); i++) {
 
 const result = await db.insert(motivexDailyWords).values(entries).onConflictDoNothing().returning();
 
-console.log(`Scheduled ${result.length} new words (${entries.length - result.length} already existed).`);
+console.log(
+  `Scheduled ${result.length} new words (${entries.length - result.length} already existed).`,
+);
 console.log(`Range: ${entries[0]?.date} → ${entries.at(-1)?.date}`);
 process.exit(0);

@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { and, gte, lte } from "drizzle-orm";
 /**
  * Supprime les films planifiés dans une range de dates.
  *
@@ -8,7 +9,6 @@
  */
 import { db } from "../src/db";
 import { cineclueDaily } from "../src/db/schema";
-import { and, gte, lte } from "drizzle-orm";
 
 const [fromArg, toArg] = process.argv.slice(2);
 
