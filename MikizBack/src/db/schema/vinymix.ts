@@ -14,9 +14,7 @@ export const vinymixArtists = pgTable("vinymix_artists", {
   memberCount: integer("member_count").notNull().default(1),
   spotifyFollowers: integer("spotify_followers").notNull().default(0),
   genres: jsonb("genres").notNull().$type<string[]>().default([]),
-  country: text("country"),
   vocalType: text("vocal_type"),
-  primaryLanguage: text("primary_language"),
   mostFamousSong: jsonb("most_famous_song").$type<{
     title: string;
     spotifyStreams: number;

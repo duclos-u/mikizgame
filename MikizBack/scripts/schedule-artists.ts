@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Fetches top artists from Last.fm chart, upserts them into vinymix_artists,
+ * Fetches popular artists from Spotify, upserts them into vinymix_artists,
  * and schedules them in vinymix_daily.
  *
  * Usage:
@@ -11,15 +11,14 @@
 import { and, gte, lte, sql } from "drizzle-orm";
 import { db } from "../src/db";
 import { vinymixArtists, vinymixDaily } from "../src/db/schema";
-import { type LastfmChartEntry, getArtistInfo, getTopArtists } from "../src/lib/lastfm";
+import { type SpotifyChartEntry, getArtistInfo, getPopularArtists } from "../src/lib/spotify";
 import type { VinymixArtist } from "../src/lib/vinymix";
 
 const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
 const startArg = process.argv[3];
 
-const apiKey = process.env.LASTFM_API_KEY;
-if (!apiKey) {
-  console.error("LASTFM_API_KEY missing from environment");
+if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
+  console.error("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in environment");
   process.exit(1);
 }
 
@@ -52,35 +51,12 @@ const alreadyScheduledDates = new Set(existing.map((r) => r.date));
 console.log(`  → ${recentlyScheduledIds.size} artist(s) in exclusion window (±30 days)`);
 console.log(`  → ${alreadyScheduledDates.size} date(s) already scheduled`);
 
-// ─── Fetch chart pool ─────────────────────────────────────────────────────────
+// ─── Fetch chart pool from Spotify ───────────────────────────────────────────
 
-async function fetchChartPool(needed: number): Promise<LastfmChartEntry[]> {
-  const pagesNeeded = Math.ceil((needed * 2.5) / 50) + 1;
-  const collected: LastfmChartEntry[] = [];
-  const seen = new Set<string>();
-
-  console.log(`\n[Chart] Fetching ${pagesNeeded} page(s) of top artists...`);
-
-  for (let page = 1; page <= pagesNeeded; page++) {
-    try {
-      const { artists, totalPages } = await getTopArtists(page, apiKey as string);
-      for (const a of artists) {
-        if (!seen.has(a.id)) {
-          seen.add(a.id);
-          collected.push(a);
-        }
-      }
-      console.log(
-        `  Page ${page}/${Math.min(pagesNeeded, totalPages)}: +${artists.length} artists (total: ${collected.length})`,
-      );
-      if (page >= totalPages) break;
-      await new Promise((r) => setTimeout(r, 200));
-    } catch (err) {
-      console.warn(`  Page ${page} failed: ${err}`);
-    }
-  }
-
-  return collected;
+async function fetchChartPool(needed: number): Promise<SpotifyChartEntry[]> {
+  // Fetch 3× what we need to have buffer after exclusion filtering
+  const pool = await getPopularArtists(needed * 3);
+  return pool;
 }
 
 const chartPool = await fetchChartPool(daysArg);
@@ -95,15 +71,15 @@ if (eligible.length < daysArg) {
 
 const selected = eligible.sort(() => Math.random() - 0.5).slice(0, daysArg);
 
-// ─── Enrich artists from Last.fm ──────────────────────────────────────────────
+// ─── Enrich artists from Spotify ──────────────────────────────────────────────
 
-console.log(`\nEnriching ${selected.length} artists from Last.fm...`);
+console.log(`\nEnriching ${selected.length} artists from Spotify...`);
 
 const enriched: VinymixArtist[] = [];
 
 for (const entry of selected) {
   try {
-    const artist = await getArtistInfo(entry.name, apiKey as string);
+    const artist = await getArtistInfo(entry.id, entry.name, entry.imageUrl);
     enriched.push(artist);
     process.stdout.write(`  ✓ ${artist.name}\n`);
   } catch (err) {
@@ -132,9 +108,7 @@ await db
       memberCount: a.memberCount,
       spotifyFollowers: a.spotifyFollowers,
       genres: a.genres,
-      country: a.country,
       vocalType: a.vocalType,
-      primaryLanguage: a.primaryLanguage,
       mostFamousSong: a.mostFamousSong,
       instrumentation: a.instrumentation,
       appearsOnSoundtracksWith: a.appearsOnSoundtracksWith,
@@ -148,9 +122,7 @@ await db
       imageUrl: sql`excluded.image_url`,
       spotifyFollowers: sql`excluded.spotify_followers`,
       genres: sql`excluded.genres`,
-      country: sql`excluded.country`,
       vocalType: sql`excluded.vocal_type`,
-      primaryLanguage: sql`excluded.primary_language`,
       mostFamousSong: sql`excluded.most_famous_song`,
       updatedAt: sql`excluded.updated_at`,
       // creationYear, memberCount, instrumentation, appearsOnSoundtracksWith are NOT updated
@@ -172,14 +144,17 @@ for (let i = 0; i < enriched.length; i++) {
   }
 }
 
+if (entries.length === 0) {
+  console.log("\nAll requested dates already scheduled. Nothing to do.");
+  process.exit(0);
+}
+
 const inserted = await db.insert(vinymixDaily).values(entries).onConflictDoNothing().returning();
 
 console.log(
   `\nScheduled ${inserted.length} artist(s) (${entries.length - inserted.length} already existed).`,
 );
-if (entries.length > 0) {
-  console.log(`Period: ${entries[0]?.date} → ${entries.at(-1)?.date}\n`);
-}
+console.log(`Period: ${entries[0]?.date} → ${entries.at(-1)?.date}\n`);
 
 for (const row of inserted) {
   const artist = enriched.find((a) => a.id === row.artistId);

@@ -1,0 +1,15 @@
+﻿id;prenom;nom;date_debut_mandat;date_fin_mandat
+51;Charles ;de Gaulle;jeudi 8 janvier 1959;mardi 28 décembre 1965
+52;Charles ;de Gaulle;mardi 28 décembre 1965;lundi 28 avril 1969
+53;Alain;Poher;lundi 28 avril 1969;jeudi 19 juin 1969
+54;Georges;Pompidou;jeudi 19 juin 1969;mardi 2 avril 1974
+55;Alain;Poher;mardi 2 avril 1974;lundi 27 mai 1974
+56;Valéry;Giscard d'Estaing;lundi 27 mai 1974;jeudi 21 mai 1981
+57;François ;Mitterrand;jeudi 21 mai 1981;samedi 21 mai 1988
+58;François ;Mitterrand; 21 mai 1988;mercredi 17 mai 1995
+59;Jacques;Chirac;mercredi 17 mai 1995;vendredi 17 mai 2002
+510;Jacques;Chirac;vendredi 17 mai 2002;mercredi 16 mai 2007
+511;Nicolas ;Sarkozy;mercredi 16 mai 2007;mardi 15 mai 2012
+512;François ;Hollande;mardi 15 mai 2012;dimanche 14 mai 2017
+513;Emmanuel;Macron;dimanche 14 mai 2017;samedi 14 mai 2022
+514;Emmanuel;Macron;samedi 14 mai 2022;

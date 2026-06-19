@@ -35,7 +35,7 @@ export function GuessHistoryTable({ guesses }: Props) {
       {guesses.map((guess, i) => {
         const num = i + 1
         const { avBg, avFg, bar } = artistColors(guess.artist.name)
-        const meta = [guess.artist.genres[0], guess.artist.country].filter(Boolean).join(' · ')
+        const meta = guess.artist.genres[0] ?? ''
 
         return (
           <div key={`${guess.artist.id}-${num}`} className="vinymix-card" style={{ borderLeftColor: bar }}>

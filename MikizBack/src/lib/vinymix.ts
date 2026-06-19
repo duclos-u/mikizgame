@@ -6,9 +6,7 @@ export type VinymixArtist = {
   memberCount: number;
   spotifyFollowers: number;
   genres: string[];
-  country: string | null;
   vocalType: string | null;
-  primaryLanguage: string | null;
   mostFamousSong: { title: string; spotifyStreams: number } | null;
   instrumentation: string | null;
   appearsOnSoundtracksWith: string[];
@@ -97,16 +95,7 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
     status: guess.genres.length === 0 ? "unknown" : commonGenres.length > 0 ? "match" : "miss",
   });
 
-  // 5. Country
-  clues.push({
-    key: "country",
-    label: "Pays",
-    value: guess.country ?? "?",
-    status:
-      guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
-  });
-
-  // 6. Vocal Type
+  // 5. Vocal Type
   clues.push({
     key: "vocalType",
     label: "Voix",
@@ -119,20 +108,7 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
           : "miss",
   });
 
-  // 7. Primary Language
-  clues.push({
-    key: "language",
-    label: "Langue",
-    value: guess.primaryLanguage ?? "?",
-    status:
-      guess.primaryLanguage === null
-        ? "unknown"
-        : guess.primaryLanguage === target.primaryLanguage
-          ? "match"
-          : "miss",
-  });
-
-  // 8. Same Soundtrack / collaboration
+  // 6. Same Soundtrack / collaboration
   const bothHaveData =
     target.appearsOnSoundtracksWith.length > 0 || guess.appearsOnSoundtracksWith.length > 0;
   const sharedCollab =

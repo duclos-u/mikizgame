@@ -76,11 +76,7 @@ export function ResultModal({ status, guesses, targetArtist, onClose, onReset }:
 
   const won = status === 'won'
   const targetMeta = targetArtist
-    ? [
-        targetArtist.creationYear,
-        targetArtist.country,
-        targetArtist.genres.slice(0, 2).join(', '),
-      ]
+    ? [targetArtist.creationYear, targetArtist.genres.slice(0, 2).join(', ')]
         .filter(Boolean)
         .join(' · ')
     : ''

@@ -1,0 +1,578 @@
+id,civ,nom,prenom,naissance,age,groupe,groupeAbrev,departementNom,departementCode,circo,job,nombreMandats,experienceDepute,scoreParticipation,scoreParticipationSpecialite,scoreLoyaute,scoreMajorite
+PA1008,M.,David,Alain,1949-06-02,77,Socialistes et apparentés,SOC,Gironde,33,4,Ingénieur,3,9 ans,0.06,0.00,0.913,0.000
+PA1567,M.,Guedj,Jérôme,1972-01-23,54,Socialistes et apparentés,SOC,Essonne,91,6,Inspecteur général des affaires sociales,4,6 ans,0.24,0.43,0.966,0.000
+PA1592,M.,Habib,David,1961-03-16,65,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Pyrénées-Atlantiques,64,3,Cadre,6,24 ans,0.05,0.00,0.771,0.000
+PA1630,M.,Herbillon,Michel,1951-03-06,75,Droite Républicaine,DR,Val-de-Marne,94,8,Cadre supérieur,6,24 ans,0.07,0.00,0.960,0.000
+PA1654,M.,Hollande,François,1954-08-12,71,Socialistes et apparentés,SOC,Corrèze,19,1,Conseiller référendaire à la Cour des comptes,3,12 ans,0.11,0.00,0.911,0.000
+PA227089,Mme,Létard,Valérie,1962-10-13,63,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Nord,59,21,Cadre de la fonction publique territoriale,1,1 an,0.03,0.06,0.930,0.000
+PA266793,M.,Bony,Jean-Yves,1955-03-11,71,Droite Républicaine,DR,Cantal,15,2,Exploitant agricole,4,12 ans,0.16,0.05,0.892,0.000
+PA266797,M.,Gosselin,Philippe,1966-10-23,59,Droite Républicaine,DR,Manche,50,1,Maître de conférences à Sciences Po,5,19 ans,0.16,0.27,0.925,0.000
+PA266808,M.,Rolland,Vincent,1970-02-01,56,Droite Républicaine,DR,Savoie,73,2,Collaborateur parlementaire,4,14 ans,0.09,0.18,0.941,0.000
+PA267042,M.,Favennec-Bécot,Yannick,1958-08-12,67,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Mayenne,53,3,Directeur de cabinet,6,24 ans,0.10,0.14,0.881,0.000
+PA267200,M.,Huyghe,Sébastien,1969-10-25,56,Ensemble pour la République,EPR,Nord,59,5,Notaire,5,22 ans,0.33,0.45,0.854,0.000
+PA267285,M.,Wauquiez,Laurent,1975-04-12,51,Droite Républicaine,DR,Haute-Loire,43,1,(33) - Cadre de la fonction publique,4,10 ans,0.09,0.15,0.968,0.000
+PA267318,M.,Grelier,Jean-Carles,1966-03-15,60,Les Démocrates,DEM,Sarthe,72,5,Avocat,3,9 ans,0.04,0.09,0.936,0.000
+PA267763,M.,Bataille,Jean-Pierre,1963-10-24,62,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Nord,59,15,Pharmacien,1,2 ans,0.15,0.42,0.849,0.000
+PA267780,Mme,Firmin Le Bodo,Agnès,1968-11-20,57,Horizons & Indépendants,HOR,Seine-Maritime,76,7,Pharmacien,3,7 ans,0.25,0.50,0.922,0.000
+PA267794,Mme,Tabarot,Michèle,1962-10-13,63,Droite Républicaine,DR,Alpes-Maritimes,6,9,Chef d'entreprise,6,24 ans,0.08,0.00,0.973,0.000
+PA2940,Mme,Voynet,Dominique,1958-11-04,67,Écologiste et Social,ECOS,Doubs,25,2,Médecin,1,2 ans,0.34,0.65,0.920,0.000
+PA2952,M.,Warsmann,Jean-Luc,1965-10-22,60,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Ardennes,8,3,Directeur de mutuelle,6,24 ans,0.17,0.10,0.736,0.000
+PA309643,Mme,Besse,Véronique,1963-08-11,62,Non inscrit,NI,Vendée,85,4,Journaliste,5,16 ans,0.05,0.00,0.649,0.000
+PA330008,M.,Breton,Xavier,1962-11-25,63,Droite Républicaine,DR,Ain,1,1,Cadre territorial,5,19 ans,0.13,0.20,0.847,0.000
+PA330240,M.,Ciotti,Éric,1965-09-28,60,Union des droites pour la République,UDDPLR,Alpes-Maritimes,6,1,(33) - Cadre de la fonction publique,5,19 ans,0.05,0.05,0.967,0.000
+PA330909,M.,Descoeur,Vincent,1962-12-13,63,Droite Républicaine,DR,Cantal,15,1,Professeur agrégé de biologie,4,14 ans,0.25,0.24,0.901,0.000
+PA331582,M.,Vigier,Philippe,1958-02-03,68,Les Démocrates,DEM,Eure-et-Loir,28,4,Biologiste A.I.H.P.,5,18 ans,0.21,0.49,0.947,0.000
+PA331973,Mme,Got,Pascale,1961-04-01,65,Socialistes et apparentés,SOC,Gironde,33,5,Journaliste,3,12 ans,0.24,0.25,0.958,0.000
+PA332228,M.,Benoit,Thierry,1966-09-13,59,Horizons & Indépendants,HOR,Ille-et-Vilaine,35,6,Représentant de commerce,5,19 ans,0.34,0.56,0.832,0.000
+PA332523,Mme,Dalloz,Marie-Christine,1958-01-10,68,Droite Républicaine,DR,Jura,39,2,retraitée,5,19 ans,0.19,0.58,0.903,0.000
+PA333285,M.,Garot,Guillaume,1966-05-29,60,Socialistes et apparentés,SOC,Mayenne,53,1,Cadre administratif,5,17 ans,0.28,0.56,0.973,0.000
+PA335054,Mme,Karamanli,Marietta,1964-12-18,61,Socialistes et apparentés,SOC,Sarthe,72,2,Professeur dans l'enseignement supérieur,5,19 ans,0.26,0.32,0.934,0.000
+PA335612,M.,Lecoq,Jean-Paul,1958-10-13,67,Gauche Démocrate et Républicaine,GDR,Seine-Maritime,76,8,Électricien,4,14 ans,0.19,0.00,0.972,0.000
+PA335999,Mme,Batho,Delphine,1973-03-23,53,Écologiste et Social,ECOS,Deux-Sèvres,79,2,Cadre territorial,5,18 ans,0.13,0.37,0.878,0.000
+PA340343,M.,Saulignac,Hervé,1970-11-06,55,Socialistes et apparentés,SOC,Ardèche,7,1,Cadre (entreprises publiques),3,9 ans,0.14,0.18,0.948,0.000
+PA341981,Mme,Récalde,Marie,1965-03-12,61,Socialistes et apparentés,SOC,Gironde,33,6,Avocate,2,7 ans,0.14,0.24,0.978,0.000
+PA342196,Mme,Rouaux,Claudia,1963-10-13,62,Socialistes et apparentés,SOC,Ille-et-Vilaine,35,3,Gestionnaire à l'INRAE,3,6 ans,0.31,0.16,0.973,0.000
+PA342240,M.,Bourgeaux,Jean-Luc,1963-04-10,63,Droite Républicaine,DR,Ille-et-Vilaine,35,7,Agriculteur,3,6 ans,0.18,0.30,0.907,0.000
+PA342384,Mme,Martin,Élisa,1972-05-15,54,La France insoumise - Nouveau Front Populaire,LFI-NFP,Isère,38,3,"Professeur, profession scientifique",2,4 ans,0.31,0.48,0.993,0.000
+PA342415,Mme,Battistel,Marie-Noëlle,1956-08-20,69,Socialistes et apparentés,SOC,Isère,38,4,Autre cadre (secteur privé),5,16 ans,0.37,0.26,0.953,0.000
+PA345722,Mme,Le Grip,Constance,1960-11-14,65,Ensemble pour la République,EPR,Hauts-de-Seine,92,6,Conseillère parlementaire,3,9 ans,0.23,0.52,0.965,0.000
+PA346782,M.,Juvin,Philippe,1964-02-01,62,Droite Républicaine,DR,Hauts-de-Seine,92,3,Professeur de médecine,2,4 ans,0.28,0.73,0.868,0.000
+PA368,M.,Barnier,Michel,1951-01-09,75,Droite Républicaine,DR,Paris,75,2,Ancien Premier ministre,1,1 an,0.10,0.00,0.896,0.000
+PA569,M.,Bonnecarrère,Philippe,1955-07-12,70,Non inscrit,NI,Tarn,81,1,Avocat,1,2 ans,0.27,0.29,0.847,0.000
+PA588884,Mme,Autain,Clémentine,1973-05-26,53,Écologiste et Social,ECOS,Seine-Saint-Denis,93,11,Journaliste et autre média,3,9 ans,0.11,0.33,0.968,0.000
+PA605745,M.,Sansu,Nicolas,1968-06-17,58,Gauche Démocrate et Républicaine,GDR,Cher,18,2,Permanent politique,3,9 ans,0.26,0.57,0.952,0.000
+PA605782,M.,Marcangeli,Laurent,1980-12-10,45,Horizons & Indépendants,HOR,Corse-du-sud,2a,1,Avocat,3,8 ans,0.13,0.17,0.942,0.000
+PA606507,M.,Boudié,Florent,1973-09-22,52,Ensemble pour la République,EPR,Gironde,33,10,Cadre supérieur du secteur public,4,14 ans,0.13,0.50,0.962,0.000
+PA606545,M.,Roumégas,Jean-Louis,1962-06-06,64,Écologiste et Social,ECOS,Hérault,34,1,Enseignant 1er deg.- Professeur d'école,2,7 ans,0.17,0.00,0.985,0.000
+PA606573,Mme,Dombre Coste,Fanny,1956-12-26,69,Socialistes et apparentés,SOC,Hérault,34,3,Artisan Photographe,2,7 ans,0.19,0.43,0.974,0.000
+PA606793,M.,Baumel,Laurent,1965-08-13,60,Socialistes et apparentés,SOC,Indre-et-Loire,37,4,Cadre supérieur du secteur public,2,7 ans,0.20,0.31,0.979,0.000
+PA607090,M.,Vigier,Jean-Pierre,1969-10-22,56,Droite Républicaine,DR,Haute-Loire,43,2,Fonctionnaire de catégorie A,4,14 ans,0.18,0.33,0.934,0.000
+PA607193,Mme,Errante,Sophie,1971-07-22,54,Non inscrit,NI,Loire-Atlantique,44,10,Industriel-Chef d'entreprise,4,14 ans,0.11,0.63,0.933,0.000
+PA607395,M.,Travert,Stéphane,1969-10-12,56,Ensemble pour la République,EPR,Manche,50,3,Cadre secteur privé,4,13 ans,0.23,0.66,0.924,0.000
+PA607553,M.,Potier,Dominique,1964-03-17,62,Socialistes et apparentés,SOC,Meurthe-et-Moselle,54,5,Agriculteur,4,14 ans,0.39,0.64,0.852,0.000
+PA607619,M.,Molac,Paul,1962-05-21,64,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Morbihan,56,4,Professeur du secondaire,4,14 ans,0.17,0.12,0.753,0.000
+PA608172,Mme,Pirès Beaune,Christine,1964-10-06,61,Socialistes et apparentés,SOC,Puy-de-Dôme,63,2,Fonctionnaire de catégorie A,4,14 ans,0.36,0.42,0.968,0.000
+PA608264,Mme,Capdevielle,Colette,1958-10-14,67,Socialistes et apparentés,SOC,Pyrénées-Atlantiques,64,5,Avocate,2,7 ans,0.34,0.34,0.966,0.000
+PA608416,M.,Hetzel,Patrick,1964-07-02,61,Droite Républicaine,DR,Bas-Rhin,67,7,Professeur des Universités,4,14 ans,0.34,0.42,0.935,0.000
+PA608826,Mme,Duby-Muller,Virginie,1979-08-16,46,Droite Républicaine,DR,Haute-Savoie,74,4,Cadre du secteur privé,4,14 ans,0.17,0.35,0.919,0.000
+PA609332,M.,Faure,Olivier,1968-08-18,57,Socialistes et apparentés,SOC,Seine-et-Marne,77,11,Cadre supérieur (secteur privé),4,14 ans,0.10,0.50,0.947,0.000
+PA610002,Mme,Sas,Eva,1970-08-13,55,Écologiste et Social,ECOS,Paris,75,8,Cadre supérieur du secteur privé,3,9 ans,0.31,0.73,0.980,0.000
+PA610654,M.,Nilor,Jean-Philippe,1965-05-15,61,La France insoumise - Nouveau Front Populaire,LFI-NFP,Martinique,972,4,Collaborateur parlementaire,4,14 ans,0.10,0.10,0.965,0.000
+PA610968,M.,Amirshahi,Pouria,1972-03-27,54,Écologiste et Social,ECOS,Paris,75,5,Cadre territorial de catégorie A,2,7 ans,0.45,0.47,0.972,0.000
+PA642695,M.,Bothorel,Éric,1966-10-20,59,Ensemble pour la République,EPR,Côtes-d'armor,22,5,Cadre supérieur (secteur privé),4,9 ans,0.26,0.07,0.943,0.000
+PA642725,M.,Liégeon,Eric,1961-01-24,65,Droite Républicaine,DR,Doubs,25,5,Exploitant agricole,1,2 ans,0.32,0.18,0.902,0.000
+PA642764,M.,Aviragnet,Joël,1956-06-16,70,Socialistes et apparentés,SOC,Haute-Garonne,31,8,Directeur d'un établissement pour l'enfance handicapée,4,10 ans,0.09,0.27,0.954,0.000
+PA642847,M.,Bazin,Thibault,1984-10-27,41,Droite Républicaine,DR,Meurthe-et-Moselle,54,4,Autre cadre (secteur privé),3,9 ans,0.30,0.60,0.895,0.000
+PA642935,M.,Becht,Olivier,1976-04-28,50,Ensemble pour la République,EPR,Haut-Rhin,68,5,Magistrat,3,7 ans,0.03,0.02,0.927,0.000
+PA642988,M.,de Lépinau,Hervé,1969-06-08,57,Rassemblement National,RN,Vaucluse,84,3,Avocat,2,4 ans,0.27,0.24,0.992,0.000
+PA643089,M.,Thiériot,Jean-Louis,1969-06-26,56,Droite Républicaine,DR,Seine-et-Marne,77,3,Sans profession déclarée,3,8 ans,0.12,0.85,0.948,0.000
+PA643104,Mme,Minard,Christelle,1970-10-04,55,Droite Républicaine,DR,Eure-et-Loir,28,2,Agricultrice,1,1 an,0.31,0.53,0.954,0.000
+PA643143,M.,Baptiste,Christian,1962-06-18,63,Socialistes et apparentés,SOC,Guadeloupe,971,2,Directeur d'association,2,4 ans,0.17,0.28,0.968,0.000
+PA643157,M.,Naillet,Philippe,1960-08-14,65,Socialistes et apparentés,SOC,Réunion,974,1,Inspecteur assurance-vie,4,7 ans,0.21,0.19,0.967,0.000
+PA643175,Mme,Dupont,Stella,1973-11-03,52,Non inscrit,NI,Maine-et-Loire,49,2,Comptable,3,9 ans,0.28,0.44,0.820,0.000
+PA643184,Mme,Klinkert,Brigitte,1956-07-22,69,Ensemble pour la République,EPR,Haut-Rhin,68,1,Ancien cadre,3,4 ans,0.26,0.31,0.968,0.000
+PA643192,Mme,Jourdan,Chantal,1958-09-02,67,Socialistes et apparentés,SOC,Orne,61,1,Psychologue,3,6 ans,0.44,0.37,0.927,0.000
+PA687214,M.,Berrios,Sylvain,1968-05-06,58,Horizons & Indépendants,HOR,Val-de-Marne,94,1,(33) - Cadre de la fonction publique,2,6 ans,0.20,0.39,0.890,0.000
+PA712014,M.,Ledoux,Vincent,1966-06-21,59,Ensemble pour la République,EPR,Nord,59,10,Sans profession déclarée,4,10 ans,0.08,0.06,0.945,0.000
+PA712015,M.,Dive,Julien,1985-05-21,41,Droite Républicaine,DR,Aisne,2,2,Chef de projet dans l'industrie,4,10 ans,0.14,0.40,0.923,0.000
+PA717161,Mme,Borne,Élisabeth,1961-04-18,65,Ensemble pour la République,EPR,Calvados,14,6,Ingénieur et cadre technique d'entreprise,2,2 ans,0.10,0.00,0.958,0.000
+PA717379,M.,Maillard,Sylvain,1974-04-28,52,Ensemble pour la République,EPR,Paris,75,1,Industriel-Chef d'entreprise,3,9 ans,0.23,0.43,0.962,0.000
+PA718674,Mme,Givernet,Olga,1981-10-17,44,Ensemble pour la République,EPR,Ain,1,3,Ingénieure,3,9 ans,0.27,0.01,0.981,0.000
+PA718784,M.,Pauget,Éric,1970-08-18,55,Droite Républicaine,DR,Alpes-Maritimes,6,7,Autre cadre (secteur privé),3,9 ans,0.07,0.21,0.959,0.000
+PA718820,Mme,Cestrières,Pauline,1977-03-24,49,Ensemble pour la République,EPR,Aveyron,12,1,Agricultrice,1,2 mois,0.48,0.27,0.965,0.000
+PA718838,M.,Brun,Fabrice,1968-04-02,58,Droite Républicaine,DR,Ardèche,7,3,Industriel-Chef d'entreprise,3,9 ans,0.07,0.05,0.872,0.000
+PA718850,M.,Cordier,Pierre,1972-05-27,54,Droite Républicaine,DR,Ardennes,8,2,Fonctionnaire de catégorie A,3,9 ans,0.11,0.40,0.875,0.000
+PA718884,Mme,Bazin-Malgras,Valérie,1969-10-31,56,Droite Républicaine,DR,Aube,10,2,Commerçante,3,9 ans,0.42,0.71,0.957,0.000
+PA719024,M.,Blanchet,Christophe,1973-04-09,53,Les Démocrates,DEM,Calvados,14,4,Commerçant,3,9 ans,0.24,0.43,0.942,0.000
+PA719032,M.,Bouyx,Bertrand,1970-05-26,56,Horizons & Indépendants,HOR,Calvados,14,5,Pharmacien,3,9 ans,0.30,0.50,0.946,0.000
+PA719052,M.,Kervran,Loïc,1984-02-11,42,Horizons & Indépendants,HOR,Cher,18,3,Autre cadre (secteur privé),3,9 ans,0.28,0.69,0.917,0.000
+PA719080,Mme,Marsaud,Sandra,1974-01-02,52,Ensemble pour la République,EPR,Charente,16,2,Cadre (entreprises publiques),3,9 ans,0.23,0.39,0.961,0.000
+PA719118,M.,Cormier-Bouligeon,François,1972-11-19,53,Ensemble pour la République,EPR,Cher,18,1,Juriste,3,9 ans,0.24,0.71,0.971,0.000
+PA719138,M.,Castellani,Michel,1945-09-28,80,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Haute-corse,2b,1,Professeur des Universités,3,9 ans,0.04,0.11,0.817,0.000
+PA719218,M.,Berville,Hervé,1990-01-15,36,Ensemble pour la République,EPR,Côtes-d'armor,22,2,Economiste,3,7 ans,0.24,0.00,0.954,0.000
+PA719272,Mme,Meunier,Frédérique,1960-12-08,65,Droite Républicaine,DR,Corrèze,19,2,Avocate,3,9 ans,0.12,0.09,0.795,0.000
+PA719286,M.,Colombani,Paul-André,1967-08-17,58,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Corse-du-sud,2a,2,Médecin,3,9 ans,0.09,0.26,0.825,0.000
+PA719338,Mme,Melchior,Graziella,1960-04-06,66,Ensemble pour la République,EPR,Finistère,29,5,Professeure agrégée,3,9 ans,0.28,0.84,0.977,0.000
+PA719372,M.,Kasbarian,Guillaume,1987-02-28,39,Ensemble pour la République,EPR,Eure-et-Loir,28,1,Consultant en stratégie d'entreprise,3,8 ans,0.21,0.21,0.966,0.000
+PA719388,Mme,Le Meur,Annaïg,1973-04-29,53,Ensemble pour la République,EPR,Finistère,29,1,Autre profession libérale,3,9 ans,0.21,0.28,0.986,0.000
+PA719404,M.,Le Gac,Didier,1965-07-19,60,Ensemble pour la République,EPR,Finistère,29,3,Profession rattachée à l'enseignement,3,9 ans,0.15,0.40,0.958,0.000
+PA719412,Mme,Le Feur,Sandrine,1991-03-18,35,Ensemble pour la République,EPR,Finistère,29,4,Agriculteur-propriétaire exploitant,3,9 ans,0.27,0.50,0.946,0.000
+PA719436,M.,Meizonnet,Nicolas,1983-12-22,42,Rassemblement National,RN,Gard,30,2,Ingénieur en informatique,3,6 ans,0.26,0.22,0.994,0.000
+PA719472,M.,Cazeneuve,Jean-René,1958-06-09,68,Ensemble pour la République,EPR,Gers,32,1,Ingénieur,3,9 ans,0.26,0.57,0.954,0.000
+PA719512,Mme,Vignon,Corinne,1963-06-10,63,Ensemble pour la République,EPR,Haute-Garonne,31,3,Cadre supérieur (secteur privé),3,9 ans,0.29,0.82,0.970,0.000
+PA719528,M.,Portarrieu,Jean-François,1965-10-14,60,Horizons & Indépendants,HOR,Haute-Garonne,31,5,Journaliste,3,9 ans,0.04,0.00,0.925,0.000
+PA719550,Mme,Tanguy,Liliana,1967-03-12,59,Ensemble pour la République,EPR,Finistère,29,7,Cadre supérieur du secteur public,3,9 ans,0.44,0.33,0.870,0.000
+PA719558,M.,Balanant,Erwan,1971-02-21,55,Les Démocrates,DEM,Finistère,29,8,Photographe et réalisateur,3,9 ans,0.18,0.25,0.914,0.000
+PA719578,M.,Prud'homme,Loïc,1969-08-19,56,La France insoumise - Nouveau Front Populaire,LFI-NFP,Gironde,33,3,Fonctionnaire de catégorie B,3,9 ans,0.17,0.32,0.972,0.000
+PA719632,Mme,Panonacle,Sophie,1968-12-16,57,Ensemble pour la République,EPR,Gironde,33,8,Sans profession déclarée,3,9 ans,0.14,0.11,0.949,0.000
+PA719640,Mme,Mette,Sophie,1959-09-13,66,Les Démocrates,DEM,Gironde,33,9,Sans profession déclarée,3,9 ans,0.42,0.56,0.948,0.000
+PA719756,Mme,Le Nabour,Christine,1964-10-28,61,Ensemble pour la République,EPR,Ille-et-Vilaine,35,5,Employée (secteur privé),3,9 ans,0.26,0.44,0.978,0.000
+PA719778,M.,Jolivet,François,1966-03-21,60,Horizons & Indépendants,HOR,Indre,36,1,Cadre supérieur (secteur privé),3,9 ans,0.20,0.39,0.926,0.000
+PA719798,M.,Labaronne,Daniel,1955-07-16,70,Ensemble pour la République,EPR,Indre-et-Loire,37,2,Retraité de l'enseignement supérieur,3,9 ans,0.27,0.57,0.960,0.000
+PA719822,Mme,Thillaye,Sabine,1959-05-18,67,Les Démocrates,DEM,Indre-et-Loire,37,5,Ancien Chef d'entreprise,3,9 ans,0.24,0.29,0.953,0.000
+PA719890,Mme,Brulebois,Danielle,1947-07-04,78,Ensemble pour la République,EPR,Jura,39,1,Retraitée de l'enseignement,3,9 ans,0.31,0.27,0.906,0.000
+PA719914,Mme,Darrieussecq,Geneviève,1956-03-04,70,Les Démocrates,DEM,Landes,40,1,médecin,3,3 ans,0.30,0.82,0.952,0.000
+PA719922,M.,Causse,Lionel,1971-05-06,55,Ensemble pour la République,EPR,Landes,40,2,Autre cadre (secteur privé),3,9 ans,0.11,0.04,0.895,0.000
+PA719930,M.,Vallaud,Boris,1975-07-25,50,Socialistes et apparentés,SOC,Landes,40,3,Fonctionnaire de catégorie A,3,9 ans,0.29,0.08,0.970,0.000
+PA719938,M.,Fesneau,Marc,1971-01-11,55,Les Démocrates,DEM,Loir-et-Cher,41,1,Ministre,3,3 ans,0.22,0.33,0.963,0.000
+PA719968,Mme,Bonnet,Sylvie,1969-12-21,56,Droite Républicaine,DR,Loire,42,4,Collaboratrice parlementaire,2,2 ans,0.15,0.23,0.959,0.000
+PA720022,M.,Lauzzana,Michel,1957-03-20,69,Ensemble pour la République,EPR,Lot-et-Garonne,47,1,Médecin,3,9 ans,0.28,0.58,0.944,0.000
+PA720038,Mme,Josso,Sandrine,1975-09-19,50,Les Démocrates,DEM,Loire-Atlantique,44,7,Autre profession libérale,3,9 ans,0.22,0.06,0.927,0.000
+PA720092,M.,Ramos,Richard,1968-03-23,58,Les Démocrates,DEM,Loiret,45,6,Autre cadre (secteur privé),3,9 ans,0.04,0.07,0.885,0.000
+PA720100,M.,Pradié,Aurélien,1986-03-14,40,Non inscrit,NI,Lot,46,1,Cadre supérieur (secteur privé),3,9 ans,0.02,0.00,0.655,0.000
+PA720138,Mme,Saint-Paul,Laetitia,1981-01-21,45,Horizons & Indépendants,HOR,Maine-et-Loire,49,4,Officier de l'armée de Terre,3,9 ans,0.22,0.76,0.925,0.000
+PA720146,M.,Masséglia,Denis,1981-04-11,45,Ensemble pour la République,EPR,Maine-et-Loire,49,5,Ingénieur Arts et métiers,3,9 ans,0.24,0.61,0.952,0.000
+PA720154,Mme,Dubré-Chirat,Nicole,1951-12-18,74,Ensemble pour la République,EPR,Maine-et-Loire,49,6,Retraitée de la fonction publique hospitalière et chargée de formation,3,9 ans,0.38,0.54,0.970,0.000
+PA720190,M.,Sorre,Bertrand,1965-05-08,61,Ensemble pour la République,EPR,Manche,50,2,Enseignant 1er degré-directeur d'école (en disponibilité),3,9 ans,0.17,0.37,0.981,0.000
+PA720230,Mme,Magnier,Lise,1984-12-31,41,Horizons & Indépendants,HOR,Marne,51,4,Cadre territorial,3,9 ans,0.33,0.93,0.888,0.000
+PA720256,Mme,Bannier,Géraldine,1979-11-22,46,Les Démocrates,DEM,Mayenne,53,2,Professeur du secondaire et technique,3,9 ans,0.25,0.81,0.941,0.000
+PA720334,M.,Pahun,Jimmy,1962-05-15,64,Les Démocrates,DEM,Morbihan,56,2,Navigateur,3,9 ans,0.22,0.27,0.909,0.000
+PA720342,Mme,Le Peih,Nicole,1959-09-28,66,Ensemble pour la République,EPR,Morbihan,56,3,Agricultrice,3,9 ans,0.31,0.36,0.970,0.000
+PA720354,M.,Jacques,Jean-Michel,1968-02-29,58,Ensemble pour la République,EPR,Morbihan,56,6,Infirmier des forces spéciales,3,9 ans,0.09,0.87,0.968,0.000
+PA720362,M.,Belhaddad,Belkhir,1969-07-09,56,Socialistes et apparentés,SOC,Moselle,57,1,Industriel-Chef d'entreprise,3,9 ans,0.22,0.37,0.926,0.000
+PA720370,M.,Mendes,Ludovic,1987-04-11,39,Ensemble pour la République,EPR,Moselle,57,2,Cadre supérieur (secteur privé),3,9 ans,0.11,0.08,0.957,0.000
+PA720390,M.,End,Jérôme,1979-04-09,47,Droite Républicaine,DR,Moselle,57,4,Chargé de mission et d'études,1,2 mois,0.07,0.23,0.934,0.000
+PA720430,M.,Bernalicis,Ugo,1989-09-25,36,La France insoumise - Nouveau Front Populaire,LFI-NFP,Nord,59,2,Fonctionnaire de catégorie A,3,9 ans,0.19,0.42,0.996,0.000
+PA720446,Mme,Liso,Brigitte,1959-07-29,66,Ensemble pour la République,EPR,Nord,59,4,Commerçant,3,9 ans,0.23,0.43,0.976,0.000
+PA720468,M.,Chenu,Sébastien,1973-04-13,53,Rassemblement National,RN,Nord,59,19,Conseiller en communication,3,9 ans,0.14,0.00,0.948,0.000
+PA720480,Mme,Parmentier-Lecocq,Charlotte,1977-07-17,48,Horizons & Indépendants,HOR,Nord,59,6,Industriel-Chef d'entreprise,3,7 ans,0.23,0.00,0.964,0.000
+PA720552,Mme,Rauch,Isabelle,1968-08-10,57,Horizons & Indépendants,HOR,Moselle,57,9,Consultante,3,9 ans,0.15,0.29,0.934,0.000
+PA720560,Mme,Goulet,Perrine,1978-03-19,48,Les Démocrates,DEM,Nièvre,58,1,Autre cadre (secteur privé),3,9 ans,0.16,0.34,0.938,0.000
+PA720614,Mme,Le Pen,Marine,1968-08-05,57,Rassemblement National,RN,Pas-de-Calais,62,11,Avocate,3,9 ans,0.11,0.00,0.998,0.000
+PA720668,M.,Blairy,Emmanuel,1986-03-14,40,Rassemblement National,RN,Pas-de-Calais,62,1,Fonctionnaire territorial,3,4 ans,0.20,0.26,0.996,0.000
+PA720720,Mme,Poueyto,Josy,1954-01-13,72,Les Démocrates,DEM,Pyrénées-Atlantiques,64,1,Retraitée de la fonction publique (hors enseignement),3,9 ans,0.22,0.76,0.932,0.000
+PA720728,M.,Mattei,Jean-Paul,1954-03-21,72,Les Démocrates,DEM,Pyrénées-Atlantiques,64,2,Notaire,3,9 ans,0.29,0.82,0.952,0.000
+PA720822,M.,Bilde,Bruno,1976-09-22,49,Rassemblement National,RN,Pas-de-Calais,62,12,Juriste,3,9 ans,0.18,0.01,0.993,0.000
+PA720838,Mme,Bourouaha,Soumya,1964-03-16,62,Gauche Démocrate et Républicaine,GDR,Seine-Saint-Denis,93,4,Professeure,2,4 ans,0.15,0.57,0.953,0.000
+PA720846,M.,Lachaud,Bastien,1980-08-05,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,6,Professeur du secondaire et technique,3,9 ans,0.30,0.70,0.996,0.000
+PA720892,Mme,Panot,Mathilde,1989-01-15,37,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-de-Marne,94,10,Coordinatrice de projets associatifs,3,9 ans,0.34,0.50,0.998,0.000
+PA720952,M.,Taché,Aurélien,1984-05-26,42,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-d'oise,95,10,Fonctionnaire de catégorie A,3,9 ans,0.10,0.14,0.985,0.000
+PA720960,M.,Serva,Olivier,1974-06-21,51,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Guadeloupe,971,1,Expert comptable,3,9 ans,0.02,0.01,0.673,0.000
+PA720976,M.,Mathiasin,Max,1956-02-24,70,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Guadeloupe,971,3,Fonction publique territoriale,3,9 ans,0.04,0.08,0.767,0.000
+PA720992,M.,William,Jiovanny,1985-06-03,41,Socialistes et apparentés,SOC,Martinique,972,1,Profession libérale,2,4 ans,0.05,0.10,0.914,0.000
+PA721004,Mme,Lakrafi,Amélia,1978-03-20,48,Ensemble pour la République,EPR,Français établis hors de France,99,10,Chef d'entreprise,3,9 ans,0.11,0.40,0.949,0.000
+PA721024,Mme,Genetet,Anne,1963-04-20,63,Ensemble pour la République,EPR,Français établis hors de France,99,11,Médecin généraliste,3,9 ans,0.23,0.27,0.967,0.000
+PA721062,M.,Ratenon,Jean-Hugues,1967-06-25,58,La France insoumise - Nouveau Front Populaire,LFI-NFP,Réunion,974,5,Employé (secteur privé),3,9 ans,0.21,0.40,0.993,0.000
+PA721110,Mme,Sanquer,Nicole,1972-06-16,54,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Polynésie française,987,2,Professeur du secondaire et technique,2,7 ans,0.06,0.05,0.775,0.000
+PA721158,M.,Anglade,Pieyre-Alexandre,1986-11-02,39,Ensemble pour la République,EPR,Français établis hors de France,99,4,Agent contractuel au Parlement européen,3,9 ans,0.21,0.00,0.957,0.000
+PA721182,M.,Petit,Frédéric,1961-02-10,65,Les Démocrates,DEM,Français établis hors de France,99,7,Ingénieur,3,9 ans,0.22,0.50,0.964,0.000
+PA721202,M.,Coquerel,Éric,1958-12-30,67,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,1,Industriel-Chef d'entreprise,3,9 ans,0.20,0.64,0.952,0.000
+PA721210,M.,Corbière,Alexis,1968-08-17,57,Écologiste et Social,ECOS,Seine-Saint-Denis,93,7,Professeur de lycée professionnel,3,9 ans,0.21,0.13,0.952,0.000
+PA721234,Mme,Petit,Maud,1971-11-15,54,Les Démocrates,DEM,Val-de-Marne,94,4,Chargée de ressources humaines,3,9 ans,0.25,0.31,0.809,0.000
+PA721270,M.,Peu,Stéphane,1962-07-24,63,Gauche Démocrate et Républicaine,GDR,Seine-Saint-Denis,93,2,Employé,3,9 ans,0.18,0.14,0.940,0.000
+PA721296,M.,Gouffier Valente,Guillaume,1986-02-01,40,Ensemble pour la République,EPR,Val-de-Marne,94,6,Manager public,3,9 ans,0.32,0.30,0.954,0.000
+PA721314,M.,Schellenberger,Raphaël,1990-02-14,36,Non inscrit,NI,Haut-Rhin,68,4,(33) - Cadre de la fonction publique,3,9 ans,0.07,0.00,0.852,0.000
+PA721336,Mme,Brocard,Blandine,1981-11-03,44,Les Démocrates,DEM,Rhône,69,5,Employée (secteur privé),3,9 ans,0.15,0.20,0.707,0.000
+PA721410,Mme,Bonnivard,Émilie,1980-08-02,45,Droite Républicaine,DR,Savoie,73,3,Cadre à la Caisse des Dépôts et Consignations,3,9 ans,0.36,0.26,0.951,0.000
+PA721426,Mme,Riotton,Véronique,1969-11-02,56,Ensemble pour la République,EPR,Haute-Savoie,74,1,Consultante-Coach en Ressources Humaines,3,9 ans,0.19,0.32,0.971,0.000
+PA721458,M.,Roseren,Xavier,1970-01-12,56,Horizons & Indépendants,HOR,Haute-Savoie,74,6,Commerçant,3,9 ans,0.12,0.09,0.943,0.000
+PA721474,M.,Viry,Stéphane,1969-10-14,56,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Vosges,88,1,Avocat,3,9 ans,0.07,0.16,0.898,0.000
+PA721486,M.,Naegelen,Christophe,1983-12-30,42,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Vosges,88,3,Industriel-Chef d'entreprise,3,9 ans,0.13,0.47,0.839,0.000
+PA721584,M.,Terlier,Jean,1977-03-02,49,Ensemble pour la République,EPR,Tarn,81,3,Avocat,3,9 ans,0.20,0.20,0.950,0.000
+PA721612,Mme,Guillerm,Carole,1987-01-08,39,Les Démocrates,DEM,Hauts-de-Seine,92,12,Conseillère ministérielle,1,3 mois,0.14,1.00,0.955,0.000
+PA721632,Mme,Lemoine,Patricia,1961-12-30,64,Ensemble pour la République,EPR,Seine-et-Marne,77,5,retraitée,3,6 ans,0.48,0.96,0.983,0.000
+PA721750,Mme,Calvez,Céline,1979-07-24,46,Ensemble pour la République,EPR,Hauts-de-Seine,92,5,Consultante communication,3,9 ans,0.25,0.49,0.970,0.000
+PA721764,Mme,Grégoire,Olivia,1978-09-30,47,Ensemble pour la République,EPR,Paris,75,12,Chef d'entreprise,3,5 ans,0.26,0.52,0.973,0.000
+PA721816,M.,Boucard,Ian,1988-05-05,38,Droite Républicaine,DR,Territoire de Belfort,90,1,Autre cadre (secteur privé),3,9 ans,0.15,0.16,0.903,0.000
+PA721844,Mme,Piron,Béatrice,1965-08-30,60,Horizons & Indépendants,HOR,Yvelines,78,3,Chef d'entreprise,3,9 ans,0.40,0.49,0.893,0.000
+PA721852,Mme,Lebec,Marie,1990-12-17,35,Ensemble pour la République,EPR,Yvelines,78,4,Consultante en affaires publiques,3,9 ans,0.27,0.51,0.975,0.000
+PA721896,Mme,Faucillon,Elsa,1981-08-06,44,Gauche Démocrate et Républicaine,GDR,Hauts-de-Seine,92,1,Employée du secteur privé,3,9 ans,0.15,0.33,0.971,0.000
+PA721908,Mme,Braun-Pivet,Yaël,1970-12-07,55,Ensemble pour la République,EPR,Yvelines,78,5,Avocate,3,9 ans,1.00,,0.989,0.000
+PA721916,Mme,Pouzyreff,Natalia,1961-02-18,65,Ensemble pour la République,EPR,Yvelines,78,6,Ingénieure,3,9 ans,0.23,0.43,0.973,0.000
+PA721932,Mme,Lorho,Marie-France,1964-12-15,61,Rassemblement National,RN,Vaucluse,84,4,Déléguée médicale,3,9 ans,0.43,0.53,0.991,0.000
+PA721960,Mme,Obono,Danièle,1980-07-12,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Paris,75,17,Bibliothécaire,3,9 ans,0.21,0.24,0.994,0.000
+PA721984,M.,Latombe,Philippe,1975-04-21,51,Les Démocrates,DEM,Vendée,85,1,Cadre supérieur (secteur privé),3,9 ans,0.07,0.10,0.957,0.000
+PA722000,M.,Buchou,Stéphane,1974-03-14,52,Ensemble pour la République,EPR,Vendée,85,3,Cadre supérieur (secteur privé),3,9 ans,0.21,0.16,0.971,0.000
+PA722070,M.,Henriet,Pierre,1991-11-26,34,Horizons & Indépendants,HOR,Vendée,85,5,Professeur du secondaire et technique,3,9 ans,0.20,0.29,0.924,0.000
+PA722102,Mme,Vidal,Annie,1956-09-17,69,Ensemble pour la République,EPR,Seine-Maritime,76,2,Retraitée de la fonction publique hospitalière,3,9 ans,0.26,0.69,0.796,0.000
+PA722134,M.,Fiévet,Jean-Marie,1964-06-19,61,Ensemble pour la République,EPR,Deux-Sèvres,79,3,Fonctionnaire de catégorie B,3,9 ans,0.25,0.01,0.963,0.000
+PA722142,M.,Ruffin,François,1975-10-18,50,Écologiste et Social,ECOS,Somme,80,1,Reporter,3,9 ans,0.07,0.02,0.977,0.000
+PA722150,M.,Houlié,Sacha,1988-10-08,37,Socialistes et apparentés,SOC,Vienne,86,2,Avocat,3,9 ans,0.14,0.36,0.867,0.000
+PA722162,M.,Turquois,Nicolas,1972-07-26,53,Les Démocrates,DEM,Vienne,86,4,Agriculteur-propriétaire exploitant,3,9 ans,0.23,0.44,0.934,0.000
+PA722190,M.,Attal,Gabriel,1989-03-16,37,Ensemble pour la République,EPR,Hauts-de-Seine,92,10,Consultant,3,3 ans,0.23,0.20,0.984,0.000
+PA722252,Mme,Rixain,Marie-Pierre,1977-01-18,49,Ensemble pour la République,EPR,Essonne,91,4,Consultante en communication,3,9 ans,0.05,0.00,0.923,0.000
+PA722284,M.,Fuchs,Bruno,1959-04-07,67,Les Démocrates,DEM,Haut-Rhin,68,6,Chef d'entreprise,3,9 ans,0.09,0.50,0.932,0.000
+PA722336,M.,Thiébaut,Vincent,1972-05-23,54,Horizons & Indépendants,HOR,Bas-Rhin,67,9,Autre cadre (secteur privé),3,9 ans,0.11,0.49,0.925,0.000
+PA722358,M.,Gassilloud,Thomas,1981-05-21,45,Ensemble pour la République,EPR,Rhône,69,10,Industriel - Chef d'entreprise,3,9 ans,0.09,0.87,0.928,0.000
+PA722366,M.,Fugit,Jean-Luc,1969-11-27,56,Ensemble pour la République,EPR,Rhône,69,11,Professeur de faculté,3,9 ans,0.50,0.74,0.972,0.000
+PA722374,M.,Isaac-Sibille,Cyrille,1958-04-30,68,Les Démocrates,DEM,Rhône,69,12,Médecin,3,9 ans,0.22,0.41,0.878,0.000
+PA722382,M.,Dirx,Benjamin,1979-01-25,47,Ensemble pour la République,EPR,Saône-et-Loire,71,1,Industriel-Chef d'entreprise,3,9 ans,0.13,0.40,0.965,0.000
+PA722390,Mme,Corneloup,Josiane,1959-09-30,66,Droite Républicaine,DR,Saône-et-Loire,71,2,Pharmacien,3,9 ans,0.25,0.33,0.918,0.000
+PA736201,Mme,Taillé-Polian,Sophie,1974-10-04,51,Écologiste et Social,ECOS,Val-de-Marne,94,11,Cadre de la fonction publique,2,4 ans,0.17,0.19,0.951,0.000
+PA757225,M.,Seo,Mikaele,1971-12-27,54,Ensemble pour la République,EPR,Wallis-et-Futuna,986,1,Profession intermédiaire administrative de la fonction publique,2,4 ans,0.05,0.00,0.971,0.000
+PA759832,Mme,Pannier-Runacher,Agnès,1974-06-19,51,Ensemble pour la République,EPR,Pas-de-Calais,62,2,Dirigeante d'entreprise,1,1 an,0.25,0.31,0.917,0.000
+PA774954,Mme,Blin,Anne-Laure,1983-06-12,43,Droite Républicaine,DR,Maine-et-Loire,49,3,Juriste,3,6 ans,0.20,0.16,0.950,0.000
+PA774958,M.,Leseul,Gérard,1960-08-15,65,Socialistes et apparentés,SOC,Seine-Maritime,76,5,Cadre d'entreprise / enseignant universitaire,3,6 ans,0.45,0.44,0.933,0.000
+PA774960,Mme,Santiago,Isabelle,1965-09-20,60,Socialistes et apparentés,SOC,Val-de-Marne,94,9,Cadre territorial,3,6 ans,0.22,0.32,0.926,0.000
+PA774962,Mme,Lebon,Karine,1985-06-09,41,Gauche Démocrate et Républicaine,GDR,Réunion,974,2,Professeure des écoles,3,6 ans,0.16,0.25,0.971,0.000
+PA791812,Mme,Chikirou,Sophia,1979-06-03,47,La France insoumise - Nouveau Front Populaire,LFI-NFP,Paris,75,6,Chef d'entreprise de 10 salariés ou plus,2,4 ans,0.21,0.03,0.992,0.000
+PA791824,Mme,Legrain,Sarah,1985-11-17,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Paris,75,16,Professeure de français,2,4 ans,0.51,0.55,0.992,0.000
+PA793094,M.,Ray,Nicolas,1981-05-14,45,Droite Républicaine,DR,Allier,3,3,Inspecteur principal des Finances publiques,2,4 ans,0.28,0.65,0.938,0.000
+PA793102,M.,Girard,Christian,1952-05-07,74,Rassemblement National,RN,Alpes-de-Haute-Provence,4,1,Ancien cadre,2,4 ans,0.50,0.58,0.983,0.000
+PA793122,M.,Daubié,Romain,1980-05-05,46,Les Démocrates,DEM,Ain,1,2,Avocat,2,4 ans,0.22,0.17,0.869,0.000
+PA793134,M.,Buisson,Jérôme,1973-01-15,53,Rassemblement National,RN,Ain,1,4,Professeur d'italien,2,4 ans,0.28,0.00,0.991,0.000
+PA793146,M.,Dragon,Nicolas,1977-04-19,49,Rassemblement National,RN,Aisne,2,1,Profession libérale,2,4 ans,0.54,0.00,0.995,0.000
+PA793158,M.,Beaurain,José,1971-07-27,54,Rassemblement National,RN,Aisne,2,4,Artisan,2,4 ans,0.28,0.10,0.981,0.000
+PA793166,M.,Dessigny,Jocelyn,1981-06-29,44,Rassemblement National,RN,Aisne,2,5,Cadre administratif et commercial d'entreprise,2,4 ans,0.44,0.62,0.987,0.000
+PA793174,M.,Monnet,Yannick,1975-10-07,50,Gauche Démocrate et Républicaine,GDR,Allier,3,1,Cadre de la fonction publique,2,4 ans,0.16,0.32,0.925,0.000
+PA793182,M.,Bovet,Jorys,1993-03-30,33,Rassemblement National,RN,Allier,3,2,Chauffeur-livreur,2,4 ans,0.37,0.50,0.991,0.000
+PA793194,M.,Vuibert,Lionel,1968-08-31,57,Non inscrit,NI,Ardennes,8,1,Directeur général,2,3 ans,0.20,0.00,0.840,0.000
+PA793214,Mme,Abadie-Amiel,Audrey,1974-11-16,51,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Ariège,9,2,Enseignante,1,1 an,0.14,0.42,0.850,0.000
+PA793218,M.,Guitton,Jordan,1995-01-30,31,Rassemblement National,RN,Aube,10,1,Assistant Parlementaire,2,4 ans,0.42,0.43,0.977,0.000
+PA793230,Mme,Ranc,Angélique,1988-03-16,38,Rassemblement National,RN,Aube,10,3,Sans activité professionnelle,2,4 ans,0.30,0.29,0.990,0.000
+PA793246,M.,Falcon,Frédéric,1985-11-23,40,Rassemblement National,RN,Aude,11,2,Commerçant et assimilé,2,4 ans,0.28,0.28,0.987,0.000
+PA793254,M.,Rancoule,Julien,1993-07-31,32,Rassemblement National,RN,Aude,11,3,Profession libérale,2,4 ans,0.44,0.47,0.982,0.000
+PA793262,M.,Alexandre,Laurent,1973-06-09,53,La France insoumise - Nouveau Front Populaire,LFI-NFP,Aveyron,12,2,Ouvrier qualifié de type industriel,2,4 ans,0.43,0.37,0.991,0.000
+PA793270,M.,Rousset,Jean-François,1952-09-09,73,Ensemble pour la République,EPR,Aveyron,12,3,Chirurgien,2,4 ans,0.45,0.73,0.977,0.000
+PA793290,Mme,Lelouis,Gisèle,1952-03-10,74,Rassemblement National,RN,Bouches-du-Rhône,13,3,Ancien employé,2,4 ans,0.32,0.30,0.994,0.000
+PA793298,M.,Tivoli,Lionel,1988-02-29,38,Rassemblement National,RN,Alpes-Maritimes,6,2,Chef d'entreprise de 10 salariés ou plus,2,4 ans,0.32,0.35,0.994,0.000
+PA793322,Mme,D'Intorni,Christelle,1985-05-02,41,Union des droites pour la République,UDDPLR,Alpes-Maritimes,6,5,Avocate,2,4 ans,0.18,0.00,0.976,0.000
+PA793334,M.,Tribuiani,Cyril,1981-07-25,44,Rassemblement National,RN,Alpes-Maritimes,6,6,Agent d'assurances,1,3 mois,0.26,0.26,0.997,0.000
+PA793342,Mme,Martin (Alpes-Maritimes),Alexandra,1968-10-25,57,Droite Républicaine,DR,Alpes-Maritimes,6,8,Employé civil et agent de service de la fonction publique,2,4 ans,0.12,0.41,0.900,0.000
+PA793354,Mme,Mélin,Joëlle,1950-03-26,76,Rassemblement National,RN,Bouches-du-Rhône,13,9,Médecin expert judiciaire,2,4 ans,0.23,0.39,0.988,0.000
+PA793362,M.,Gonzalez,José,1943-04-28,83,Rassemblement National,RN,Bouches-du-Rhône,13,10,Ancien employé,2,4 ans,0.37,0.60,0.988,0.000
+PA793374,M.,Baubry,Romain,1989-01-28,37,Rassemblement National,RN,Bouches-du-Rhône,13,15,Policier et militaire,2,4 ans,0.19,0.21,0.978,0.000
+PA793382,M.,Taché,Emmanuel,1975-02-20,51,Rassemblement National,RN,Bouches-du-Rhône,13,16,Cadre de la fonction publique,2,4 ans,0.13,0.11,0.985,0.000
+PA793394,M.,Delaporte,Arthur,1991-10-07,34,Socialistes et apparentés,SOC,Calvados,14,2,"Professeur, profession scientifique",2,4 ans,0.41,0.27,0.963,0.000
+PA793398,M.,Patrier-Leitus,Jérémie,1989-03-07,37,Horizons & Indépendants,HOR,Calvados,14,3,Cadre de la fonction publique,2,4 ans,0.34,0.34,0.908,0.000
+PA793432,M.,Allisio,Franck,1980-08-04,45,Rassemblement National,RN,Bouches-du-Rhône,13,12,Profession libérale,2,4 ans,0.08,0.13,0.985,0.000
+PA793444,M.,Bompard,Manuel,1986-03-30,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Bouches-du-Rhône,13,4,Ingénieur,2,4 ans,0.30,0.06,0.997,0.000
+PA793452,M.,Davi,Hendrik,1977-12-21,48,Écologiste et Social,ECOS,Bouches-du-Rhône,13,5,"Professeur, profession scientifique",2,4 ans,0.30,0.49,0.964,0.000
+PA793464,M.,Delogu,Sébastien,1987-06-08,39,La France insoumise - Nouveau Front Populaire,LFI-NFP,Bouches-du-Rhône,13,7,Sans profession,2,4 ans,0.14,0.10,0.992,0.000
+PA793508,M.,Brigand,Hubert,1952-07-28,73,Droite Républicaine,DR,Côte-d'or,21,4,Ancienne profession intermédiaire,2,4 ans,0.15,0.34,0.902,0.000
+PA793520,M.,Cosson,Mickaël,1975-11-29,50,Les Démocrates,DEM,Côtes-d'armor,22,1,Chargé d'opérations urbanisme,2,4 ans,0.22,0.01,0.902,0.000
+PA793532,Mme,Lepvraud,Murielle,1974-07-15,51,La France insoumise - Nouveau Front Populaire,LFI-NFP,Côtes-d'armor,22,4,Employé administratif d'entreprise,2,4 ans,0.51,0.43,0.990,0.000
+PA793548,Mme,Colombier,Caroline,1957-08-22,68,Rassemblement National,RN,Charente,16,3,Ancienne avocate / Ancien cadre,2,4 ans,0.43,0.67,0.988,0.000
+PA793556,Mme,Gervais,Sabine,1970-05-20,56,Les Démocrates,DEM,Charente-Maritime,17,1,Infirmière puéricultrice,1,2 mois,0.08,0.18,0.958,0.000
+PA793572,M.,Plassard,Christophe,1967-11-19,58,Horizons & Indépendants,HOR,Charente-Maritime,17,5,Profession libérale,2,4 ans,0.20,0.25,0.968,0.000
+PA793592,Mme,Grangier,Géraldine,1975-02-13,51,Rassemblement National,RN,Doubs,25,4,Profession intermédiaire administrative de la fonction publique,2,4 ans,0.37,0.61,0.995,0.000
+PA793608,Mme,Levavasseur,Katiana,1970-12-09,55,Rassemblement National,RN,Eure,27,2,Ouvrier de type industriel,2,4 ans,0.36,0.20,0.987,0.000
+PA793616,M.,Mauvieux,Kévin,1991-09-09,34,Rassemblement National,RN,Eure,27,3,Conseiller en assurance,2,4 ans,0.44,0.77,0.992,0.000
+PA793624,M.,Brun,Philippe,1991-10-16,34,Socialistes et apparentés,SOC,Eure,27,4,Magistrat administratif,2,4 ans,0.25,0.65,0.961,0.000
+PA793632,M.,Houssin,Timothée,1988-07-29,37,Rassemblement National,RN,Eure,27,5,Cadre,2,4 ans,0.41,0.40,0.979,0.000
+PA793656,Mme,Pollet,Lisette,1968-01-04,58,Rassemblement National,RN,Drôme,26,2,Ouvrier qualifié de type industriel,2,4 ans,0.62,0.71,0.995,0.000
+PA793664,Mme,Pochon,Marie,1990-05-04,36,Écologiste et Social,ECOS,Drôme,26,3,Responsable associative,2,4 ans,0.24,0.76,0.969,0.000
+PA793672,Mme,Loir,Christine,1977-02-22,49,Rassemblement National,RN,Eure,27,1,Profession intermédiaire de la santé et du travail social,2,4 ans,0.59,0.84,0.986,0.000
+PA793696,M.,Muller,Serge,1976-02-26,50,Rassemblement National,RN,Dordogne,24,2,Profession intermédiaire de la santé et du travail social,2,4 ans,0.41,0.54,0.992,0.000
+PA793708,M.,Peytavie,Sébastien,1982-04-17,44,Écologiste et Social,ECOS,Dordogne,24,4,Profession intermédiaire de la santé et du travail social,2,4 ans,0.46,0.64,0.966,0.000
+PA793716,M.,Croizier,Laurent,1975-01-29,51,Les Démocrates,DEM,Doubs,25,1,"Professeur des écoles, instituteur et assimilé",2,4 ans,0.13,0.05,0.931,0.000
+PA793736,M.,Clouet,Hadrien,1991-07-13,34,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Garonne,31,1,Sociologue,2,4 ans,0.29,0.58,0.996,0.000
+PA793744,Mme,Stambach-Terrenoir,Anne,1980-06-23,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Garonne,31,2,Professeure de piano,2,4 ans,0.54,0.51,0.995,0.000
+PA793756,M.,Piquemal,François,1984-12-28,41,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Garonne,31,4,Enseignant,2,4 ans,0.14,0.22,0.979,0.000
+PA793772,M.,Bex,Christophe,1961-11-14,64,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Garonne,31,7,Retraité,2,4 ans,0.45,0.02,0.986,0.000
+PA793780,Mme,Arrighi,Christine,1959-09-19,66,Écologiste et Social,ECOS,Haute-Garonne,31,9,Ancien cadre,2,4 ans,0.23,0.49,0.981,0.000
+PA793796,M.,Taupiac,David,1975-05-13,51,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Gers,32,2,Consultant aéronautique,2,4 ans,0.15,0.67,0.797,0.000
+PA793816,Mme,Thomin,Mélanie,1984-06-04,42,Socialistes et apparentés,SOC,Finistère,29,6,"Professeur, profession scientifique",2,4 ans,0.24,0.67,0.971,0.000
+PA793832,M.,Gillet,Yoann,1986-08-29,39,Rassemblement National,RN,Gard,30,1,Cadre de la fonction publique,2,4 ans,0.50,0.68,0.959,0.000
+PA793852,M.,Meurin,Pierre,1989-11-30,36,Rassemblement National,RN,Gard,30,4,Cadre administratif et commercial d'entreprise,2,4 ans,0.37,0.05,0.989,0.000
+PA793872,Mme,Oziol,Nathalie,1990-02-18,36,La France insoumise - Nouveau Front Populaire,LFI-NFP,Hérault,34,2,"Professeur, profession scientifique",2,4 ans,0.18,0.13,0.996,0.000
+PA793892,Mme,Galzy,Stéphanie,1981-10-20,44,Rassemblement National,RN,Hérault,34,5,Employé administratif d'entreprise,2,4 ans,0.20,0.59,0.945,0.000
+PA793912,M.,Carrière,Sylvain,1991-05-21,35,La France insoumise - Nouveau Front Populaire,LFI-NFP,Hérault,34,8,Employé de commerce,2,4 ans,0.49,0.50,0.992,0.000
+PA793928,Mme,Diaz,Edwige,1987-10-15,38,Rassemblement National,RN,Gironde,33,11,Cadre administratif et commercial d'entreprise,2,4 ans,0.62,0.80,0.973,0.000
+PA793944,Mme,Martin (Gironde),Alexandra,1976-07-28,49,Ensemble pour la République,EPR,Gironde,33,1,Sans profession déclarée,2,1 an,0.07,0.41,0.946,0.000
+PA793948,M.,Thierry,Nicolas,1975-12-08,50,Écologiste et Social,ECOS,Gironde,33,2,Consultant en développement durable,2,4 ans,0.21,0.47,0.984,0.000
+PA793980,M.,Fournier,Charles,1968-03-10,58,Écologiste et Social,ECOS,Indre-et-Loire,37,1,"Consultant, formateur",2,4 ans,0.27,0.28,0.979,0.000
+PA793992,M.,Alfandari,Henri,1979-10-02,46,Horizons & Indépendants,HOR,Indre-et-Loire,37,3,"Ancien artisan, commerçant, chef d'entreprise",2,4 ans,0.06,0.03,0.933,0.000
+PA794008,Mme,Chatelain,Cyrielle,1987-07-15,38,Écologiste et Social,ECOS,Isère,38,2,Collaboratrice de cabinet,2,4 ans,0.34,0.32,0.981,0.000
+PA794022,M.,Iordanoff,Jérémie,1983-02-02,43,Écologiste et Social,ECOS,Isère,38,5,Artiste-peintre,2,4 ans,0.28,0.24,0.948,0.000
+PA794030,M.,Jolly,Alexis,1990-12-22,35,Rassemblement National,RN,Isère,38,6,Commerçant et assimilé,2,4 ans,0.27,0.11,0.982,0.000
+PA794038,M.,Neuder,Yannick,1969-03-15,57,Droite Républicaine,DR,Isère,38,7,Cardiologue,2,3 ans,0.08,0.18,0.944,0.000
+PA794058,Mme,Gruet,Justine,1989-10-23,36,Droite Républicaine,DR,Jura,39,3,Masseur Kinésithérapeute,2,4 ans,0.22,0.50,0.938,0.000
+PA794082,Mme,Hignet,Mathilde,1993-06-10,33,La France insoumise - Nouveau Front Populaire,LFI-NFP,Ille-et-Vilaine,35,4,Ouvrière agricole,2,4 ans,0.51,0.73,0.991,0.000
+PA794094,M.,Bouloux,Mickaël,1972-08-16,53,Socialistes et apparentés,SOC,Ille-et-Vilaine,35,8,Ingénieur et cadre technique d'entreprise,2,4 ans,0.44,0.68,0.965,0.000
+PA794106,Mme,Taurinya,Andrée,1963-06-03,63,La France insoumise - Nouveau Front Populaire,LFI-NFP,Loire,42,2,"Professeur, profession scientifique",2,4 ans,0.42,0.50,0.991,0.000
+PA794114,M.,Mandon,Emmanuel,1965-06-22,60,Les Démocrates,DEM,Loire,42,3,Conseiller d'insertion professionnelle,2,4 ans,0.18,0.41,0.829,0.000
+PA794118,M.,Vermorel-Marques,Antoine,1993-02-17,33,Droite Républicaine,DR,Loire,42,5,Conseiller parlementaire,2,4 ans,0.10,0.05,0.916,0.000
+PA794130,M.,Kerbrat,Andy,1990-10-01,35,La France insoumise - Nouveau Front Populaire,LFI-NFP,Loire-Atlantique,44,2,Chargé d'assistance automobile,2,4 ans,0.29,0.41,0.986,0.000
+PA794138,Mme,Amiot,Ségolène,1986-02-23,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Loire-Atlantique,44,3,Employé administratif d'entreprise,2,4 ans,0.51,0.71,0.987,0.000
+PA794146,Mme,Laernoes,Julie,1982-07-03,43,Écologiste et Social,ECOS,Loire-Atlantique,44,4,Ancien cadre,2,4 ans,0.28,0.17,0.981,0.000
+PA794154,M.,Raux,Jean-Claude,1967-01-18,59,Écologiste et Social,ECOS,Loire-Atlantique,44,6,"Professeur, profession scientifique",2,4 ans,0.36,0.52,0.973,0.000
+PA794166,M.,Tavel,Matthias,1987-07-06,38,La France insoumise - Nouveau Front Populaire,LFI-NFP,Loire-Atlantique,44,8,Cadre de la fonction publique,2,4 ans,0.29,0.24,0.989,0.000
+PA794178,M.,Taite,Jean-Pierre,1962-03-14,64,Droite Républicaine,DR,Loire,42,6,"Ancien artisan, commerçant, chef d'entreprise",2,4 ans,0.09,0.00,0.926,0.000
+PA794198,M.,Chudeau,Roger,1949-09-28,76,Rassemblement National,RN,Loir-et-Cher,41,2,Inspecteur général de l'éducation nationale honoraire,2,4 ans,0.26,0.58,0.974,0.000
+PA794206,M.,Marion,Christophe,1973-04-25,53,Ensemble pour la République,EPR,Loir-et-Cher,41,3,Délégué général du Comité des travaux historiques et scientifiques,2,4 ans,0.44,0.79,0.972,0.000
+PA794234,M.,Gernigon,François,1961-04-02,65,Horizons & Indépendants,HOR,Maine-et-Loire,49,1,Ancien cadre,2,4 ans,0.26,0.43,0.949,0.000
+PA794262,Mme,Maussion,Patricia,1968-09-23,57,Les Démocrates,DEM,Maine-et-Loire,49,7,Agricultrice,1,2 mois,0.24,0.57,0.970,0.000
+PA794270,Mme,Pic,Anna,1978-06-04,48,Socialistes et apparentés,SOC,Manche,50,4,"Professeur, profession scientifique",2,4 ans,0.23,0.78,0.975,0.000
+PA794278,M.,Albertini,Xavier,1970-01-28,56,Horizons & Indépendants,HOR,Marne,51,1,Profession libérale,2,4 ans,0.06,0.08,0.929,0.000
+PA794322,M.,Ménagé,Thomas,1992-01-06,34,Rassemblement National,RN,Loiret,45,4,Cadre administratif et commercial d'entreprise,2,4 ans,0.29,0.39,0.910,0.000
+PA794330,M.,Brosse,Anthony,1980-11-04,45,Ensemble pour la République,EPR,Loiret,45,5,Profession intermédiaire de la santé et du travail social,2,4 ans,0.60,0.73,0.964,0.000
+PA794354,Mme,Laporte,Hélène,1978-12-29,47,Rassemblement National,RN,Lot-et-Garonne,47,2,Analyste bancaire,2,4 ans,0.31,0.48,0.991,0.000
+PA794418,Mme,Goulet,Florence,1961-06-30,64,Rassemblement National,RN,Meuse,55,2,Cadre de la fonction publique,2,4 ans,0.45,0.74,0.992,0.000
+PA794430,M.,Criaud,Michel,1962-08-03,63,Horizons & Indépendants,HOR,Morbihan,56,1,Maître menuisier à la retraite,1,1 an,0.33,0.52,0.920,0.000
+PA794434,M.,Bentz,Christophe,1987-07-04,38,Rassemblement National,RN,Haute-Marne,52,1,"Professeur, profession scientifique",2,4 ans,0.61,0.82,0.989,0.000
+PA794442,Mme,Robert-Dehault,Laurence,1964-01-17,62,Rassemblement National,RN,Haute-Marne,52,2,Profession libérale,2,4 ans,0.31,0.40,0.988,0.000
+PA794470,Mme,Gérard,Félicie,1974-01-28,52,Horizons & Indépendants,HOR,Nord,59,7,Chef de projet,2,4 ans,0.30,0.84,0.905,0.000
+PA794486,Mme,Spillebout,Violette,1972-09-02,53,Ensemble pour la République,EPR,Nord,59,9,Cadre administratif et commercial d'entreprise,2,4 ans,0.13,0.33,0.940,0.000
+PA794494,M.,Vicot,Roger,1963-06-01,63,Socialistes et apparentés,SOC,Nord,59,11,sans profession,2,4 ans,0.15,0.22,0.988,0.000
+PA794502,M.,Taverne,Michaël,1979-03-10,47,Rassemblement National,RN,Nord,59,12,Policier et militaire,2,4 ans,0.30,0.46,0.992,0.000
+PA794518,M.,Marle,Pierre,1954-02-19,72,Horizons & Indépendants,HOR,Nord,59,14,Directeur d'école primaire (retraité),1,5 mois,0.32,0.47,0.902,0.000
+PA794530,M.,Marchio,Matthieu,1993-06-08,33,Rassemblement National,RN,Nord,59,16,Cadre administratif et commercial d'entreprise,2,4 ans,0.33,0.55,0.975,0.000
+PA794562,M.,Ballard,Philippe,1960-11-24,65,Rassemblement National,RN,Oise,60,2,Ancien journaliste,2,4 ans,0.24,0.13,0.989,0.000
+PA794570,M.,Sabatou,Alexandre,1993-02-18,33,Rassemblement National,RN,Oise,60,3,Chef de projets SI,2,4 ans,0.30,0.57,0.977,0.000
+PA794578,Mme,Ludmann,Véronique,1963-03-17,63,Horizons & Indépendants,HOR,Oise,60,4,Directrice d'école,1,4 mois,0.32,0.63,0.946,0.000
+PA794582,M.,Pfeffer,Kévin,1990-07-09,35,Rassemblement National,RN,Moselle,57,6,Permanent politique,2,4 ans,0.35,0.61,0.957,0.000
+PA794590,M.,Loubet,Alexandre,1994-07-07,31,Rassemblement National,RN,Moselle,57,7,Cadre d'entreprise,2,4 ans,0.28,0.26,0.993,0.000
+PA794598,M.,Jacobelli,Laurent,1969-10-13,56,Rassemblement National,RN,Moselle,57,8,"Profession de l'information, des arts et des spectacles",2,4 ans,0.31,0.92,0.992,0.000
+PA794658,M.,Fait,Philippe,1969-06-24,56,Horizons & Indépendants,HOR,Pas-de-Calais,62,4,"Professeur des écoles, instituteur et assimilé",2,4 ans,0.15,0.27,0.854,0.000
+PA794670,Mme,Parmentier,Caroline,1965-12-16,60,Rassemblement National,RN,Pas-de-Calais,62,9,Attachée de Presse,2,4 ans,0.25,0.02,0.991,0.000
+PA794678,M.,Frappé,Thierry,1952-05-23,74,Rassemblement National,RN,Pas-de-Calais,62,10,Profession libérale,2,4 ans,0.41,0.60,0.991,0.000
+PA794686,Mme,Maximi,Marianne,1985-11-13,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Puy-de-Dôme,63,1,Profession intermédiaire de la santé et du travail social,2,4 ans,0.26,0.39,0.994,0.000
+PA794702,Mme,Lingemann,Delphine,1972-11-14,53,Les Démocrates,DEM,Puy-de-Dôme,63,4,Chef d'entreprise - Enseignante associée université,2,4 ans,0.29,0.38,0.925,0.000
+PA794710,M.,Brugerolles,Julien,1982-07-05,43,Gauche Démocrate et Républicaine,GDR,Puy-de-Dôme,63,5,Collaborateur parlementaire,1,1 an,0.15,0.48,0.967,0.000
+PA794718,Mme,Engrand,Christine,1955-05-07,71,Non inscrit,NI,Pas-de-Calais,62,6,Cadre administratif et commercial d'entreprise,2,4 ans,0.12,0.00,0.634,0.000
+PA794734,M.,Guiniot,Michel,1954-11-29,71,Rassemblement National,RN,Oise,60,6,Ancien cadre,2,4 ans,0.25,0.00,0.978,0.000
+PA794750,M.,Liger,Thierry,1970-05-27,56,Droite Républicaine,DR,Orne,61,2,Chef d'entreprise,1,1 an,0.14,0.52,0.953,0.000
+PA794762,Mme,Dogor-Such,Sandrine,1970-11-08,55,Rassemblement National,RN,Pyrénées-Orientales,66,3,Préparatrice en pharmacie,2,4 ans,0.47,0.64,0.996,0.000
+PA794770,Mme,Martinez,Michèle,1968-06-06,58,Rassemblement National,RN,Pyrénées-Orientales,66,4,Clerc d'huissier,2,4 ans,0.24,0.75,0.994,0.000
+PA794778,Mme,Regol,Sandra,1978-04-13,48,Écologiste et Social,ECOS,Bas-Rhin,67,1,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.51,0.57,0.961,0.000
+PA794786,M.,Fernandes,Emmanuel,1980-08-10,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Bas-Rhin,67,2,Profession intermédiaire administrative et commerciale des entreprises,2,4 ans,0.59,0.49,0.994,0.000
+PA794798,Mme,Buffet,Françoise,1953-12-11,72,Ensemble pour la République,EPR,Bas-Rhin,67,4,"Ancien artisan, commerçant, chef d'entreprise",2,4 ans,0.42,0.35,0.962,0.000
+PA794802,M.,Sitzenstuhl,Charles,1988-12-03,37,Ensemble pour la République,EPR,Bas-Rhin,67,5,Cadre de la fonction publique,2,4 ans,0.63,0.72,0.901,0.000
+PA794810,Mme,Morel,Louise,1995-10-15,30,Les Démocrates,DEM,Bas-Rhin,67,6,Cadre administratif et commercial d'entreprise,2,4 ans,0.40,0.41,0.907,0.000
+PA794830,M.,Ott,Hubert,1964-06-06,62,Les Démocrates,DEM,Haut-Rhin,68,2,"Professeur, profession scientifique",2,4 ans,0.19,0.20,0.864,0.000
+PA794838,M.,Lemaire,Didier,1975-07-23,50,Horizons & Indépendants,HOR,Haut-Rhin,68,3,Employé civil et agent de service de la fonction publique,2,4 ans,0.15,0.27,0.942,0.000
+PA794854,M.,Echaniz,Iñaki,1993-09-02,32,Socialistes et apparentés,SOC,Pyrénées-Atlantiques,64,4,Cadre de la fonction publique,2,4 ans,0.38,0.38,0.974,0.000
+PA794870,Mme,Ferrer,Sylvie,1967-11-06,58,La France insoumise - Nouveau Front Populaire,LFI-NFP,Hautes-Pyrénées,65,1,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.35,0.48,0.990,0.000
+PA794886,Mme,Blanc,Sophie,1968-02-20,58,Rassemblement National,RN,Pyrénées-Orientales,66,1,Profession libérale,2,4 ans,0.25,0.28,0.994,0.000
+PA794894,Mme,Sabatini,Anaïs,1990-03-10,36,Rassemblement National,RN,Pyrénées-Orientales,66,2,Avocate,2,4 ans,0.58,0.73,0.990,0.000
+PA794906,M.,Amard,Gabriel,1967-05-05,59,La France insoumise - Nouveau Front Populaire,LFI-NFP,Rhône,69,6,Cadre administratif et commercial d'entreprise,2,4 ans,0.32,0.36,0.993,0.000
+PA794938,M.,Boumertit,Idir,1974-10-04,51,La France insoumise - Nouveau Front Populaire,LFI-NFP,Rhône,69,14,Employé administratif d'entreprise,2,4 ans,0.26,0.17,0.982,0.000
+PA794946,M.,Villedieu,Antoine,1989-03-08,37,Rassemblement National,RN,Haute-Saône,70,1,Policier,2,4 ans,0.42,0.38,0.983,0.000
+PA794954,M.,Salmon,Emeric,1973-11-26,52,Rassemblement National,RN,Haute-Saône,70,2,Cadre administratif et commercial d'entreprise,2,4 ans,0.75,0.84,0.987,0.000
+PA794982,Mme,Delpech,Julie,1989-09-25,36,Ensemble pour la République,EPR,Sarthe,72,1,Chargée de communication,2,4 ans,0.17,0.27,0.976,0.000
+PA794994,M.,Portier,Alexandre,1990-04-21,36,Droite Républicaine,DR,Rhône,69,9,Professeur de philosophie,2,4 ans,0.12,0.75,0.968,0.000
+PA795010,Mme,Garin,Marie-Charlotte,1995-09-02,30,Écologiste et Social,ECOS,Rhône,69,3,Collaboratrice politique en collectivité locale,2,4 ans,0.26,0.24,0.970,0.000
+PA795026,Mme,Violland,Anne-Cécile,1973-06-10,53,Horizons & Indépendants,HOR,Haute-Savoie,74,5,Profession libérale,2,4 ans,0.19,0.15,0.879,0.000
+PA795046,Mme,Yadan,Caroline,1968-08-14,57,Ensemble pour la République,EPR,Français établis hors de France,99,8,Avocat,2,4 ans,0.20,0.31,0.986,0.000
+PA795050,Mme,Panosyan-Bouvet,Astrid,1971-08-13,54,Ensemble pour la République,EPR,Paris,75,4,Cadre administratif et commercial d'entreprise,2,3 ans,0.31,0.00,0.893,0.000
+PA795076,Mme,Rousseau,Sandrine,1972-03-08,54,Écologiste et Social,ECOS,Paris,75,9,"Professeur, profession scientifique",2,4 ans,0.32,0.49,0.970,0.000
+PA795084,M.,Arenas,Rodrigo,1974-04-24,52,La France insoumise - Nouveau Front Populaire,LFI-NFP,Paris,75,10,Cadre de la fonction publique,2,4 ans,0.14,0.53,0.993,0.000
+PA795100,M.,Martineau,Éric,1968-05-08,58,Les Démocrates,DEM,Sarthe,72,3,Agriculteur sur moyenne exploitation,2,4 ans,0.47,0.55,0.941,0.000
+PA795108,Mme,Leboucher,Élise,1982-10-09,43,La France insoumise - Nouveau Front Populaire,LFI-NFP,Sarthe,72,4,Educatrice spécialisée,2,4 ans,0.43,0.66,0.995,0.000
+PA795124,M.,Padey,Didier,1965-11-09,60,Les Démocrates,DEM,Savoie,73,1,cadre commercial,2,1 an,0.11,0.06,0.930,0.000
+PA795136,M.,Coulomme,Jean-François,1966-04-01,60,La France insoumise - Nouveau Front Populaire,LFI-NFP,Savoie,73,4,Ingénieur commercial,2,4 ans,0.48,0.49,0.987,0.000
+PA795156,Mme,Keloua Hachi,Fatiha,1971-06-05,55,Socialistes et apparentés,SOC,Seine-Saint-Denis,93,8,"Professeur, profession scientifique",2,4 ans,0.20,0.39,0.975,0.000
+PA795164,Mme,Trouvé,Aurélie,1979-09-20,46,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,9,Cadre de la fonction publique,2,4 ans,0.24,0.47,0.980,0.000
+PA795176,M.,Metzdorf,Nicolas,1988-05-20,38,Ensemble pour la République,EPR,Nouvelle-Calédonie,988,1,Ingénieur et cadre technique d'entreprise,2,4 ans,0.14,0.21,0.951,0.000
+PA795200,Mme,Dufour,Alma,1990-05-06,36,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Maritime,76,4,Responsable associative,2,4 ans,0.19,0.07,0.993,0.000
+PA795228,Mme,Abomangoli,Nadège,1975-09-15,50,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,10,Contrôleure interne et risk manager,2,4 ans,0.39,0.67,0.985,0.000
+PA795240,Mme,Reid Arbelot,Mereana,1970-09-12,55,Gauche Démocrate et Républicaine,GDR,Polynésie française,987,3,Ingénieur en chef du contrôle de la navigation aérienne,2,3 ans,0.04,0.09,0.956,0.000
+PA795244,M.,Lenormand,Stéphane,1964-08-13,61,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Saint-Pierre-et-Miquelon,975,1,Ancien cadre,2,4 ans,0.13,0.05,0.824,0.000
+PA795258,M.,Gumbs,Frantz,1954-01-21,72,Les Démocrates,DEM,Saint-Barthélemy et Saint-Martin,977,1,Personnel de direction de l'éducation nationale retraité,2,4 ans,0.19,0.16,0.953,0.000
+PA795270,Mme,Poussier-Winsback,Marie-Agnès,1967-03-25,59,Horizons & Indépendants,HOR,Seine-Maritime,76,9,Enseignante,2,4 ans,0.26,0.10,0.915,0.000
+PA795298,M.,Legavre,Jérôme,1972-08-20,53,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,12,Professeur de lettres,2,4 ans,0.30,0.50,0.990,0.000
+PA795310,Mme,Guetté,Clémence,1991-03-15,35,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-de-Marne,94,2,Cadre du secteur privé,2,4 ans,0.37,0.89,0.991,0.000
+PA795318,M.,Boyard,Louis,2000-08-26,25,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-de-Marne,94,3,"Elève, étudiant",2,4 ans,0.25,0.43,0.995,0.000
+PA795326,M.,Weissberg,Christopher,1985-11-26,40,Ensemble pour la République,EPR,Français établis hors de France,99,1,Cadre dirigeant,2,2 ans,0.08,0.00,0.981,0.000
+PA795334,M.,Larrouquis,Benoît,1969-11-18,56,Ensemble pour la République,EPR,Français établis hors de France,99,2,Chef d'entreprise,1,1 an,0.11,0.20,0.959,0.000
+PA795350,M.,Valletoux,Frédéric,1966-08-23,59,Horizons & Indépendants,HOR,Seine-et-Marne,77,2,Profession de l'information,2,4 ans,0.28,0.76,0.878,0.000
+PA795362,Mme,Belluco,Lisa,1988-07-20,37,Écologiste et Social,ECOS,Vienne,86,1,Cadre de la fonction publique,2,4 ans,0.35,0.26,0.978,0.000
+PA795374,M.,Lecamp,Pascal,1958-04-06,68,Les Démocrates,DEM,Vienne,86,3,Cadre administratif et commercial d'entreprise,2,4 ans,0.27,0.51,0.951,0.000
+PA795390,Mme,Lalanne,Sandrine,1973-02-16,53,Ensemble pour la République,EPR,Val-de-Marne,94,5,Sans profession déclarée,1,1 an,0.34,0.44,0.939,0.000
+PA795402,Mme,Coggia,Nathalie,1977-07-16,48,Ensemble pour la République,EPR,Français établis hors de France,99,5,Directrice financière et des opérations,1,1 an,0.45,0.38,0.972,0.000
+PA795410,Mme,Roullaud,Béatrice,1960-06-09,66,Rassemblement National,RN,Seine-et-Marne,77,6,Profession libérale,2,4 ans,0.47,0.55,0.977,0.000
+PA795422,M.,Maudet,Damien,1996-11-14,29,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Vienne,87,1,Cadre administratif et commercial d'entreprise,2,4 ans,0.24,0.16,0.995,0.000
+PA795430,M.,Delautrette,Stéphane,1972-09-20,53,Socialistes et apparentés,SOC,Haute-Vienne,87,2,Ingénieur dans le domaine de l'environnement,2,4 ans,0.31,0.53,0.982,0.000
+PA795454,M.,Ben Cheikh,Karim,1977-03-19,49,Écologiste et Social,ECOS,Français établis hors de France,99,9,Cadre de la fonction publique,2,4 ans,0.34,0.68,0.978,0.000
+PA795466,Mme,Soudais,Ersilia,1988-05-21,38,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-et-Marne,77,7,"Professeur, profession scientifique",2,4 ans,0.29,0.34,0.988,0.000
+PA795482,Mme,Meunier,Manon,1996-03-30,30,La France insoumise - Nouveau Front Populaire,LFI-NFP,Haute-Vienne,87,3,Cadre de la fonction publique,2,4 ans,0.35,0.65,0.990,0.000
+PA795516,M.,Laisney,Maxime,1981-01-19,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-et-Marne,77,10,"Professeur des écoles, instituteur et assimilé",2,4 ans,0.51,0.40,0.991,0.000
+PA795528,M.,Rodwell,Charles,1996-07-26,29,Ensemble pour la République,EPR,Yvelines,78,1,Cadre de la fonction publique,2,4 ans,0.29,0.32,0.931,0.000
+PA795540,M.,Grenon,Daniel,1948-07-31,77,Non inscrit,NI,Yonne,89,1,"Ancien artisan, commerçant, chef d'entreprise",2,4 ans,0.06,0.00,0.773,0.000
+PA795552,M.,Odoul,Julien,1985-05-08,41,Rassemblement National,RN,Yonne,89,3,Collaborateur parlementaire,2,4 ans,0.08,0.13,0.986,0.000
+PA795588,Mme,Amrani,Farida,1976-09-03,49,La France insoumise - Nouveau Front Populaire,LFI-NFP,Essonne,91,1,Cadre de la fonction publique,2,4 ans,0.29,0.22,0.992,0.000
+PA795596,M.,Vannier,Paul,1985-09-19,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-d'oise,95,5,Professeur d'histoire-géographie,2,4 ans,0.22,0.28,0.995,0.000
+PA795616,M.,Bilongo,Carlos Martens,1990-12-31,35,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-d'oise,95,8,"Professeur, profession scientifique",2,4 ans,0.18,0.35,0.990,0.000
+PA795636,M.,Lucas-Lundy,Benjamin,1990-10-08,35,Écologiste et Social,ECOS,Yvelines,78,8,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.23,0.14,0.971,0.000
+PA795644,Mme,Da Conceicao Carvalho,Nathalie,1966-03-31,60,Rassemblement National,RN,Essonne,91,2,Profession libérale,2,4 ans,0.41,0.03,0.987,0.000
+PA795664,M.,Midy,Paul,1983-01-25,43,Ensemble pour la République,EPR,Essonne,91,5,Chef d'entreprise de 10 salariés ou plus,2,4 ans,0.25,0.81,0.982,0.000
+PA795672,M.,Le Gall,Arnaud,1980-11-29,45,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-d'oise,95,9,Cadre de la fonction publique,2,4 ans,0.32,0.25,0.989,0.000
+PA795722,M.,Olive,Karl,1969-03-29,57,Ensemble pour la République,EPR,Yvelines,78,12,Chef d'entreprise,2,4 ans,0.07,0.06,0.901,0.000
+PA795730,M.,Marchive,Bastien,1990-07-15,35,Ensemble pour la République,EPR,Deux-Sèvres,79,1,Juriste,2,4 ans,0.23,0.26,0.925,0.000
+PA795746,M.,Léaument,Antoine,1989-09-04,36,La France insoumise - Nouveau Front Populaire,LFI-NFP,Essonne,91,10,Responsable de la communication numérique,2,4 ans,0.33,0.46,0.993,0.000
+PA795762,M.,Califer,Elie,1954-04-19,72,Socialistes et apparentés,SOC,Guadeloupe,971,4,Ancien cadre,2,4 ans,0.26,0.36,0.957,0.000
+PA795778,M.,Tanguy,Jean-Philippe,1986-03-25,40,Rassemblement National,RN,Somme,80,4,Cadre administratif et commercial d'entreprise,2,4 ans,0.37,0.88,0.977,0.000
+PA795786,Mme,Ménaché,Yaël,1985-05-12,41,Rassemblement National,RN,Somme,80,5,Commerciale,2,4 ans,0.22,0.51,0.986,0.000
+PA795808,Mme,Sebaihi,Sabrina,1981-05-10,45,Écologiste et Social,ECOS,Hauts-de-Seine,92,4,Profession libérale,2,4 ans,0.27,0.37,0.969,0.000
+PA795820,M.,Nadeau,Marcellin,1962-11-02,63,Gauche Démocrate et Républicaine,GDR,Martinique,972,2,Cadre de la fonction publique,2,4 ans,0.08,0.38,0.974,0.000
+PA795844,Mme,Erodi,Karen,1977-02-04,49,La France insoumise - Nouveau Front Populaire,LFI-NFP,Tarn,81,2,Profession libérale,2,4 ans,0.39,0.62,0.992,0.000
+PA795864,M.,Cazeneuve,Pierre,1995-03-11,31,Ensemble pour la République,EPR,Hauts-de-Seine,92,7,Cadre de la fonction publique,2,4 ans,0.26,0.34,0.965,0.000
+PA795868,M.,Castor,Jean-Victor,1962-04-21,64,Gauche Démocrate et Républicaine,GDR,Guyane,973,1,Cadre technique d'entreprise,2,4 ans,0.10,0.09,0.958,0.000
+PA795876,M.,Rimane,Davy,1979-12-15,46,Gauche Démocrate et Républicaine,GDR,Guyane,973,2,Technicien,2,4 ans,0.03,0.00,0.958,0.000
+PA795884,M.,Ferracci,Marc,1977-12-19,48,Ensemble pour la République,EPR,Français établis hors de France,99,6,"Professeur, profession scientifique",2,3 ans,0.14,0.17,0.982,0.000
+PA795900,Mme,Hamelet,Marine,1967-07-13,58,Rassemblement National,RN,Tarn-et-Garonne,82,2,Profession intermédiaire administrative et commerciale des entreprises,2,4 ans,0.78,0.45,0.986,0.000
+PA795908,M.,Chenevard,Yannick,1959-11-27,66,Ensemble pour la République,EPR,Var,83,1,Profession libérale,2,4 ans,0.20,0.91,0.955,0.000
+PA795912,Mme,Lavalette,Laure,1976-04-16,50,Rassemblement National,RN,Var,83,2,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.11,0.10,0.994,0.000
+PA795920,Mme,Thevenot,Prisca,1985-03-01,41,Ensemble pour la République,EPR,Hauts-de-Seine,92,8,Collaboratrice parlementaire,2,3 ans,0.37,0.50,0.970,0.000
+PA795954,Mme,Ibled,Catherine,1975-05-25,51,Ensemble pour la République,EPR,Paris,75,13,Directrice adjointe de la communication,1,1 an,0.29,0.31,0.981,0.000
+PA795962,Mme,Missoffe,Joséphine,1973-09-24,52,Ensemble pour la République,EPR,Paris,75,14,Infirmière-Puéricultrice,1,2 ans,0.28,0.42,0.905,0.000
+PA795966,M.,Rambaud,Stéphane,1960-04-05,66,Rassemblement National,RN,Var,83,3,Retraité de la police nationale,2,4 ans,0.29,0.20,0.982,0.000
+PA795974,M.,Lottiaux,Philippe,1966-08-14,59,Rassemblement National,RN,Var,83,4,Cadre de la fonction publique,2,4 ans,0.47,0.76,0.982,0.000
+PA795982,M.,Saintoul,Aurélien,1988-05-26,38,La France insoumise - Nouveau Front Populaire,LFI-NFP,Hauts-de-Seine,92,11,Cadre de la fonction publique,2,4 ans,0.45,0.81,0.992,0.000
+PA795998,Mme,K/Bidi,Émeline,1987-05-13,39,Gauche Démocrate et Républicaine,GDR,Réunion,974,4,Avocate,2,4 ans,0.12,0.13,0.944,0.000
+PA796010,M.,Maillot,Frédéric,1986-11-15,39,Gauche Démocrate et Républicaine,GDR,Réunion,974,6,Intervenant social,2,4 ans,0.09,0.10,0.914,0.000
+PA796018,Mme,Simonnet,Danielle,1971-07-02,54,Écologiste et Social,ECOS,Paris,75,15,"Professeur, profession scientifique",2,4 ans,0.27,0.41,0.975,0.000
+PA796026,Mme,Lechanteux,Julie,1977-12-22,48,Rassemblement National,RN,Var,83,5,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.20,0.00,0.990,0.000
+PA796034,M.,Giletti,Frank,1973-03-01,53,Rassemblement National,RN,Var,83,6,Fonctionnaire,2,4 ans,0.27,0.83,0.991,0.000
+PA796042,M.,Boccaletti,Frédéric,1973-11-23,52,Rassemblement National,RN,Var,83,7,(85) - Personne diverse sans activité professionnelle de moins de 60 ans,2,4 ans,0.38,0.03,0.980,0.000
+PA796050,M.,Schreck,Philippe,1972-02-02,54,Rassemblement National,RN,Var,83,8,Profession libérale,2,4 ans,0.27,0.23,0.989,0.000
+PA796062,M.,Portes,Thomas,1985-11-18,40,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,3,Cheminot,2,4 ans,0.36,0.31,0.990,0.000
+PA796070,M.,Gaillard,Perceval,1983-04-24,43,La France insoumise - Nouveau Front Populaire,LFI-NFP,Réunion,974,7,Profession intermédiaire de la santé et du travail social,2,4 ans,0.32,0.56,0.993,0.000
+PA796078,Mme,Youssouffa,Estelle,1978-07-31,47,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Mayotte,976,1,Consultante,2,4 ans,0.08,0.85,0.921,0.000
+PA796090,M.,Caron,Aymeric,1971-12-04,54,La France insoumise - Nouveau Front Populaire,LFI-NFP,Paris,75,18,"Profession de l'information, des arts et des spectacles",2,4 ans,0.21,0.21,0.988,0.000
+PA796106,M.,Bénard,Édouard,1995-02-18,31,Gauche Démocrate et Républicaine,GDR,Seine-Maritime,76,3,Collaborateur d'élu,2,2 ans,0.18,0.57,0.950,0.000
+PA796118,Mme,Auzanot,Bénédicte,1972-08-05,53,Rassemblement National,RN,Vaucluse,84,2,(85) - Personne diverse sans activité professionnelle de moins de 60 ans (sauf r,2,4 ans,0.21,0.03,0.986,0.000
+PA805166,Mme,Bergantz,Anne,1968-09-17,57,Les Démocrates,DEM,Yvelines,78,2,responsable de service social,2,3 ans,0.46,0.74,0.941,0.000
+PA817203,Mme,Miller,Laure,1983-12-25,42,Ensemble pour la République,EPR,Marne,51,2,Avocate,2,3 ans,0.19,0.25,0.917,0.000
+PA817211,M.,Pilato,René,1962-08-31,63,La France insoumise - Nouveau Front Populaire,LFI-NFP,Charente,16,1,Enseignant,2,3 ans,0.40,0.34,0.986,0.000
+PA822617,Mme,Froger,Martine,1961-06-11,65,Socialistes et apparentés,SOC,Ariège,9,1,Chef d'entreprise,2,3 ans,0.21,0.33,0.968,0.000
+PA826635,M.,Rousseau,Aurélien,1976-06-25,49,Socialistes et apparentés,SOC,Yvelines,78,7,Maître des requêtes au Conseil d'État,1,2 ans,0.25,0.09,0.890,0.000
+PA840067,M.,Tomatis,Gabriel,1999-11-02,26,Rassemblement National,RN,Alpes-Maritimes,6,4,Sans profession déclarée,1,2 mois,0.11,0.37,0.992,0.000
+PA840075,M.,Casterman,Eddy,1996-07-28,29,Rassemblement National,RN,Aisne,2,3,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.33,0.51,0.992,0.000
+PA840107,M.,Chaumeil,Bernard,1958-09-30,67,Rassemblement National,RN,Hérault,34,7,Directeur des relations institutionnelles,1,2 mois,0.07,0.58,0.987,0.000
+PA840119,Mme,Delannoy,Sandra,1974-05-01,52,Non inscrit,NI,Nord,59,3,(21) - Artisan,1,2 ans,0.25,0.54,0.773,0.000
+PA840135,M.,Dufosset,Alexandre,1998-08-24,27,Rassemblement National,RN,Nord,59,18,(54) - Employé administratif d'entreprise,1,2 ans,0.29,0.56,0.955,0.000
+PA840143,M.,Florquin,Guillaume,1993-05-04,33,Rassemblement National,RN,Nord,59,20,(33) - Cadre de la fonction publique,1,2 ans,0.32,0.41,0.995,0.000
+PA840159,M.,Clavet,Bruno,1989-05-06,37,Rassemblement National,RN,Pas-de-Calais,62,3,(45) - Profession intermédiaire administrative de la fonction publique,1,2 ans,0.18,0.07,0.980,0.000
+PA840175,Mme,Bregman,Dorine,1962-03-04,64,Socialistes et apparentés,SOC,Paris,75,7,Consultante en participation citoyenne,1,2 mois,0.38,0.50,0.973,0.000
+PA840235,M.,Frébault,Moerani,1988-08-22,37,Ensemble pour la République,EPR,Polynésie française,987,1,(33) - Cadre de la fonction publique,1,2 ans,0.06,0.15,0.936,0.000
+PA840657,Mme,Ricourt Vaginay,Sophie,1969-12-18,56,Union des droites pour la République,UDDPLR,Alpes-de-Haute-Provence,4,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.25,0.35,0.951,0.000
+PA840665,Mme,Allemand,Marie-José,1970-01-27,56,Socialistes et apparentés,SOC,Hautes-Alpes,5,1,(12) - Agriculteur sur moyenne exploitation,1,2 ans,0.42,0.47,0.960,0.000
+PA840673,Mme,Rossi,Valérie,1964-06-05,62,Socialistes et apparentés,SOC,Hautes-Alpes,5,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.44,0.26,0.948,0.000
+PA840685,M.,Trébuchet,Vincent,1988-07-05,37,Union des droites pour la République,UDDPLR,Ardèche,7,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.20,0.35,0.979,0.000
+PA840701,M.,Chaix,Bernard,1965-01-06,61,Union des droites pour la République,UDDPLR,Alpes-Maritimes,6,3,(22) - Commerçant et assimilé,1,2 ans,0.19,0.01,0.924,0.000
+PA840721,M.,Chavent,Marc,1968-06-28,57,Union des droites pour la République,UDDPLR,Ain,1,5,(33) - Cadre de la fonction publique,1,2 ans,0.23,0.13,0.974,0.000
+PA840745,M.,Jordan,Édouard,1987-11-06,38,Rassemblement National,RN,Aude,11,1,Inspecteur des finances publiques,1,2 mois,0.47,0.56,0.989,0.000
+PA840757,Mme,Griseti,Monique,1960-07-23,65,Rassemblement National,RN,Bouches-du-Rhône,13,1,(22) - Commerçant et assimilé,1,2 ans,0.39,0.43,0.988,0.000
+PA840765,M.,Lhardit,Laurent,1963-04-20,63,Socialistes et apparentés,SOC,Bouches-du-Rhône,13,2,Chef d'entreprise,1,2 ans,0.30,0.26,0.951,0.000
+PA840773,M.,Fayssat,Olivier,1968-03-24,58,Union des droites pour la République,UDDPLR,Bouches-du-Rhône,13,6,Dirigeant d'entreprise,1,2 ans,0.60,0.57,0.974,0.000
+PA840781,M.,Tonussi,Romain,1996-04-09,30,Rassemblement National,RN,Bouches-du-Rhône,13,8,(45) - Profession intermédiaire administrative de la fonction publique,1,2 ans,0.32,0.72,0.991,0.000
+PA840793,M.,Pena,Marc,1960-05-07,66,Socialistes et apparentés,SOC,Bouches-du-Rhône,13,11,"(34) - Professeur, profession scientifique",1,2 ans,0.19,0.32,0.934,0.000
+PA840801,M.,Fouquart,Emmanuel,1966-07-30,59,Rassemblement National,RN,Bouches-du-Rhône,13,13,Retraité militaire,1,2 ans,0.35,0.58,0.995,0.000
+PA840809,M.,Verny,Gérault,1984-12-23,41,Union des droites pour la République,UDDPLR,Bouches-du-Rhône,13,14,(23) - Chef d'entreprise de 10 salariés ou plus,1,2 ans,0.14,0.33,0.935,0.000
+PA840817,M.,Bruneau,Joël,1963-09-07,62,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Calvados,14,1,(31) - Profession libérale,1,2 ans,0.42,0.54,0.833,0.000
+PA840829,M.,Barusseau,Fabrice,1970-06-01,56,Socialistes et apparentés,SOC,Charente-Maritime,17,3,"(34) - Professeur, profession scientifique",1,2 ans,0.31,0.34,0.973,0.000
+PA840837,M.,Markowsky,Pascal,1954-07-22,71,Rassemblement National,RN,Charente-Maritime,17,4,"(72) - Ancien artisan, commerçant, chef d'entreprise",1,2 ans,0.50,0.38,0.989,0.000
+PA840857,Mme,Lechon,Nadine,1963-04-16,63,Rassemblement National,RN,Dordogne,24,1,(12) - Agriculteur sur moyenne exploitation,1,2 ans,0.43,0.90,0.987,0.000
+PA840869,Mme,Joubert,Florence,1965-06-30,60,Rassemblement National,RN,Dordogne,24,3,(33) - Cadre de la fonction publique,1,2 ans,0.40,0.34,0.991,0.000
+PA840889,M.,Bloch,Matthieu,1983-04-26,43,Union des droites pour la République,UDDPLR,Doubs,25,3,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.29,0.63,0.940,0.000
+PA840903,M.,Christophle,Paul,1987-02-03,39,Socialistes et apparentés,SOC,Drôme,26,1,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.19,0.21,0.965,0.000
+PA840915,M.,Monnier,Thibaut,1987-02-24,39,Rassemblement National,RN,Drôme,26,4,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.30,0.35,0.991,0.000
+PA840939,Mme,Godard,Océane,1982-11-22,43,Socialistes et apparentés,SOC,Côte-d'or,21,1,Psychologue du travail,1,2 ans,0.23,0.53,0.984,0.000
+PA840947,Mme,Hervieu,Catherine,1958-05-09,68,Écologiste et Social,ECOS,Côte-d'or,21,2,Psychologue scolaire,1,2 ans,0.35,0.85,0.960,0.000
+PA840955,M.,Pribetich,Pierre,1956-12-28,69,Socialistes et apparentés,SOC,Côte-d'or,21,3,"(34) - Professeur, profession scientifique",1,2 ans,0.50,0.50,0.963,0.000
+PA840967,M.,Lioret,René,1952-01-13,74,Rassemblement National,RN,Côte-d'or,21,5,(74) - Ancien cadre,1,2 ans,0.25,0.29,0.980,0.000
+PA840979,M.,Le Fur,Corentin,1989-12-13,36,Droite Républicaine,DR,Côtes-d'armor,22,3,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.27,0.66,0.941,0.000
+PA840983,M.,Lenoir,Bartolomé,1991-09-04,34,Union des droites pour la République,UDDPLR,Creuse,23,1,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.24,0.13,0.966,0.000
+PA840997,M.,Biteau,Benoît,1967-04-07,59,Écologiste et Social,ECOS,Charente-Maritime,17,2,(12) - Agriculteur sur moyenne exploitation,1,2 ans,0.26,0.46,0.975,0.000
+PA841017,M.,Huwart,Harold,1982-01-03,44,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Eure-et-Loir,28,3,Administrateur de l'État,1,2 ans,0.09,0.08,0.852,0.000
+PA841023,M.,Cadalen,Pierre-Yves,1992-07-09,33,La France insoumise - Nouveau Front Populaire,LFI-NFP,Finistère,29,2,"(34) - Professeur, profession scientifique",1,2 ans,0.28,0.45,0.993,0.000
+PA841047,M.,Ceccoli,François-Xavier,1968-10-27,57,Droite Républicaine,DR,Haute-corse,2b,2,(23) - Chef d'entreprise de 10 salariés ou plus,1,2 ans,0.12,0.35,0.908,0.000
+PA841059,Mme,Dellong Meng,Catherine,1960-05-04,66,Rassemblement National,RN,Gard,30,3,Cadre territoriale de la fonction publique retraitée,1,2 mois,0.42,0.04,0.983,0.000
+PA841067,M.,Allegret-Pilot,Alexandre,1989-01-11,37,Union des droites pour la République,UDDPLR,Gard,30,5,(33) - Cadre de la fonction publique,1,2 ans,0.41,0.23,0.951,0.000
+PA841075,Mme,Josserand,Sylvie,1968-08-23,57,Rassemblement National,RN,Gard,30,6,(31) - Profession libérale,1,2 ans,0.38,0.15,0.991,0.000
+PA841091,M.,Simion,Arnaud,1968-05-19,58,Socialistes et apparentés,SOC,Haute-Garonne,31,6,(33) - Cadre de la fonction publique,1,2 ans,0.29,0.50,0.972,0.000
+PA841107,M.,Oberti,Jacques,1960-11-26,65,Socialistes et apparentés,SOC,Haute-Garonne,31,10,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.70,0.89,0.958,0.000
+PA841131,Mme,Bouquin,Manon,1992-06-02,34,Rassemblement National,RN,Hérault,34,4,(33) - Cadre de la fonction publique,1,2 ans,0.48,0.36,0.987,0.000
+PA841139,M.,Gabarron,Julien,1981-03-11,45,Rassemblement National,RN,Hérault,34,6,Cadre Commercial,1,2 ans,0.25,0.38,0.996,0.000
+PA841151,Mme,Fruchon,Alix,1994-10-14,31,Droite Républicaine,DR,Indre,36,2,Juriste,1,1 an,0.16,0.00,0.741,0.000
+PA841183,Mme,Mansouri,Hanane,2000-11-24,25,Union des droites pour la République,UDDPLR,Isère,38,8,"(84) - Elève, étudiant",1,2 ans,0.16,0.08,0.963,0.000
+PA841191,Mme,Nosbé,Sandrine,1972-10-29,53,La France insoumise - Nouveau Front Populaire,LFI-NFP,Isère,38,9,(54) - Employé administratif d'entreprise,1,2 ans,0.45,0.51,0.990,0.000
+PA841199,M.,Perez,Thierry,1966-11-19,59,Rassemblement National,RN,Isère,38,10,(33) - Cadre de la fonction publique,1,2 ans,0.32,0.22,0.993,0.000
+PA841207,M.,Alloncle,Charles,1993-10-21,32,Union des droites pour la République,UDDPLR,Hérault,34,9,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.13,0.01,0.966,0.000
+PA841215,Mme,Mesmeur,Marie,1994-08-12,31,La France insoumise - Nouveau Front Populaire,LFI-NFP,Ille-et-Vilaine,35,1,Educatrice spécialisée,1,2 ans,0.34,0.31,0.991,0.000
+PA841223,M.,Lahais,Tristan,1983-05-11,43,Écologiste et Social,ECOS,Ille-et-Vilaine,35,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.33,0.63,0.979,0.000
+PA841243,M.,Saint-Pasteur,Sébastien,1980-12-08,45,Socialistes et apparentés,SOC,Gironde,33,7,(33) - Cadre de la fonction publique,1,2 ans,0.30,0.84,0.971,0.000
+PA841251,Mme,Feld,Mathilde,1969-04-28,57,La France insoumise - Nouveau Front Populaire,LFI-NFP,Gironde,33,12,(33) - Cadre de la fonction publique,1,2 ans,0.40,0.74,0.993,0.000
+PA841295,M.,Courbon,Pierrick,1985-07-08,40,Socialistes et apparentés,SOC,Loire,42,1,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.27,0.43,0.956,0.000
+PA841315,M.,Benbrahim,Karim,1980-04-13,46,Socialistes et apparentés,SOC,Loire-Atlantique,44,1,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.33,0.22,0.971,0.000
+PA841327,M.,Roussel,Fabrice,1973-04-11,53,Socialistes et apparentés,SOC,Loire-Atlantique,44,5,"(34) - Professeur, profession scientifique",1,2 ans,0.39,0.44,0.983,0.000
+PA841339,M.,Brard,Jean-Michel,1968-04-03,58,Horizons & Indépendants,HOR,Loire-Atlantique,44,9,(22) - Commerçant et assimilé,1,2 ans,0.20,0.31,0.857,0.000
+PA841351,M.,Duplessy,Emmanuel,1990-01-02,36,Écologiste et Social,ECOS,Loiret,45,2,(33) - Cadre de la fonction publique,1,2 ans,0.21,0.38,0.936,0.000
+PA841359,Mme,de Pélichy,Constance,1986-04-01,40,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Loiret,45,3,Cadre supérieur,1,2 ans,0.22,0.00,0.888,0.000
+PA841367,M.,Proença,Christophe,1966-05-31,60,Socialistes et apparentés,SOC,Lot,46,2,"(34) - Professeur, profession scientifique",1,2 ans,0.30,0.40,0.954,0.000
+PA841377,Mme,Rey-Rinchet,Emeline,1988-03-29,38,Droite Républicaine,DR,Lot-et-Garonne,47,3,Ostéopathe,1,2 mois,0.07,0.09,0.987,0.000
+PA841381,Mme,Pantel,Sophie,1971-07-27,54,Socialistes et apparentés,SOC,Lozère,48,1,Cadre de la fonction publique d'État,1,2 ans,0.47,0.45,0.904,0.000
+PA841395,M.,Michelet,Maxime,1992-04-19,34,Union des droites pour la République,UDDPLR,Marne,51,3,Historien,1,2 ans,0.35,0.45,0.985,0.000
+PA841419,M.,Girard,Damien,1973-05-30,53,Écologiste et Social,ECOS,Morbihan,56,5,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.16,0.86,0.975,0.000
+PA841431,Mme,Colin-Oesterlé,Nathalie,1965-05-05,61,Horizons & Indépendants,HOR,Moselle,57,3,(31) - Profession libérale,1,2 ans,0.24,0.50,0.912,0.000
+PA841439,M.,Jenft,Pascal,1966-11-29,59,Rassemblement National,RN,Moselle,57,5,(21) - Artisan,1,2 ans,0.42,0.38,0.992,0.000
+PA841451,M.,Guibert,Julien,1984-05-11,42,Rassemblement National,RN,Nièvre,58,2,(46) - Profession intermédiaire administrative et commerciale des entreprises,1,2 ans,0.47,0.43,0.994,0.000
+PA841463,Mme,Mercier,Estelle,1973-01-15,53,Socialistes et apparentés,SOC,Meurthe-et-Moselle,54,1,"(34) - Professeur, profession scientifique",1,2 ans,0.35,0.80,0.967,0.000
+PA841471,M.,Hablot,Stéphane,1965-06-30,60,Socialistes et apparentés,SOC,Meurthe-et-Moselle,54,2,Education nationale,1,2 ans,0.13,0.16,0.942,0.000
+PA841479,M.,Weber,Frédéric,1973-05-21,53,Rassemblement National,RN,Meurthe-et-Moselle,54,3,(43) - Profession intermédiaire de la santé et du travail social,1,2 ans,0.42,0.63,0.987,0.000
+PA841487,M.,Boulogne,Anthony,1993-06-08,33,Rassemblement National,RN,Meurthe-et-Moselle,54,6,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.39,0.58,0.966,0.000
+PA841495,M.,Amblard,Maxime,1996-09-06,29,Rassemblement National,RN,Meuse,55,1,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.35,0.33,0.980,0.000
+PA841507,M.,Bonnet,Nicolas,1981-02-11,45,Écologiste et Social,ECOS,Puy-de-Dôme,63,3,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.38,0.56,0.961,0.000
+PA841515,M.,Le Coq,Aurélien,1996-09-28,29,La France insoumise - Nouveau Front Populaire,LFI-NFP,Nord,59,1,(54) - Employé administratif d'entreprise,1,2 ans,0.28,0.80,0.994,0.000
+PA841531,Mme,Bentorki,Shéhérazade,1986-11-06,39,La France insoumise - Nouveau Front Populaire,LFI-NFP,Nord,59,8,Collaboratrice parlementaire,1,2 mois,0.26,1.00,0.997,0.000
+PA841543,M.,Bodart,Jean,1946-02-21,80,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Nord,59,13,Retraité de la sidérurgie,1,2 mois,0.05,0.14,0.902,0.000
+PA841553,M.,Tesson,Thierry,1957-04-22,69,Rassemblement National,RN,Nord,59,17,(74) - Ancien cadre,1,2 ans,0.34,0.51,0.992,0.000
+PA841563,Mme,Marais-Beuil,Claire,1958-11-04,67,Rassemblement National,RN,Oise,60,1,Profession libérale,1,2 ans,0.78,0.82,0.990,0.000
+PA841575,M.,Vos,Frédéric-Pierre,1963-03-10,63,Rassemblement National,RN,Oise,60,5,avocat,1,2 ans,0.19,0.36,0.990,0.000
+PA841587,M.,Magnier,David,1972-06-05,54,Rassemblement National,RN,Oise,60,7,"(48) - Contremaître, agent de maîtrise",1,2 ans,0.63,0.31,0.990,0.000
+PA841595,Mme,Chazé,Cendrine,1977-10-14,48,Droite Républicaine,DR,Orne,61,3,Secrétaire de mairie,1,2 mois,0.13,,0.955,0.000
+PA841605,M.,Golliot,Antoine,1985-08-13,40,Rassemblement National,RN,Pas-de-Calais,62,5,(47) - Technicien,1,2 ans,0.33,0.46,0.988,0.000
+PA841613,M.,de Fleurian,Marc,1989-02-07,37,Rassemblement National,RN,Pas-de-Calais,62,7,(33) - Cadre de la fonction publique,1,2 ans,0.54,0.93,0.987,0.000
+PA841621,M.,Evrard,Auguste,2000-05-04,26,Rassemblement National,RN,Pas-de-Calais,62,8,Collaborateur de cabinet en mairie,1,2 ans,0.21,0.25,0.988,0.000
+PA841633,M.,Dufau,Peio,1979-05-30,47,Socialistes et apparentés,SOC,Pyrénées-Atlantiques,64,6,"(48) - Contremaître, agent de maîtrise",1,2 ans,0.35,0.27,0.911,0.000
+PA841645,M.,Bernhardt,Théo,2000-06-29,25,Rassemblement National,RN,Bas-Rhin,67,8,Ingénieur de recherche,1,2 ans,0.45,0.60,0.952,0.000
+PA841657,Mme,Belouassa-Cherifi,Anaïs,1995-02-07,31,La France insoumise - Nouveau Front Populaire,LFI-NFP,Rhône,69,1,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.23,0.23,0.994,0.000
+PA841665,M.,Fégné,Denis,1960-07-31,65,Socialistes et apparentés,SOC,Hautes-Pyrénées,65,2,(74) - Ancien cadre,1,2 ans,0.40,0.67,0.968,0.000
+PA841681,M.,Sother,Thierry,1982-02-02,44,Socialistes et apparentés,SOC,Bas-Rhin,67,3,(33) - Cadre de la fonction publique,1,2 ans,0.22,0.10,0.963,0.000
+PA841701,Mme,Balage El Mariky,Léa,1990-04-09,36,Écologiste et Social,ECOS,Paris,75,3,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.29,0.49,0.982,0.000
+PA841713,M.,Tavernier,Boris,1979-08-23,46,Écologiste et Social,ECOS,Rhône,69,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.27,0.23,0.968,0.000
+PA841717,Mme,Runel,Sandrine,1979-06-01,47,Socialistes et apparentés,SOC,Rhône,69,4,(33) - Cadre de la fonction publique,1,2 ans,0.31,0.63,0.974,0.000
+PA841729,M.,Lahmar,Abdelkader,1971-05-12,55,La France insoumise - Nouveau Front Populaire,LFI-NFP,Rhône,69,7,"(34) - Professeur, profession scientifique",1,2 ans,0.19,0.12,0.963,0.000
+PA841737,M.,Gery,Jonathan,1986-10-12,39,Rassemblement National,RN,Rhône,69,8,(53) - Policier et militaire,1,2 ans,0.42,0.51,0.994,0.000
+PA841749,Mme,Joncour,Tiffany,1989-09-02,36,Rassemblement National,RN,Rhône,69,13,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.50,0.22,0.989,0.000
+PA841761,M.,Dutremble,Aurélien,1978-12-23,47,Rassemblement National,RN,Saône-et-Loire,71,3,(47) - Technicien hospitalier,1,2 ans,0.28,0.21,0.995,0.000
+PA841769,M.,Michoux,Éric,1959-06-17,67,Union des droites pour la République,UDDPLR,Saône-et-Loire,71,4,(23) - Chef d'entreprise de 10 salariés ou plus,1,2 ans,0.33,0.28,0.946,0.000
+PA841801,Mme,Carteron,Danièle,1984-10-31,41,Ensemble pour la République,EPR,Haute-Savoie,74,2,Cheffe d'entreprise,1,5 mois,0.23,0.00,0.991,0.000
+PA841813,Mme,Herouin-Léautey,Florence,1972-12-28,53,Socialistes et apparentés,SOC,Seine-Maritime,76,1,(33) - Cadre de la fonction publique,1,2 ans,0.25,0.36,0.974,0.000
+PA841825,M.,Martin,Patrice,1963-09-13,62,Rassemblement National,RN,Seine-Maritime,76,6,(11) - Agriculteur sur petite exploitation,1,2 ans,0.53,0.82,0.984,0.000
+PA841837,M.,Le Bourgeois,Robert,1969-11-12,56,Rassemblement National,RN,Seine-Maritime,76,10,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.43,0.57,0.991,0.000
+PA841845,M.,Saint-Martin,Arnaud,1979-01-25,47,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-et-Marne,77,1,"(34) - Professeur, profession scientifique",1,2 ans,0.39,0.72,0.990,0.000
+PA841853,Mme,Hervieu,Céline,1993-08-19,32,Socialistes et apparentés,SOC,Paris,75,11,(31) - Profession libérale,1,2 ans,0.19,0.17,0.970,0.000
+PA841873,M.,Limongi,Julien,1996-02-12,30,Rassemblement National,RN,Seine-et-Marne,77,4,(74) - Ancien cadre,1,2 ans,0.48,0.93,0.992,0.000
+PA841885,M.,Bonnet,Arnaud,1977-02-23,49,Écologiste et Social,ECOS,Seine-et-Marne,77,8,"(34) - Professeur, profession scientifique",1,2 ans,0.32,0.59,0.981,0.000
+PA841893,Mme,Thiébault-Martinez,Céline,1974-08-04,51,Socialistes et apparentés,SOC,Seine-et-Marne,77,9,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.33,0.33,0.956,0.000
+PA841919,Mme,Diop,Dieynaba,1974-07-15,51,Socialistes et apparentés,SOC,Yvelines,78,9,"(34) - Professeur, profession scientifique",1,2 ans,0.27,0.40,0.975,0.000
+PA841927,Mme,Ronceret,Anne-Sophie,1978-01-07,48,Ensemble pour la République,EPR,Yvelines,78,10,Collaboratrice parlementaire,1,1 an,0.33,0.65,0.972,0.000
+PA841931,M.,Mazaury,Laurent,1965-08-23,60,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Yvelines,78,11,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.17,0.00,0.865,0.000
+PA841947,Mme,Hamdane,Zahia,1965-05-14,61,La France insoumise - Nouveau Front Populaire,LFI-NFP,Somme,80,2,(43) - Profession intermédiaire de la santé et du travail social,1,2 ans,0.36,0.49,0.990,0.000
+PA841955,M.,Renault,Matthias,1988-05-02,38,Rassemblement National,RN,Somme,80,3,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.50,0.85,0.992,0.000
+PA841973,M.,Carbonnel,Pierre-Henri,1990-03-23,36,Union des droites pour la République,UDDPLR,Tarn-et-Garonne,82,1,Agriculteur,1,1 an,0.39,0.18,0.974,0.000
+PA841981,Mme,Rimbert,Catherine,1968-09-13,57,Rassemblement National,RN,Vaucluse,84,5,(31) - Profession libérale,1,2 ans,0.49,0.90,0.991,0.000
+PA841993,M.,Paillat,Dominique,1958-06-11,68,Horizons & Indépendants,HOR,Vendée,85,2,responsable d'usine,1,1 mois,0.01,0.00,1.000,0.000
+PA842001,M.,Bigot,Guillaume,1969-11-14,56,Rassemblement National,RN,Territoire de Belfort,90,2,"(35) - Profession de l'information, des arts et des spectacles",1,2 ans,0.16,0.00,0.976,0.000
+PA842013,M.,Gustave,Steevy,1970-02-05,56,Écologiste et Social,ECOS,Essonne,91,3,"(35) - Profession de l'information, des arts et des spectacles",1,2 ans,0.54,0.59,0.963,0.000
+PA842029,Mme,Lejeune,Claire,1994-09-07,31,La France insoumise - Nouveau Front Populaire,LFI-NFP,Essonne,91,7,"34 - Professeur, profession scientifique",1,2 ans,0.49,0.81,0.991,0.000
+PA842037,M.,Cernon,Bérenger,1988-05-02,38,La France insoumise - Nouveau Front Populaire,LFI-NFP,Essonne,91,8,"(65) - Ouvrier qualifié de la manutention, du magasinage et du transport",1,2 ans,0.43,0.78,0.991,0.000
+PA842045,Mme,Ozenne,Julie,1978-08-02,47,Écologiste et Social,ECOS,Essonne,91,9,(38) - Ingénieur et cadre technique d'entreprise,1,2 ans,0.44,0.84,0.970,0.000
+PA842073,M.,Dussausaye,Gaëtan,1994-04-05,32,Rassemblement National,RN,Vosges,88,2,(55) - Employé de commerce,1,2 ans,0.45,0.52,0.931,0.000
+PA842085,M.,Humbert,Sébastien,1990-07-10,35,Rassemblement National,RN,Vosges,88,4,(33) - Cadre de la fonction publique,1,2 ans,0.63,0.39,0.991,0.000
+PA842097,Mme,Roy,Sophie-Laurence,1955-12-23,70,Rassemblement National,RN,Yonne,89,2,(31) - Profession libérale,1,2 ans,0.27,0.50,0.993,0.000
+PA842105,M.,Arnault,Raphaël,1995-01-08,31,La France insoumise - Nouveau Front Populaire,LFI-NFP,Vaucluse,84,1,(52) - Employé civil et agent de service de la fonction publique,1,2 ans,0.30,0.37,0.997,0.000
+PA842121,M.,Tryzna,Nicolas,1987-12-15,38,Droite Républicaine,DR,Val-de-Marne,94,7,Formateur,1,1 an,0.23,0.13,0.958,0.000
+PA842125,M.,Lam,Thomas,1981-10-22,44,Horizons & Indépendants,HOR,Hauts-de-Seine,92,2,(23) - Chef d'entreprise de 10 salariés ou plus,1,2 ans,0.48,0.44,0.855,0.000
+PA842141,Mme,de Maistre,Élisabeth,1975-10-07,50,Droite Républicaine,DR,Hauts-de-Seine,92,9,Avocat,1,1 an,0.26,0.57,0.917,0.000
+PA842147,M.,Mongardien,Christophe,1963-01-09,63,Ensemble pour la République,EPR,Hauts-de-Seine,92,13,Ingénieur - Responsable Support Technique Grands Comptes,1,1 an,0.60,0.74,0.977,0.000
+PA842155,M.,Diouara,Aly,1987-03-01,39,La France insoumise - Nouveau Front Populaire,LFI-NFP,Seine-Saint-Denis,93,5,(33) - Cadre de la fonction publique,1,2 ans,0.18,0.18,0.995,0.000
+PA842183,M.,Blanchard,Benoît,1961-05-01,65,Horizons & Indépendants,HOR,Val-d'oise,95,4,Directeur d'un laboratoire de recherche,1,1 an,0.56,0.60,0.899,0.000
+PA842187,Mme,Cathala,Gabrielle,1992-05-14,34,La France insoumise - Nouveau Front Populaire,LFI-NFP,Val-d'oise,95,6,Secrétaire générale de groupe parlementaire,1,2 ans,0.42,0.49,0.991,0.000
+PA842195,M.,Eskenazi,Romain,1986-05-04,40,Socialistes et apparentés,SOC,Val-d'oise,95,7,(33) - Cadre de la fonction publique,1,2 ans,0.28,0.33,0.973,0.000
+PA842211,Mme,Bellay,Béatrice,1975-07-25,50,Socialistes et apparentés,SOC,Martinique,972,3,(33) - Cadre de la fonction publique,1,2 ans,0.14,0.23,0.951,0.000
+PA842227,M.,Rivière,Joseph,1971-10-15,54,Rassemblement National,RN,Réunion,974,3,(45) - Profession intermédiaire administrative de la fonction publique,1,2 ans,0.25,0.25,0.991,0.000
+PA842255,Mme,Sicard,Anne,1967-06-15,59,Rassemblement National,RN,Val-d'oise,95,1,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.42,0.11,0.989,0.000
+PA842263,Mme,Hadizadeh,Ayda,1982-02-12,44,Socialistes et apparentés,SOC,Val-d'oise,95,2,(37) - Cadre administratif et commercial d'entreprise,1,2 ans,0.29,0.40,0.969,0.000
+PA842271,M.,Maurel,Emmanuel,1973-05-10,53,Gauche Démocrate et Républicaine,GDR,Val-d'oise,95,3,"(34) - Professeur, profession scientifique",1,2 ans,0.18,0.43,0.930,0.000
+PA842279,Mme,Bamana,Anchya,1971-03-12,55,Rassemblement National,RN,Mayotte,976,2,(33) - Cadre de la fonction publique,1,2 ans,0.23,0.32,0.983,0.000
+PA842299,M.,Tjibaou,Emmanuel,1976-03-17,50,Gauche Démocrate et Républicaine,GDR,Nouvelle-Calédonie,988,2,(33) - Cadre de la fonction publique,1,2 ans,0.06,0.11,0.963,0.000
+PA842311,M.,Caure,Vincent,1992-12-31,33,Ensemble pour la République,EPR,Français établis hors de France,99,3,(33) - Cadre de la fonction publique,1,2 ans,0.24,0.43,0.981,0.000
+PA857021,M.,Latrèche,Alim,1979-12-05,46,Ensemble pour la République,EPR,Isère,38,1,Ingénieur-Cadre,1,3 mois,0.11,0.14,0.865,0.000
+PA870009,M.,Duparay,Lionel,1981-02-07,45,Droite Républicaine,DR,Saône-et-Loire,71,5,Ingénieur,1,1 an,0.41,0.28,0.924,0.000
+PA878242,M.,Valentin,Antoine,1992-10-16,33,Union des droites pour la République,UDDPLR,Haute-Savoie,74,3,chef d'entreprise,1,5 mois,0.13,0.07,0.968,0.000
+PA879389,Mme,Lubet,Marie-Philippe,1957-09-06,68,Ensemble pour la République,EPR,Loiret,45,1,Retraitée,1,4 mois,0.34,0.51,0.971,0.000
+PA942,M.,de Courson,Charles,1952-04-02,74,"Libertés, Indépendants, Outre-mer et Territoires",LIOT,Marne,51,5,Conseiller référendaire honoraire à la Cour des comptes,6,24 ans,0.18,0.61,0.849,0.000

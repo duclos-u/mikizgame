@@ -92,9 +92,7 @@ export type VinymixArtist = {
   memberCount: number
   spotifyFollowers: number
   genres: string[]
-  country: string | null
   vocalType: string | null
-  primaryLanguage: string | null
   mostFamousSong: { title: string; spotifyStreams: number } | null
   instrumentation: string | null
   appearsOnSoundtracksWith: string[]
@@ -146,6 +144,16 @@ export const api = {
         body: JSON.stringify({ email, password }),
       }),
     me: () => request<{ user: User }>('/auth/me'),
+    forgotPassword: (email: string) =>
+      request<{ message: string }>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      }),
+    resetPassword: (token: string, newPassword: string) =>
+      request<{ message: string }>('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ token, newPassword }),
+      }),
   },
   motivex: {
     daily: () => request<DailyInfo>('/motivex/daily'),
