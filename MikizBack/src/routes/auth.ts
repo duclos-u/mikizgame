@@ -6,6 +6,11 @@ import { db } from "../db";
 import { users } from "../db/schema";
 import { signToken } from "../lib/jwt";
 import { authMiddleware } from "../middleware/auth";
+import {
+  createResetToken,
+  resetPassword,
+  sendResetEmail,
+} from "../server/auth/passwordReset";
 
 const auth = new Hono();
 
@@ -137,6 +142,62 @@ auth.get("/me", authMiddleware, async (c) => {
       streak: streakCount,
     },
   });
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  newPassword: z.string().min(8).max(100),
+});
+
+// In-memory rate limiter: email → timestamp of last request
+const forgotPasswordRateLimit = new Map<string, number>();
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
+/**
+ * POST /api/auth/forgot-password
+ * Body: { email }
+ * Always returns 200 to avoid revealing whether the email is registered.
+ */
+auth.post("/forgot-password", zValidator("json", forgotPasswordSchema), async (c) => {
+  const { email } = c.req.valid("json");
+
+  const now = Date.now();
+  const lastRequest = forgotPasswordRateLimit.get(email);
+  if (lastRequest !== undefined && now - lastRequest < RATE_LIMIT_WINDOW_MS) {
+    return c.json({ error: "Trop de demandes. Veuillez réessayer dans une minute." }, 429);
+  }
+  forgotPasswordRateLimit.set(email, now);
+
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
+
+  if (user) {
+    const token = await createResetToken(user.id);
+    const frontendUrl = process.env.CORS_ORIGIN ?? "http://localhost:5173";
+    const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
+    await sendResetEmail(email, resetUrl);
+  }
+
+  return c.json({ message: "Si cet email est enregistré, un lien de réinitialisation a été envoyé." });
+});
+
+/**
+ * POST /api/auth/reset-password
+ * Body: { token, newPassword }
+ */
+auth.post("/reset-password", zValidator("json", resetPasswordSchema), async (c) => {
+  const { token, newPassword } = c.req.valid("json");
+
+  try {
+    await resetPassword(token, newPassword);
+  } catch {
+    return c.json({ error: "Lien invalide ou expiré." }, 400);
+  }
+
+  return c.json({ message: "Mot de passe réinitialisé avec succès." });
 });
 
 export { auth };

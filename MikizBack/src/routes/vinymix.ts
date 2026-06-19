@@ -9,7 +9,7 @@ import {
   vinymixSessions,
 } from "../db/schema";
 import { todayDate } from "../lib/date";
-import { searchArtists as searchLastfmArtists } from "../lib/lastfm";
+import { searchSpotifyArtists } from "../lib/spotify";
 import { type VinymixArtist, type VinymixGuess, compareArtists, dailySeed } from "../lib/vinymix";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
@@ -28,9 +28,7 @@ function rowToArtist(row: typeof vinymixArtists.$inferSelect): VinymixArtist {
     memberCount: row.memberCount,
     spotifyFollowers: row.spotifyFollowers,
     genres: (row.genres as string[]) ?? [],
-    country: row.country,
     vocalType: row.vocalType,
-    primaryLanguage: row.primaryLanguage,
     mostFamousSong: row.mostFamousSong as { title: string; spotifyStreams: number } | null,
     instrumentation: row.instrumentation,
     appearsOnSoundtracksWith: (row.appearsOnSoundtracksWith as string[]) ?? [],
@@ -204,16 +202,13 @@ vinymix.post("/guess", optionalAuthMiddleware, async (c) => {
 
 /**
  * GET /api/vinymix/search?q=
- * Public. Searches Last.fm directly.
+ * Public. Searches Spotify directly.
  */
 vinymix.get("/search", async (c) => {
   const q = (c.req.query("q") ?? "").trim();
   if (q.length < 2) return c.json([]);
 
-  const apiKey = process.env.LASTFM_API_KEY;
-  if (!apiKey) return c.json([]);
-
-  const results = await searchLastfmArtists(q, apiKey);
+  const results = await searchSpotifyArtists(q);
   return c.json(results);
 });
 

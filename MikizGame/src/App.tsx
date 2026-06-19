@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import { AuthModal } from './components/AuthModal'
 import { DailyGamesPage } from './components/DailyGamesPage'
 import { Header } from './components/Header'
@@ -39,6 +39,26 @@ function AppFooter() {
   )
 }
 
+function ResetPasswordPage() {
+  const [params] = useSearchParams()
+  const navigate = useNavigate()
+  const token = params.get('token') ?? ''
+
+  return (
+    <div className="app-root">
+      <Header onLoginClick={() => {}} />
+      <main className="app-main" />
+      <AppFooter />
+      <AuthModal
+        open
+        initialMode={token ? 'reset' : 'login'}
+        resetToken={token}
+        onClose={() => navigate('/')}
+      />
+    </div>
+  )
+}
+
 export default function App() {
   const { state, markGameDone } = useJdj2State()
   const [authModalOpen, setAuthModalOpen] = useState(false)
@@ -73,6 +93,7 @@ export default function App() {
           }
         />
         <Route path="/games/:gameId" element={<GameRoutePage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </AuthProvider>
   )

@@ -64,6 +64,20 @@
       "when": 1781777030032,
       "tag": "0008_closed_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1781788127483,
+      "tag": "0009_wandering_wendell_rand",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1781792731519,
+      "tag": "0010_hesitant_grim_reaper",
+      "breakpoints": true
     }
   ]
 }
