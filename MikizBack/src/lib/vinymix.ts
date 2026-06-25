@@ -6,10 +6,9 @@ export type VinymixArtist = {
   memberCount: number;
   spotifyFollowers: number;
   genres: string[];
-  vocalType: string | null;
   mostFamousSong: { title: string; spotifyStreams: number } | null;
-  instrumentation: string | null;
-  appearsOnSoundtracksWith: string[];
+  gender: string | null;
+  country: string | null;
 };
 
 export type MatchStatus = "match" | "close" | "miss" | "info" | "unknown";
@@ -64,7 +63,15 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
     });
   }
 
-  // 2. Member Count
+  // 2. Country
+  clues.push({
+    key: "country",
+    label: "Pays",
+    value: guess.country ?? "?",
+    status: guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
+  });
+
+  // 3. Member Count
   const memberDiff = guess.memberCount - target.memberCount;
   clues.push({
     key: "memberCount",
@@ -86,61 +93,27 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
     direction: tierDiff !== 0 ? (tierDiff > 0 ? "up" : "down") : undefined,
   });
 
-  // 4. Genres
-  const commonGenres = guess.genres.filter((g) => target.genres.includes(g));
-  clues.push({
-    key: "genres",
-    label: "Genres",
-    value: guess.genres.slice(0, 3).join(", ") || "?",
-    status: guess.genres.length === 0 ? "unknown" : commonGenres.length > 0 ? "match" : "miss",
-  });
+  // 4. Genres (one pill per genre)
+  if (guess.genres.length === 0) {
+    clues.push({ key: "genre-0", label: "Genre", value: "?", status: "unknown" });
+  } else {
+    for (let i = 0; i < Math.min(guess.genres.length, 2); i++) {
+      const g = guess.genres[i];
+      clues.push({
+        key: `genre-${i}`,
+        label: "Genre",
+        value: g,
+        status: target.genres.includes(g) ? "match" : "miss",
+      });
+    }
+  }
 
-  // 5. Vocal Type
+  // 5. Gender
   clues.push({
-    key: "vocalType",
-    label: "Voix",
-    value: guess.vocalType ?? "?",
-    status:
-      guess.vocalType === null
-        ? "unknown"
-        : guess.vocalType === target.vocalType
-          ? "match"
-          : "miss",
-  });
-
-  // 6. Same Soundtrack / collaboration
-  const bothHaveData =
-    target.appearsOnSoundtracksWith.length > 0 || guess.appearsOnSoundtracksWith.length > 0;
-  const sharedCollab =
-    bothHaveData &&
-    (target.appearsOnSoundtracksWith.includes(guess.id) ||
-      guess.appearsOnSoundtracksWith.includes(target.id));
-  clues.push({
-    key: "soundtrack",
-    label: "Collab",
-    value: !bothHaveData ? "?" : sharedCollab ? "Oui" : "Non",
-    status: !bothHaveData ? "unknown" : sharedCollab ? "match" : "miss",
-  });
-
-  // 9. Most Famous Song (informational)
-  clues.push({
-    key: "famousSong",
-    label: "Hit",
-    value: guess.mostFamousSong?.title ?? "?",
-    status: "info",
-  });
-
-  // 10. Instrumentation
-  clues.push({
-    key: "instrumentation",
-    label: "Son",
-    value: guess.instrumentation ?? "?",
-    status:
-      guess.instrumentation === null
-        ? "unknown"
-        : guess.instrumentation === target.instrumentation
-          ? "match"
-          : "miss",
+    key: "gender",
+    label: "Sexe",
+    value: guess.gender ?? "?",
+    status: guess.gender === null ? "unknown" : guess.gender === target.gender ? "match" : "miss",
   });
 
   return clues;

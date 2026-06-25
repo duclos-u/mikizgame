@@ -9,9 +9,12 @@ import {
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
+import { STORAGE_KEYS } from '../../constants/storage'
+import { today } from '../../utils/date'
 import { artistColors } from '../../utils/artistColors'
 import { ArtistSearchBar } from './ArtistSearchBar'
 import { GuessHistoryTable } from './GuessHistoryTable'
+import { PersonaBoard } from './PersonaBoard'
 import { ResultModal } from './ResultModal'
 
 const MAX_GUESSES = 6
@@ -19,7 +22,7 @@ const MAX_GUESSES = 6
 // ─── localStorage persistence ─────────────────────────────────────────────────
 
 function todayKey() {
-  return `vinymixstate_${new Date().toISOString().slice(0, 10)}`
+  return STORAGE_KEYS.VINYMIX_STATE(today())
 }
 
 type LocalState = {
@@ -177,6 +180,7 @@ export default function Vinymix() {
   const [showModal, setShowModal] = useState(false)
   const [resetting, setResetting] = useState(false)
   const [streak, setStreak] = useState(loadStreak)
+  const [guessError, setGuessError] = useState<string | null>(null)
 
   const initialized = useRef(false)
   const gameOver = status !== 'in_progress'
@@ -241,6 +245,7 @@ export default function Vinymix() {
       if (!token && guesses.length >= MAX_GUESSES) return
 
       setSubmitting(true)
+      setGuessError(null)
 
       try {
         const result = await api.vinymix.guess(artistId)
@@ -269,8 +274,11 @@ export default function Vinymix() {
           setStreak(0)
           setTimeout(() => setShowModal(true), 800)
         }
-      } catch {
-        // error handled silently; user can retry
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err)
+        setGuessError(msg.includes('503') || msg.toLowerCase().includes('configuré')
+          ? "Aucun artiste configuré pour aujourd'hui. Demande à l'admin de lancer le scheduling."
+          : "Une erreur est survenue. Réessaie.")
       } finally {
         setSubmitting(false)
       }
@@ -313,13 +321,19 @@ export default function Vinymix() {
   return (
     <Shell streak={streak}>
       <HeroCard status={status} guesses={guesses} targetArtist={targetArtist} />
+      <PersonaBoard guesses={guesses} targetArtist={targetArtist} />
 
       {!gameOver && (
-        <ArtistSearchBar
-          onGuess={handleGuess}
-          disabled={submitting}
-          alreadyGuessed={guessedIds}
-        />
+        <>
+          <ArtistSearchBar
+            onGuess={handleGuess}
+            disabled={submitting}
+            alreadyGuessed={guessedIds}
+          />
+          {guessError && (
+            <p className="vinymix-error">{guessError}</p>
+          )}
+        </>
       )}
 
       {gameOver && !showModal && (

@@ -11,7 +11,7 @@ import { useAuth } from '../context/AuthContext'
 
 const GAME_LABELS: Record<string, string> = {
   motivex: 'Motivex',
-  cineclue: 'CinéClue',
+  cinemaxd: 'Cinemaxd',
 }
 
 function gameLabel(slug: string) {

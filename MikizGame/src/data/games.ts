@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 import { STORAGE_KEYS } from '../constants/storage'
 import { today } from '../utils/date'
 
-export type GameCategory = 'mots' | 'geo' | 'musique' | 'cinema' | 'culture'
+export type GameCategory = 'mots' | 'geo' | 'musique' | 'cinema' | 'culture' | 'politique'
 export type GameStatus = 'live' | 'soon'
 
 export type Game = {
@@ -31,8 +31,9 @@ export function internalGamePath(gameId: string) {
 
 // Imports are at the bottom to avoid circular-dependency confusion.
 import Motivex from '../games/motivex'
-import CineClue from '../games/cineclue'
+import Cinemaxd from '../games/cinemaxd'
 import Vinymix from '../games/vinymix'
+import PolitiClue from '../games/politics'
 
 export const GAMES: Game[] = [
   {
@@ -59,8 +60,8 @@ export const GAMES: Game[] = [
     },
   },
   {
-    id: 'cineclue',
-    name: 'CinéClue',
+    id: 'cinemaxd',
+    name: 'Cinemaxd',
     desc: 'Devine le film du jour en 10 tentatives.',
     icon: '🎬',
     cat: 'cinema',
@@ -70,14 +71,13 @@ export const GAMES: Game[] = [
     status: 'live',
     players: 9,
     avgTries: 5,
-    route: internalGamePath('cineclue'),
+    route: internalGamePath('cinemaxd'),
     maxAttempts: 10,
-    component: CineClue,
+    component: Cinemaxd,
     checkDoneToday: () => {
       try {
-        const raw = localStorage.getItem(STORAGE_KEYS.CINECLUE_STATE(today()))
+        const raw = localStorage.getItem(STORAGE_KEYS.CINEMAXD_STATE(today()))
         if (!raw) return false
-        // Stored as { session: CineclueSession | null; totalIndices: ... }
         const parsed = JSON.parse(raw) as { session?: { statut?: string } }
         const statut = parsed.session?.statut
         return statut === 'won' || statut === 'lost'
@@ -99,7 +99,44 @@ export const GAMES: Game[] = [
     players: 0,
     avgTries: 0,
     route: internalGamePath('vinymix'),
+    maxAttempts: 6,
     component: Vinymix,
+    checkDoneToday: () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.VINYMIX_STATE(today()))
+        if (!raw) return false
+        const parsed = JSON.parse(raw) as { status?: string }
+        return parsed.status === 'won' || parsed.status === 'lost'
+      } catch {
+        return false
+      }
+    },
+  },
+  {
+    id: 'politics',
+    name: 'PolitiClue',
+    desc: 'Devine le politicien du jour en 10 essais.',
+    icon: '🗳️',
+    cat: 'politique',
+    tag: 'tag-politique',
+    tagLabel: 'Politique',
+    accent: 'oklch(0.56 0.20 22)',
+    status: 'live',
+    players: 0,
+    avgTries: 0,
+    route: internalGamePath('politics'),
+    maxAttempts: 10,
+    component: PolitiClue,
+    checkDoneToday: () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.POLITICS_STATE(today()))
+        if (!raw) return false
+        const parsed = JSON.parse(raw) as { statut?: string }
+        return parsed.statut === 'won' || parsed.statut === 'lost'
+      } catch {
+        return false
+      }
+    },
   },
   {
     id: 'geodle',

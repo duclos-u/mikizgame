@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PITY_POPUP_KEY = 'cineclue_pity_popup_dismissed'
+const PITY_POPUP_KEY = 'cinemaxd_pity_popup_dismissed'
 
 type Props = {
   onClose: () => void
@@ -15,34 +15,34 @@ export function PityCluePopup({ onClose }: Props) {
   }
 
   return (
-    <div className="cineclue-modal-overlay" onClick={handleClose}>
+    <div className="cinemaxd-modal-overlay" onClick={handleClose}>
       <div
-        className="cineclue-pity-modal"
+        className="cinemaxd-pity-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label="Indice offert"
       >
-        <button type="button" className="cineclue-modal-close" onClick={handleClose} aria-label="Fermer">
+        <button type="button" className="cinemaxd-modal-close" onClick={handleClose} aria-label="Fermer">
           ✕
         </button>
 
-        <div className="cineclue-modal-header">
-          <div className="cineclue-modal-emoji">🎁</div>
+        <div className="cinemaxd-modal-header">
+          <div className="cinemaxd-modal-emoji">🎁</div>
           <h2>Indice offert !</h2>
         </div>
 
-        <p className="cineclue-pity-description">
+        <p className="cinemaxd-pity-description">
           Pour t'aider à ne pas rester bloqué, le jeu te révèle automatiquement un indice à certaines étapes :
         </p>
 
-        <ul className="cineclue-pity-list">
+        <ul className="cinemaxd-pity-list">
           <li><strong>3e tentative</strong> — la langue du film</li>
           <li><strong>5e tentative</strong> — le premier genre du film</li>
           <li><strong>7e tentative</strong> — le réalisateur</li>
         </ul>
 
-        <label className="cineclue-pity-checkbox">
+        <label className="cinemaxd-pity-checkbox">
           <input
             type="checkbox"
             checked={neverShow}
@@ -51,7 +51,7 @@ export function PityCluePopup({ onClose }: Props) {
           Ne plus afficher ce message
         </label>
 
-        <div className="cineclue-modal-actions">
+        <div className="cinemaxd-modal-actions">
           <button type="button" className="btn btn-primary" onClick={handleClose}>
             Compris !
           </button>

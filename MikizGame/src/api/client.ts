@@ -6,15 +6,15 @@ export type {
   MotivexSession,
   GuessResponse,
   DailyInfo,
-  CineclueActeur,
-  CineclueReal,
-  CineclueFilm,
-  CineclueIndices,
-  CineclueStatut,
-  CineclueTotaux,
-  CineclueTentative,
-  CineclueSession,
-  CineclueGuessResponse,
+  CinemaxdActeur,
+  CinemaxdReal,
+  CinemaxdFilm,
+  CinemaxdIndices,
+  CinemaxdStatut,
+  CinemaxdTotaux,
+  CinemaxdTentative,
+  CinemaxdSession,
+  CinemaxdGuessResponse,
   TmdbFilmResult,
   LeaderboardEntry,
   LeaderboardResponse,
@@ -35,10 +35,10 @@ import type {
   MotivexSession,
   GuessResponse,
   DailyInfo,
-  CineclueFilm,
-  CineclueSession,
-  CineclueGuessResponse,
-  CineclueTotaux,
+  CinemaxdFilm,
+  CinemaxdSession,
+  CinemaxdGuessResponse,
+  CinemaxdTotaux,
   TmdbFilmResult,
   LeaderboardResponse,
   AllTimeResponse,
@@ -66,10 +66,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── CinéClue ────────────────────────────────────────────────────────────────
+// ─── Cinemaxd ────────────────────────────────────────────────────────────────
 
 export function searchFilms(q: string): Promise<TmdbFilmResult[]> {
-  return request<TmdbFilmResult[]>(`/cineclue/search?q=${encodeURIComponent(q)}`)
+  return request<TmdbFilmResult[]>(`/cinemaxd/search?q=${encodeURIComponent(q)}`)
 }
 
 // ─── Vinymix ───────────────────────────────────────────────────────────────────
@@ -92,10 +92,9 @@ export type VinymixArtist = {
   memberCount: number
   spotifyFollowers: number
   genres: string[]
-  vocalType: string | null
   mostFamousSong: { title: string; spotifyStreams: number } | null
-  instrumentation: string | null
-  appearsOnSoundtracksWith: string[]
+  gender: string | null
+  country: string | null
 }
 
 export type VinymixGuess = {
@@ -127,6 +126,109 @@ export type VinymixSearchResult = {
   imageUrl: string | null
   genres: string[]
   followers: number
+}
+
+// ─── Politics ─────────────────────────────────────────────────────────────────
+
+export type PoliticsMatchResult = 'exact' | 'wrong'
+export type PoliticsMandatType =
+  | 'Président de la République'
+  | 'Premier ministre'
+  | 'Ministre'
+  | 'Député'
+  | 'Eurodéputé'
+  | 'Sénateur'
+  | 'Chef de parti'
+export type PoliticsOrientation =
+  | 'gauche'
+  | 'centre-gauche'
+  | 'centre'
+  | 'droite'
+  | 'extrême droite'
+
+export type PoliticsComparison = {
+  genre: { value: string | null; match: PoliticsMatchResult }
+  originRegion: { value: string | null; match: PoliticsMatchResult }
+  currentOrLastParti: { value: string | null; match: PoliticsMatchResult | 'meme-famille' }
+  fonctionActuelle: { value: PoliticsMandatType[]; matching: PoliticsMandatType[] }
+  anciennesFonctions: { value: PoliticsMandatType[]; matching: PoliticsMandatType[] }
+  naissance: {
+    value: string | null
+    deces: string | null
+    direction: 'exact' | 'plus-age' | 'plus-jeune'
+    proche: boolean
+  }
+  orientation: {
+    value: PoliticsOrientation
+    score: number
+    match: PoliticsMatchResult
+    direction?: 'plus-gauche' | 'plus-droite'
+  }
+  condamnation: {
+    condamne: boolean
+    match: PoliticsMatchResult
+    affaires?: Array<{
+      affaire: string | null
+      prison: string | null
+      amende: string | null
+      date: number | null
+    }>
+  }
+}
+
+export type PoliticsDeputeInfo = {
+  scoreParticipation: number | null
+  scoreParticipationSpecialite: number | null
+  scoreLoyaute: number | null
+  groupe: string | undefined
+  departementNom: string | undefined
+}
+
+export type PoliticsTentative = {
+  politicianIndex: number
+  politicien: { prenom: string; nom: string }
+  comparison: PoliticsComparison
+  deputeInfo?: PoliticsDeputeInfo | null
+  mepInfo?: PoliticsDeputeInfo | null
+}
+
+export type PoliticsStatus = 'in_progress' | 'won' | 'lost'
+
+export type PoliticsCible = {
+  prenom: string
+  nom: string
+  currentOrLastParti: string | null
+  originRegion: string | null
+  naissance: string | null
+  genre: string | null
+  politiscore: number
+}
+
+export type PoliticsSearchResult = {
+  index: number
+  prenom: string
+  nom: string
+  currentOrLastParti: string | null
+  popularityScore: number
+}
+
+export type PoliticsGuessResponse = {
+  correct: boolean
+  comparison: PoliticsComparison
+  deputeInfo: PoliticsDeputeInfo | null
+  mepInfo: PoliticsDeputeInfo | null
+  tentativesRestantes: number | null
+  statut: PoliticsStatus | null
+  politicienCible: PoliticsCible | null
+}
+
+export type PoliticsSessionResponse = {
+  session: {
+    statut: PoliticsStatus
+    tentatives: PoliticsTentative[]
+    tentativesRestantes: number
+    politicienCible: PoliticsCible | null
+  } | null
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -165,17 +267,17 @@ export const api = {
       }),
     reset: () => request<{ ok: boolean }>('/motivex/session', { method: 'DELETE' }),
   },
-  cineclue: {
+  cinemaxd: {
     session: () =>
-      request<{ session: CineclueSession | null; totalIndices: CineclueTotaux }>('/filmdujour/session'),
+      request<{ session: CinemaxdSession | null; totalIndices: CinemaxdTotaux }>('/filmdujour/session'),
     guess: (tmdbId: number) =>
-      request<CineclueGuessResponse>('/filmdujour/guess', {
+      request<CinemaxdGuessResponse>('/filmdujour/guess', {
         method: 'POST',
         body: JSON.stringify({ tmdbId }),
       }),
     reset: () => request<{ ok: boolean }>('/filmdujour/session', { method: 'DELETE' }),
     search: (q: string) =>
-      request<{ films: CineclueFilm[] }>(`/films/search?q=${encodeURIComponent(q)}`),
+      request<{ films: CinemaxdFilm[] }>(`/films/search?q=${encodeURIComponent(q)}`),
   },
   vinymix: {
     session: () => request<VinymixSessionResponse>('/vinymix/session'),
@@ -187,6 +289,17 @@ export const api = {
     search: (q: string) =>
       request<VinymixSearchResult[]>(`/vinymix/search?q=${encodeURIComponent(q)}`),
     reset: () => request<{ ok: boolean }>('/vinymix/session', { method: 'DELETE' }),
+  },
+  politics: {
+    session: () => request<PoliticsSessionResponse>('/politics/session'),
+    guess: (politicianIndex: number) =>
+      request<PoliticsGuessResponse>('/politics/guess', {
+        method: 'POST',
+        body: JSON.stringify({ politicianIndex }),
+      }),
+    search: (q: string) =>
+      request<PoliticsSearchResult[]>(`/politics/search?q=${encodeURIComponent(q)}`),
+    reset: () => request<{ ok: boolean }>('/politics/session', { method: 'DELETE' }),
   },
   leaderboard: {
     get: (game: string, date?: string) =>

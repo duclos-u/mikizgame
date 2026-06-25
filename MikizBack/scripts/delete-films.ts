@@ -8,7 +8,7 @@ import { and, gte, lte } from "drizzle-orm";
  *   bun films:delete 2026-07-01               # supprime à partir du 1er juillet
  */
 import { db } from "../src/db";
-import { cineclueDaily } from "../src/db/schema";
+import { cinemaxdDaily } from "../src/db/schema";
 
 const [fromArg, toArg] = process.argv.slice(2);
 
@@ -24,8 +24,8 @@ const to = toArg ?? "2099-12-31";
 console.log(`\nSuppression des films planifiés du ${from} au ${to}…`);
 
 const deleted = await db
-  .delete(cineclueDaily)
-  .where(and(gte(cineclueDaily.date, from), lte(cineclueDaily.date, to)))
+  .delete(cinemaxdDaily)
+  .where(and(gte(cinemaxdDaily.date, from), lte(cinemaxdDaily.date, to)))
   .returning();
 
 if (deleted.length === 0) {

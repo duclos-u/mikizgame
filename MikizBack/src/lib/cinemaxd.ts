@@ -1,5 +1,5 @@
 /**
- * Logique métier du jeu CinéClue (comparaison, indices).
+ * Logique métier du jeu Cinemaxd (comparaison, indices).
  * Les données film viennent de TMDB via lib/tmdb.ts.
  */
 

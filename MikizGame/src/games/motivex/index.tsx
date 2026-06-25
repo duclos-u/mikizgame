@@ -40,6 +40,8 @@ function Shell({ children }: { children: React.ReactNode }) {
 const Motivex = () => {
   const { user } = useAuth()
   const { saveScore } = useHubScores()
+  const hiddenInputRef = useRef<HTMLInputElement>(null)
+  const physicalKeyHandled = useRef(false)
 
   // ── Session loading ───────────────────────────────────────────────────────
   const { data, loading, error: loadError, authenticated } = useGameSession<MotivexLoadData>({
@@ -153,10 +155,32 @@ const Motivex = () => {
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      handleKey(e.key.toUpperCase())
+      const upper = e.key.toUpperCase()
+      if (upper === 'ENTER' || upper === 'BACKSPACE' || /^[A-Z]$/.test(upper)) {
+        physicalKeyHandled.current = true
+        requestAnimationFrame(() => { physicalKeyHandled.current = false })
+      }
+      handleKey(upper)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
+  }, [handleKey])
+
+  const handleNativeInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const ie = e.nativeEvent as InputEvent
+    const input = e.currentTarget as HTMLInputElement
+    if (!physicalKeyHandled.current) {
+      if (ie.inputType === 'deleteContentBackward') {
+        handleKey('BACKSPACE')
+      } else if (ie.inputType === 'insertLineBreak') {
+        handleKey('ENTER')
+      } else if (ie.data) {
+        const char = ie.data.slice(-1).toUpperCase()
+        if (/^[A-Z]$/.test(char)) handleKey(char)
+      }
+    }
+    // keep a dummy space so backspace always triggers an input event
+    input.value = ' '
   }, [handleKey])
 
   // ── Letter status map for keyboard coloring ───────────────────────────────
@@ -186,6 +210,16 @@ const Motivex = () => {
     confetti({ particleCount: 180, spread: 70, origin: { y: 0.6 } })
     setPendingConfetti(false)
   }, [pendingConfetti, revealingRow])
+
+  // Auto-focus hidden input so physical/native keyboard works immediately
+  useEffect(() => {
+    if (!loading && wordLength) hiddenInputRef.current?.focus()
+  }, [loading, wordLength])
+
+  // Dismiss native keyboard when game ends
+  useEffect(() => {
+    if (gameOver) hiddenInputRef.current?.blur()
+  }, [gameOver])
 
   // ── Render guards ─────────────────────────────────────────────────────────
   if (!authenticated) {
@@ -248,12 +282,38 @@ const Motivex = () => {
   if (!wordLength) return null
 
   const currentRow = attempts.length
-  const gridCols = `repeat(${wordLength}, 52px)`
+  const tileGap = 6
+  const tileSize = `min(52px, calc((100vw - 2rem - ${(wordLength - 1) * tileGap}px) / ${wordLength}))`
+  const gridCols = `repeat(${wordLength}, ${tileSize})`
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <Shell>
-      <div className="wordle-board">
+      <div className="wordle-board" onClick={() => hiddenInputRef.current?.focus()}>
+        <input
+          ref={hiddenInputRef}
+          type="text"
+          inputMode="text"
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="characters"
+          spellCheck={false}
+          defaultValue=" "
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '1px',
+            height: '1px',
+            opacity: 0,
+            border: 'none',
+            outline: 'none',
+            padding: 0,
+            margin: 0,
+            pointerEvents: 'none',
+          }}
+          onInput={handleNativeInput}
+        />
         <div className="wordle-message-wrapper">
           <p className="wordle-message">{message}</p>
         </div>

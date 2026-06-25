@@ -11,7 +11,7 @@
 import { and, gte, lte, sql } from "drizzle-orm";
 import { db } from "../src/db";
 import { vinymixArtists, vinymixDaily } from "../src/db/schema";
-import { type SpotifyChartEntry, getArtistInfo, getPopularArtists } from "../src/lib/spotify";
+import { type SpotifyChartEntry, getArtistInfo, getFrenchArtists, getPopularArtists } from "../src/lib/spotify";
 import type { VinymixArtist } from "../src/lib/vinymix";
 
 const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
@@ -51,25 +51,48 @@ const alreadyScheduledDates = new Set(existing.map((r) => r.date));
 console.log(`  → ${recentlyScheduledIds.size} artist(s) in exclusion window (±30 days)`);
 console.log(`  → ${alreadyScheduledDates.size} date(s) already scheduled`);
 
-// ─── Fetch chart pool from Spotify ───────────────────────────────────────────
+// ─── Fetch 50/50 global + French pools from Spotify ──────────────────────────
 
-async function fetchChartPool(needed: number): Promise<SpotifyChartEntry[]> {
-  // Fetch 3× what we need to have buffer after exclusion filtering
-  const pool = await getPopularArtists(needed * 3);
-  return pool;
+const globalCount = Math.floor(daysArg / 2);
+const frenchCount = Math.ceil(daysArg / 2);
+
+// Always fetch a full global buffer so it can backfill if the French pool falls short
+const globalBuffer = Math.max(globalCount, daysArg) * 3;
+const [globalPool, frenchPool] = await Promise.all([
+  getPopularArtists(globalBuffer),
+  getFrenchArtists(frenchCount * 3),
+]);
+
+const eligibleGlobal = globalPool.filter((a) => !recentlyScheduledIds.has(a.id));
+const eligibleFrench = frenchPool.filter((a) => !recentlyScheduledIds.has(a.id));
+
+console.log(`\n  → ${globalPool.length} global artist(s) fetched, ${eligibleGlobal.length} eligible`);
+console.log(`  → ${frenchPool.length} French artist(s) fetched, ${eligibleFrench.length} eligible`);
+
+if (eligibleGlobal.length < globalCount) {
+  console.warn(`\n⚠  Only ${eligibleGlobal.length} eligible global artists for ${globalCount} slots.`);
+}
+if (eligibleFrench.length < frenchCount) {
+  console.warn(`\n⚠  Only ${eligibleFrench.length} eligible French artists for ${frenchCount} slots.`);
 }
 
-const chartPool = await fetchChartPool(daysArg);
-const eligible = chartPool.filter((a) => !recentlyScheduledIds.has(a.id));
+let selectedGlobal = eligibleGlobal.sort(() => Math.random() - 0.5).slice(0, globalCount);
+const selectedFrench = eligibleFrench.sort(() => Math.random() - 0.5).slice(0, frenchCount);
 
-console.log(`\n  → ${chartPool.length} chart artists fetched`);
-console.log(`  → ${eligible.length} eligible after exclusion window`);
-
-if (eligible.length < daysArg) {
-  console.warn(`\n⚠  Only ${eligible.length} eligible artists for ${daysArg} days requested.`);
+// Backfill from the global pool when French pool doesn't have enough artists
+const shortfall = daysArg - selectedGlobal.length - selectedFrench.length;
+if (shortfall > 0) {
+  const usedIds = new Set(selectedGlobal.map((a) => a.id));
+  const extras = eligibleGlobal
+    .filter((a) => !usedIds.has(a.id))
+    .sort(() => Math.random() - 0.5)
+    .slice(0, shortfall);
+  selectedGlobal = [...selectedGlobal, ...extras];
+  if (extras.length > 0) console.log(`  → Backfilled ${extras.length} slot(s) from global pool`);
 }
 
-const selected = eligible.sort(() => Math.random() - 0.5).slice(0, daysArg);
+// Intersperse global and French days with a final shuffle
+const selected = [...selectedGlobal, ...selectedFrench].sort(() => Math.random() - 0.5);
 
 // ─── Enrich artists from Spotify ──────────────────────────────────────────────
 
@@ -85,7 +108,7 @@ for (const entry of selected) {
   } catch (err) {
     console.warn(`  [skip] ${entry.name}: ${err}`);
   }
-  await new Promise((r) => setTimeout(r, 250));
+  await new Promise((r) => setTimeout(r, 1100));
 }
 
 console.log(`\n  → ${enriched.length} artist(s) enriched successfully`);
@@ -108,10 +131,9 @@ await db
       memberCount: a.memberCount,
       spotifyFollowers: a.spotifyFollowers,
       genres: a.genres,
-      vocalType: a.vocalType,
       mostFamousSong: a.mostFamousSong,
-      instrumentation: a.instrumentation,
-      appearsOnSoundtracksWith: a.appearsOnSoundtracksWith,
+      gender: a.gender,
+      country: a.country,
       updatedAt: new Date(),
     })),
   )
@@ -122,11 +144,12 @@ await db
       imageUrl: sql`excluded.image_url`,
       spotifyFollowers: sql`excluded.spotify_followers`,
       genres: sql`excluded.genres`,
-      vocalType: sql`excluded.vocal_type`,
       mostFamousSong: sql`excluded.most_famous_song`,
+      gender: sql`excluded.gender`,
+      country: sql`excluded.country`,
+      memberCount: sql`excluded.member_count`,
       updatedAt: sql`excluded.updated_at`,
-      // creationYear, memberCount, instrumentation, appearsOnSoundtracksWith are NOT updated
-      // to preserve any values manually curated via the admin route
+      // mostFamousSong is NOT updated to preserve manually curated values
     },
   });
 

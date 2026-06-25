@@ -2,13 +2,13 @@ import confetti from 'canvas-confetti'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  type CineclueFilm,
-  type CineclueGuessResponse,
-  type CineclueIndices,
-  type CineclueSession,
-  type CineclueStatut,
-  type CineclueTentative,
-  type CineclueTotaux,
+  type CinemaxdFilm,
+  type CinemaxdGuessResponse,
+  type CinemaxdIndices,
+  type CinemaxdSession,
+  type CinemaxdStatut,
+  type CinemaxdTentative,
+  type CinemaxdTotaux,
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
@@ -25,9 +25,9 @@ const MAX_TENTATIVES = 10
 
 // ─── Empty state constants ────────────────────────────────────────────────────
 
-const TOTAUX_VIDES: CineclueTotaux = { genres: 0, pays: 0, acteurs: 0 }
+const TOTAUX_VIDES: CinemaxdTotaux = { genres: 0, pays: 0, acteurs: 0 }
 
-const INDICES_VIDES: CineclueIndices = {
+const INDICES_VIDES: CinemaxdIndices = {
   genres: [],
   pays: [],
   acteurs: [],
@@ -42,9 +42,9 @@ const INDICES_VIDES: CineclueIndices = {
 
 // ─── Data type managed by the session hook ────────────────────────────────────
 
-type CineclueData = {
-  session: CineclueSession | null
-  totalIndices: CineclueTotaux
+type CinemaxdData = {
+  session: CinemaxdSession | null
+  totalIndices: CinemaxdTotaux
 }
 
 // ─── Shell ────────────────────────────────────────────────────────────────────
@@ -52,7 +52,7 @@ type CineclueData = {
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="game-shell">
-      <GameHeader title="CinéClue" subtitle="Devine le film du jour en 10 tentatives" />
+      <GameHeader title="Cinemaxd" subtitle="Devine le film du jour en 10 tentatives" />
       <main className="container">
         <div className="game-content">{children}</div>
       </main>
@@ -64,17 +64,17 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 export default function FilmDuJour() {
   // ── Session hook: localStorage-first + API refresh when authed ────────────
-  const { data, setData, loading } = useGameSession<CineclueData>({
-    cacheKey: STORAGE_KEYS.CINECLUE_STATE(today()),
-    fetch: () => api.cineclue.session(),
+  const { data, setData, loading } = useGameSession<CinemaxdData>({
+    cacheKey: STORAGE_KEYS.CINEMAXD_STATE(today()),
+    fetch: () => api.cinemaxd.session(),
   })
 
   // Derive game state from loaded data
-  const tentatives: CineclueTentative[] = data?.session?.tentatives ?? []
-  const indices: CineclueIndices = data?.session?.indices ?? INDICES_VIDES
-  const statut: CineclueStatut = data?.session?.statut ?? 'in_progress'
-  const filmCible: CineclueFilm | null = data?.session?.filmCible ?? null
-  const totalIndices: CineclueTotaux = data?.totalIndices ?? TOTAUX_VIDES
+  const tentatives: CinemaxdTentative[] = data?.session?.tentatives ?? []
+  const indices: CinemaxdIndices = data?.session?.indices ?? INDICES_VIDES
+  const statut: CinemaxdStatut = data?.session?.statut ?? 'in_progress'
+  const filmCible: CinemaxdFilm | null = data?.session?.filmCible ?? null
+  const totalIndices: CinemaxdTotaux = data?.totalIndices ?? TOTAUX_VIDES
 
   const gameOver = statut !== 'in_progress'
 
@@ -111,17 +111,17 @@ export default function FilmDuJour() {
       setSubmitting(true)
       setMessage('')
 
-      let result: CineclueGuessResponse
+      let result: CinemaxdGuessResponse
       try {
-        result = await api.cineclue.guess(film.id)
+        result = await api.cinemaxd.guess(film.id)
       } catch (err) {
         setMessage(err instanceof Error ? err.message : 'Erreur réseau')
         setSubmitting(false)
         return
       }
 
-      const newTentative: CineclueTentative = { tmdbId: film.id, filmSoumis: result.filmSoumis, anneeProche: result.anneeProche, dureeProche: result.dureeProche }
-      const updatedSession: CineclueSession = {
+      const newTentative: CinemaxdTentative = { tmdbId: film.id, filmSoumis: result.filmSoumis, anneeProche: result.anneeProche, dureeProche: result.dureeProche }
+      const updatedSession: CinemaxdSession = {
         statut: result.statut,
         tentatives: [...tentatives, newTentative],
         indices: result.indicesReveles,
@@ -160,7 +160,7 @@ export default function FilmDuJour() {
   async function handleReset() {
     setResetting(true)
     try {
-      await api.cineclue.reset()
+      await api.cinemaxd.reset()
       setData(null)  // clears localStorage and resets derived state
       setShowModal(false)
       messageInitialized.current = false
@@ -188,20 +188,20 @@ export default function FilmDuJour() {
 
   return (
     <Shell>
-      <div className="cineclue-game">
+      <div className="cinemaxd-game">
         {/* Persona épinglée en haut */}
         <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} pitySlots={pitySlots} />
 
         {/* Message + compteur + dots */}
-        <div className="cineclue-status">
-          <span className="cineclue-message">{message}</span>
-          <div className="cineclue-status-right">
-            <div className="cineclue-dots">
+        <div className="cinemaxd-status">
+          <span className="cinemaxd-message">{message}</span>
+          <div className="cinemaxd-status-right">
+            <div className="cinemaxd-dots">
               {Array.from({ length: MAX_TENTATIVES }, (_, i) => (
-                <span key={i} className={`cineclue-dot${i < tentatives.length ? ' used' : ''}`} />
+                <span key={i} className={`cinemaxd-dot${i < tentatives.length ? ' used' : ''}`} />
               ))}
             </div>
-            <span className="cineclue-counter">
+            <span className="cinemaxd-counter">
               {tentatives.length} / {MAX_TENTATIVES}
             </span>
           </div>
@@ -217,7 +217,7 @@ export default function FilmDuJour() {
         )}
 
         {gameOver && !showModal && (
-          <div className="cineclue-gameover-actions">
+          <div className="cinemaxd-gameover-actions">
             <button
               type="button"
               className="btn btn-primary"
@@ -230,25 +230,25 @@ export default function FilmDuJour() {
 
         {/* Légende */}
         {tentatives.length > 0 && (
-          <div className="cineclue-legend">
-            <span className="cineclue-legend-item">
-              <span className="cineclue-legend-swatch match" />
+          <div className="cinemaxd-legend">
+            <span className="cinemaxd-legend-item">
+              <span className="cinemaxd-legend-swatch match" />
               Correct
             </span>
-            <span className="cineclue-legend-item">
-              <span className="cineclue-legend-swatch close" />
+            <span className="cinemaxd-legend-item">
+              <span className="cinemaxd-legend-swatch close" />
               Proche
             </span>
-            <span className="cineclue-legend-item">
-              <span className="cineclue-legend-swatch miss" />
+            <span className="cinemaxd-legend-item">
+              <span className="cinemaxd-legend-swatch miss" />
               Incorrect
             </span>
-            <span className="cineclue-legend-item">
-              <span className="cineclue-legend-arrow">↑↓</span>
+            <span className="cinemaxd-legend-item">
+              <span className="cinemaxd-legend-arrow">↑↓</span>
               direction de la réponse
             </span>
-            <span className="cineclue-legend-item">
-              <span className="cineclue-legend-actor-dot" />
+            <span className="cinemaxd-legend-item">
+              <span className="cinemaxd-legend-actor-dot" />
               acteur en commun
             </span>
           </div>
@@ -262,14 +262,14 @@ export default function FilmDuJour() {
         />
 
         {/* Lien de retour + reset dev */}
-        <div className="cineclue-footer">
-          <Link to="/" className="cineclue-back-link">
+        <div className="cinemaxd-footer">
+          <Link to="/" className="cinemaxd-back-link">
             ← Retour aux jeux
           </Link>
           {import.meta.env.DEV && (
             <button
               type="button"
-              className="cineclue-dev-reset"
+              className="cinemaxd-dev-reset"
               onClick={handleReset}
               disabled={resetting}
             >

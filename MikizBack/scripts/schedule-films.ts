@@ -14,7 +14,7 @@
  */
 import { and, gte, lte } from "drizzle-orm";
 import { db } from "../src/db";
-import { cineclueDaily } from "../src/db/schema";
+import { cinemaxdDaily } from "../src/db/schema";
 
 const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
 const startArg = process.argv[3];
@@ -164,12 +164,12 @@ windowEnd.setDate(windowEnd.getDate() + daysArg - 1);
 windowEnd.setMonth(windowEnd.getMonth() + 6);
 
 const existing = await db
-  .select({ tmdbId: cineclueDaily.tmdbId })
-  .from(cineclueDaily)
+  .select({ tmdbId: cinemaxdDaily.tmdbId })
+  .from(cinemaxdDaily)
   .where(
     and(
-      gte(cineclueDaily.date, windowStart.toISOString().slice(0, 10)),
-      lte(cineclueDaily.date, windowEnd.toISOString().slice(0, 10)),
+      gte(cinemaxdDaily.date, windowStart.toISOString().slice(0, 10)),
+      lte(cinemaxdDaily.date, windowEnd.toISOString().slice(0, 10)),
     ),
   );
 
@@ -200,7 +200,7 @@ const entries = Array.from({ length: count }, (_, i) => {
   return { tmdbId: combined[i].id, date: d.toISOString().slice(0, 10) };
 });
 
-const inserted = await db.insert(cineclueDaily).values(entries).onConflictDoNothing().returning();
+const inserted = await db.insert(cinemaxdDaily).values(entries).onConflictDoNothing().returning();
 
 console.log(
   `\nPlanifié ${inserted.length} film(s) (${entries.length - inserted.length} déjà existants).`,

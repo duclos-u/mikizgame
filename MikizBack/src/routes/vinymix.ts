@@ -9,7 +9,7 @@ import {
   vinymixSessions,
 } from "../db/schema";
 import { todayDate } from "../lib/date";
-import { searchSpotifyArtists } from "../lib/spotify";
+import { fetchSpotifyArtist, getArtistInfo, searchSpotifyArtists } from "../lib/spotify";
 import { type VinymixArtist, type VinymixGuess, compareArtists, dailySeed } from "../lib/vinymix";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
@@ -28,10 +28,9 @@ function rowToArtist(row: typeof vinymixArtists.$inferSelect): VinymixArtist {
     memberCount: row.memberCount,
     spotifyFollowers: row.spotifyFollowers,
     genres: (row.genres as string[]) ?? [],
-    vocalType: row.vocalType,
     mostFamousSong: row.mostFamousSong as { title: string; spotifyStreams: number } | null,
-    instrumentation: row.instrumentation,
-    appearsOnSoundtracksWith: (row.appearsOnSoundtracksWith as string[]) ?? [],
+    gender: row.gender,
+    country: row.country,
   };
 }
 
@@ -123,15 +122,27 @@ vinymix.post("/guess", optionalAuthMiddleware, async (c) => {
   const body = await c.req.json<{ artistId?: string }>();
   if (!body.artistId) return c.json({ error: "artistId requis" }, 400);
 
-  const [guessRow, target] = await Promise.all([
-    db.query.vinymixArtists.findFirst({ where: eq(vinymixArtists.id, body.artistId) }),
-    getDailyArtist(),
-  ]);
+  // Fetch guess artist from pool; auto-upsert from Spotify if missing
+  let guessArtist: VinymixArtist;
+  const guessRow = await db.query.vinymixArtists.findFirst({
+    where: eq(vinymixArtists.id, body.artistId),
+  });
 
-  if (!guessRow) return c.json({ error: "Artiste introuvable dans le pool" }, 404);
+  if (guessRow) {
+    guessArtist = rowToArtist(guessRow);
+  } else {
+    const spotifyArtist = await fetchSpotifyArtist(body.artistId);
+    if (!spotifyArtist) return c.json({ error: "Artiste introuvable" }, 404);
+    guessArtist = await getArtistInfo(body.artistId, spotifyArtist.name, spotifyArtist.imageUrl);
+    // Upsert so the pool grows and future dailySeed can draw from it
+    await db
+      .insert(vinymixArtists)
+      .values({ ...guessArtist, updatedAt: new Date() })
+      .onConflictDoNothing();
+  }
+
+  const target = await getDailyArtist();
   if (!target) return c.json({ error: "Artiste du jour non configuré" }, 503);
-
-  const guessArtist = rowToArtist(guessRow);
   const clues = compareArtists(guessArtist, target);
   const correct = guessArtist.id === target.id;
 
@@ -240,10 +251,35 @@ vinymix.post("/daily", async (c) => {
   const { artistId, date } = await c.req.json<{ artistId: string; date?: string }>();
   const targetDate = date ?? todayDate();
 
-  const artist = await db.query.vinymixArtists.findFirst({
+  let artist = await db.query.vinymixArtists.findFirst({
     where: eq(vinymixArtists.id, artistId),
   });
-  if (!artist) return c.json({ error: "Artiste introuvable dans le pool" }, 404);
+
+  if (!artist) {
+    const spotifyArtist = await fetchSpotifyArtist(artistId);
+    if (!spotifyArtist) return c.json({ error: "Artiste introuvable" }, 404);
+    const newArtist = {
+      id: spotifyArtist.id,
+      name: spotifyArtist.name,
+      imageUrl: spotifyArtist.imageUrl,
+      creationYear: null,
+      memberCount: 1,
+      spotifyFollowers: spotifyArtist.followers,
+      genres: spotifyArtist.genres,
+      vocalType: null,
+      mostFamousSong: null,
+      instrumentation: null,
+      appearsOnSoundtracksWith: [],
+      updatedAt: new Date(),
+    };
+    const [inserted] = await db
+      .insert(vinymixArtists)
+      .values(newArtist)
+      .onConflictDoNothing()
+      .returning();
+    artist = inserted ?? await db.query.vinymixArtists.findFirst({ where: eq(vinymixArtists.id, artistId) }) ?? null;
+    if (!artist) return c.json({ error: "Impossible d'insérer l'artiste" }, 500);
+  }
 
   await db
     .insert(vinymixDaily)

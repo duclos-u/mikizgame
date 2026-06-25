@@ -14,16 +14,12 @@ export const vinymixArtists = pgTable("vinymix_artists", {
   memberCount: integer("member_count").notNull().default(1),
   spotifyFollowers: integer("spotify_followers").notNull().default(0),
   genres: jsonb("genres").notNull().$type<string[]>().default([]),
-  vocalType: text("vocal_type"),
   mostFamousSong: jsonb("most_famous_song").$type<{
     title: string;
     spotifyStreams: number;
   } | null>(),
-  instrumentation: text("instrumentation"),
-  appearsOnSoundtracksWith: jsonb("appears_on_soundtracks_with")
-    .notNull()
-    .$type<string[]>()
-    .default([]),
+  gender: text("gender"),
+  country: text("country"),
   imageUrl: text("image_url"),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

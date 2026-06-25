@@ -1,4 +1,4 @@
-import type { Film } from "./cineclue";
+import type { Film } from "./cinemaxd";
 
 const BASE = "https://api.themoviedb.org/3";
 const cache = new Map<number, Film>();
