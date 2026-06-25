@@ -110,13 +110,13 @@ export function SearchBar({ onGuess, disabled = false, dejaJoues = [] }: Props) 
   const hasMore = visibleCount < suggestions.length
 
   return (
-    <div className="cineclue-search">
-      <div className="cineclue-search-row">
-        <div className="cineclue-search-wrap">
+    <div className="cinemaxd-search">
+      <div className="cinemaxd-search-row">
+        <div className="cinemaxd-search-wrap">
           <input
             ref={inputRef}
             type="text"
-            className="cineclue-input"
+            className="cinemaxd-input"
             placeholder="Tape un titre de film…"
             value={query}
             disabled={disabled}
@@ -129,12 +129,12 @@ export function SearchBar({ onGuess, disabled = false, dejaJoues = [] }: Props) 
             onFocus={() => open && setOpen(true)}
             onBlur={() => setTimeout(() => setOpen(false), 150)}
           />
-          {loading && <span className="cineclue-search-spinner" />}
+          {loading && <span className="cinemaxd-search-spinner" />}
 
           {open && (
-            <ul ref={listRef} className="cineclue-dropdown" role="listbox">
+            <ul ref={listRef} className="cinemaxd-dropdown" role="listbox">
               {suggestions.length === 0 ? (
-                <li className="cineclue-dropdown-item" role="option" aria-selected={false}>
+                <li className="cinemaxd-dropdown-item" role="option" aria-selected={false}>
                   Aucun film trouvé
                 </li>
               ) : (
@@ -147,9 +147,9 @@ export function SearchBar({ onGuess, disabled = false, dejaJoues = [] }: Props) 
                         role="option"
                         aria-selected={i === activeIdx}
                         className={[
-                          'cineclue-dropdown-item',
-                          i === activeIdx ? 'cineclue-dropdown-active' : '',
-                          deja ? 'cineclue-dropdown-deja' : '',
+                          'cinemaxd-dropdown-item',
+                          i === activeIdx ? 'cinemaxd-dropdown-active' : '',
+                          deja ? 'cinemaxd-dropdown-deja' : '',
                         ]
                           .filter(Boolean)
                           .join(' ')}
@@ -159,21 +159,21 @@ export function SearchBar({ onGuess, disabled = false, dejaJoues = [] }: Props) 
                           <img
                             src={film.poster}
                             alt=""
-                            className="cineclue-dropdown-poster"
+                            className="cinemaxd-dropdown-poster"
                             width={32}
                             height={48}
                           />
                         )}
-                        <span className="cineclue-dropdown-titre">{film.titre}</span>
-                        <span className="cineclue-dropdown-annee">{film.annee ?? '—'}</span>
-                        {deja && <span className="cineclue-dropdown-badge">Déjà joué</span>}
+                        <span className="cinemaxd-dropdown-titre">{film.titre}</span>
+                        <span className="cinemaxd-dropdown-annee">{film.annee ?? '—'}</span>
+                        {deja && <span className="cinemaxd-dropdown-badge">Déjà joué</span>}
                       </li>
                     )
                   })}
                   {hasMore && (
                     <li
                       ref={sentinelRef}
-                      className="cineclue-dropdown-item"
+                      className="cinemaxd-dropdown-item"
                       style={{ justifyContent: 'center', color: 'var(--muted)', fontSize: '0.78rem' }}
                       aria-hidden="true"
                     >
@@ -188,7 +188,7 @@ export function SearchBar({ onGuess, disabled = false, dejaJoues = [] }: Props) 
 
         <button
           type="button"
-          className="cineclue-btn-submit"
+          className="cinemaxd-btn-submit"
           disabled={!selected || disabled}
           onClick={submit}
         >

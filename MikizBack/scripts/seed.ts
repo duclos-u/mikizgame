@@ -10,7 +10,7 @@ await db
   .insert(games)
   .values([
     { slug: "motivex", name: "Motivex" },
-    { slug: "cineclue", name: "CinéClue" },
+    { slug: "cinemaxd", name: "Cinemaxd" },
   ])
   .onConflictDoNothing();
 

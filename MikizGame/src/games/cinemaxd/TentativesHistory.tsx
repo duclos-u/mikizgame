@@ -1,4 +1,4 @@
-import type { CineclueFilm, CineclueIndices, CineclueTentative } from '../../api/client'
+import type { CinemaxdFilm, CinemaxdIndices, CinemaxdTentative } from '../../api/client'
 import { countryLabel } from './PersonaBoard'
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w185'
@@ -17,7 +17,7 @@ function toInitials(name: string) {
 
 function yearChip(
   year: number,
-  filmCible: CineclueFilm | null,
+  filmCible: CinemaxdFilm | null,
   anneeMin: number | null,
   anneeMax: number | null,
   proche: boolean,
@@ -34,7 +34,7 @@ function yearChip(
 
 function durChip(
   dur: number,
-  filmCible: CineclueFilm | null,
+  filmCible: CinemaxdFilm | null,
   dureeMin: number | null,
   dureeMax: number | null,
   proche: boolean,
@@ -52,16 +52,16 @@ function durChip(
 }
 
 type Props = {
-  tentatives: CineclueTentative[]
-  filmCible: CineclueFilm | null
-  indicesCourants: CineclueIndices
+  tentatives: CinemaxdTentative[]
+  filmCible: CinemaxdFilm | null
+  indicesCourants: CinemaxdIndices
 }
 
 export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Props) {
   if (tentatives.length === 0) return null
 
   return (
-    <div className="cineclue-guess-cards">
+    <div className="cinemaxd-guess-cards">
       {[...tentatives].reverse().map((t, i) => {
         const f = t.filmSoumis
         const num = tentatives.length - i
@@ -114,27 +114,27 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
         ]
 
         return (
-          <div key={`${t.tmdbId}-${i}`} className="cineclue-guess-card">
-            <div className="cineclue-guess-header">
-              <span className="cineclue-guess-num">#{num}</span>
-              <span className="cineclue-guess-title">{f.titre}</span>
+          <div key={`${t.tmdbId}-${i}`} className="cinemaxd-guess-card">
+            <div className="cinemaxd-guess-header">
+              <span className="cinemaxd-guess-num">#{num}</span>
+              <span className="cinemaxd-guess-title">{f.titre}</span>
             </div>
 
-            <div className="cineclue-guess-attrs">
-              <div className="cineclue-guess-attr">
-                <span className="cineclue-attr-label">Année</span>
-                <span className={`cineclue-chip ${yr.status}`}>{yr.text}</span>
+            <div className="cinemaxd-guess-attrs">
+              <div className="cinemaxd-guess-attr">
+                <span className="cinemaxd-attr-label">Année</span>
+                <span className={`cinemaxd-chip ${yr.status}`}>{yr.text}</span>
               </div>
-              <div className="cineclue-guess-attr">
-                <span className="cineclue-attr-label">Durée</span>
-                <span className={`cineclue-chip ${dr.status}`}>{dr.text}</span>
+              <div className="cinemaxd-guess-attr">
+                <span className="cinemaxd-attr-label">Durée</span>
+                <span className={`cinemaxd-chip ${dr.status}`}>{dr.text}</span>
               </div>
               {genres.length > 0 && (
-                <div className="cineclue-guess-attr">
-                  <span className="cineclue-attr-label">Genres</span>
-                  <div className="cineclue-chip-row">
+                <div className="cinemaxd-guess-attr">
+                  <span className="cinemaxd-attr-label">Genres</span>
+                  <div className="cinemaxd-chip-row">
                     {genres.map((g) => (
-                      <span key={g.label} className={`cineclue-chip ${g.status}`}>
+                      <span key={g.label} className={`cinemaxd-chip ${g.status}`}>
                         {g.label}
                       </span>
                     ))}
@@ -142,28 +142,28 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
                 </div>
               )}
               {countries.length > 0 && (
-                <div className="cineclue-guess-attr">
-                  <span className="cineclue-attr-label">Pays</span>
-                  <div className="cineclue-chip-row">
+                <div className="cinemaxd-guess-attr">
+                  <span className="cinemaxd-attr-label">Pays</span>
+                  <div className="cinemaxd-chip-row">
                     {countries.map((c) => (
-                      <span key={c.label} className={`cineclue-chip ${c.status}`}>
+                      <span key={c.label} className={`cinemaxd-chip ${c.status}`}>
                         {c.label}
                       </span>
                     ))}
                   </div>
                 </div>
               )}
-              <div className="cineclue-guess-attr">
-                <span className="cineclue-attr-label">Réal.</span>
-                <span className={`cineclue-chip ${dirMatch ? 'match' : 'miss'}`}>{dirName}</span>
+              <div className="cinemaxd-guess-attr">
+                <span className="cinemaxd-attr-label">Réal.</span>
+                <span className={`cinemaxd-chip ${dirMatch ? 'match' : 'miss'}`}>{dirName}</span>
               </div>
             </div>
 
             {actors.length > 0 && (
-              <div className="cineclue-guess-actor-list">
+              <div className="cinemaxd-guess-actor-list">
                 {actors.map((a) => (
-                  <div key={a.name} className={`cineclue-guess-actor${a.targetOnly ? ' target-only' : ''}`}>
-                    <span className={`cineclue-guess-actor-av${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>
+                  <div key={a.name} className={`cinemaxd-guess-actor${a.targetOnly ? ' target-only' : ''}`}>
+                    <span className={`cinemaxd-guess-actor-av${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>
                       {a.src ? (
                         <img
                           src={a.src}
@@ -175,7 +175,7 @@ export function TentativesHistory({ tentatives, filmCible, indicesCourants }: Pr
                         a.inits
                       )}
                     </span>
-                    <span className={`cineclue-guess-actor-name${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>{a.name}</span>
+                    <span className={`cinemaxd-guess-actor-name${a.on ? ' on' : ''}${a.targetOnly ? ' target-only' : ''}`}>{a.name}</span>
                   </div>
                 ))}
               </div>

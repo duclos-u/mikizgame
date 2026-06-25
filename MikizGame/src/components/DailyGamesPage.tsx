@@ -51,17 +51,18 @@ function HeroDaily({
   game,
   done,
   todayLabel,
+  avgTries,
 }: {
   game: Game
   done: boolean
   todayLabel: string
+  avgTries: number | null
 }) {
   return (
     <section className="hero">
       <div className="hero-glow" />
       <div className="hero-content">
         <div className="hero-left">
-          <Pill accent={game.accent}>● Jeu du jour</Pill>
           <h1 className="hero-title">
             Un nouveau défi<br />chaque jour à minuit.
           </h1>
@@ -83,7 +84,7 @@ function HeroDaily({
               <div className="hero-card-cat">{game.tagLabel} · {game.cat}</div>
             </div>
             <span style={{ marginLeft: 'auto' }}>
-              <Pill tone="live">EN LIGNE</Pill>
+              <Pill accent={game.accent}>● Jeu le plus joué</Pill>
             </span>
           </div>
           <div className="hero-card-stats">
@@ -92,7 +93,7 @@ function HeroDaily({
               <span>joueurs aujourd'hui</span>
             </div>
             <div>
-              <b>{game.avgTries}</b>
+              <b>{avgTries != null ? avgTries : '—'}</b>
               <span>essais en moyenne</span>
             </div>
           </div>
@@ -309,6 +310,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
   ]
   const [lbLoading, setLbLoading] = useState(true)
   const [playerCounts, setPlayerCounts] = useState<Record<string, number>>({})
+  const [dailyAvgTries, setDailyAvgTries] = useState<Record<string, number | null>>({})
 
   useEffect(() => {
     api.leaderboard
@@ -316,7 +318,10 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
       .then(({ entries }) => setCrossEntries(entries))
       .catch(() => setCrossEntries([]))
       .finally(() => setLbLoading(false))
-    api.leaderboard.getCounts().then(({ counts }) => setPlayerCounts(counts)).catch(() => {})
+    api.leaderboard.getCounts().then(({ counts, avgTries }) => {
+      setPlayerCounts(counts)
+      setDailyAvgTries(avgTries)
+    }).catch(() => {})
   }, [])
 
   const todayLabel = new Date().toLocaleDateString('fr-FR', {
@@ -331,7 +336,10 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
     players: playerCounts[g.id] ?? g.players,
   }))
   const liveGames = gamesWithCounts.filter((g) => g.status === 'live')
-  const featuredGame = liveGames[0]
+  const featuredGame = liveGames.reduce<typeof liveGames[0] | undefined>(
+    (best, g) => (best == null || g.players > best.players ? g : best),
+    undefined,
+  )
 
   return (
     <div className="page">
@@ -340,6 +348,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           game={featuredGame}
           done={effectiveDoneIds.includes(featuredGame.id)}
           todayLabel={todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1)}
+          avgTries={dailyAvgTries[featuredGame.id] ?? null}
         />
       )}
 

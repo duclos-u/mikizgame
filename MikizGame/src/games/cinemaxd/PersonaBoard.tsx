@@ -1,11 +1,11 @@
-import type { CineclueFilm, CineclueIndices, CineclueTotaux } from '../../api/client'
+import type { CinemaxdFilm, CinemaxdIndices, CinemaxdTotaux } from '../../api/client'
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w185'
 
 type Props = {
-  indices: CineclueIndices
-  filmCible: CineclueFilm | null
-  totalIndices?: CineclueTotaux
+  indices: CinemaxdIndices
+  filmCible: CinemaxdFilm | null
+  totalIndices?: CinemaxdTotaux
   pitySlots?: Set<string>
 }
 
@@ -13,22 +13,22 @@ type Props = {
 
 function Slot({ label, pity, children }: { label: string; pity?: boolean; children: React.ReactNode }) {
   return (
-    <div className="cineclue-slot">
-      <span className="cineclue-slot-label">{label}</span>
-      <div className={`cineclue-slot-body${pity ? ' cineclue-pity-slot' : ''}`}>{children}</div>
+    <div className="cinemaxd-slot">
+      <span className="cinemaxd-slot-label">{label}</span>
+      <div className={`cinemaxd-slot-body${pity ? ' cinemaxd-pity-slot' : ''}`}>{children}</div>
     </div>
   )
 }
 
 // ─── Titre ───────────────────────────────────────────────────────────────────
 
-function SlotTitre({ film }: { film: CineclueFilm | null }) {
+function SlotTitre({ film }: { film: CinemaxdFilm | null }) {
   return (
     <Slot label="Titre">
       {film ? (
-        <span className="cineclue-revealed cineclue-titre-reveal">{film.titre}</span>
+        <span className="cinemaxd-revealed cinemaxd-titre-reveal">{film.titre}</span>
       ) : (
-        <span className="cineclue-hidden">— — —</span>
+        <span className="cinemaxd-hidden">— — —</span>
       )}
     </Slot>
   )
@@ -53,21 +53,21 @@ export function SlotGenre({
   if (!hasAny) {
     return (
       <Slot label="Genres" pity={pity}>
-        <span className="cineclue-hidden">--</span>
+        <span className="cinemaxd-hidden">--</span>
       </Slot>
     )
   }
 
   return (
     <Slot label="Genres" pity={pity}>
-      <div className="cineclue-tags">
+      <div className="cinemaxd-tags">
         {cibleGenres
           ? cibleGenres.map((g) => {
               const revele = indicesGenres.includes(g)
               return (
                 <span
                   key={g}
-                  className={`cineclue-tag${revele ? ' cineclue-tag-on cineclue-flip' : ''}`}
+                  className={`cinemaxd-tag${revele ? ' cinemaxd-tag-on cinemaxd-flip' : ''}`}
                 >
                   {revele ? g : '?'}
                 </span>
@@ -75,12 +75,12 @@ export function SlotGenre({
             })
           : <>
               {indicesGenres.map((g) => (
-                <span key={g} className="cineclue-tag cineclue-tag-on cineclue-flip">
+                <span key={g} className="cinemaxd-tag cinemaxd-tag-on cinemaxd-flip">
                   {g}
                 </span>
               ))}
               {Array.from({ length: hiddenCount }, (_, i) => (
-                <span key={`hidden-genre-${i}`} className="cineclue-tag">?</span>
+                <span key={`hidden-genre-${i}`} className="cinemaxd-tag">?</span>
               ))}
             </>}
       </div>
@@ -122,14 +122,14 @@ export function SlotNationalite({
   if (!hasAny) {
     return (
       <Slot label="Pays">
-        <span className="cineclue-hidden">--</span>
+        <span className="cinemaxd-hidden">--</span>
       </Slot>
     )
   }
 
   return (
     <Slot label="Pays">
-      <div className="cineclue-flags">
+      <div className="cinemaxd-flags">
         {ciblePays
           ? ciblePays.map((p) => {
               const revele = indicesPays.includes(p)
@@ -137,7 +137,7 @@ export function SlotNationalite({
                 <span
                   key={p}
                   title={revele ? countryLabel(p) : '?'}
-                  className={`cineclue-flag${revele ? ' cineclue-flag-on cineclue-flip' : ''}`}
+                  className={`cinemaxd-flag${revele ? ' cinemaxd-flag-on cinemaxd-flip' : ''}`}
                 >
                   {revele ? isoToFlag(p) : '🏴'}
                 </span>
@@ -145,12 +145,12 @@ export function SlotNationalite({
             })
           : <>
               {indicesPays.map((p) => (
-                <span key={p} title={countryLabel(p)} className="cineclue-flag cineclue-flag-on cineclue-flip">
+                <span key={p} title={countryLabel(p)} className="cinemaxd-flag cinemaxd-flag-on cinemaxd-flip">
                   {isoToFlag(p)}
                 </span>
               ))}
               {Array.from({ length: hiddenCount }, (_, i) => (
-                <span key={`hidden-pays-${i}`} className="cineclue-flag" title="Pays inconnu">🏴</span>
+                <span key={`hidden-pays-${i}`} className="cinemaxd-flag" title="Pays inconnu">🏴</span>
               ))}
             </>}
       </div>
@@ -176,21 +176,21 @@ export function SlotLangue({
   pity,
 }: {
   langue: string | null
-  filmCible: CineclueFilm | null
+  filmCible: CinemaxdFilm | null
   pity?: boolean
 }) {
   const code = filmCible ? filmCible.langue : langue
   if (!code) {
     return (
       <Slot label="Langue" pity={pity}>
-        <span className="cineclue-hidden">--</span>
+        <span className="cinemaxd-hidden">--</span>
       </Slot>
     )
   }
   const flag = LANGUES[code] ?? '🏳️'
   return (
     <Slot label="Langue" pity={pity}>
-      <span className="cineclue-revealed cineclue-flip">
+      <span className="cinemaxd-revealed cinemaxd-flip">
         {flag} {code.toUpperCase()}
       </span>
     </Slot>
@@ -206,43 +206,43 @@ export function SlotDate({
 }: {
   anneeMin: number | null
   anneeMax: number | null
-  filmCible: CineclueFilm | null
+  filmCible: CinemaxdFilm | null
 }) {
   const currentYear = new Date().getFullYear()
   let texte: React.ReactNode
 
   if (filmCible) {
-    texte = <span className="cineclue-revealed">{filmCible.annee}</span>
+    texte = <span className="cinemaxd-revealed">{filmCible.annee}</span>
   } else if (anneeMin !== null && anneeMax !== null) {
     if (anneeMax - anneeMin === 2) {
       // Only one year possible between the two bounds
-      texte = <span className="cineclue-revealed cineclue-flip">{anneeMin + 1}</span>
+      texte = <span className="cinemaxd-revealed cinemaxd-flip">{anneeMin + 1}</span>
     } else {
       texte = (
-        <span className="cineclue-fourchette">
+        <span className="cinemaxd-fourchette">
           Entre <strong>{anneeMin}</strong> et <strong>{anneeMax}</strong>
         </span>
       )
     }
   } else if (anneeMax !== null) {
     texte = (
-      <span className="cineclue-fourchette">
+      <span className="cinemaxd-fourchette">
         Avant <strong>{anneeMax}</strong>
       </span>
     )
   } else if (anneeMin !== null) {
     if (anneeMin + 1 >= currentYear) {
       // "After last year" in the current year uniquely identifies the target
-      texte = <span className="cineclue-revealed cineclue-flip">{anneeMin + 1}</span>
+      texte = <span className="cinemaxd-revealed cinemaxd-flip">{anneeMin + 1}</span>
     } else {
       texte = (
-        <span className="cineclue-fourchette">
+        <span className="cinemaxd-fourchette">
           Après <strong>{anneeMin}</strong>
         </span>
       )
     }
   } else {
-    texte = <span className="cineclue-hidden">--</span>
+    texte = <span className="cinemaxd-hidden">--</span>
   }
 
   return <Slot label="Année">{texte}</Slot>
@@ -263,36 +263,36 @@ export function SlotDuree({
 }: {
   dureeMin: number | null
   dureeMax: number | null
-  filmCible: CineclueFilm | null
+  filmCible: CinemaxdFilm | null
 }) {
   let texte: React.ReactNode
 
   if (filmCible && filmCible.duree > 0) {
-    texte = <span className="cineclue-revealed">{formatMin(filmCible.duree)}</span>
+    texte = <span className="cinemaxd-revealed">{formatMin(filmCible.duree)}</span>
   } else if (dureeMin !== null && dureeMax !== null) {
     if (dureeMax - dureeMin === 2) {
-      texte = <span className="cineclue-revealed cineclue-flip">{formatMin(dureeMin + 1)}</span>
+      texte = <span className="cinemaxd-revealed cinemaxd-flip">{formatMin(dureeMin + 1)}</span>
     } else {
       texte = (
-        <span className="cineclue-fourchette">
+        <span className="cinemaxd-fourchette">
           Entre <strong>{formatMin(dureeMin)}</strong> et <strong>{formatMin(dureeMax)}</strong>
         </span>
       )
     }
   } else if (dureeMax !== null) {
     texte = (
-      <span className="cineclue-fourchette">
+      <span className="cinemaxd-fourchette">
         Moins de <strong>{formatMin(dureeMax)}</strong>
       </span>
     )
   } else if (dureeMin !== null) {
     texte = (
-      <span className="cineclue-fourchette">
+      <span className="cinemaxd-fourchette">
         Plus de <strong>{formatMin(dureeMin)}</strong>
       </span>
     )
   } else {
-    texte = <span className="cineclue-hidden">--</span>
+    texte = <span className="cinemaxd-hidden">--</span>
   }
 
   return <Slot label="Durée">{texte}</Slot>
@@ -306,34 +306,34 @@ export function SlotActeurs({
   totalActeurs = 0,
 }: {
   indicesActeurs: string[]
-  filmCible: CineclueFilm | null
+  filmCible: CinemaxdFilm | null
   totalActeurs?: number
 }) {
   if (filmCible) {
     if (filmCible.acteurs.length === 0) {
       return (
         <Slot label="Acteurs">
-          <span className="cineclue-hidden">--</span>
+          <span className="cinemaxd-hidden">--</span>
         </Slot>
       )
     }
     return (
       <Slot label="Acteurs">
-        <div className="cineclue-acteurs">
+        <div className="cinemaxd-acteurs">
           {filmCible.acteurs.map((a) => {
             const src = a.photo ? `${TMDB_IMG}${a.photo}` : null
             return (
-              <div key={a.nom} className="cineclue-acteur cineclue-acteur-on cineclue-flip" title={a.nom}>
-                <div className="cineclue-acteur-photo">
+              <div key={a.nom} className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip" title={a.nom}>
+                <div className="cinemaxd-acteur-photo">
                   {src ? (
                     <img src={src} alt={a.nom} loading="lazy" />
                   ) : (
-                    <span className="cineclue-acteur-initiales">
+                    <span className="cinemaxd-acteur-initiales">
                       {a.nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
                     </span>
                   )}
                 </div>
-                <span className="cineclue-acteur-nom">{a.nom}</span>
+                <span className="cinemaxd-acteur-nom">{a.nom}</span>
               </div>
             )
           })}
@@ -348,30 +348,30 @@ export function SlotActeurs({
   if (!hasAny) {
     return (
       <Slot label="Acteurs">
-        <span className="cineclue-hidden">--</span>
+        <span className="cinemaxd-hidden">--</span>
       </Slot>
     )
   }
 
   return (
     <Slot label="Acteurs">
-      <div className="cineclue-acteurs">
+      <div className="cinemaxd-acteurs">
         {indicesActeurs.map((nom) => (
-          <div key={nom} className="cineclue-acteur cineclue-acteur-on cineclue-flip" title={nom}>
-            <div className="cineclue-acteur-photo">
-              <span className="cineclue-acteur-initiales">
+          <div key={nom} className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip" title={nom}>
+            <div className="cinemaxd-acteur-photo">
+              <span className="cinemaxd-acteur-initiales">
                 {nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
               </span>
             </div>
-            <span className="cineclue-acteur-nom">{nom}</span>
+            <span className="cinemaxd-acteur-nom">{nom}</span>
           </div>
         ))}
         {Array.from({ length: hiddenCount }, (_, i) => (
-          <div key={`hidden-acteur-${i}`} className="cineclue-acteur" title="Acteur non découvert">
-            <div className="cineclue-acteur-photo">
-              <span className="cineclue-acteur-initiales">?</span>
+          <div key={`hidden-acteur-${i}`} className="cinemaxd-acteur" title="Acteur non découvert">
+            <div className="cinemaxd-acteur-photo">
+              <span className="cinemaxd-acteur-initiales">?</span>
             </div>
-            <span className="cineclue-acteur-nom">&nbsp;</span>
+            <span className="cinemaxd-acteur-nom">&nbsp;</span>
           </div>
         ))}
       </div>
@@ -389,7 +389,7 @@ export function SlotReal({
 }: {
   realisateurRevele: boolean
   realisateurInfo?: { nom: string; photo: string | null } | null
-  filmCible: CineclueFilm | null
+  filmCible: CinemaxdFilm | null
   pity?: boolean
 }) {
   const real = filmCible?.realisateurs[0] ?? (realisateurRevele ? realisateurInfo : null) ?? null
@@ -397,23 +397,23 @@ export function SlotReal({
   return (
     <Slot label="Réalisateur" pity={pity}>
       {real ? (
-        <div className="cineclue-real cineclue-flip">
+        <div className="cinemaxd-real cinemaxd-flip">
           {real.photo ? (
             <img
               src={`${TMDB_IMG}${real.photo}`}
               alt={real.nom}
-              className="cineclue-real-photo"
+              className="cinemaxd-real-photo"
               loading="lazy"
             />
           ) : (
-            <span className="cineclue-real-initials">
+            <span className="cinemaxd-real-initials">
               {real.nom.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
             </span>
           )}
-          <span className="cineclue-revealed">{real.nom}</span>
+          <span className="cinemaxd-revealed">{real.nom}</span>
         </div>
       ) : (
-        <span className="cineclue-hidden">--</span>
+        <span className="cinemaxd-hidden">--</span>
       )}
     </Slot>
   )
@@ -423,9 +423,9 @@ export function SlotReal({
 
 export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots }: Props) {
   return (
-    <div className="cineclue-persona">
+    <div className="cinemaxd-persona">
       <SlotTitre film={filmCible} />
-      <div className="cineclue-persona-row">
+      <div className="cinemaxd-persona-row">
         <SlotGenre
           indicesGenres={indices.genres}
           cibleGenres={filmCible?.genres}
@@ -438,7 +438,7 @@ export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots }: Pr
           totalPays={totalIndices?.pays}
         />
       </div>
-      <div className="cineclue-persona-row-3">
+      <div className="cinemaxd-persona-row-3">
         <SlotDate
           anneeMin={indices.anneeMin}
           anneeMax={indices.anneeMax}

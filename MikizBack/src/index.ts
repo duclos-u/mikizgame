@@ -2,9 +2,10 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { auth } from "./routes/auth";
-import { cineclueSearch, filmdujour } from "./routes/filmdujour";
+import { cinemaxdSearch, filmdujour } from "./routes/filmdujour";
 import { leaderboard } from "./routes/leaderboard";
 import { motivex } from "./routes/motivex";
+import { politics } from "./routes/politics";
 import { vinymix } from "./routes/vinymix";
 
 const app = new Hono();
@@ -24,8 +25,9 @@ app.get("/health", (c) => c.json({ ok: true, ts: new Date().toISOString() }));
 app.route("/api/auth", auth);
 app.route("/api/motivex", motivex);
 app.route("/api/filmdujour", filmdujour);
-app.route("/api/cineclue", cineclueSearch);
+app.route("/api/cinemaxd", cinemaxdSearch);
 app.route("/api/vinymix", vinymix);
+app.route("/api/politics", politics);
 app.route("/api/leaderboard", leaderboard);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));

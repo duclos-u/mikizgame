@@ -282,15 +282,16 @@ body
 
 .hero-glow
   position: absolute
-  top: -180px
-  right: -120px
-  left: auto
-  width: 600px
-  height: 600px
+  top: -60px
+  left: 50%
+  transform: translateX(-50%)
+  width: 900px
+  height: 420px
   border-radius: 50%
-  background: radial-gradient(circle, color-mix(in oklch, var(--accent) 18%, transparent), transparent 66%)
+  background: radial-gradient(ellipse at 50% 30%, color-mix(in oklch, var(--accent) 14%, transparent) 0%, color-mix(in oklch, var(--accent) 5%, transparent) 45%, transparent 72%)
   pointer-events: none
   z-index: 0
+  filter: blur(24px)
 
 .hero-content
   position: relative
@@ -525,6 +526,7 @@ body
   appearance: none
   overflow: hidden
   color: inherit
+  text-decoration: none
   box-shadow: var(--shadow-soft)
 
   &:hover:not(:disabled):not(.is-soon)
@@ -1435,7 +1437,7 @@ header
 .grid-row
   display: grid
   grid-template-columns: repeat(6, 64px)
-  gap: 24px
+  gap: 6px
   transform-style: preserve-3d
 
   &-win
@@ -1459,8 +1461,7 @@ header
     transform: translateX(0)
 
 .grid-cell
-  width: 64px
-  height: 64px
+  aspect-ratio: 1
   border: 1px solid var(--border)
   border-radius: 6px
   background: var(--card)
@@ -1655,8 +1656,13 @@ header
     border-color: oklch(0.60 0.01 60)
     color: white
 
+@media (max-width: 400px)
+  .motivex-key
+    height: 44px
+    font-size: 0.8rem
+
 // ═══════════════════════════════════════════════════════════════════════════
-// CinéClue
+// Cinemaxd
 // ═══════════════════════════════════════════════════════════════════════════
 
 $slot-bg: var(--card)
@@ -1666,7 +1672,7 @@ $tag-on-bg: var(--accent)
 $tag-on-color: white
 $flip-duration: 400ms
 
-.cineclue-game
+.cinemaxd-game
   display: flex
   flex-direction: column
   gap: 1.5rem
@@ -1674,7 +1680,7 @@ $flip-duration: 400ms
   margin: 0 auto
   padding: 1.5rem 0 3rem
 
-.cineclue-persona
+.cinemaxd-persona
   background: $slot-bg
   border: 1px solid $slot-border
   border-radius: var(--radius)
@@ -1690,7 +1696,7 @@ $flip-duration: 400ms
     position: static
     padding: 1rem
 
-.cineclue-persona-row
+.cinemaxd-persona-row
   display: grid
   grid-template-columns: 1fr 1fr
   gap: 1rem
@@ -1698,7 +1704,7 @@ $flip-duration: 400ms
   @media (max-width: 500px)
     grid-template-columns: 1fr
 
-.cineclue-persona-row-3
+.cinemaxd-persona-row-3
   display: grid
   grid-template-columns: repeat(3, 1fr)
   gap: 1rem
@@ -1706,19 +1712,19 @@ $flip-duration: 400ms
   @media (max-width: 500px)
     grid-template-columns: 1fr
 
-.cineclue-slot
+.cinemaxd-slot
   display: flex
   flex-direction: column
   gap: 0.35rem
 
-.cineclue-slot-label
+.cinemaxd-slot-label
   font-size: 0.72rem
   font-weight: 600
   text-transform: uppercase
   letter-spacing: 0.06em
   color: var(--muted)
 
-.cineclue-slot-body
+.cinemaxd-slot-body
   font-size: 0.9rem
   min-height: 1.5rem
   display: flex
@@ -1726,18 +1732,18 @@ $flip-duration: 400ms
   flex-wrap: wrap
   gap: 0.35rem
 
-.cineclue-hidden
+.cinemaxd-hidden
   color: var(--muted)
   font-style: italic
 
-.cineclue-revealed
+.cinemaxd-revealed
   font-weight: 600
   color: var(--accent)
 
-.cineclue-titre-reveal
+.cinemaxd-titre-reveal
   font-size: 1.05rem
 
-@keyframes cineclue-flip
+@keyframes cinemaxd-flip
   0%
     transform: rotateY(90deg)
     opacity: 0
@@ -1747,15 +1753,15 @@ $flip-duration: 400ms
     transform: rotateY(0deg)
     opacity: 1
 
-.cineclue-flip
-  animation: cineclue-flip $flip-duration ease both
+.cinemaxd-flip
+  animation: cinemaxd-flip $flip-duration ease both
 
-.cineclue-tags
+.cinemaxd-tags
   display: flex
   flex-wrap: wrap
   gap: 0.3rem
 
-.cineclue-tag
+.cinemaxd-tag
   font-size: 0.75rem
   padding: 0.2rem 0.5rem
   border-radius: 3px
@@ -1764,33 +1770,33 @@ $flip-duration: 400ms
   border: 1px solid var(--border)
   font-weight: 500
 
-  &.cineclue-tag-on
+  &.cinemaxd-tag-on
     background: $tag-on-bg
     color: $tag-on-color
     border-color: var(--accent)
 
-.cineclue-flags
+.cinemaxd-flags
   display: flex
   flex-wrap: wrap
   gap: 0.35rem
 
-.cineclue-flag
+.cinemaxd-flag
   font-size: 1.3rem
   line-height: 1
   filter: grayscale(100%) opacity(0.25)
   transition: filter 0.3s
 
-  &.cineclue-flag-on
+  &.cinemaxd-flag-on
     filter: none
 
-.cineclue-fourchette
+.cinemaxd-fourchette
   color: var(--text)
   font-size: 0.88rem
 
   strong
     color: var(--accent)
 
-.cineclue-acteurs
+.cinemaxd-acteurs
   display: flex
   flex-wrap: nowrap
   overflow-x: auto
@@ -1799,7 +1805,7 @@ $flip-duration: 400ms
   scrollbar-width: thin
   scrollbar-color: var(--border) transparent
 
-.cineclue-acteur
+.cinemaxd-acteur
   display: flex
   flex-direction: column
   align-items: center
@@ -1807,16 +1813,16 @@ $flip-duration: 400ms
   width: 60px
   flex-shrink: 0
 
-  &:not(.cineclue-acteur-on)
-    .cineclue-acteur-photo
+  &:not(.cinemaxd-acteur-on)
+    .cinemaxd-acteur-photo
       background: var(--card-2)
       img
         filter: grayscale(1)
         opacity: 0.45
-    .cineclue-acteur-nom
+    .cinemaxd-acteur-nom
       color: var(--muted)
 
-.cineclue-acteur-photo
+.cinemaxd-acteur-photo
   width: 48px
   height: 48px
   border-radius: 50%
@@ -1832,13 +1838,13 @@ $flip-duration: 400ms
     height: 100%
     object-fit: cover
 
-.cineclue-acteur-initiales
+.cinemaxd-acteur-initiales
   font-size: 0.75rem
   font-weight: 700
   color: var(--muted)
   text-transform: uppercase
 
-.cineclue-acteur-nom
+.cinemaxd-acteur-nom
   font-size: 0.62rem
   text-align: center
   line-height: 1.2
@@ -1847,48 +1853,48 @@ $flip-duration: 400ms
   text-overflow: ellipsis
   white-space: nowrap
 
-.cineclue-real
+.cinemaxd-real
   display: flex
   align-items: center
   gap: 0.5rem
 
-.cineclue-real-photo
+.cinemaxd-real-photo
   width: 40px
   height: 40px
   border-radius: 50%
   object-fit: cover
 
-.cineclue-status
+.cinemaxd-status
   display: flex
   align-items: center
   justify-content: space-between
   gap: 0.5rem
 
-.cineclue-message
+.cinemaxd-message
   font-size: 0.88rem
   color: var(--muted)
 
-.cineclue-counter
+.cinemaxd-counter
   font-size: 0.8rem
   font-weight: 600
   color: var(--muted)
   font-family: var(--mono)
 
-.cineclue-search
+.cinemaxd-search
   display: flex
   flex-direction: column
   gap: 0.5rem
 
-.cineclue-search-row
+.cinemaxd-search-row
   display: flex
   gap: 0.5rem
   align-items: flex-start
 
-.cineclue-search-wrap
+.cinemaxd-search-wrap
   position: relative
   flex: 1
 
-.cineclue-input
+.cinemaxd-input
   width: 100%
   padding: 0.55rem 0.9rem
   border: 1px solid var(--border)
@@ -1910,7 +1916,7 @@ $flip-duration: 400ms
   &::placeholder
     color: var(--muted)
 
-.cineclue-search-spinner
+.cinemaxd-search-spinner
   position: absolute
   right: 0.7rem
   top: 50%
@@ -1926,7 +1932,7 @@ $flip-duration: 400ms
   to
     transform: translateY(-50%) rotate(360deg)
 
-.cineclue-dropdown
+.cinemaxd-dropdown
   position: absolute
   top: calc(100% + 4px)
   left: 0
@@ -1940,7 +1946,7 @@ $flip-duration: 400ms
   overflow-y: auto
   z-index: 100
 
-.cineclue-dropdown-item
+.cinemaxd-dropdown-item
   padding: 0.5rem 0.9rem
   cursor: pointer
   display: flex
@@ -1948,30 +1954,30 @@ $flip-duration: 400ms
   gap: 0.5rem
   font-size: 0.88rem
 
-  &:hover, &.cineclue-dropdown-active
+  &:hover, &.cinemaxd-dropdown-active
     background: var(--card-2)
 
-  &.cineclue-dropdown-deja
+  &.cinemaxd-dropdown-deja
     opacity: 0.4
     cursor: default
 
-.cineclue-dropdown-titre
+.cinemaxd-dropdown-titre
   flex: 1
   font-weight: 500
 
-.cineclue-dropdown-annee
+.cinemaxd-dropdown-annee
   font-size: 0.78rem
   color: var(--muted)
   font-family: var(--mono)
 
-.cineclue-dropdown-badge
+.cinemaxd-dropdown-badge
   font-size: 0.7rem
   padding: 0.1rem 0.4rem
   background: var(--card-2)
   border-radius: 3px
   color: var(--muted)
 
-.cineclue-btn-submit
+.cinemaxd-btn-submit
   padding: 0.55rem 1.1rem
   background: var(--accent)
   color: white
@@ -1987,7 +1993,7 @@ $flip-duration: 400ms
     opacity: 0.35
     cursor: not-allowed
 
-.cineclue-history
+.cinemaxd-history
   display: flex
   flex-direction: column
   gap: 0
@@ -1995,7 +2001,7 @@ $flip-duration: 400ms
   border-radius: var(--radius)
   overflow: hidden
 
-.cineclue-history-head
+.cinemaxd-history-head
   display: grid
   grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr
   gap: 0.5rem
@@ -2012,7 +2018,7 @@ $flip-duration: 400ms
     > span:nth-child(5), > span:nth-child(6), > span:nth-child(7)
       display: none
 
-.cineclue-history-row
+.cinemaxd-history-row
   display: grid
   grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1.2fr
   gap: 0.5rem
@@ -2030,7 +2036,7 @@ $flip-duration: 400ms
     > div:nth-child(5), > div:nth-child(6), > div:nth-child(7)
       display: none
 
-.cineclue-history-actors
+.cinemaxd-history-actors
   display: flex
   flex-wrap: wrap
   gap: 0.5rem
@@ -2042,7 +2048,7 @@ $flip-duration: 400ms
     border-bottom-left-radius: var(--radius)
     border-bottom-right-radius: var(--radius)
 
-.cineclue-history-titre
+.cinemaxd-history-titre
   display: flex
   align-items: center
   gap: 0.4rem
@@ -2051,24 +2057,24 @@ $flip-duration: 400ms
   text-overflow: ellipsis
   white-space: nowrap
 
-.cineclue-history-num
+.cinemaxd-history-num
   font-size: 0.7rem
   color: var(--muted)
   font-family: var(--mono)
   flex-shrink: 0
 
-.cineclue-history-val
+.cinemaxd-history-val
   font-size: 0.78rem
   color: var(--text)
   margin-left: 0.25rem
 
-.cineclue-history-tags
+.cinemaxd-history-tags
   display: flex
   flex-wrap: wrap
   gap: 0.2rem
   font-size: 0.72rem
 
-.cineclue-badge
+.cinemaxd-badge
   display: inline-flex
   align-items: center
   justify-content: center
@@ -2079,15 +2085,15 @@ $flip-duration: 400ms
   font-weight: 700
   flex-shrink: 0
 
-  &.cineclue-badge-match
+  &.cinemaxd-badge-match
     background: var(--accent)
     color: white
 
-  &.cineclue-badge-no
+  &.cinemaxd-badge-no
     background: var(--card-2)
     color: var(--muted)
 
-  &.cineclue-badge-hint
+  &.cinemaxd-badge-hint
     background: var(--yellow-light)
     color: var(--yellow)
     border: 1px solid color-mix(in oklch, var(--yellow) 28%, var(--border))
@@ -2098,13 +2104,13 @@ $flip-duration: 400ms
   to
     text-decoration-color: color-mix(in oklch, var(--muted) 50%, transparent)
 
-.cineclue-hist-tag
+.cinemaxd-hist-tag
   padding: 0.1rem 0.3rem
   border-radius: 2px
   background: var(--card-2)
   color: var(--muted)
 
-  &:not(.on):not(.cineclue-hist-tag-more)
+  &:not(.on):not(.cinemaxd-hist-tag-more)
     text-decoration: line-through
     animation: hist-sweep 0.3s ease-out forwards
 
@@ -2113,17 +2119,17 @@ $flip-duration: 400ms
     color: var(--accent)
     border: 1px solid color-mix(in oklch, var(--accent) 28%, var(--border))
 
-.cineclue-gameover-actions
+.cinemaxd-gameover-actions
   display: flex
   justify-content: center
 
-.cineclue-footer
+.cinemaxd-footer
   display: flex
   align-items: center
   justify-content: space-between
   padding-top: 0.5rem
 
-.cineclue-back-link
+.cinemaxd-back-link
   font-size: 0.85rem
   color: var(--muted)
   text-decoration: none
@@ -2131,7 +2137,7 @@ $flip-duration: 400ms
   &:hover
     color: var(--accent)
 
-.cineclue-dev-reset
+.cinemaxd-dev-reset
   font-size: 0.72rem
   padding: 0.25rem 0.65rem
   background: transparent
@@ -2141,7 +2147,7 @@ $flip-duration: 400ms
   cursor: pointer
   opacity: 0.5
 
-.cineclue-modal-overlay
+.cinemaxd-modal-overlay
   position: fixed
   inset: 0
   background: oklch(0.25 0.01 60 / 0.50)
@@ -2151,7 +2157,7 @@ $flip-duration: 400ms
   z-index: 200
   padding: 1rem
 
-.cineclue-modal
+.cinemaxd-modal
   background: var(--card)
   border-radius: calc(var(--radius) * 1.5)
   padding: 2rem 1.75rem
@@ -2163,7 +2169,7 @@ $flip-duration: 400ms
   flex-direction: column
   gap: 1.25rem
 
-.cineclue-modal-close
+.cinemaxd-modal-close
   position: absolute
   top: 0.85rem
   right: 0.85rem
@@ -2174,7 +2180,7 @@ $flip-duration: 400ms
   cursor: pointer
   padding: 0.25rem 0.5rem
 
-.cineclue-modal-header
+.cinemaxd-modal-header
   text-align: center
 
   h2
@@ -2186,11 +2192,11 @@ $flip-duration: 400ms
     color: var(--muted)
     font-size: 0.88rem
 
-.cineclue-modal-emoji
+.cinemaxd-modal-emoji
   font-size: 2.5rem
   margin-bottom: 0.5rem
 
-.cineclue-modal-film
+.cinemaxd-modal-film
   display: flex
   flex-direction: column
   gap: 0.25rem
@@ -2199,14 +2205,14 @@ $flip-duration: 400ms
   border-radius: var(--radius)
   text-align: center
 
-.cineclue-modal-titre
+.cinemaxd-modal-titre
   font-size: 1.1rem
 
-.cineclue-modal-meta
+.cinemaxd-modal-meta
   font-size: 0.82rem
   color: var(--muted)
 
-.cineclue-modal-share-text
+.cinemaxd-modal-share-text
   background: var(--card-2)
   border-radius: var(--radius)
   padding: 0.75rem 1rem
@@ -2215,7 +2221,7 @@ $flip-duration: 400ms
   white-space: pre-wrap
   color: var(--text)
 
-.cineclue-modal-actions
+.cinemaxd-modal-actions
   display: flex
   gap: 0.75rem
   justify-content: center
@@ -2223,17 +2229,17 @@ $flip-duration: 400ms
 
 // ─── Status dots ──────────────────────────────────────────────────────────────
 
-.cineclue-status-right
+.cinemaxd-status-right
   display: flex
   align-items: center
   gap: 10px
 
-.cineclue-dots
+.cinemaxd-dots
   display: flex
   gap: 4px
   align-items: center
 
-.cineclue-dot
+.cinemaxd-dot
   width: 9px
   height: 9px
   border-radius: 50%
@@ -2245,20 +2251,20 @@ $flip-duration: 400ms
 
 // ─── Legend ───────────────────────────────────────────────────────────────────
 
-.cineclue-legend
+.cinemaxd-legend
   display: flex
   gap: 14px 18px
   flex-wrap: wrap
   align-items: center
 
-.cineclue-legend-item
+.cinemaxd-legend-item
   display: flex
   align-items: center
   gap: 5px
   font-size: 0.75rem
   color: var(--muted)
 
-.cineclue-legend-swatch
+.cinemaxd-legend-swatch
   width: 11px
   height: 11px
   border-radius: 3px
@@ -2273,12 +2279,12 @@ $flip-duration: 400ms
   &.miss
     background: #E2DBCF
 
-.cineclue-legend-arrow
+.cinemaxd-legend-arrow
   font-weight: 700
   color: var(--text-2)
   font-size: 0.75rem
 
-.cineclue-legend-actor-dot
+.cinemaxd-legend-actor-dot
   width: 14px
   height: 14px
   border-radius: 50%
@@ -2288,7 +2294,7 @@ $flip-duration: 400ms
 
 // ─── Chip ─────────────────────────────────────────────────────────────────────
 
-.cineclue-chip
+.cinemaxd-chip
   display: inline-flex
   align-items: center
   padding: 4px 10px
@@ -2314,7 +2320,7 @@ $flip-duration: 400ms
     color: #9B9385
     border-color: #E7E0D4
 
-.cineclue-chip-row
+.cinemaxd-chip-row
   display: flex
   gap: 4px
   flex-wrap: wrap
@@ -2322,12 +2328,12 @@ $flip-duration: 400ms
 
 // ─── Guess cards ──────────────────────────────────────────────────────────────
 
-.cineclue-guess-cards
+.cinemaxd-guess-cards
   display: flex
   flex-direction: column
   gap: 10px
 
-.cineclue-guess-card
+.cinemaxd-guess-card
   background: var(--card)
   border-radius: calc(var(--radius) + 2px)
   padding: 15px 16px
@@ -2336,12 +2342,12 @@ $flip-duration: 400ms
   flex-direction: column
   gap: 12px
 
-.cineclue-guess-header
+.cinemaxd-guess-header
   display: flex
   align-items: center
   gap: 10px
 
-.cineclue-guess-num
+.cinemaxd-guess-num
   background: var(--card-2)
   color: var(--muted)
   font-size: 0.72rem
@@ -2351,31 +2357,31 @@ $flip-duration: 400ms
   font-variant-numeric: tabular-nums
   flex-shrink: 0
 
-.cineclue-guess-title
+.cinemaxd-guess-title
   font-family: var(--font-display)
   font-weight: 700
   font-size: 0.95rem
   letter-spacing: -0.01em
 
-.cineclue-guess-attrs
+.cinemaxd-guess-attrs
   display: flex
   flex-wrap: wrap
   gap: 14px 20px
   align-items: flex-start
 
-.cineclue-guess-attr
+.cinemaxd-guess-attr
   display: flex
   flex-direction: column
   gap: 5px
 
-.cineclue-attr-label
+.cinemaxd-attr-label
   font-size: 0.62rem
   letter-spacing: 0.08em
   text-transform: uppercase
   color: var(--muted)
   font-weight: 600
 
-.cineclue-guess-actor-list
+.cinemaxd-guess-actor-list
   display: flex
   gap: 12px
   flex-wrap: nowrap
@@ -2386,7 +2392,7 @@ $flip-duration: 400ms
   scrollbar-width: thin
   scrollbar-color: var(--border) transparent
 
-.cineclue-guess-actor
+.cinemaxd-guess-actor
   display: flex
   flex-direction: column
   align-items: center
@@ -2394,7 +2400,7 @@ $flip-duration: 400ms
   width: 64px
   flex-shrink: 0
 
-.cineclue-guess-actor-av
+.cinemaxd-guess-actor-av
   width: 58px
   height: 58px
   border-radius: 50%
@@ -2417,7 +2423,7 @@ $flip-duration: 400ms
     box-shadow: 0 0 0 2px var(--border)
     opacity: 0.6
 
-.cineclue-guess-actor-name
+.cinemaxd-guess-actor-name
   font-size: 0.7rem
   font-weight: 500
   color: var(--muted)
@@ -2434,7 +2440,7 @@ $flip-duration: 400ms
 
 // ─── Pity clue glow animation ─────────────────────────────────────────────────
 
-@keyframes cineclue-pity-glow
+@keyframes cinemaxd-pity-glow
   0%
     box-shadow: 0 0 0 0 oklch(0.82 0.18 75 / 0.7)
   60%
@@ -2442,15 +2448,15 @@ $flip-duration: 400ms
   100%
     box-shadow: 0 0 0 0 oklch(0.82 0.18 75 / 0)
 
-.cineclue-pity-slot
-  animation: cineclue-pity-glow 1.4s ease 0.35s both
+.cinemaxd-pity-slot
+  animation: cinemaxd-pity-glow 1.4s ease 0.35s both
   border-radius: var(--radius)
   padding: 2px 4px
   margin: -2px -4px
 
 // ─── Pity clue popup ──────────────────────────────────────────────────────────
 
-.cineclue-pity-modal
+.cinemaxd-pity-modal
   background: var(--card)
   border-radius: calc(var(--radius) * 1.5)
   padding: 2rem 1.75rem
@@ -2462,12 +2468,12 @@ $flip-duration: 400ms
   flex-direction: column
   gap: 1rem
 
-.cineclue-pity-description
+.cinemaxd-pity-description
   font-size: 0.9rem
   color: var(--muted)
   margin: 0
 
-.cineclue-pity-list
+.cinemaxd-pity-list
   margin: 0
   padding-left: 1.2rem
   display: flex
@@ -2479,7 +2485,7 @@ $flip-duration: 400ms
   li
     list-style: disc
 
-.cineclue-pity-checkbox
+.cinemaxd-pity-checkbox
   display: flex
   align-items: center
   gap: 0.5rem
@@ -2495,7 +2501,7 @@ $flip-duration: 400ms
 
 // ─── Director initials (PersonaBoard) ─────────────────────────────────────────
 
-.cineclue-real-initials
+.cinemaxd-real-initials
   width: 30px
   height: 30px
   border-radius: 50%
@@ -2559,6 +2565,28 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   max-width: 760px
   margin: 0 auto
   padding: 1.5rem 0 4rem
+
+// ─── Persona board ───────────────────────────────────────────────────────────
+.vinymix-persona
+  background: $slot-bg
+  border: 1px solid $slot-border
+  border-radius: var(--radius)
+  padding: 1.25rem
+  display: flex
+  flex-direction: column
+  gap: 1rem
+  box-shadow: 0 2px 8px rgba(0,0,0,.12)
+
+  @media (max-width: 600px)
+    padding: 1rem
+
+.vinymix-persona-row
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 1rem
+
+  @media (max-width: 500px)
+    grid-template-columns: 1fr
 
 // ─── Hero card ────────────────────────────────────────────────────────────────
 .vinymix-hero
@@ -2926,6 +2954,29 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   flex-wrap: wrap
   gap: 5px
 
+.vinymix-card-genres
+  display: flex
+  align-items: flex-start
+  gap: 0.5rem
+  margin-top: 6px
+  padding-top: 6px
+  border-top: 1px solid var(--line-soft)
+
+.vinymix-card-genres-label
+  font-size: 0.65rem
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: 0.03em
+  color: var(--muted)
+  white-space: nowrap
+  padding-top: 5px
+  flex-shrink: 0
+
+.vinymix-card-genres-pills
+  display: flex
+  flex-wrap: wrap
+  gap: 5px
+
 .vinymix-clue-pill
   display: inline-flex
   align-items: center
@@ -2987,6 +3038,16 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: var(--muted)
   margin-top: 0.3rem
   max-width: 36ch
+
+// ─── Guess error ─────────────────────────────────────────────────────────────
+.vinymix-error
+  margin: 0.5rem 0 0
+  padding: 0.55rem 0.9rem
+  border-radius: 8px
+  background: oklch(0.96 0.06 25)
+  color: oklch(0.42 0.18 25)
+  font-size: 0.85rem
+  font-weight: 500
 
 // ─── Game over actions ────────────────────────────────────────────────────────
 .vinymix-gameover-actions
@@ -3194,3 +3255,720 @@ $vinymix-info-text: oklch(0.52 0.06 255)
 .vinymix-modal-actions
   display: flex
   gap: 0.625rem
+
+// ─── PolitiClue ────────────────────────────────────────────────────────────────
+
+.politiclue-game
+  max-width: 740px
+  margin: 0 auto
+  padding: 26px 0 60px
+
+// Clue board
+.politiclue-clueboard
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 18px
+  padding: 18px 18px 20px
+  box-shadow: var(--shadow-soft)
+  margin-bottom: 18px
+
+.politiclue-clueboard-title
+  display: flex
+  align-items: center
+  gap: 8px
+  margin-bottom: 14px
+  font-family: var(--font-display)
+  font-size: 15px
+  font-weight: 700
+
+.politiclue-clueboard-subtitle
+  font-size: 12px
+  color: var(--muted)
+  font-family: var(--font)
+  font-weight: 400
+
+// Scale bar
+.politiclue-scale-wrap
+  margin-bottom: 16px
+
+.politiclue-scale-header
+  display: flex
+  justify-content: space-between
+  align-items: baseline
+  margin-bottom: 7px
+
+.politiclue-scale-heading
+  font-size: 11px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .04em
+  color: var(--muted)
+
+.politiclue-scale-label
+  font-size: 13px
+  font-weight: 700
+  color: oklch(0.40 0.02 60)
+
+.politiclue-scale-bar-wrap
+  position: relative
+  padding-top: 18px
+
+.politiclue-scale-bar
+  position: relative
+  height: 14px
+  border-radius: 99px
+  overflow: hidden
+  background: linear-gradient(90deg, oklch(0.55 0.20 25), oklch(0.74 0.13 38), oklch(0.91 0.025 80), oklch(0.62 0.12 245), oklch(0.45 0.16 262))
+
+.politiclue-scale-mask
+  position: absolute
+  top: 0
+  bottom: 0
+  background: oklch(0.975 0.012 85 / 0.82)
+
+.politiclue-scale-mask-left
+  left: 0
+
+.politiclue-scale-mask-right
+  right: 0
+
+.politiclue-scale-cursor
+  position: absolute
+  top: 0
+  bottom: 0
+  width: 0
+  transform: translateX(-50%)
+  pointer-events: none
+  &::before
+    content: '▼'
+    position: absolute
+    top: 0
+    left: 50%
+    transform: translateX(-50%) translateY(-100%)
+    font-size: 9px
+    line-height: 1
+    color: oklch(0.22 0.02 60)
+  &::after
+    content: ''
+    position: absolute
+    top: 18px
+    bottom: 0
+    left: 0
+    width: 2px
+    transform: translateX(-50%)
+    background: oklch(0.22 0.02 60)
+    border-radius: 2px
+
+.politiclue-scale-ticks
+  display: flex
+  justify-content: space-between
+  margin-top: 5px
+  font-size: 10.5px
+  font-weight: 600
+  color: var(--muted)
+
+// Clue tiles
+.politiclue-tiles
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr))
+  gap: 10px
+
+.politiclue-tile
+  background: oklch(0.965 0.012 84)
+  border: 1px solid oklch(0.925 0.011 80)
+  border-radius: 12px
+  padding: 9px 12px
+
+.politiclue-tile-wide
+  margin-top: 10px
+
+.politiclue-tile-label
+  font-size: 10.5px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .03em
+  color: var(--muted)
+  margin-bottom: 3px
+
+.politiclue-tile-val
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+
+// Status bar
+.politiclue-status
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 12px
+  margin-bottom: 14px
+  flex-wrap: wrap
+
+.politiclue-status-right
+  display: flex
+  align-items: center
+  gap: 10px
+
+.politiclue-dots
+  display: flex
+  gap: 5px
+
+.politiclue-dot
+  width: 9px
+  height: 9px
+  border-radius: 50%
+  display: inline-block
+
+.politiclue-counter
+  font-variant-numeric: tabular-nums
+  font-size: 13px
+  font-weight: 700
+  color: oklch(0.48 0.02 62)
+
+// Search
+.politiclue-search-wrap
+  position: relative
+  margin-bottom: 18px
+
+.politiclue-search-row
+  display: flex
+  gap: 10px
+
+.politiclue-search-input
+  width: 100%
+  border: 1px solid var(--border)
+  background: var(--card)
+  border-radius: 12px
+  padding: 13px 16px
+  font-family: var(--font)
+  font-size: 15px
+  color: var(--text)
+  outline: none
+  box-shadow: 0 1px 2px oklch(0.5 0.03 60 / .04)
+  &:focus
+    border-color: oklch(0.70 0.17 45 / 0.5)
+    box-shadow: 0 0 0 3px oklch(0.70 0.17 45 / 0.12)
+
+.politiclue-dropdown
+  list-style: none
+  position: absolute
+  top: calc(100% + 6px)
+  left: 0
+  right: 0
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 12px
+  box-shadow: var(--shadow-lift)
+  z-index: 30
+  max-height: 296px
+  overflow-y: auto
+  padding: 5px
+
+.politiclue-dropdown-item
+  display: flex
+  align-items: center
+  gap: 11px
+  padding: 8px 10px
+  border-radius: 9px
+  cursor: pointer
+  &:hover, &.politiclue-dropdown-item-active
+    background: oklch(0.945 0.016 84)
+
+.politiclue-dropdown-empty
+  padding: 11px 12px
+  font-size: 13.5px
+  color: var(--muted)
+
+.politiclue-dropdown-nom
+  flex: 1
+  font-size: 14.5px
+  font-weight: 600
+  color: var(--text)
+
+.politiclue-dropdown-parti
+  font-size: 12px
+  color: var(--muted)
+
+.politiclue-error
+  margin-top: 8px
+  font-size: 13.5px
+  color: oklch(0.58 0.18 25)
+
+// Controls
+.politiclue-controls
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 14px
+  margin-bottom: 14px
+  flex-wrap: wrap
+
+.politiclue-seg
+  display: flex
+  background: oklch(0.945 0.016 84)
+  border: 1px solid oklch(0.925 0.011 80)
+  border-radius: 99px
+  padding: 3px
+
+.politiclue-seg-btn
+  border: none
+  border-radius: 99px
+  padding: 7px 16px
+  font-family: var(--font)
+  font-size: 13px
+  font-weight: 700
+  cursor: pointer
+  background: transparent
+  color: oklch(0.62 0.018 64)
+  transition: background .15s, color .15s
+  &.active
+    background: var(--card)
+    color: var(--text)
+
+.politiclue-legend
+  display: flex
+  gap: 14px
+  align-items: center
+  font-size: 11.5px
+  font-weight: 600
+  color: oklch(0.48 0.02 62)
+  flex-wrap: wrap
+
+.politiclue-legend-item
+  display: inline-flex
+  align-items: center
+  gap: 5px
+
+.politiclue-legend-swatch
+  width: 13px
+  height: 13px
+  border-radius: 4px
+  display: inline-block
+
+// Tableau view
+.politiclue-tableau-wrap
+  overflow-x: auto
+  padding-bottom: 6px
+  margin-bottom: 22px
+
+.politiclue-tableau-container
+  min-width: 570px
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+.politiclue-tableau-header
+  display: grid
+  grid-template-columns: minmax(130px, 1.6fr) repeat(7, minmax(50px, 1fr))
+  gap: 5px
+  padding: 0 4px
+
+.politiclue-tableau-row
+  display: grid
+  grid-template-columns: minmax(130px, 1.6fr) repeat(7, minmax(50px, 1fr))
+  gap: 5px
+  padding: 7px 7px 4px
+
+.politiclue-col-label
+  font-size: 10.5px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .03em
+  color: var(--muted)
+  padding-left: 2px
+
+.politiclue-col-center
+  text-align: center
+
+// Cells
+.politiclue-namecell
+  display: flex
+  align-items: center
+  gap: 8px
+  padding: 2px 4px 2px 2px
+  min-width: 0
+
+.politiclue-namecell-text
+  display: flex
+  flex-direction: column
+  min-width: 0
+
+.politiclue-nom-prenom
+  font-size: 10.5px
+  font-weight: 500
+  color: oklch(0.52 0.02 64)
+  line-height: 1.2
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.politiclue-nom
+  font-size: 12.5px
+  font-weight: 700
+  color: var(--text)
+  line-height: 1.2
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.politiclue-cell
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 2px
+  border-radius: 9px
+  font-weight: 700
+  font-size: 11px
+  text-align: center
+  padding: 5px 3px
+  line-height: 1.15
+  min-width: 0
+  overflow: hidden
+
+.politiclue-cell-text
+  font-size: 10.5px
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  width: 100%
+
+.politiclue-cell-main
+  display: block
+
+.politiclue-cell-arrow
+  font-size: 12px
+  opacity: 0.85
+  line-height: 1
+
+.politiclue-cell-foreign-badge
+  font-size: 8px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .04em
+  opacity: 0.82
+  line-height: 1.2
+
+.politiclue-cell-card
+  border-radius: 9px
+  padding: 7px 6px
+  font-size: 11.5px
+
+// Avatars
+.politiclue-avatar
+  width: 30px
+  height: 30px
+  border-radius: 50%
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 700
+  font-size: 12px
+  color: #fff
+  flex-shrink: 0
+
+.politiclue-avatar-sm
+  width: 34px
+  height: 34px
+  font-size: 13px
+
+.politiclue-avatar-lg
+  width: 38px
+  height: 38px
+  font-size: 14px
+
+// Guess card wrapper
+.politiclue-guess-card
+  background: var(--card)
+  border: 1px solid oklch(0.915 0.014 80)
+  border-radius: 12px
+  overflow: hidden
+  box-shadow: 0 1px 3px oklch(0.5 0.03 60 / .05)
+
+// Anciennes fonctions row
+.politiclue-anciens-row
+  display: flex
+  align-items: center
+  gap: 6px
+  flex-wrap: wrap
+  padding: 5px 10px 7px
+  border-top: 1px solid oklch(0.93 0.010 80)
+  background: oklch(0.975 0.007 80)
+
+.politiclue-anciens-label
+  font-size: 9px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .04em
+  color: var(--muted)
+
+.politiclue-chip
+  padding: 2px 8px
+  border-radius: 99px
+  font-size: 10px
+  font-weight: 700
+
+// Député scores
+.politiclue-depute-panel
+  display: flex
+  flex-direction: column
+  gap: 6px
+  padding: 8px 12px
+  background: oklch(0.965 0.012 84)
+  border-top: 1px solid oklch(0.925 0.011 80)
+
+.politiclue-depute-item
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 10px
+
+.politiclue-depute-meta
+  display: flex
+  flex-direction: column
+  gap: 1px
+  min-width: 0
+
+.politiclue-depute-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .03em
+  color: var(--muted)
+
+.politiclue-depute-desc
+  font-size: 11px
+  color: oklch(0.52 0.02 64)
+
+.politiclue-depute-val
+  font-size: 13px
+  font-weight: 700
+  color: var(--text)
+  white-space: nowrap
+  flex-shrink: 0
+
+// Condamnation panel
+.politiclue-condamnation-panel
+  display: flex
+  flex-direction: column
+  gap: 6px
+  padding: 8px 12px
+  background: oklch(0.975 0.012 25 / 0.6)
+  border-top: 1px solid oklch(0.91 0.025 25)
+
+.politiclue-condamnation-item
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.politiclue-condamnation-affaire
+  font-size: 12px
+  font-weight: 600
+  color: var(--text)
+
+.politiclue-condamnation-tags
+  display: flex
+  flex-wrap: wrap
+  gap: 5px
+
+.politiclue-condamnation-tag
+  font-size: 11px
+  font-weight: 500
+  padding: 2px 7px
+  border-radius: 99px
+  background: oklch(0.925 0.018 80)
+  color: oklch(0.40 0.02 60)
+
+.politiclue-condamnation-tag-prison
+  background: oklch(0.88 0.04 25)
+  color: oklch(0.38 0.10 25)
+
+.politiclue-condamnation-tag-amende
+  background: oklch(0.90 0.04 75)
+  color: oklch(0.40 0.06 75)
+
+// Cards view
+.politiclue-card
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 14px
+  padding: 14px
+  box-shadow: 0 2px 4px oklch(0.5 0.03 60 / .05)
+
+.politiclue-card-header
+  display: flex
+  align-items: center
+  gap: 11px
+  margin-bottom: 12px
+
+.politiclue-card-nom
+  font-family: var(--font-display)
+  font-size: 17px
+  font-weight: 700
+  color: var(--text)
+
+.politiclue-card-num
+  margin-left: auto
+  font-size: 12px
+  font-weight: 700
+  color: var(--muted)
+
+.politiclue-card-grid
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr))
+  gap: 7px
+
+.politiclue-card-field
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.politiclue-card-field-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .03em
+  color: var(--muted)
+
+.politiclue-card-anciens
+  margin-top: 11px
+  padding-top: 11px
+  border-top: 1px solid oklch(0.925 0.011 80)
+
+// Buttons
+.politiclue-btn-primary
+  border: none
+  border-radius: 12px
+  padding: 0 22px
+  height: 50px
+  font-family: var(--font)
+  font-size: 15px
+  font-weight: 700
+  color: #fff
+  background: oklch(0.70 0.17 45)
+  cursor: pointer
+  box-shadow: 0 2px 0 oklch(0.55 0.16 45), 0 6px 16px oklch(0.70 0.17 45 / .34)
+  white-space: nowrap
+  &:disabled
+    opacity: .5
+    cursor: not-allowed
+
+.politiclue-btn-secondary
+  flex: 1
+  border: 1px solid var(--border)
+  border-radius: 99px
+  padding: 12px
+  font-family: var(--font)
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  background: oklch(0.965 0.012 84)
+  cursor: pointer
+
+// Footer
+.politiclue-footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 12px
+  padding-top: 6px
+
+.politiclue-dev-reset
+  background: none
+  border: none
+  font-family: var(--font)
+  font-size: 12.5px
+  color: var(--muted)
+  cursor: pointer
+  text-decoration: underline
+  text-underline-offset: 2px
+
+// Modal
+.politiclue-modal-overlay
+  position: fixed
+  inset: 0
+  background: oklch(0.3 0.02 60 / .42)
+  backdrop-filter: blur(3px)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 60
+  padding: 20px
+
+.politiclue-modal
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 20px
+  padding: 28px
+  max-width: 420px
+  width: 100%
+  box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
+  text-align: center
+  animation: pcFade .3s ease both
+  @keyframes pcFade
+    0%
+      opacity: 0
+      transform: translateY(10px)
+    100%
+      opacity: 1
+      transform: none
+
+.politiclue-modal-title
+  font-family: var(--font-display)
+  font-size: 22px
+  font-weight: 800
+
+.politiclue-modal-avatar
+  width: 74px
+  height: 74px
+  border-radius: 50%
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 800
+  font-size: 26px
+  color: #fff
+  margin: 18px auto 12px
+
+.politiclue-modal-nom
+  font-family: var(--font-display)
+  font-size: 21px
+  font-weight: 700
+  color: var(--text)
+
+.politiclue-modal-sub
+  font-size: 14px
+  color: oklch(0.48 0.02 62)
+  margin-top: 3px
+
+.politiclue-modal-grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 8px
+  margin: 18px 0 6px
+  text-align: left
+
+.politiclue-modal-tile
+  background: oklch(0.965 0.012 84)
+  border-radius: 10px
+  padding: 8px 11px
+
+.politiclue-modal-tile-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  color: var(--muted)
+
+.politiclue-modal-tile-val
+  font-size: 13.5px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  margin-top: 2px
+
+.politiclue-modal-actions
+  display: flex
+  gap: 10px
+  margin-top: 18px
+  & .politiclue-btn-primary
+    flex: 1
+    border-radius: 99px

@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { db } from "../db";
-import { cineclueDaily, cineclueSessions, games, leaderboardEntries } from "../db/schema";
+import { cinemaxdDaily, cinemaxdSessions, games, leaderboardEntries } from "../db/schema";
 import {
   type Film,
   type IndicesReveles,
@@ -11,7 +11,7 @@ import {
   compareFilms,
   indicesFinaux,
   indicesVides,
-} from "../lib/cineclue";
+} from "../lib/cinemaxd";
 import { todayDate } from "../lib/date";
 import { fetchFilmById } from "../lib/tmdb";
 import { authMiddleware } from "../middleware/auth";
@@ -26,8 +26,8 @@ async function getDailyFilm(): Promise<Film | null> {
   const dateStr = todayDate();
   if (dailyCache?.dateStr === dateStr) return dailyCache.film;
 
-  const row = await db.query.cineclueDaily.findFirst({
-    where: eq(cineclueDaily.date, dateStr),
+  const row = await db.query.cinemaxdDaily.findFirst({
+    where: eq(cinemaxdDaily.date, dateStr),
   });
   if (!row) return null;
 
@@ -38,12 +38,12 @@ async function getDailyFilm(): Promise<Film | null> {
 
 // ─── Game ID helper ───────────────────────────────────────────────────────────
 
-let cineclueGameId: string | null = null;
-async function getCineclueGameId(): Promise<string | null> {
-  if (cineclueGameId) return cineclueGameId;
-  const game = await db.query.games.findFirst({ where: eq(games.slug, "cineclue") });
-  if (game) cineclueGameId = game.id;
-  return cineclueGameId;
+let cinemaxdGameId: string | null = null;
+async function getCinemaxdGameId(): Promise<string | null> {
+  if (cinemaxdGameId) return cinemaxdGameId;
+  const game = await db.query.games.findFirst({ where: eq(games.slug, "cinemaxd") });
+  if (game) cinemaxdGameId = game.id;
+  return cinemaxdGameId;
 }
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
@@ -75,8 +75,8 @@ filmdujour.get("/session", authMiddleware, async (c) => {
   const cible = await getDailyFilm();
   if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
 
-  const session = await db.query.cineclueSessions.findFirst({
-    where: and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)),
+  const session = await db.query.cinemaxdSessions.findFirst({
+    where: and(eq(cinemaxdSessions.userId, userId), eq(cinemaxdSessions.date, today)),
   });
 
   const totalIndices = {
@@ -114,8 +114,8 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
   if (!filmSoumis) return c.json({ error: "Film introuvable" }, 404);
   if (!cible) return c.json({ error: "Film du jour non configuré" }, 503);
 
-  const session = await db.query.cineclueSessions.findFirst({
-    where: and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)),
+  const session = await db.query.cinemaxdSessions.findFirst({
+    where: and(eq(cinemaxdSessions.userId, userId), eq(cinemaxdSessions.date, today)),
   });
 
   if (session && session.status !== "in_progress") {
@@ -160,7 +160,7 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
   const completedAt = nouveauStatut !== "in_progress" ? new Date() : null;
 
   if (!session) {
-    await db.insert(cineclueSessions).values({
+    await db.insert(cinemaxdSessions).values({
       userId,
       date: today,
       tentatives: nouvellesTentatives,
@@ -170,18 +170,18 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
     });
   } else {
     await db
-      .update(cineclueSessions)
+      .update(cinemaxdSessions)
       .set({
         tentatives: nouvellesTentatives,
         indices: nouveauxIndices,
         status: nouveauStatut,
         completedAt,
       })
-      .where(eq(cineclueSessions.id, session.id));
+      .where(eq(cinemaxdSessions.id, session.id));
   }
 
   if (nouveauStatut !== "in_progress") {
-    const gameId = await getCineclueGameId();
+    const gameId = await getCinemaxdGameId();
     if (gameId) {
       await db
         .insert(leaderboardEntries)
@@ -229,9 +229,9 @@ filmdujour.post("/daily", zValidator("json", dailySchema), async (c) => {
   if (!film) return c.json({ error: "Film TMDB introuvable" }, 404);
 
   await db
-    .insert(cineclueDaily)
+    .insert(cinemaxdDaily)
     .values({ date: targetDate, tmdbId })
-    .onConflictDoUpdate({ target: cineclueDaily.date, set: { tmdbId } });
+    .onConflictDoUpdate({ target: cinemaxdDaily.date, set: { tmdbId } });
 
   dailyCache = null;
   return c.json({ ok: true, film });
@@ -249,10 +249,10 @@ filmdujour.delete("/session", authMiddleware, async (c) => {
   const today = todayDate();
 
   await db
-    .delete(cineclueSessions)
-    .where(and(eq(cineclueSessions.userId, userId), eq(cineclueSessions.date, today)));
+    .delete(cinemaxdSessions)
+    .where(and(eq(cinemaxdSessions.userId, userId), eq(cinemaxdSessions.date, today)));
 
-  const gameId = await getCineclueGameId();
+  const gameId = await getCinemaxdGameId();
   if (gameId) {
     await db
       .delete(leaderboardEntries)
@@ -273,12 +273,12 @@ export { filmdujour };
 // ─── Route search TMDB ────────────────────────────────────────────────────────
 
 /**
- * GET /api/cineclue/search?q=...
+ * GET /api/cinemaxd/search?q=...
  * Public. Autocomplete via l'API TMDB (min 3 caractères, max 20 résultats).
  */
-export const cineclueSearch = new Hono();
+export const cinemaxdSearch = new Hono();
 
-cineclueSearch.get("/search", async (c) => {
+cinemaxdSearch.get("/search", async (c) => {
   const q = c.req.query("q") ?? "";
   if (q.length < 3) {
     return c.json({ error: "q doit faire au moins 3 caractères" }, 400);
@@ -310,7 +310,7 @@ cineclueSearch.get("/search", async (c) => {
 
     return c.json(films);
   } catch (err) {
-    console.error("[cineclue/search] TMDB error:", err);
+    console.error("[cinemaxd/search] TMDB error:", err);
     return c.json({ error: "Erreur TMDB" }, 502);
   }
 });

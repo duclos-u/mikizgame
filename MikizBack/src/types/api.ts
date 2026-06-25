@@ -32,12 +32,12 @@ export type DailyInfo = {
   firstLetter: string;
 };
 
-// ─── CinéClue ─────────────────────────────────────────────────────────────────
+// ─── Cinemaxd ─────────────────────────────────────────────────────────────────
 
-export type CineclueActeur = { nom: string; photo: string | null };
-export type CineclueReal = { nom: string; photo: string | null };
+export type CinemaxdActeur = { nom: string; photo: string | null };
+export type CinemaxdReal = { nom: string; photo: string | null };
 
-export type CineclueFilm = {
+export type CinemaxdFilm = {
   id: number;
   titre: string;
   annee: number;
@@ -45,12 +45,12 @@ export type CineclueFilm = {
   genres: string[];
   pays: string[];
   langue: string;
-  realisateurs: CineclueReal[];
-  acteurs: CineclueActeur[];
+  realisateurs: CinemaxdReal[];
+  acteurs: CinemaxdActeur[];
   recompenses: string[];
 };
 
-export type CineclueIndices = {
+export type CinemaxdIndices = {
   genres: string[];
   pays: string[];
   acteurs: string[];
@@ -63,39 +63,39 @@ export type CineclueIndices = {
   langue: string | null;
 };
 
-export type CineclueStatut = "in_progress" | "won" | "lost";
+export type CinemaxdStatut = "in_progress" | "won" | "lost";
 
-export type CineclueTotaux = {
+export type CinemaxdTotaux = {
   genres: number;
   pays: number;
   acteurs: number;
 };
 
-export type CineclueTentative = {
+export type CinemaxdTentative = {
   tmdbId: number;
-  filmSoumis: CineclueFilm;
+  filmSoumis: CinemaxdFilm;
   anneeProche?: boolean;
   dureeProche?: boolean;
 };
 
-export type CineclueSession = {
-  statut: CineclueStatut;
-  tentatives: CineclueTentative[];
-  indices: CineclueIndices;
+export type CinemaxdSession = {
+  statut: CinemaxdStatut;
+  tentatives: CinemaxdTentative[];
+  indices: CinemaxdIndices;
   tentativesRestantes: number;
-  filmCible: CineclueFilm | null;
+  filmCible: CinemaxdFilm | null;
 };
 
-export type CineclueGuessResponse = {
+export type CinemaxdGuessResponse = {
   correct: boolean;
-  filmSoumis: CineclueFilm;
+  filmSoumis: CinemaxdFilm;
   anneeProche: boolean;
   dureeProche: boolean;
-  indicesReveles: CineclueIndices;
+  indicesReveles: CinemaxdIndices;
   tentativesRestantes: number;
-  statut: CineclueStatut;
-  filmCible: CineclueFilm | null;
-  totalIndices: CineclueTotaux;
+  statut: CinemaxdStatut;
+  filmCible: CinemaxdFilm | null;
+  totalIndices: CinemaxdTotaux;
   pityCluesRevealed: string[];
 };
 
@@ -138,6 +138,7 @@ export type AllTimeResponse = {
 export type DailyCountsResponse = {
   date: string;
   counts: Record<string, number>;
+  avgTries: Record<string, number | null>;
 };
 
 export type CrossGameBreakdown = {

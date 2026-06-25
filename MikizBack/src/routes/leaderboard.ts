@@ -150,20 +150,27 @@ leaderboard.get("/counts", async (c) => {
     where: eq(games.active, true),
   });
 
-  const counts = await Promise.all(
+  const rows = await Promise.all(
     activeGames.map(async (game) => {
       const [row] = await db
-        .select({ count: sql<number>`count(*)::int` })
+        .select({
+          count: sql<number>`count(*)::int`,
+          avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)`,
+        })
         .from(leaderboardEntries)
         .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
-      return { slug: game.slug, count: row?.count ?? 0 };
+      return { slug: game.slug, count: row?.count ?? 0, avgTries: row?.avgTries ?? null };
     }),
   );
 
-  const result: Record<string, number> = {};
-  for (const { slug, count } of counts) result[slug] = count;
+  const counts: Record<string, number> = {};
+  const avgTries: Record<string, number | null> = {};
+  for (const { slug, count, avgTries: avg } of rows) {
+    counts[slug] = count;
+    avgTries[slug] = avg;
+  }
 
-  return c.json({ date, counts: result });
+  return c.json({ date, counts, avgTries });
 });
 
 /**

@@ -6,7 +6,7 @@
  *   bun films:set 2026-06-15 872585
  */
 import { db } from "../src/db";
-import { cineclueDaily } from "../src/db/schema";
+import { cinemaxdDaily } from "../src/db/schema";
 
 const [dateArg, tmdbIdArg] = process.argv.slice(2);
 
@@ -36,9 +36,9 @@ if (apiKey) {
 }
 
 await db
-  .insert(cineclueDaily)
+  .insert(cinemaxdDaily)
   .values({ date: dateArg, tmdbId })
-  .onConflictDoUpdate({ target: cineclueDaily.date, set: { tmdbId } });
+  .onConflictDoUpdate({ target: cinemaxdDaily.date, set: { tmdbId } });
 
 console.log(`Film du jour ${dateArg} : tmdbId=${tmdbId}`);
 process.exit(0);

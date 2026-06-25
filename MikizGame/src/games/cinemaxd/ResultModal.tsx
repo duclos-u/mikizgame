@@ -1,17 +1,17 @@
-import type { CineclueFilm, CineclueTentative } from '../../api/client'
+import type { CinemaxdFilm, CinemaxdTentative } from '../../api/client'
 
 type Props = {
   statut: 'won' | 'lost'
-  filmCible: CineclueFilm
-  tentatives: CineclueTentative[]
+  filmCible: CinemaxdFilm
+  tentatives: CinemaxdTentative[]
   onClose: () => void
 }
 
 // Génère le texte de partage style Wordle avec emojis
 function buildShareText(
   statut: 'won' | 'lost',
-  filmCible: CineclueFilm,
-  tentatives: CineclueTentative[],
+  filmCible: CinemaxdFilm,
+  tentatives: CinemaxdTentative[],
 ): string {
   const date = new Date().toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -39,7 +39,7 @@ function buildShareText(
     return '⬛'
   })
 
-  return `CinéClue 🎬 — ${date}\n${resultat}\n${lignes.join('')}\n\n#CinéClue`
+  return `Cinemaxd 🎬 — ${date}\n${resultat}\n${lignes.join('')}\n\n#Cinemaxd`
 }
 
 export function ResultModal({ statut, filmCible, tentatives, onClose }: Props) {
@@ -55,43 +55,43 @@ export function ResultModal({ statut, filmCible, tentatives, onClose }: Props) {
   }
 
   return (
-    <div className="cineclue-modal-overlay" onClick={onClose}>
+    <div className="cinemaxd-modal-overlay" onClick={onClose}>
       <div
-        className="cineclue-modal"
+        className="cinemaxd-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
-        <button type="button" className="cineclue-modal-close" onClick={onClose} aria-label="Fermer">
+        <button type="button" className="cinemaxd-modal-close" onClick={onClose} aria-label="Fermer">
           ✕
         </button>
 
-        <div className="cineclue-modal-header">
+        <div className="cinemaxd-modal-header">
           {statut === 'won' ? (
             <>
-              <div className="cineclue-modal-emoji">🎉</div>
+              <div className="cinemaxd-modal-emoji">🎉</div>
               <h2>Bravo !</h2>
               <p>Trouvé en {tentatives.length} tentative{tentatives.length > 1 ? 's' : ''}</p>
             </>
           ) : (
             <>
-              <div className="cineclue-modal-emoji">😞</div>
+              <div className="cinemaxd-modal-emoji">😞</div>
               <h2>Perdu !</h2>
               <p>Le film était :</p>
             </>
           )}
         </div>
 
-        <div className="cineclue-modal-film">
-          <strong className="cineclue-modal-titre">{filmCible.titre}</strong>
-          <span className="cineclue-modal-meta">
+        <div className="cinemaxd-modal-film">
+          <strong className="cinemaxd-modal-titre">{filmCible.titre}</strong>
+          <span className="cinemaxd-modal-meta">
             {filmCible.annee || '—'} · {filmCible.realisateurs[0]?.nom ?? '?'} · {filmCible.genres.slice(0, 2).join(', ')}
           </span>
         </div>
 
-        <pre className="cineclue-modal-share-text">{shareText}</pre>
+        <pre className="cinemaxd-modal-share-text">{shareText}</pre>
 
-        <div className="cineclue-modal-actions">
+        <div className="cinemaxd-modal-actions">
           <button type="button" className="btn btn-primary" onClick={handleShare}>
             Copier le résultat
           </button>

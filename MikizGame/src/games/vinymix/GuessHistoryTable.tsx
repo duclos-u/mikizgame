@@ -53,7 +53,7 @@ export function GuessHistoryTable({ guesses }: Props) {
                 {meta && <span className="vinymix-card-meta">{meta}</span>}
               </div>
               <div className="vinymix-card-clues">
-                {guess.clues.map((clue) => {
+                {guess.clues.filter((c) => !c.key.startsWith('genre-')).map((clue) => {
                   const p = PILL_STYLE[clue.status] ?? PILL_STYLE.unknown
                   return (
                     <span
@@ -72,6 +72,29 @@ export function GuessHistoryTable({ guesses }: Props) {
                   )
                 })}
               </div>
+              {(() => {
+                const genreClues = guess.clues.filter((c) => c.key.startsWith('genre-'))
+                if (genreClues.length === 0) return null
+                return (
+                  <div className="vinymix-card-genres">
+                    <span className="vinymix-card-genres-label">Genres</span>
+                    <div className="vinymix-card-genres-pills">
+                      {genreClues.map((clue) => {
+                        const p = PILL_STYLE[clue.status] ?? PILL_STYLE.unknown
+                        return (
+                          <span
+                            key={clue.key}
+                            className="vinymix-clue-pill"
+                            style={{ background: p.bg, color: p.fg, borderColor: p.bd }}
+                          >
+                            {clue.value}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
           </div>
         )

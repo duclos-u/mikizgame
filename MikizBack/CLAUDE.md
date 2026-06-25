@@ -23,6 +23,7 @@ bun words:delete <from> [to]       # delete scheduled words in date range
 bun words:set <date> <word>        # set a single word for a date
 
 bun artists:schedule [days] [start] # bulk-schedule daily artists via Spotify
+bun artists:set <date> <id|name>    # pin a specific artist to a date (Spotify ID or name)
 
 bun films:schedule [days] [start]  # bulk-schedule daily films via TMDB
 bun films:set <date> <tmdbId>      # set a single film for a date
