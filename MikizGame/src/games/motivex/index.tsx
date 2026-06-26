@@ -158,7 +158,6 @@ const Motivex = () => {
       const upper = e.key.toUpperCase()
       if (upper === 'ENTER' || upper === 'BACKSPACE' || /^[A-Z]$/.test(upper)) {
         physicalKeyHandled.current = true
-        requestAnimationFrame(() => { physicalKeyHandled.current = false })
       }
       handleKey(upper)
     }
@@ -179,6 +178,7 @@ const Motivex = () => {
         if (/^[A-Z]$/.test(char)) handleKey(char)
       }
     }
+    physicalKeyHandled.current = false
     // keep a dummy space so backspace always triggers an input event
     input.value = ' '
   }, [handleKey])
