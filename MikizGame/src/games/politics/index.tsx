@@ -18,6 +18,7 @@ import { today } from '../../utils/date'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const MAX_ATTEMPTS = 10
+const RANK_POINTS = [25, 18, 15, 12, 10, 8, 6, 5, 4, 3]
 
 const CELL = {
   match: 'background:oklch(0.74 0.14 150);color:#fff',
@@ -473,6 +474,7 @@ function ResultModal({
 }) {
   const [shared, setShared] = useState(false)
   const won = statut === 'won'
+  const points = won ? (RANK_POINTS[tentatives.length - 1] ?? 1) : 0
 
   const lastAnciennes = tentatives.at(-1)?.comparison.anciennesFonctions.value ?? []
   const lastFonctions = tentatives.at(-1)?.comparison.fonctionActuelle.value ?? []
@@ -516,6 +518,16 @@ function ResultModal({
           style={{ color: won ? 'oklch(0.55 0.13 150)' : 'oklch(0.58 0.18 25)' }}
         >
           {won ? 'Trouvé 🎉' : 'Dommage !'}
+        </div>
+
+        <div className="politiclue-modal-points">
+          <span className="politiclue-modal-points-value">{points}</span>
+          <span className="politiclue-modal-points-label">pts</span>
+          {won && (
+            <span className="politiclue-modal-points-detail">
+              en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
+            </span>
+          )}
         </div>
 
         {cible && (
@@ -568,9 +580,14 @@ function ResultModal({
           <button type="button" className="politiclue-btn-secondary" onClick={share}>
             {shared ? 'Copié ✓' : 'Partager'}
           </button>
-          <button type="button" className="politiclue-btn-primary" onClick={onReset}>
-            Rejouer
-          </button>
+          <a href="/leaderboard" className="politiclue-btn-secondary">
+            Classement
+          </a>
+          {import.meta.env.DEV && (
+            <button type="button" className="politiclue-btn-primary" onClick={onReset}>
+              Rejouer
+            </button>
+          )}
         </div>
       </div>
     </div>

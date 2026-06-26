@@ -11,6 +11,7 @@ await db
   .values([
     { slug: "motivex", name: "Motivex" },
     { slug: "cinemaxd", name: "Cinemaxd" },
+    { slug: "mikizpolitics", name: "PolitiClue" },
   ])
   .onConflictDoNothing();
 

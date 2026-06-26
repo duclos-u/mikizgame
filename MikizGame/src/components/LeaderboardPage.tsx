@@ -12,6 +12,8 @@ import { useAuth } from '../context/AuthContext'
 const GAME_LABELS: Record<string, string> = {
   motivex: 'Motivex',
   cinemaxd: 'Cinemaxd',
+  mikizpolitics: 'PolitiClue',
+  vinymix: 'Vinymix',
 }
 
 function gameLabel(slug: string) {
@@ -20,6 +22,11 @@ function gameLabel(slug: string) {
 
 function gameShort(slug: string) {
   return (GAME_LABELS[slug] ?? slug).slice(0, 1).toUpperCase()
+}
+
+function getGameSlug(gameId: string): string {
+  const game = GAMES.find((g) => g.id === gameId)
+  return game?.slug ?? gameId
 }
 
 // ── Avatar (initials circle) ──────────────────────────────────────────────────
@@ -195,7 +202,7 @@ export function LeaderboardPage() {
     if (gameId === 'general' || scope !== 'all') return
     setAllTimeLoading(true)
     api.leaderboard
-      .getStats(gameId)
+      .getStats(getGameSlug(gameId))
       .then(({ entries }) => setAllTimeEntries(entries))
       .catch(() => {})
       .finally(() => setAllTimeLoading(false))
@@ -438,7 +445,7 @@ export function LeaderboardPage() {
 
       {/* Per-game daily table */}
       {gameId !== 'general' && scope === 'daily' && (() => {
-        const entries = perGameEntries[gameId] ?? []
+        const entries = perGameEntries[getGameSlug(gameId)] ?? []
         const label = gameLabel(gameId)
         return (
           <div className="lb-table" style={{ marginBottom: '1.25rem' }}>
