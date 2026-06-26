@@ -2,15 +2,33 @@ import { and, eq, ne } from "drizzle-orm";
 import { db } from "../src/db";
 import { cinemaxdSessions, games, leaderboardEntries } from "../src/db/schema";
 
-const cinemaxdGame = await db
+let cinemaxdGame = await db
   .select()
   .from(games)
   .where(eq(games.slug, "cinemaxd"))
   .then((r) => r[0]);
 
 if (!cinemaxdGame) {
-  console.error("No cinemaxd game row found in games table. Aborting.");
-  process.exit(1);
+  // Migration may not have run yet — try the old slug and fix it on the fly
+  const oldRow = await db
+    .select()
+    .from(games)
+    .where(eq(games.slug, "cineclue"))
+    .then((r) => r[0]);
+
+  if (!oldRow) {
+    console.error("No cinemaxd or cineclue game row found in games table. Aborting.");
+    process.exit(1);
+  }
+
+  console.log("Found row with slug='cineclue' — updating to slug='cinemaxd', name='Cinemaxd'...");
+  await db
+    .update(games)
+    .set({ slug: "cinemaxd", name: "Cinemaxd" })
+    .where(eq(games.slug, "cineclue"));
+
+  cinemaxdGame = { ...oldRow, slug: "cinemaxd", name: "Cinemaxd" };
+  console.log("  Updated.\n");
 }
 
 const gameId = cinemaxdGame.id;
