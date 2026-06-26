@@ -38,7 +38,9 @@
       "Bash(bun db:generate)",
       "Bash(bun db:migrate *)",
       "Bash(bun *)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)\\)\")",
+      "Bash(xargs cat)",
+      "Bash(bunx drizzle-kit *)"
     ]
   }
 }
