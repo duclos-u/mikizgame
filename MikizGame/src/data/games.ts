@@ -7,6 +7,7 @@ export type GameStatus = 'live' | 'soon'
 
 export type Game = {
   id: string
+  slug?: string  // backend DB slug when it differs from id
   name: string
   desc: string
   icon: string
@@ -114,6 +115,7 @@ export const GAMES: Game[] = [
   },
   {
     id: 'politics',
+    slug: 'mikizpolitics',
     name: 'PolitiClue',
     desc: 'Devine le politicien du jour en 10 essais.',
     icon: '🗳️',

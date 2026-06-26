@@ -35,9 +35,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     api.auth
       .me()
       .then(({ user }) => setUser(user))
-      .catch(() => {
-        localStorage.removeItem(TOKEN_KEY)
-        setToken(null)
+      .catch((err: unknown) => {
+        // Only clear token on explicit auth rejection (401), not transient network errors
+        if (err instanceof Error && (err.message === 'Unauthorized' || err.message === 'Invalid or expired token')) {
+          localStorage.removeItem(TOKEN_KEY)
+          setToken(null)
+        }
       })
       .finally(() => setLoading(false))
   }, [token])

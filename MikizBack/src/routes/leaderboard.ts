@@ -1,7 +1,22 @@
 import { and, asc, eq, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
-import { games, leaderboardEntries, users } from "../db/schema";
+import {
+  cinemaxdSessions,
+  games,
+  leaderboardEntries,
+  motivexSessions,
+  politicsSessions,
+  users,
+  vinymixSessions,
+} from "../db/schema";
+
+const SESSIONS_BY_SLUG = {
+  motivex: motivexSessions,
+  cinemaxd: cinemaxdSessions,
+  mikizpolitics: politicsSessions,
+  vinymix: vinymixSessions,
+} as const;
 
 const leaderboard = new Hono();
 
@@ -152,14 +167,21 @@ leaderboard.get("/counts", async (c) => {
 
   const rows = await Promise.all(
     activeGames.map(async (game) => {
-      const [row] = await db
-        .select({
-          count: sql<number>`count(*)::int`,
-          avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)`,
-        })
+      const sessionsTable = SESSIONS_BY_SLUG[game.slug as keyof typeof SESSIONS_BY_SLUG];
+
+      const [countRow] = sessionsTable
+        ? await db
+            .select({ count: sql<number>`count(*)::int` })
+            .from(sessionsTable)
+            .where(eq(sessionsTable.date, date))
+        : [{ count: 0 }];
+
+      const [avgRow] = await db
+        .select({ avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)` })
         .from(leaderboardEntries)
         .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
-      return { slug: game.slug, count: row?.count ?? 0, avgTries: row?.avgTries ?? null };
+
+      return { slug: game.slug, count: countRow?.count ?? 0, avgTries: avgRow?.avgTries ?? null };
     }),
   );
 

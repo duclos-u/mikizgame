@@ -64,7 +64,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 export default function FilmDuJour() {
   // ── Session hook: localStorage-first + API refresh when authed ────────────
-  const { data, setData, loading } = useGameSession<CinemaxdData>({
+  const { data, setData, loading, error } = useGameSession<CinemaxdData>({
     cacheKey: STORAGE_KEYS.CINEMAXD_STATE(today()),
     fetch: () => api.cinemaxd.session(),
   })
@@ -179,6 +179,16 @@ export default function FilmDuJour() {
       <Shell>
         <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
           <p style={{ color: 'var(--muted)' }}>Chargement…</p>
+        </div>
+      </Shell>
+    )
+  }
+
+  if (error) {
+    return (
+      <Shell>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--muted)' }}>{error}</p>
         </div>
       </Shell>
     )
