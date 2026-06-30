@@ -5,8 +5,8 @@ export type VinymixArtist = {
   creationYear: number | null;
   memberCount: number;
   spotifyFollowers: number;
+  spotifyPopularity: number;
   genres: string[];
-  mostFamousSong: { title: string; spotifyStreams: number } | null;
   gender: string | null;
   country: string | null;
 };
@@ -45,6 +45,25 @@ export function followerTierLabel(n: number): string {
   return FOLLOWER_TIERS[followerTier(n)].label;
 }
 
+const POPULARITY_TIERS = [
+  { max: 30,  label: "Peu connu" },
+  { max: 50,  label: "Connu" },
+  { max: 65,  label: "Populaire" },
+  { max: 80,  label: "Très populaire" },
+  { max: 101, label: "Star interplanétaire" },
+];
+
+export function popularityTier(n: number): number {
+  for (let i = 0; i < POPULARITY_TIERS.length; i++) {
+    if (n < POPULARITY_TIERS[i].max) return i;
+  }
+  return POPULARITY_TIERS.length - 1;
+}
+
+export function popularityTierLabel(n: number): string {
+  return POPULARITY_TIERS[popularityTier(n)].label;
+}
+
 export function compareArtists(guess: VinymixArtist, target: VinymixArtist): ClueResult[] {
   const clues: ClueResult[] = [];
 
@@ -81,14 +100,14 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
     direction: memberDiff !== 0 ? (memberDiff < 0 ? "up" : "down") : undefined,
   });
 
-  // 3. Popularity (follower tier)
-  const gTier = followerTier(guess.spotifyFollowers);
-  const tTier = followerTier(target.spotifyFollowers);
+  // 3. Popularity (Spotify popularity score tier)
+  const gTier = popularityTier(guess.spotifyPopularity);
+  const tTier = popularityTier(target.spotifyPopularity);
   const tierDiff = tTier - gTier;
   clues.push({
     key: "popularity",
     label: "Popularité",
-    value: FOLLOWER_TIERS[gTier].label,
+    value: POPULARITY_TIERS[gTier].label,
     status: tierDiff === 0 ? "match" : Math.abs(tierDiff) === 1 ? "close" : "miss",
     direction: tierDiff !== 0 ? (tierDiff > 0 ? "up" : "down") : undefined,
   });

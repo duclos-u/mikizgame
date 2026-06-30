@@ -39,7 +39,7 @@ async function getDailyPoliticianIndex(): Promise<number | null> {
 let politicsGameId: string | null = null;
 async function getPoliticsGameId(): Promise<string | null> {
   if (politicsGameId) return politicsGameId;
-  const game = await db.query.games.findFirst({ where: eq(games.slug, "mikizpolitics") });
+  const game = await db.query.games.findFirst({ where: eq(games.slug, "politeki") });
   if (game) politicsGameId = game.id;
   return politicsGameId;
 }

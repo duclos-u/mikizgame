@@ -313,15 +313,14 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
   const [dailyAvgTries, setDailyAvgTries] = useState<Record<string, number | null>>({})
 
   useEffect(() => {
-    api.leaderboard
-      .getCross()
-      .then(({ entries }) => setCrossEntries(entries))
-      .catch(() => setCrossEntries([]))
-      .finally(() => setLbLoading(false))
-    api.leaderboard.getCounts().then(({ counts, avgTries }) => {
+    Promise.all([
+      api.leaderboard.getCross().catch(() => ({ entries: [] as CrossGameEntry[] })),
+      api.leaderboard.getCounts().catch(() => ({ counts: {} as Record<string, number>, avgTries: {} as Record<string, number | null> })),
+    ]).then(([{ entries }, { counts, avgTries }]) => {
+      setCrossEntries(entries)
       setPlayerCounts(counts)
       setDailyAvgTries(avgTries)
-    }).catch(() => {})
+    }).finally(() => setLbLoading(false))
   }, [])
 
   const todayLabel = new Date().toLocaleDateString('fr-FR', {

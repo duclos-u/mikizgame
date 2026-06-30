@@ -1,5 +1,5 @@
 import confetti from 'canvas-confetti'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   type PoliticsCible,
   type PoliticsDeputeInfo,
@@ -276,31 +276,31 @@ function deriveClues(tentatives: PoliticsTentative[]) {
 
 function DeputePanel({ info }: { info: PoliticsDeputeInfo }) {
   return (
-    <div className="politiclue-depute-panel">
-      <div className="politiclue-depute-item">
-        <div className="politiclue-depute-meta">
-          <span className="politiclue-depute-label">Participation</span>
-          <span className="politiclue-depute-desc">Présence en séance et votes exprimés</span>
+    <div className="politeki-depute-panel">
+      <div className="politeki-depute-item">
+        <div className="politeki-depute-meta">
+          <span className="politeki-depute-label">Participation</span>
+          <span className="politeki-depute-desc">Présence en séance et votes exprimés</span>
         </div>
-        <span className="politiclue-depute-val">{fmtPct(info.scoreParticipation)}</span>
+        <span className="politeki-depute-val">{fmtPct(info.scoreParticipation)}</span>
       </div>
-      <div className="politiclue-depute-item">
-        <div className="politiclue-depute-meta">
-          <span className="politiclue-depute-label">Loyauté</span>
-          <span className="politiclue-depute-desc">Vote en accord avec son groupe parlementaire</span>
+      <div className="politeki-depute-item">
+        <div className="politeki-depute-meta">
+          <span className="politeki-depute-label">Loyauté</span>
+          <span className="politeki-depute-desc">Vote en accord avec son groupe parlementaire</span>
         </div>
-        <span className="politiclue-depute-val">{fmtPct(info.scoreLoyaute)}</span>
+        <span className="politeki-depute-val">{fmtPct(info.scoreLoyaute)}</span>
       </div>
       {info.groupe && (
-        <div className="politiclue-depute-item">
-          <span className="politiclue-depute-label">Groupe</span>
-          <span className="politiclue-depute-val">{info.groupe}</span>
+        <div className="politeki-depute-item">
+          <span className="politeki-depute-label">Groupe</span>
+          <span className="politeki-depute-val">{info.groupe}</span>
         </div>
       )}
       {info.departementNom && (
-        <div className="politiclue-depute-item">
-          <span className="politiclue-depute-label">Département</span>
-          <span className="politiclue-depute-val">{info.departementNom}</span>
+        <div className="politeki-depute-item">
+          <span className="politeki-depute-label">Département</span>
+          <span className="politeki-depute-val">{info.departementNom}</span>
         </div>
       )}
     </div>
@@ -356,7 +356,7 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
   const fonctionsMatch = c.fonctionActuelle.matching
   const allMatch = fonctions.every((f) => fonctionsMatch.includes(f))
   const anyMatch = fonctions.some((f) => fonctionsMatch.includes(f))
-  const fonctionCellStyle = allMatch ? CELL.match : anyMatch ? CELL.close : CELL.miss
+  const fonctionCellStyle = (fonctions.length > 0 && allMatch) ? CELL.match : anyMatch ? CELL.close : CELL.miss
 
   const condStyle = c.condamnation.match === 'exact' ? CELL.match : CELL.miss
   const condLabel = c.condamnation.condamne ? 'Oui' : 'Non'
@@ -365,57 +365,60 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
   const matching = c.anciennesFonctions.matching
 
   return (
-    <div className="politiclue-guess-card">
-      <div className="politiclue-tableau-row">
-        <div className="politiclue-namecell">
-          <span className="politiclue-avatar" style={{ background: color }}>
+    <div className="politeki-guess-card">
+      <div className="politeki-tableau-row">
+        <div className="politeki-namecell">
+          <span className="politeki-avatar" style={{ background: color }}>
             {mkInitials(t.politicien.prenom, t.politicien.nom)}
           </span>
-          <div className="politiclue-namecell-text">
-            <span className="politiclue-nom-prenom">{t.politicien.prenom}</span>
-            <span className="politiclue-nom">{t.politicien.nom}</span>
+          <div className="politeki-namecell-text">
+            <span className="politeki-nom-prenom">{t.politicien.prenom}</span>
+            <span className="politeki-nom">{t.politicien.nom}</span>
           </div>
         </div>
-        <div className="politiclue-cell" style={{ cssText: genreStyle } as React.CSSProperties}>
+        <div className="politeki-cell" style={{ cssText: genreStyle } as React.CSSProperties}>
           {genreLabel}
         </div>
-        <div className="politiclue-cell politiclue-cell-text" style={{ cssText: partiStyle } as React.CSSProperties}>
+        <div className="politeki-cell politeki-cell-text" style={{ cssText: partiStyle } as React.CSSProperties}>
           {partiLabel}
         </div>
-        <div className="politiclue-cell" style={{ cssText: oriStyle } as React.CSSProperties}>
-          <span className="politiclue-cell-main">{oriLabel}</span>
-          {oriArrow && <span className="politiclue-cell-arrow">{oriArrow}</span>}
+        <div className="politeki-cell" style={{ cssText: oriStyle } as React.CSSProperties}>
+          <span className="politeki-cell-main">{oriLabel}</span>
+          {oriArrow && <span className="politeki-cell-arrow">{oriArrow}</span>}
         </div>
-        <div className="politiclue-cell" style={{ cssText: ageStyle } as React.CSSProperties}>
-          <span className="politiclue-cell-main">{ageLabel}</span>
-          {ageArrow && <span className="politiclue-cell-arrow">{ageArrow}</span>}
+        <div className="politeki-cell" style={{ cssText: ageStyle } as React.CSSProperties}>
+          <span className="politeki-cell-main">{ageLabel}</span>
+          {ageArrow && <span className="politeki-cell-arrow">{ageArrow}</span>}
         </div>
-        <div className="politiclue-cell" style={{ cssText: regionStyle } as React.CSSProperties}>
-          {regionForeign && <span className="politiclue-cell-foreign-badge">🌍 Étranger</span>}
-          <span className="politiclue-cell-main">{regionLabel}</span>
+        <div className="politeki-cell" style={{ cssText: regionStyle } as React.CSSProperties}>
+          {regionForeign && <span className="politeki-cell-foreign-badge">🌍 Étranger</span>}
+          <span className="politeki-cell-main">{regionLabel}</span>
         </div>
-        <div className="politiclue-cell" style={{ cssText: fonctionCellStyle } as React.CSSProperties}>
-          {fonctions.map((f) => (
-            <span
-              key={f}
-              className="politiclue-cell-main"
-              style={fonctions.length > 1 ? { opacity: fonctionsMatch.includes(f) ? 1 : 0.55 } : undefined}
-            >
-              {abbrevFonction(f)}
-            </span>
-          ))}
+        <div className="politeki-cell" style={{ cssText: fonctionCellStyle } as React.CSSProperties}>
+          {fonctions.length === 0
+            ? <span className="politeki-cell-main">—</span>
+            : fonctions.map((f) => (
+                <span
+                  key={f}
+                  className="politeki-cell-main"
+                  style={fonctions.length > 1 ? { opacity: fonctionsMatch.includes(f) ? 1 : 0.55 } : undefined}
+                >
+                  {abbrevFonction(f)}
+                </span>
+              ))
+          }
         </div>
-        <div className="politiclue-cell" style={{ cssText: condStyle } as React.CSSProperties}>
+        <div className="politeki-cell" style={{ cssText: condStyle } as React.CSSProperties}>
           {condLabel}
         </div>
       </div>
       {anciens.length > 0 && (
-        <div className="politiclue-anciens-row">
-          <span className="politiclue-anciens-label">Anc. fonctions</span>
+        <div className="politeki-anciens-row">
+          <span className="politeki-anciens-label">Anc. fonctions</span>
           {anciens.map((a) => (
             <span
               key={a}
-              className="politiclue-chip"
+              className="politeki-chip"
               style={{ cssText: matching.includes(a as PoliticsMandatType) ? CHIP.match : CHIP.grey } as React.CSSProperties}
             >
               {a}
@@ -424,23 +427,23 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
         </div>
       )}
       {c.condamnation.condamne && (c.condamnation.affaires?.length ?? 0) > 0 && (
-        <div className="politiclue-condamnation-panel">
+        <div className="politeki-condamnation-panel">
           {c.condamnation.affaires!.map((a, i) => (
-            <div key={i} className="politiclue-condamnation-item">
-              <span className="politiclue-condamnation-affaire">{a.affaire ?? '—'}</span>
-              <div className="politiclue-condamnation-tags">
+            <div key={i} className="politeki-condamnation-item">
+              <span className="politeki-condamnation-affaire">{a.affaire ?? '—'}</span>
+              <div className="politeki-condamnation-tags">
                 {a.prison && (
-                  <span className="politiclue-condamnation-tag politiclue-condamnation-tag-prison">
+                  <span className="politeki-condamnation-tag politeki-condamnation-tag-prison">
                     🔒 {a.prison}
                   </span>
                 )}
                 {a.amende && (
-                  <span className="politiclue-condamnation-tag politiclue-condamnation-tag-amende">
+                  <span className="politeki-condamnation-tag politeki-condamnation-tag-amende">
                     💶 {a.amende}
                   </span>
                 )}
                 {a.date && (
-                  <span className="politiclue-condamnation-tag">{a.date}</span>
+                  <span className="politeki-condamnation-tag">{a.date}</span>
                 )}
               </div>
             </div>
@@ -478,7 +481,7 @@ function ResultModal({
 
   const lastAnciennes = tentatives.at(-1)?.comparison.anciennesFonctions.value ?? []
   const lastFonctions = tentatives.at(-1)?.comparison.fonctionActuelle.value ?? []
-  const cibleAge = ageOf(cible?.naissance ?? null)
+  const cibleAge = ageOf(cible?.naissance ?? null, cible?.deces)
   const cibleOri =
     cible != null
       ? ORIENTATION_ORDER[Math.round((cible.politiscore / 100) * 4)]
@@ -497,7 +500,7 @@ function ResultModal({
         c.fonctionActuelle.matching.length === c.fonctionActuelle.value.length && c.fonctionActuelle.matching.length > 0 ? sym.match : c.fonctionActuelle.matching.length > 0 ? sym.close : sym.miss,
       ].join('')
     })
-    const head = `PolitiClue ${won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`}`
+    const head = `Politeki ${won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`}`
     try {
       navigator.clipboard.writeText(`${head}\n${lines.join('\n')}`)
       setShared(true)
@@ -506,25 +509,25 @@ function ResultModal({
   }
 
   return (
-    <div className="politiclue-modal-overlay" onClick={onClose}>
+    <div className="politeki-modal-overlay" onClick={onClose}>
       <div
-        className="politiclue-modal"
+        className="politeki-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
         <div
-          className="politiclue-modal-title"
+          className="politeki-modal-title"
           style={{ color: won ? 'oklch(0.55 0.13 150)' : 'oklch(0.58 0.18 25)' }}
         >
           {won ? 'Trouvé 🎉' : 'Dommage !'}
         </div>
 
-        <div className="politiclue-modal-points">
-          <span className="politiclue-modal-points-value">{points}</span>
-          <span className="politiclue-modal-points-label">pts</span>
+        <div className="politeki-modal-points">
+          <span className="politeki-modal-points-value">{points}</span>
+          <span className="politeki-modal-points-label">pts</span>
           {won && (
-            <span className="politiclue-modal-points-detail">
+            <span className="politeki-modal-points-detail">
               en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
             </span>
           )}
@@ -533,58 +536,58 @@ function ResultModal({
         {cible && (
           <>
             <div
-              className="politiclue-modal-avatar"
+              className="politeki-modal-avatar"
               style={{ background: partiColor(cible.currentOrLastParti) }}
             >
               {mkInitials(cible.prenom, cible.nom)}
             </div>
-            <div className="politiclue-modal-nom">
+            <div className="politeki-modal-nom">
               {cible.prenom} {cible.nom}
             </div>
-            <div className="politiclue-modal-sub">
-              {cibleAge != null ? `${cibleAge} ans · ` : ''}
+            <div className="politeki-modal-sub">
+              {cibleAge != null ? `${cible.deces ? '†' : ''}${cibleAge} ans · ` : ''}
               {cible.genre === 'M' ? 'Homme' : 'Femme'}
             </div>
 
-            <div className="politiclue-modal-grid">
-              <div className="politiclue-modal-tile">
-                <div className="politiclue-modal-tile-label">Parti</div>
-                <div className="politiclue-modal-tile-val">{cible.currentOrLastParti ?? '—'}</div>
+            <div className="politeki-modal-grid">
+              <div className="politeki-modal-tile">
+                <div className="politeki-modal-tile-label">Parti</div>
+                <div className="politeki-modal-tile-val">{cible.currentOrLastParti ?? '—'}</div>
               </div>
-              <div className="politiclue-modal-tile">
-                <div className="politiclue-modal-tile-label">Positionnement</div>
-                <div className="politiclue-modal-tile-val">{cibleOri ?? '—'}</div>
+              <div className="politeki-modal-tile">
+                <div className="politeki-modal-tile-label">Positionnement</div>
+                <div className="politeki-modal-tile-val">{cibleOri ?? '—'}</div>
               </div>
-              <div className="politiclue-modal-tile">
-                <div className="politiclue-modal-tile-label">Région</div>
-                <div className="politiclue-modal-tile-val">{cible.originRegion ?? '—'}</div>
+              <div className="politeki-modal-tile">
+                <div className="politeki-modal-tile-label">Région</div>
+                <div className="politeki-modal-tile-val">{cible.originRegion ?? '—'}</div>
               </div>
-              <div className="politiclue-modal-tile">
-                <div className="politiclue-modal-tile-label">Fonction</div>
-                <div className="politiclue-modal-tile-val">
+              <div className="politeki-modal-tile">
+                <div className="politeki-modal-tile-label">Fonction</div>
+                <div className="politeki-modal-tile-val">
                   {lastFonctions.length > 0 ? lastFonctions.join(' · ') : '—'}
                 </div>
               </div>
             </div>
 
             {lastAnciennes.length > 0 && (
-              <div className="politiclue-modal-tile" style={{ textAlign: 'left', marginTop: 8 }}>
-                <div className="politiclue-modal-tile-label">Anciennes fonctions</div>
-                <div className="politiclue-modal-tile-val">{lastAnciennes.join(' · ')}</div>
+              <div className="politeki-modal-tile" style={{ textAlign: 'left', marginTop: 8 }}>
+                <div className="politeki-modal-tile-label">Anciennes fonctions</div>
+                <div className="politeki-modal-tile-val">{lastAnciennes.join(' · ')}</div>
               </div>
             )}
           </>
         )}
 
-        <div className="politiclue-modal-actions">
-          <button type="button" className="politiclue-btn-secondary" onClick={share}>
+        <div className="politeki-modal-actions">
+          <button type="button" className="politeki-btn-secondary" onClick={share}>
             {shared ? 'Copié ✓' : 'Partager'}
           </button>
-          <a href="/leaderboard" className="politiclue-btn-secondary">
+          <a href="/leaderboard" className="politeki-btn-secondary">
             Classement
           </a>
           {import.meta.env.DEV && (
-            <button type="button" className="politiclue-btn-primary" onClick={onReset}>
+            <button type="button" className="politeki-btn-primary" onClick={onReset}>
               Rejouer
             </button>
           )}
@@ -596,7 +599,7 @@ function ResultModal({
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
-export default function PolitiClue() {
+export default function Politeki() {
   const { token } = useAuth()
 
   const [tentatives, setTentatives] = useState<PoliticsTentative[]>([])
@@ -687,7 +690,7 @@ export default function PolitiClue() {
           setSuggestions(results.filter((r) => !guessedIdx.includes(r.index)))
           setOpen(true)
         } catch {}
-      }, 200)
+      }, 300)
     },
     [tentatives],
   )
@@ -763,7 +766,7 @@ export default function PolitiClue() {
 
   // ─────────────────────────────────────────────────────────────────────────
 
-  const clues = deriveClues(tentatives)
+  const clues = useMemo(() => deriveClues(tentatives), [tentatives])
   // When the answer is revealed, use the exact politiscore for precision
   const scaleCursorPct = cible !== null ? cible.politiscore : clues.cursorPct
   const scaleLabel = cible !== null && clues.scaleLabel !== '—'
@@ -772,9 +775,12 @@ export default function PolitiClue() {
   const hasGuesses = tentatives.length > 0
   const guessCount = tentatives.length
 
-  const dots = Array.from({ length: MAX_ATTEMPTS }, (_, i) => ({
-    color: i < guessCount ? 'oklch(0.70 0.17 45)' : 'oklch(0.885 0.014 80)',
-  }))
+  const dots = useMemo(
+    () => Array.from({ length: MAX_ATTEMPTS }, (_, i) => ({
+      color: i < guessCount ? 'oklch(0.70 0.17 45)' : 'oklch(0.885 0.014 80)',
+    })),
+    [guessCount],
+  )
 
   let message = ''
   let messageColor = 'oklch(0.48 0.02 62)'
@@ -789,12 +795,12 @@ export default function PolitiClue() {
     message = `${r} essai${r > 1 ? 's' : ''} restant${r > 1 ? 's' : ''}.`
   }
 
-  const reversedTentatives = [...tentatives].reverse()
+  const reversedTentatives = useMemo(() => [...tentatives].reverse(), [tentatives])
 
   if (loading) {
     return (
       <div className="game-shell">
-        <GameHeader title="PolitiClue" subtitle={`Devine le politicien du jour en ${MAX_ATTEMPTS} essais`} />
+        <GameHeader title="Politeki" subtitle={`Devine le politicien du jour en ${MAX_ATTEMPTS} essais`} />
         <main className="container">
           <p style={{ color: 'var(--muted)', textAlign: 'center', paddingTop: '3rem' }}>
             Chargement…
@@ -807,45 +813,45 @@ export default function PolitiClue() {
   return (
     <div className="game-shell">
       <GameHeader
-        title="PolitiClue"
+        title="Politeki"
         subtitle={`Devine le politicien du jour en ${MAX_ATTEMPTS} essais`}
       />
 
       <main className="container">
-        <div className="politiclue-game">
+        <div className="politeki-game">
 
           {/* ── Clue board ───────────────────────────────────────────────── */}
-          <section className="politiclue-clueboard">
-              <div className="politiclue-clueboard-title">
+          <section className="politeki-clueboard">
+              <div className="politeki-clueboard-title">
                 <span>Ce qu'on sait</span>
-                <span className="politiclue-clueboard-subtitle">— déduit de tes essais</span>
+                <span className="politeki-clueboard-subtitle">— déduit de tes essais</span>
               </div>
 
               {/* Politiscale */}
-              <div className="politiclue-scale-wrap">
-                <div className="politiclue-scale-header">
-                  <span className="politiclue-scale-heading">Politiscale</span>
-                  <span className="politiclue-scale-label">{scaleLabel}</span>
+              <div className="politeki-scale-wrap">
+                <div className="politeki-scale-header">
+                  <span className="politeki-scale-heading">Politiscale</span>
+                  <span className="politeki-scale-label">{scaleLabel}</span>
                 </div>
-                <div className="politiclue-scale-bar-wrap">
-                  <div className="politiclue-scale-bar">
+                <div className="politeki-scale-bar-wrap">
+                  <div className="politeki-scale-bar">
                     <div
-                      className="politiclue-scale-mask politiclue-scale-mask-left"
+                      className="politeki-scale-mask politeki-scale-mask-left"
                       style={{ width: `${clues.leftPct}%` }}
                     />
                     <div
-                      className="politiclue-scale-mask politiclue-scale-mask-right"
+                      className="politeki-scale-mask politeki-scale-mask-right"
                       style={{ width: `${clues.rightPct}%` }}
                     />
                   </div>
                   {scaleCursorPct !== null && (
                     <div
-                      className="politiclue-scale-cursor"
+                      className="politeki-scale-cursor"
                       style={{ left: `${scaleCursorPct}%` }}
                     />
                   )}
                 </div>
-                <div className="politiclue-scale-ticks">
+                <div className="politeki-scale-ticks">
                   <span>Gauche</span>
                   <span>Centre</span>
                   <span>Droite</span>
@@ -853,7 +859,7 @@ export default function PolitiClue() {
               </div>
 
               {/* Tiles */}
-              <div className="politiclue-tiles">
+              <div className="politeki-tiles">
                 {[
                   { label: 'Genre', value: clues.genre },
                   { label: 'Âge', value: clues.ageLabel },
@@ -861,22 +867,22 @@ export default function PolitiClue() {
                   { label: "Région d'origine", value: clues.region },
                   { label: 'Fonction', value: clues.fonction },
                 ].map(({ label, value }) => (
-                  <div key={label} className="politiclue-tile">
-                    <div className="politiclue-tile-label">{label}</div>
-                    <div className="politiclue-tile-val">{value}</div>
+                  <div key={label} className="politeki-tile">
+                    <div className="politeki-tile-label">{label}</div>
+                    <div className="politeki-tile-val">{value}</div>
                   </div>
                 ))}
               </div>
 
               {/* Anciennes confirmées */}
-              <div className="politiclue-tile politiclue-tile-wide">
-                <div className="politiclue-tile-label">Anciennes fonctions confirmées</div>
+              <div className="politeki-tile politeki-tile-wide">
+                <div className="politeki-tile-label">Anciennes fonctions confirmées</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', marginTop: 4 }}>
                   {clues.anciens.length > 0
                     ? clues.anciens.map((a) => (
                         <span
                           key={a}
-                          className="politiclue-chip"
+                          className="politeki-chip"
                           style={{ cssText: CHIP.match } as React.CSSProperties}
                         >
                           {a}
@@ -888,19 +894,19 @@ export default function PolitiClue() {
             </section>
 
           {/* ── Status ───────────────────────────────────────────────────── */}
-          <div className="politiclue-status">
+          <div className="politeki-status">
             <span style={{ fontSize: '14.5px', fontWeight: 600, color: messageColor }}>{message}</span>
-            <div className="politiclue-status-right">
-              <div className="politiclue-dots">
+            <div className="politeki-status-right">
+              <div className="politeki-dots">
                 {dots.map((d, i) => (
                   <span
                     key={i}
-                    className="politiclue-dot"
+                    className="politeki-dot"
                     style={{ background: d.color }}
                   />
                 ))}
               </div>
-              <span className="politiclue-counter">
+              <span className="politeki-counter">
                 {guessCount} / {MAX_ATTEMPTS}
               </span>
             </div>
@@ -908,8 +914,8 @@ export default function PolitiClue() {
 
           {/* ── Search ───────────────────────────────────────────────────── */}
           {!gameOver && (
-            <div className="politiclue-search-wrap">
-              <div className="politiclue-search-row">
+            <div className="politeki-search-wrap">
+              <div className="politeki-search-row">
                 <div style={{ position: 'relative', flex: 1 }}>
                   <input
                     type="text"
@@ -936,29 +942,29 @@ export default function PolitiClue() {
                     placeholder="Tape le nom d'un politicien…"
                     autoComplete="off"
                     disabled={submitting}
-                    className="politiclue-search-input"
+                    className="politeki-search-input"
                   />
                   {open && (
-                    <ul className="politiclue-dropdown">
+                    <ul className="politeki-dropdown">
                       {suggestions.length === 0 ? (
-                        <li className="politiclue-dropdown-empty">Aucun politicien trouvé</li>
+                        <li className="politeki-dropdown-empty">Aucun politicien trouvé</li>
                       ) : (
                         suggestions.map((s, i) => (
                           <li
                             key={s.index}
                             onMouseDown={() => handleGuess(s)}
-                            className={`politiclue-dropdown-item${i === activeIdx ? ' politiclue-dropdown-item-active' : ''}`}
+                            className={`politeki-dropdown-item${i === activeIdx ? ' politeki-dropdown-item-active' : ''}`}
                           >
                             <span
-                              className="politiclue-avatar politiclue-avatar-sm"
+                              className="politeki-avatar politeki-avatar-sm"
                               style={{ background: partiColor(s.currentOrLastParti) }}
                             >
                               {mkInitials(s.prenom, s.nom)}
                             </span>
-                            <span className="politiclue-dropdown-nom">
+                            <span className="politeki-dropdown-nom">
                               {s.prenom} {s.nom}
                             </span>
-                            <span className="politiclue-dropdown-parti">
+                            <span className="politeki-dropdown-parti">
                               {s.currentOrLastParti ?? ''}
                             </span>
                           </li>
@@ -974,47 +980,47 @@ export default function PolitiClue() {
                     if (s) handleGuess(s)
                   }}
                   disabled={submitting || suggestions.length === 0}
-                  className="politiclue-btn-primary"
+                  className="politeki-btn-primary"
                 >
                   Deviner
                 </button>
               </div>
-              {error && <p className="politiclue-error">{error}</p>}
+              {error && <p className="politeki-error">{error}</p>}
             </div>
           )}
 
           {/* ── Legend ───────────────────────────────────────────────────── */}
           {hasGuesses && (
-            <div className="politiclue-legend">
-              <span className="politiclue-legend-item">
-                <span className="politiclue-legend-swatch" style={{ background: 'oklch(0.74 0.14 150)' }} />
+            <div className="politeki-legend">
+              <span className="politeki-legend-item">
+                <span className="politeki-legend-swatch" style={{ background: 'oklch(0.74 0.14 150)' }} />
                 Correct
               </span>
-              <span className="politiclue-legend-item">
-                <span className="politiclue-legend-swatch" style={{ background: 'oklch(0.82 0.14 85)' }} />
+              <span className="politeki-legend-item">
+                <span className="politeki-legend-swatch" style={{ background: 'oklch(0.82 0.14 85)' }} />
                 Proche
               </span>
-              <span className="politiclue-legend-item">
-                <span className="politiclue-legend-swatch" style={{ background: 'oklch(0.72 0.10 28)' }} />
+              <span className="politeki-legend-item">
+                <span className="politeki-legend-swatch" style={{ background: 'oklch(0.72 0.10 28)' }} />
                 Faux
               </span>
-              <span className="politiclue-legend-item">↑↓ direction</span>
+              <span className="politeki-legend-item">↑↓ direction</span>
             </div>
           )}
 
           {/* ── History ───────────────────────────────────────────────────── */}
           {hasGuesses && (
-            <div className="politiclue-tableau-wrap">
-              <div className="politiclue-tableau-container">
-                <div className="politiclue-tableau-header">
-                  <span className="politiclue-col-label">Politicien</span>
-                  <span className="politiclue-col-label politiclue-col-center">Genre</span>
-                  <span className="politiclue-col-label politiclue-col-center">Parti</span>
-                  <span className="politiclue-col-label politiclue-col-center">Axe G–D</span>
-                  <span className="politiclue-col-label politiclue-col-center">Âge</span>
-                  <span className="politiclue-col-label politiclue-col-center">Région</span>
-                  <span className="politiclue-col-label politiclue-col-center">Fonction</span>
-                  <span className="politiclue-col-label politiclue-col-center">Condamné</span>
+            <div className="politeki-tableau-wrap">
+              <div className="politeki-tableau-container">
+                <div className="politeki-tableau-header">
+                  <span className="politeki-col-label">Politicien</span>
+                  <span className="politeki-col-label politeki-col-center">Genre</span>
+                  <span className="politeki-col-label politeki-col-center">Parti</span>
+                  <span className="politeki-col-label politeki-col-center">Axe G–D</span>
+                  <span className="politeki-col-label politeki-col-center">Âge</span>
+                  <span className="politeki-col-label politeki-col-center">Région</span>
+                  <span className="politeki-col-label politeki-col-center">Fonction</span>
+                  <span className="politeki-col-label politeki-col-center">Condamné</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {reversedTentatives.map((t) => (
@@ -1026,14 +1032,14 @@ export default function PolitiClue() {
           )}
 
           {/* ── Footer ────────────────────────────────────────────────────── */}
-          <div className="politiclue-footer">
+          <div className="politeki-footer">
             <span style={{ fontSize: 13, color: 'var(--muted)' }}>
               Un nouveau politicien chaque jour.
             </span>
             {import.meta.env.DEV && (
               <button
                 type="button"
-                className="politiclue-dev-reset"
+                className="politeki-dev-reset"
                 onClick={handleReset}
               >
                 [dev] réinitialiser

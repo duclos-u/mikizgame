@@ -1,4 +1,4 @@
-import { and, asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
 import {
@@ -14,7 +14,7 @@ import {
 const SESSIONS_BY_SLUG = {
   motivex: motivexSessions,
   cinemaxd: cinemaxdSessions,
-  mikizpolitics: politicsSessions,
+  politeki: politicsSessions,
   vinymix: vinymixSessions,
 } as const;
 
@@ -39,17 +39,31 @@ leaderboard.get("/cross", async (c) => {
     return c.json({ date, games: [], entries: [] });
   }
 
-  const gameResults = await Promise.all(
-    activeGames.map(async (game) => {
-      const entries = await db
-        .select({ username: users.username, score: leaderboardEntries.score })
-        .from(leaderboardEntries)
-        .innerJoin(users, eq(leaderboardEntries.userId, users.id))
-        .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)))
-        .orderBy(asc(leaderboardEntries.score));
-      return { slug: game.slug, entries };
-    }),
-  );
+  const gameIdToSlug = Object.fromEntries(activeGames.map((g) => [g.id, g.slug]));
+
+  const flatEntries = await db
+    .select({
+      gameId: leaderboardEntries.gameId,
+      username: users.username,
+      score: leaderboardEntries.score,
+    })
+    .from(leaderboardEntries)
+    .innerJoin(users, eq(leaderboardEntries.userId, users.id))
+    .where(
+      and(
+        inArray(leaderboardEntries.gameId, activeGames.map((g) => g.id)),
+        eq(leaderboardEntries.date, date),
+      ),
+    )
+    .orderBy(asc(leaderboardEntries.score));
+
+  // Group by game slug and rank within each game
+  const bySlug: Record<string, Array<{ username: string; score: number | null }>> = {};
+  for (const entry of flatEntries) {
+    const slug = gameIdToSlug[entry.gameId] ?? entry.gameId;
+    if (!bySlug[slug]) bySlug[slug] = [];
+    bySlug[slug].push({ username: entry.username, score: entry.score });
+  }
 
   type UserData = {
     total: number;
@@ -57,7 +71,7 @@ leaderboard.get("/cross", async (c) => {
   };
   const userMap: Record<string, UserData> = {};
 
-  for (const { slug, entries } of gameResults) {
+  for (const [slug, entries] of Object.entries(bySlug)) {
     entries.forEach((entry, idx) => {
       const rank = idx + 1;
       const points = entry.score !== null ? (RANK_POINTS[entry.score - 1] ?? 0) : 0;
@@ -169,19 +183,24 @@ leaderboard.get("/counts", async (c) => {
     activeGames.map(async (game) => {
       const sessionsTable = SESSIONS_BY_SLUG[game.slug as keyof typeof SESSIONS_BY_SLUG];
 
-      const [countRow] = sessionsTable
-        ? await db
-            .select({ count: sql<number>`count(*)::int` })
-            .from(sessionsTable)
-            .where(eq(sessionsTable.date, date))
-        : [{ count: 0 }];
+      const [countResult, avgResult] = await Promise.all([
+        sessionsTable
+          ? db
+              .select({ count: sql<number>`count(*)::int` })
+              .from(sessionsTable)
+              .where(eq(sessionsTable.date, date))
+          : Promise.resolve([{ count: 0 }]),
+        db
+          .select({ avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)` })
+          .from(leaderboardEntries)
+          .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date))),
+      ]);
 
-      const [avgRow] = await db
-        .select({ avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)` })
-        .from(leaderboardEntries)
-        .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
-
-      return { slug: game.slug, count: countRow?.count ?? 0, avgTries: avgRow?.avgTries ?? null };
+      return {
+        slug: game.slug,
+        count: countResult[0]?.count ?? 0,
+        avgTries: avgResult[0]?.avgTries ?? null,
+      };
     }),
   );
 

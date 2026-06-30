@@ -1,4 +1,4 @@
-import { date, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { date, index, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const motivexSessionStatusEnum = pgEnum("motivex_session_status", [
@@ -25,7 +25,9 @@ export const motivexSessions = pgTable("motivex_sessions", {
   attempts: jsonb("attempts").notNull().default([]),
   status: motivexSessionStatusEnum("status").notNull().default("in_progress"),
   completedAt: timestamp("completed_at"),
-});
+}, (table) => [
+  index("idx_motivex_sessions_user_date").on(table.userId, table.date),
+]);
 
 export type MotivexDailyWord = typeof motivexDailyWords.$inferSelect;
 export type MotivexSession = typeof motivexSessions.$inferSelect;

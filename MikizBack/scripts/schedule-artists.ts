@@ -130,8 +130,8 @@ await db
       creationYear: a.creationYear,
       memberCount: a.memberCount,
       spotifyFollowers: a.spotifyFollowers,
+      spotifyPopularity: a.spotifyPopularity,
       genres: a.genres,
-      mostFamousSong: a.mostFamousSong,
       gender: a.gender,
       country: a.country,
       updatedAt: new Date(),
@@ -144,12 +144,10 @@ await db
       imageUrl: sql`excluded.image_url`,
       spotifyFollowers: sql`excluded.spotify_followers`,
       genres: sql`excluded.genres`,
-      mostFamousSong: sql`excluded.most_famous_song`,
       gender: sql`excluded.gender`,
       country: sql`excluded.country`,
       memberCount: sql`excluded.member_count`,
       updatedAt: sql`excluded.updated_at`,
-      // mostFamousSong is NOT updated to preserve manually curated values
     },
   });
 

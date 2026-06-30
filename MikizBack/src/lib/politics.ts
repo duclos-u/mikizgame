@@ -1,5 +1,5 @@
 /**
- * Game logic for Mikiz Politics — comparison-based politician guessing game.
+ * Game logic for Politeki — comparison-based politician guessing game.
  */
 
 import rawData from "../data/politics.json";
@@ -126,15 +126,20 @@ export function getGuessablePool(): Politician[] {
   return GUESSABLE;
 }
 
+// biome-ignore lint/suspicious/noMisleadingCharacterClass: NFD decomposition range
+const DIACRITICS = /[\u0300-\u036f]/g;
+
+const GUESSABLE_NORMALIZED = GUESSABLE.map((p) => ({
+  p,
+  normalized: `${p.prenom} ${p.nom}`.normalize("NFD").replace(DIACRITICS, "").toLowerCase(),
+}));
+
 export function searchPoliticians(q: string): Politician[] {
-  // biome-ignore lint/suspicious/noMisleadingCharacterClass: NFD decomposition range
-  const diacritics = /[\u0300-\u036f]/g;
-  const norm = q.normalize("NFD").replace(diacritics, "").toLowerCase().trim();
+  const norm = q.normalize("NFD").replace(DIACRITICS, "").toLowerCase().trim();
   if (norm.length < 2) return [];
-  return GUESSABLE.filter((p) => {
-    const full = `${p.prenom} ${p.nom}`.normalize("NFD").replace(diacritics, "").toLowerCase();
-    return full.includes(norm);
-  }).slice(0, 20);
+  return GUESSABLE_NORMALIZED.filter(({ normalized }) => normalized.includes(norm))
+    .map(({ p }) => p)
+    .slice(0, 20);
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -160,7 +165,7 @@ function currentFonctions(p: Politician): MandatType[] {
   if (activeCodes.has("ED")) result.push("Eurodéputé");
   if (activeCodes.has("SEN")) result.push("Sénateur");
   if (activeCodes.has("CP")) result.push("Chef de parti");
-  if (result.length === 0) return ["Député"]; // fallback for legacy entries
+  if (result.length === 0) return [];
   return result;
 }
 
@@ -243,7 +248,8 @@ export function comparePoliticians(guess: Politician, target: Politician): Compa
   // Party
   const guessOrientation = orientation(guess.politiscore ?? 50);
   const targetOrientation = orientation(target.politiscore ?? 50);
-  const sameParti = guess.currentOrLastParti === target.currentOrLastParti;
+  const normalizeParti = (s: string | null) => s?.trim().toLowerCase().normalize("NFC") ?? null;
+  const sameParti = normalizeParti(guess.currentOrLastParti) === normalizeParti(target.currentOrLastParti) && guess.currentOrLastParti !== null;
   const sameFamille = !sameParti && guessOrientation === targetOrientation;
   const currentOrLastParti: Comparison["currentOrLastParti"] = {
     value: guess.currentOrLastParti,

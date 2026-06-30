@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { VinymixArtist, VinymixGuess, VinymixMatchStatus, VinymixStatus } from '../../api/client'
 import { artistColors } from '../../utils/artistColors'
 
@@ -18,6 +18,8 @@ const SHARE_COLOR: Record<VinymixMatchStatus, string> = {
   unknown: 'var(--border)',
 }
 
+const GAME_URL = import.meta.env.VITE_APP_URL ?? 'https://mikiz.fr/vinymix'
+
 function buildShareText(
   status: VinymixStatus,
   guesses: VinymixGuess[],
@@ -31,12 +33,37 @@ function buildShareText(
   const result = status === 'won' ? `${guesses.length}/6` : 'X/6'
   const lines = guesses.map((g) => {
     const row = g.clues
-      .filter((c) => c.key !== 'famousSong')
       .map((c) => SHARE_EMOJI[c.status] ?? '⬜')
       .join('')
     return row
   })
-  return `Vinymix 🎵 — ${date}\n${result} (${targetArtist?.name ?? '?'})\n${lines.join('\n')}\n\n#Vinymix`
+  return `Vinymix 🎵 — ${date}\n${result} (${targetArtist?.name ?? '?'})\n${lines.join('\n')}\n\n${GAME_URL}`
+}
+
+// ─── Countdown to midnight ─────────────────────────────────────────────────
+
+function useCountdown(): string {
+  const [label, setLabel] = useState('')
+
+  useEffect(() => {
+    function compute() {
+      const now = new Date()
+      const midnight = new Date(now)
+      midnight.setHours(24, 0, 0, 0)
+      const diff = Math.max(0, Math.floor((midnight.getTime() - now.getTime()) / 1000))
+      const h = Math.floor(diff / 3600)
+      const m = Math.floor((diff % 3600) / 60)
+      const s = diff % 60
+      setLabel(
+        `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+      )
+    }
+    compute()
+    const id = setInterval(compute, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  return label
 }
 
 type Props = {
@@ -44,17 +71,17 @@ type Props = {
   guesses: VinymixGuess[]
   targetArtist: VinymixArtist | null
   onClose: () => void
-  onReset: () => void
+  onReset?: () => void
 }
 
 export function ResultModal({ status, guesses, targetArtist, onClose, onReset }: Props) {
   const [copied, setCopied] = useState(false)
+  const countdown = useCountdown()
 
   const targetColors = targetArtist ? artistColors(targetArtist.name) : null
   const shareRows = guesses.map((g, i) => ({
     num: i + 1,
     squares: g.clues
-      .filter((c) => c.key !== 'famousSong')
       .map((c) => SHARE_COLOR[c.status] ?? SHARE_COLOR.unknown),
   }))
 
@@ -67,11 +94,6 @@ export function ResultModal({ status, guesses, targetArtist, onClose, onReset }:
     }
     setCopied(true)
     setTimeout(() => setCopied(false), 1800)
-  }
-
-  function handleReset() {
-    onClose()
-    onReset()
   }
 
   const won = status === 'won'
@@ -140,13 +162,20 @@ export function ResultModal({ status, guesses, targetArtist, onClose, onReset }:
           ))}
         </div>
 
+        <div className="vinymix-modal-countdown">
+          <span className="vinymix-modal-countdown-label">Prochain vinyle dans</span>
+          <span className="vinymix-modal-countdown-timer">{countdown}</span>
+        </div>
+
         <div className="vinymix-modal-actions">
           <button type="button" className="vinymix-btn-primary" onClick={handleShare}>
             {copied ? 'Copié ✓' : 'Copier le résultat'}
           </button>
-          <button type="button" className="vinymix-btn-secondary" onClick={handleReset}>
-            Rejouer
-          </button>
+          {import.meta.env.DEV && onReset && (
+            <button type="button" className="vinymix-btn-secondary" onClick={() => { onClose(); onReset() }}>
+              [dev] Rejouer
+            </button>
+          )}
         </div>
       </div>
     </div>

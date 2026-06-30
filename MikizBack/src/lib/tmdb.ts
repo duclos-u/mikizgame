@@ -1,7 +1,18 @@
 import type { Film } from "./cinemaxd";
+import { todayDate } from "./date";
 
 const BASE = "https://api.themoviedb.org/3";
 const cache = new Map<number, Film>();
+let cacheDate = todayDate();
+
+function getCache(id: number): Film | undefined {
+  const today = todayDate();
+  if (today !== cacheDate) {
+    cache.clear();
+    cacheDate = today;
+  }
+  return cache.get(id);
+}
 
 type TmdbDetails = {
   id: number;
@@ -19,7 +30,8 @@ type TmdbCredits = {
 };
 
 export async function fetchFilmById(id: number): Promise<Film | null> {
-  if (cache.has(id)) return cache.get(id)!;
+  const cached = getCache(id);
+  if (cached) return cached;;
 
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) return null;

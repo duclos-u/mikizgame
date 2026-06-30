@@ -27,8 +27,8 @@ function rowToArtist(row: typeof vinymixArtists.$inferSelect): VinymixArtist {
     creationYear: row.creationYear,
     memberCount: row.memberCount,
     spotifyFollowers: row.spotifyFollowers,
+    spotifyPopularity: row.spotifyPopularity,
     genres: (row.genres as string[]) ?? [],
-    mostFamousSong: row.mostFamousSong as { title: string; spotifyStreams: number } | null,
     gender: row.gender,
     country: row.country,
   };
@@ -212,6 +212,16 @@ vinymix.post("/guess", optionalAuthMiddleware, async (c) => {
 });
 
 /**
+ * GET /api/vinymix/today
+ * Public. Returns today's target artist — used by guests after game over to reveal the answer.
+ */
+vinymix.get("/today", async (c) => {
+  const artist = await getDailyArtist();
+  if (!artist) return c.json({ error: "Aucun artiste configuré aujourd'hui" }, 503);
+  return c.json({ targetArtist: artist });
+});
+
+/**
  * GET /api/vinymix/search?q=
  * Public. Searches Spotify directly.
  */
@@ -265,11 +275,8 @@ vinymix.post("/daily", async (c) => {
       creationYear: null,
       memberCount: 1,
       spotifyFollowers: spotifyArtist.followers,
+      spotifyPopularity: spotifyArtist.popularity,
       genres: spotifyArtist.genres,
-      vocalType: null,
-      mostFamousSong: null,
-      instrumentation: null,
-      appearsOnSoundtracksWith: [],
       updatedAt: new Date(),
     };
     const [inserted] = await db

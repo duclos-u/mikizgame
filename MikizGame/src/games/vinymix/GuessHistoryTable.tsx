@@ -41,9 +41,19 @@ export function GuessHistoryTable({ guesses }: Props) {
           <div key={`${guess.artist.id}-${num}`} className="vinymix-card" style={{ borderLeftColor: bar }}>
             <div className="vinymix-card-left">
               <div className="vinymix-card-vinyl">
-                <div className="vinymix-card-vinyl-label" style={{ background: avBg, color: avFg }}>
-                  {guess.artist.name[0]}
-                </div>
+                {guess.artist.imageUrl ? (
+                  <img
+                    src={guess.artist.imageUrl}
+                    alt=""
+                    className="vinymix-card-vinyl-img"
+                    width={42}
+                    height={42}
+                  />
+                ) : (
+                  <div className="vinymix-card-vinyl-label" style={{ background: avBg, color: avFg }}>
+                    {guess.artist.name[0]}
+                  </div>
+                )}
               </div>
               <span className="vinymix-card-num">#{num}</span>
             </div>

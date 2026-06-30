@@ -1,4 +1,4 @@
-import { date, integer, jsonb, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { date, index, integer, jsonb, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const cinemaxdSessionStatusEnum = pgEnum("cinemaxd_session_status", [
@@ -17,7 +17,9 @@ export const cinemaxdSessions = pgTable("cinemaxd_sessions", {
   indices: jsonb("indices").notNull().default({}),
   status: cinemaxdSessionStatusEnum("status").notNull().default("in_progress"),
   completedAt: timestamp("completed_at"),
-});
+}, (table) => [
+  index("idx_cinemaxd_sessions_user_date").on(table.userId, table.date),
+]);
 
 export type CinemaxdSession = typeof cinemaxdSessions.$inferSelect;
 
