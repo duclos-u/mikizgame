@@ -134,6 +134,41 @@
       "when": 1750896000000,
       "tag": "0018_fix_cinemaxd_game_slug",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1751500800000,
+      "tag": "0019_rename_politiclue_to_politeki",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1751356800000,
+      "tag": "0020_perf_session_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1751167200000,
+      "tag": "0021_drop_most_famous_song",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1751254800000,
+      "tag": "0022_add_spotify_popularity",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1782822491349,
+      "tag": "0023_schema_sync",
+      "breakpoints": true
     }
   ]
 }

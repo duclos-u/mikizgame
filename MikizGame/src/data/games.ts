@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react'
+import { type ComponentType, lazy } from 'react'
 import { STORAGE_KEYS } from '../constants/storage'
 import { today } from '../utils/date'
 
@@ -30,11 +30,11 @@ export function internalGamePath(gameId: string) {
   return `/games/${gameId}`
 }
 
-// Imports are at the bottom to avoid circular-dependency confusion.
-import Motivex from '../games/motivex'
-import Cinemaxd from '../games/cinemaxd'
-import Vinymix from '../games/vinymix'
-import PolitiClue from '../games/politics'
+// Lazy-loaded to enable code splitting: each game is a separate chunk.
+const Motivex = lazy(() => import('../games/motivex')) as ComponentType
+const Cinemaxd = lazy(() => import('../games/cinemaxd')) as ComponentType
+const Vinymix = lazy(() => import('../games/vinymix')) as ComponentType
+const Politeki = lazy(() => import('../games/politics')) as ComponentType
 
 export const GAMES: Game[] = [
   {
@@ -96,7 +96,7 @@ export const GAMES: Game[] = [
     tag: 'tag-musique',
     tagLabel: 'Musique',
     accent: 'oklch(0.62 0.18 290)',
-    status: 'soon',
+    status: 'live',
     players: 0,
     avgTries: 0,
     route: internalGamePath('vinymix'),
@@ -115,8 +115,8 @@ export const GAMES: Game[] = [
   },
   {
     id: 'politics',
-    slug: 'mikizpolitics',
-    name: 'PolitiClue',
+    slug: 'politeki',
+    name: 'Politeki',
     desc: 'Devine le politicien du jour en 10 essais.',
     icon: '🗳️',
     cat: 'politique',
@@ -128,7 +128,7 @@ export const GAMES: Game[] = [
     avgTries: 0,
     route: internalGamePath('politics'),
     maxAttempts: 10,
-    component: PolitiClue,
+    component: Politeki,
     checkDoneToday: () => {
       try {
         const raw = localStorage.getItem(STORAGE_KEYS.POLITICS_STATE(today()))

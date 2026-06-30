@@ -53,7 +53,7 @@ function saveLocal(state: LocalState) {
 
 function loadStreak(): number {
   try {
-    return Number(localStorage.getItem('vinymix_streak') ?? 0)
+    return Number(localStorage.getItem(STORAGE_KEYS.VINYMIX_STREAK) ?? 0)
   } catch {
     return 0
   }
@@ -63,7 +63,7 @@ function updateStreak(won: boolean): number {
   try {
     const prev = loadStreak()
     const next = won ? prev + 1 : 0
-    localStorage.setItem('vinymix_streak', String(next))
+    localStorage.setItem(STORAGE_KEYS.VINYMIX_STREAK, String(next))
     return next
   } catch {
     return 0
@@ -253,16 +253,21 @@ export default function Vinymix() {
         const newGuesses = [...guesses, result.guess]
 
         let newStatus = result.status
+        let resolvedTarget = result.targetArtist
         if (!token) {
           const correct = result.status === 'won'
           const lost = !correct && newGuesses.length >= MAX_GUESSES
           newStatus = correct ? 'won' : lost ? 'lost' : 'in_progress'
+          // Fetch the daily artist for guests on computed loss (backend withholds it until then)
+          if (newStatus === 'lost' && !resolvedTarget) {
+            resolvedTarget = await api.vinymix.today().then((r) => r.targetArtist).catch(() => null)
+          }
         }
 
         setGuesses(newGuesses)
         setStatus(newStatus)
-        setTargetArtist(result.targetArtist)
-        persist(newGuesses, newStatus, result.targetArtist)
+        setTargetArtist(resolvedTarget)
+        persist(newGuesses, newStatus, resolvedTarget)
 
         if (newStatus === 'won') {
           const newStreak = updateStreak(true)

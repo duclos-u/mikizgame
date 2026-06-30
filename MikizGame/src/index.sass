@@ -2918,6 +2918,13 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   font-size: 0.75rem
   font-weight: 800
 
+.vinymix-card-vinyl-img
+  width: 42px
+  height: 42px
+  border-radius: 50%
+  object-fit: cover
+  display: block
+
 .vinymix-card-num
   font-size: 0.68rem
   font-weight: 700
@@ -3252,19 +3259,43 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   height: 15px
   border-radius: 3px
 
+.vinymix-modal-countdown
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 0.2rem
+  padding: 0.75rem 0
+  border-top: 1px solid var(--border)
+  border-bottom: 1px solid var(--border)
+
+.vinymix-modal-countdown-label
+  font-size: 0.7rem
+  font-weight: 700
+  letter-spacing: 0.12em
+  text-transform: uppercase
+  color: var(--muted)
+
+.vinymix-modal-countdown-timer
+  font-family: var(--font-display)
+  font-size: 1.75rem
+  font-weight: 800
+  font-variant-numeric: tabular-nums
+  letter-spacing: 0.04em
+  color: var(--text)
+
 .vinymix-modal-actions
   display: flex
   gap: 0.625rem
 
-// ─── PolitiClue ────────────────────────────────────────────────────────────────
+// ─── Politeki ────────────────────────────────────────────────────────────────
 
-.politiclue-game
+.politeki-game
   max-width: 740px
   margin: 0 auto
   padding: 26px 0 60px
 
 // Clue board
-.politiclue-clueboard
+.politeki-clueboard
   background: var(--card)
   border: 1px solid var(--border)
   border-radius: 18px
@@ -3272,7 +3303,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   box-shadow: var(--shadow-soft)
   margin-bottom: 18px
 
-.politiclue-clueboard-title
+.politeki-clueboard-title
   display: flex
   align-items: center
   gap: 8px
@@ -3281,58 +3312,58 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   font-size: 15px
   font-weight: 700
 
-.politiclue-clueboard-subtitle
+.politeki-clueboard-subtitle
   font-size: 12px
   color: var(--muted)
   font-family: var(--font)
   font-weight: 400
 
 // Scale bar
-.politiclue-scale-wrap
+.politeki-scale-wrap
   margin-bottom: 16px
 
-.politiclue-scale-header
+.politeki-scale-header
   display: flex
   justify-content: space-between
   align-items: baseline
   margin-bottom: 7px
 
-.politiclue-scale-heading
+.politeki-scale-heading
   font-size: 11px
   font-weight: 700
   text-transform: uppercase
   letter-spacing: .04em
   color: var(--muted)
 
-.politiclue-scale-label
+.politeki-scale-label
   font-size: 13px
   font-weight: 700
   color: oklch(0.40 0.02 60)
 
-.politiclue-scale-bar-wrap
+.politeki-scale-bar-wrap
   position: relative
   padding-top: 18px
 
-.politiclue-scale-bar
+.politeki-scale-bar
   position: relative
   height: 14px
   border-radius: 99px
   overflow: hidden
   background: linear-gradient(90deg, oklch(0.55 0.20 25), oklch(0.74 0.13 38), oklch(0.91 0.025 80), oklch(0.62 0.12 245), oklch(0.45 0.16 262))
 
-.politiclue-scale-mask
+.politeki-scale-mask
   position: absolute
   top: 0
   bottom: 0
   background: oklch(0.975 0.012 85 / 0.82)
 
-.politiclue-scale-mask-left
+.politeki-scale-mask-left
   left: 0
 
-.politiclue-scale-mask-right
+.politeki-scale-mask-right
   right: 0
 
-.politiclue-scale-cursor
+.politeki-scale-cursor
   position: absolute
   top: 0
   bottom: 0
@@ -3359,7 +3390,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     background: oklch(0.22 0.02 60)
     border-radius: 2px
 
-.politiclue-scale-ticks
+.politeki-scale-ticks
   display: flex
   justify-content: space-between
   margin-top: 5px
@@ -3368,21 +3399,21 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: var(--muted)
 
 // Clue tiles
-.politiclue-tiles
+.politeki-tiles
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr))
   gap: 10px
 
-.politiclue-tile
+.politeki-tile
   background: oklch(0.965 0.012 84)
   border: 1px solid oklch(0.925 0.011 80)
   border-radius: 12px
   padding: 9px 12px
 
-.politiclue-tile-wide
+.politeki-tile-wide
   margin-top: 10px
 
-.politiclue-tile-label
+.politeki-tile-label
   font-size: 10.5px
   font-weight: 700
   text-transform: uppercase
@@ -3390,13 +3421,13 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: var(--muted)
   margin-bottom: 3px
 
-.politiclue-tile-val
+.politeki-tile-val
   font-size: 14px
   font-weight: 700
   color: oklch(0.32 0.02 60)
 
 // Status bar
-.politiclue-status
+.politeki-status
   display: flex
   align-items: center
   justify-content: space-between
@@ -3404,37 +3435,37 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   margin-bottom: 14px
   flex-wrap: wrap
 
-.politiclue-status-right
+.politeki-status-right
   display: flex
   align-items: center
   gap: 10px
 
-.politiclue-dots
+.politeki-dots
   display: flex
   gap: 5px
 
-.politiclue-dot
+.politeki-dot
   width: 9px
   height: 9px
   border-radius: 50%
   display: inline-block
 
-.politiclue-counter
+.politeki-counter
   font-variant-numeric: tabular-nums
   font-size: 13px
   font-weight: 700
   color: oklch(0.48 0.02 62)
 
 // Search
-.politiclue-search-wrap
+.politeki-search-wrap
   position: relative
   margin-bottom: 18px
 
-.politiclue-search-row
+.politeki-search-row
   display: flex
   gap: 10px
 
-.politiclue-search-input
+.politeki-search-input
   width: 100%
   border: 1px solid var(--border)
   background: var(--card)
@@ -3449,7 +3480,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     border-color: oklch(0.70 0.17 45 / 0.5)
     box-shadow: 0 0 0 3px oklch(0.70 0.17 45 / 0.12)
 
-.politiclue-dropdown
+.politeki-dropdown
   list-style: none
   position: absolute
   top: calc(100% + 6px)
@@ -3464,38 +3495,38 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   overflow-y: auto
   padding: 5px
 
-.politiclue-dropdown-item
+.politeki-dropdown-item
   display: flex
   align-items: center
   gap: 11px
   padding: 8px 10px
   border-radius: 9px
   cursor: pointer
-  &:hover, &.politiclue-dropdown-item-active
+  &:hover, &.politeki-dropdown-item-active
     background: oklch(0.945 0.016 84)
 
-.politiclue-dropdown-empty
+.politeki-dropdown-empty
   padding: 11px 12px
   font-size: 13.5px
   color: var(--muted)
 
-.politiclue-dropdown-nom
+.politeki-dropdown-nom
   flex: 1
   font-size: 14.5px
   font-weight: 600
   color: var(--text)
 
-.politiclue-dropdown-parti
+.politeki-dropdown-parti
   font-size: 12px
   color: var(--muted)
 
-.politiclue-error
+.politeki-error
   margin-top: 8px
   font-size: 13.5px
   color: oklch(0.58 0.18 25)
 
 // Controls
-.politiclue-controls
+.politeki-controls
   display: flex
   align-items: center
   justify-content: space-between
@@ -3503,14 +3534,14 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   margin-bottom: 14px
   flex-wrap: wrap
 
-.politiclue-seg
+.politeki-seg
   display: flex
   background: oklch(0.945 0.016 84)
   border: 1px solid oklch(0.925 0.011 80)
   border-radius: 99px
   padding: 3px
 
-.politiclue-seg-btn
+.politeki-seg-btn
   border: none
   border-radius: 99px
   padding: 7px 16px
@@ -3525,7 +3556,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     background: var(--card)
     color: var(--text)
 
-.politiclue-legend
+.politeki-legend
   display: flex
   gap: 14px
   align-items: center
@@ -3534,42 +3565,42 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: oklch(0.48 0.02 62)
   flex-wrap: wrap
 
-.politiclue-legend-item
+.politeki-legend-item
   display: inline-flex
   align-items: center
   gap: 5px
 
-.politiclue-legend-swatch
+.politeki-legend-swatch
   width: 13px
   height: 13px
   border-radius: 4px
   display: inline-block
 
 // Tableau view
-.politiclue-tableau-wrap
+.politeki-tableau-wrap
   overflow-x: auto
   padding-bottom: 6px
   margin-bottom: 22px
 
-.politiclue-tableau-container
+.politeki-tableau-container
   min-width: 570px
   display: flex
   flex-direction: column
   gap: 8px
 
-.politiclue-tableau-header
+.politeki-tableau-header
   display: grid
   grid-template-columns: minmax(130px, 1.6fr) repeat(7, minmax(50px, 1fr))
   gap: 5px
   padding: 0 4px
 
-.politiclue-tableau-row
+.politeki-tableau-row
   display: grid
   grid-template-columns: minmax(130px, 1.6fr) repeat(7, minmax(50px, 1fr))
   gap: 5px
   padding: 7px 7px 4px
 
-.politiclue-col-label
+.politeki-col-label
   font-size: 10.5px
   font-weight: 700
   text-transform: uppercase
@@ -3577,23 +3608,23 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: var(--muted)
   padding-left: 2px
 
-.politiclue-col-center
+.politeki-col-center
   text-align: center
 
 // Cells
-.politiclue-namecell
+.politeki-namecell
   display: flex
   align-items: center
   gap: 8px
   padding: 2px 4px 2px 2px
   min-width: 0
 
-.politiclue-namecell-text
+.politeki-namecell-text
   display: flex
   flex-direction: column
   min-width: 0
 
-.politiclue-nom-prenom
+.politeki-nom-prenom
   font-size: 10.5px
   font-weight: 500
   color: oklch(0.52 0.02 64)
@@ -3602,7 +3633,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   text-overflow: ellipsis
   white-space: nowrap
 
-.politiclue-nom
+.politeki-nom
   font-size: 12.5px
   font-weight: 700
   color: var(--text)
@@ -3611,7 +3642,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   text-overflow: ellipsis
   white-space: nowrap
 
-.politiclue-cell
+.politeki-cell
   display: flex
   flex-direction: column
   align-items: center
@@ -3626,22 +3657,22 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   min-width: 0
   overflow: hidden
 
-.politiclue-cell-text
+.politeki-cell-text
   font-size: 10.5px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
   width: 100%
 
-.politiclue-cell-main
+.politeki-cell-main
   display: block
 
-.politiclue-cell-arrow
+.politeki-cell-arrow
   font-size: 12px
   opacity: 0.85
   line-height: 1
 
-.politiclue-cell-foreign-badge
+.politeki-cell-foreign-badge
   font-size: 8px
   font-weight: 700
   text-transform: uppercase
@@ -3649,13 +3680,13 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   opacity: 0.82
   line-height: 1.2
 
-.politiclue-cell-card
+.politeki-cell-card
   border-radius: 9px
   padding: 7px 6px
   font-size: 11.5px
 
 // Avatars
-.politiclue-avatar
+.politeki-avatar
   width: 30px
   height: 30px
   border-radius: 50%
@@ -3667,18 +3698,18 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: #fff
   flex-shrink: 0
 
-.politiclue-avatar-sm
+.politeki-avatar-sm
   width: 34px
   height: 34px
   font-size: 13px
 
-.politiclue-avatar-lg
+.politeki-avatar-lg
   width: 38px
   height: 38px
   font-size: 14px
 
 // Guess card wrapper
-.politiclue-guess-card
+.politeki-guess-card
   background: var(--card)
   border: 1px solid oklch(0.915 0.014 80)
   border-radius: 12px
@@ -3686,7 +3717,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   box-shadow: 0 1px 3px oklch(0.5 0.03 60 / .05)
 
 // Anciennes fonctions row
-.politiclue-anciens-row
+.politeki-anciens-row
   display: flex
   align-items: center
   gap: 6px
@@ -3695,21 +3726,21 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   border-top: 1px solid oklch(0.93 0.010 80)
   background: oklch(0.975 0.007 80)
 
-.politiclue-anciens-label
+.politeki-anciens-label
   font-size: 9px
   font-weight: 700
   text-transform: uppercase
   letter-spacing: .04em
   color: var(--muted)
 
-.politiclue-chip
+.politeki-chip
   padding: 2px 8px
   border-radius: 99px
   font-size: 10px
   font-weight: 700
 
 // Député scores
-.politiclue-depute-panel
+.politeki-depute-panel
   display: flex
   flex-direction: column
   gap: 6px
@@ -3717,30 +3748,30 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   background: oklch(0.965 0.012 84)
   border-top: 1px solid oklch(0.925 0.011 80)
 
-.politiclue-depute-item
+.politeki-depute-item
   display: flex
   align-items: center
   justify-content: space-between
   gap: 10px
 
-.politiclue-depute-meta
+.politeki-depute-meta
   display: flex
   flex-direction: column
   gap: 1px
   min-width: 0
 
-.politiclue-depute-label
+.politeki-depute-label
   font-size: 10px
   font-weight: 700
   text-transform: uppercase
   letter-spacing: .03em
   color: var(--muted)
 
-.politiclue-depute-desc
+.politeki-depute-desc
   font-size: 11px
   color: oklch(0.52 0.02 64)
 
-.politiclue-depute-val
+.politeki-depute-val
   font-size: 13px
   font-weight: 700
   color: var(--text)
@@ -3748,7 +3779,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   flex-shrink: 0
 
 // Condamnation panel
-.politiclue-condamnation-panel
+.politeki-condamnation-panel
   display: flex
   flex-direction: column
   gap: 6px
@@ -3756,22 +3787,22 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   background: oklch(0.975 0.012 25 / 0.6)
   border-top: 1px solid oklch(0.91 0.025 25)
 
-.politiclue-condamnation-item
+.politeki-condamnation-item
   display: flex
   flex-direction: column
   gap: 4px
 
-.politiclue-condamnation-affaire
+.politeki-condamnation-affaire
   font-size: 12px
   font-weight: 600
   color: var(--text)
 
-.politiclue-condamnation-tags
+.politeki-condamnation-tags
   display: flex
   flex-wrap: wrap
   gap: 5px
 
-.politiclue-condamnation-tag
+.politeki-condamnation-tag
   font-size: 11px
   font-weight: 500
   padding: 2px 7px
@@ -3779,64 +3810,64 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   background: oklch(0.925 0.018 80)
   color: oklch(0.40 0.02 60)
 
-.politiclue-condamnation-tag-prison
+.politeki-condamnation-tag-prison
   background: oklch(0.88 0.04 25)
   color: oklch(0.38 0.10 25)
 
-.politiclue-condamnation-tag-amende
+.politeki-condamnation-tag-amende
   background: oklch(0.90 0.04 75)
   color: oklch(0.40 0.06 75)
 
 // Cards view
-.politiclue-card
+.politeki-card
   background: var(--card)
   border: 1px solid var(--border)
   border-radius: 14px
   padding: 14px
   box-shadow: 0 2px 4px oklch(0.5 0.03 60 / .05)
 
-.politiclue-card-header
+.politeki-card-header
   display: flex
   align-items: center
   gap: 11px
   margin-bottom: 12px
 
-.politiclue-card-nom
+.politeki-card-nom
   font-family: var(--font-display)
   font-size: 17px
   font-weight: 700
   color: var(--text)
 
-.politiclue-card-num
+.politeki-card-num
   margin-left: auto
   font-size: 12px
   font-weight: 700
   color: var(--muted)
 
-.politiclue-card-grid
+.politeki-card-grid
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(96px, 1fr))
   gap: 7px
 
-.politiclue-card-field
+.politeki-card-field
   display: flex
   flex-direction: column
   gap: 4px
 
-.politiclue-card-field-label
+.politeki-card-field-label
   font-size: 10px
   font-weight: 700
   text-transform: uppercase
   letter-spacing: .03em
   color: var(--muted)
 
-.politiclue-card-anciens
+.politeki-card-anciens
   margin-top: 11px
   padding-top: 11px
   border-top: 1px solid oklch(0.925 0.011 80)
 
 // Buttons
-.politiclue-btn-primary
+.politeki-btn-primary
   border: none
   border-radius: 12px
   padding: 0 22px
@@ -3853,7 +3884,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     opacity: .5
     cursor: not-allowed
 
-.politiclue-btn-secondary
+.politeki-btn-secondary
   flex: 1
   border: 1px solid var(--border)
   border-radius: 99px
@@ -3866,14 +3897,14 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   cursor: pointer
 
 // Footer
-.politiclue-footer
+.politeki-footer
   display: flex
   align-items: center
   justify-content: space-between
   gap: 12px
   padding-top: 6px
 
-.politiclue-dev-reset
+.politeki-dev-reset
   background: none
   border: none
   font-family: var(--font)
@@ -3884,7 +3915,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   text-underline-offset: 2px
 
 // Modal
-.politiclue-modal-overlay
+.politeki-modal-overlay
   position: fixed
   inset: 0
   background: oklch(0.3 0.02 60 / .42)
@@ -3895,7 +3926,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   z-index: 60
   padding: 20px
 
-.politiclue-modal
+.politeki-modal
   background: var(--card)
   border: 1px solid var(--border)
   border-radius: 20px
@@ -3913,36 +3944,36 @@ $vinymix-info-text: oklch(0.52 0.06 255)
       opacity: 1
       transform: none
 
-.politiclue-modal-title
+.politeki-modal-title
   font-family: var(--font-display)
   font-size: 22px
   font-weight: 800
 
-.politiclue-modal-points
+.politeki-modal-points
   display: flex
   align-items: baseline
   justify-content: center
   gap: 5px
   margin: 10px 0 4px
 
-.politiclue-modal-points-value
+.politeki-modal-points-value
   font-family: var(--font-display)
   font-size: 36px
   font-weight: 800
   color: oklch(0.56 0.20 22)
   line-height: 1
 
-.politiclue-modal-points-label
+.politeki-modal-points-label
   font-size: 16px
   font-weight: 700
   color: oklch(0.56 0.20 22)
 
-.politiclue-modal-points-detail
+.politeki-modal-points-detail
   font-size: 13px
   color: var(--muted)
   margin-left: 4px
 
-.politiclue-modal-avatar
+.politeki-modal-avatar
   width: 74px
   height: 74px
   border-radius: 50%
@@ -3954,45 +3985,45 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   color: #fff
   margin: 18px auto 12px
 
-.politiclue-modal-nom
+.politeki-modal-nom
   font-family: var(--font-display)
   font-size: 21px
   font-weight: 700
   color: var(--text)
 
-.politiclue-modal-sub
+.politeki-modal-sub
   font-size: 14px
   color: oklch(0.48 0.02 62)
   margin-top: 3px
 
-.politiclue-modal-grid
+.politeki-modal-grid
   display: grid
   grid-template-columns: 1fr 1fr
   gap: 8px
   margin: 18px 0 6px
   text-align: left
 
-.politiclue-modal-tile
+.politeki-modal-tile
   background: oklch(0.965 0.012 84)
   border-radius: 10px
   padding: 8px 11px
 
-.politiclue-modal-tile-label
+.politeki-modal-tile-label
   font-size: 10px
   font-weight: 700
   text-transform: uppercase
   color: var(--muted)
 
-.politiclue-modal-tile-val
+.politeki-modal-tile-val
   font-size: 13.5px
   font-weight: 700
   color: oklch(0.32 0.02 60)
   margin-top: 2px
 
-.politiclue-modal-actions
+.politeki-modal-actions
   display: flex
   gap: 10px
   margin-top: 18px
-  & .politiclue-btn-primary
+  & .politeki-btn-primary
     flex: 1
     border-radius: 99px

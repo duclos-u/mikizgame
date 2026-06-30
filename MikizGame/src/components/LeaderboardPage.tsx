@@ -12,7 +12,7 @@ import { useAuth } from '../context/AuthContext'
 const GAME_LABELS: Record<string, string> = {
   motivex: 'Motivex',
   cinemaxd: 'Cinemaxd',
-  mikizpolitics: 'PolitiClue',
+  politeki: 'Politeki',
   vinymix: 'Vinymix',
 }
 

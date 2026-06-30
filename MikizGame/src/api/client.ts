@@ -91,8 +91,8 @@ export type VinymixArtist = {
   creationYear: number | null
   memberCount: number
   spotifyFollowers: number
+  spotifyPopularity: number
   genres: string[]
-  mostFamousSong: { title: string; spotifyStreams: number } | null
   gender: string | null
   country: string | null
 }
@@ -200,6 +200,7 @@ export type PoliticsCible = {
   currentOrLastParti: string | null
   originRegion: string | null
   naissance: string | null
+  deces?: string | null
   genre: string | null
   politiscore: number
 }
@@ -288,6 +289,7 @@ export const api = {
       }),
     search: (q: string) =>
       request<VinymixSearchResult[]>(`/vinymix/search?q=${encodeURIComponent(q)}`),
+    today: () => request<{ targetArtist: VinymixArtist }>('/vinymix/today'),
     reset: () => request<{ ok: boolean }>('/vinymix/session', { method: 'DELETE' }),
   },
   politics: {

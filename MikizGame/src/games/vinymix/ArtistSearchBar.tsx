@@ -41,7 +41,7 @@ export function ArtistSearchBar({ onGuess, disabled = false, alreadyGuessed = []
       } finally {
         setLoading(false)
       }
-    }, 280)
+    }, 300)
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)

@@ -267,8 +267,8 @@ export async function getArtistInfo(
     creationYear: mb.creationYear,
     memberCount,
     spotifyFollowers: artist?.followers ?? 0,
+    spotifyPopularity: artist?.popularity ?? 0,
     genres,
-    mostFamousSong: null,
     gender: mb.gender,
     country: mb.country,
   };

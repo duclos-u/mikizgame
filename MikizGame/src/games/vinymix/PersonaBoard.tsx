@@ -1,15 +1,15 @@
 import type { VinymixArtist, VinymixGuess } from '../../api/client'
 
-const FOLLOWER_TIERS = [
-  { max: 1_000_000, label: '< 1M' },
-  { max: 5_000_000, label: '1M–5M' },
-  { max: 10_000_000, label: '5M–10M' },
-  { max: 50_000_000, label: '10M–50M' },
-  { max: Number.POSITIVE_INFINITY, label: '50M+' },
+const POPULARITY_TIERS = [
+  { max: 30,  label: 'Discret' },
+  { max: 50,  label: 'Connu' },
+  { max: 65,  label: 'Populaire' },
+  { max: 80,  label: 'Très populaire' },
+  { max: 101, label: 'Star' },
 ]
 
-function followerTierLabel(n: number): string {
-  return (FOLLOWER_TIERS.find((t) => n < t.max) ?? FOLLOWER_TIERS[FOLLOWER_TIERS.length - 1]).label
+function popularityTierLabel(n: number): string {
+  return (POPULARITY_TIERS.find((t) => n < t.max) ?? POPULARITY_TIERS[POPULARITY_TIERS.length - 1]).label
 }
 
 // ─── Country helpers ──────────────────────────────────────────────────────────
@@ -259,7 +259,7 @@ function SlotPopularity({
   targetArtist: VinymixArtist | null
 }) {
   const label = targetArtist
-    ? followerTierLabel(targetArtist.spotifyFollowers)
+    ? popularityTierLabel(targetArtist.spotifyPopularity)
     : revealedPopularity
   const isNewReveal = !targetArtist && !!revealedPopularity
 
