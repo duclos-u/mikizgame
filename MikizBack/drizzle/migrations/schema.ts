@@ -4,7 +4,6 @@ import { sql } from "drizzle-orm"
 export const cinemaxdSessionStatus = pgEnum("cinemaxd_session_status", ['in_progress', 'won', 'lost'])
 export const motivexSessionStatus = pgEnum("motivex_session_status", ['in_progress', 'won', 'lost'])
 export const politekiStatus = pgEnum("politeki_status", ['in_progress', 'won', 'lost'])
-export const politiclueSessionStatus = pgEnum("politiclue_session_status", ['in_progress', 'won', 'lost'])
 export const vinymixSessionStatus = pgEnum("vinymix_session_status", ['in_progress', 'won', 'lost'])
 
 
@@ -81,22 +80,6 @@ export const motivexSessions = pgTable("motivex_sessions", {
 		}),
 ]);
 
-export const politiclueSessions = pgTable("politiclue_sessions", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	userId: uuid("user_id").notNull(),
-	date: date().notNull(),
-	guesses: jsonb().default([]).notNull(),
-	cluesRevealed: integer("clues_revealed").default(1).notNull(),
-	status: politiclueSessionStatus().default('in_progress').notNull(),
-	completedAt: timestamp("completed_at", { mode: 'string' }),
-}, (table) => [
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "politiclue_sessions_user_id_users_id_fk"
-		}).onDelete("cascade"),
-]);
-
 export const vinymixArtists = pgTable("vinymix_artists", {
 	id: text().primaryKey().notNull(),
 	name: text().notNull(),
@@ -104,7 +87,6 @@ export const vinymixArtists = pgTable("vinymix_artists", {
 	memberCount: integer("member_count").default(1).notNull(),
 	spotifyFollowers: integer("spotify_followers").default(0).notNull(),
 	genres: jsonb().default([]).notNull(),
-	mostFamousSong: jsonb("most_famous_song"),
 	imageUrl: text("image_url"),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
 	gender: text(),
@@ -128,7 +110,7 @@ export const politekiSessions = pgTable("politeki_sessions", {
 	foreignKey({
 			columns: [table.userId],
 			foreignColumns: [users.id],
-			name: "politics_sessions_user_id_users_id_fk"
+			name: "politeki_sessions_user_id_users_id_fk"
 		}).onDelete("cascade"),
 ]);
 
@@ -159,7 +141,7 @@ export const cinemaxdSessions = pgTable("cinemaxd_sessions", {
 	foreignKey({
 			columns: [table.userId],
 			foreignColumns: [users.id],
-			name: "cineclue_sessions_user_id_users_id_fk"
+			name: "cinemaxd_sessions_user_id_users_id_fk"
 		}).onDelete("cascade"),
 ]);
 
@@ -189,18 +171,3 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
 	unique("password_reset_tokens_token_unique").on(table.token),
 ]);
 
-export const politiclueDaily = pgTable("politiclue_daily", {
-	date: date().primaryKey().notNull(),
-	politicianId: uuid("politician_id").notNull(),
-});
-
-export const politicluePoliticians = pgTable("politiclue_politicians", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	prenom: text().notNull(),
-	nom: text().notNull(),
-	politiscore: integer().notNull(),
-	partis: jsonb().default([]).notNull(),
-	mandats: jsonb().default([]).notNull(),
-}, (table) => [
-	uniqueIndex("politiclue_politicians_prenom_nom_idx").using("btree", table.prenom.asc().nullsLast().op("text_ops"), table.nom.asc().nullsLast().op("text_ops")),
-]);
