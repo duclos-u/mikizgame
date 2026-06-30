@@ -89,7 +89,9 @@ function HeroDaily({
           </div>
           <div className="hero-card-stats">
             <div>
-              <b>{game.players.toLocaleString('fr-FR')}</b>
+              <b style={{ color: `color-mix(in oklch, ${game.accent} 90%, var(--text))` }}>
+                {game.players.toLocaleString('fr-FR')}
+              </b>
               <span>joueurs aujourd'hui</span>
             </div>
             <div>
@@ -140,8 +142,11 @@ function GameCard({
       <div className="game-card-foot">
         <span className="game-card-cat">{game.tagLabel}</span>
         {live && (
-          <span className="game-card-players">
-            {game.players.toLocaleString('fr-FR')} joueurs
+          <span
+            className="game-card-players"
+            style={{ color: `color-mix(in oklch, ${game.accent} 80%, var(--muted))` }}
+          >
+            ● {game.players.toLocaleString('fr-FR')} joueurs
           </span>
         )}
       </div>
@@ -347,7 +352,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           game={featuredGame}
           done={effectiveDoneIds.includes(featuredGame.id)}
           todayLabel={todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1)}
-          avgTries={dailyAvgTries[featuredGame.id] ?? null}
+          avgTries={dailyAvgTries[featuredGame.slug ?? featuredGame.id] ?? null}
         />
       )}
 
