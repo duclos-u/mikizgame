@@ -35,7 +35,11 @@ DO $$ BEGIN
 END $$;
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_motivex_sessions_user_date" ON "motivex_sessions" USING btree ("user_id","date");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "idx_politeki_sessions_user_date" ON "politeki_sessions" USING btree ("user_id","date");--> statement-breakpoint
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = 'politeki_sessions') THEN
+    CREATE INDEX IF NOT EXISTS "idx_politeki_sessions_user_date" ON "politeki_sessions" USING btree ("user_id","date");
+  END IF;
+END $$;--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_vinymix_sessions_user_date" ON "vinymix_sessions" USING btree ("user_id","date");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_cinemaxd_sessions_user_date" ON "cinemaxd_sessions" USING btree ("user_id","date");--> statement-breakpoint
 DROP INDEX IF EXISTS "idx_lb_game_date";--> statement-breakpoint
