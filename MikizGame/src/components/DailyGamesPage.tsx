@@ -337,7 +337,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
 
   const gamesWithCounts = GAMES.map((g) => ({
     ...g,
-    players: playerCounts[g.slug ?? g.id] ?? g.players,
+    players: playerCounts[g.slug ?? g.id] ?? 0,
   }))
   const liveGames = gamesWithCounts.filter((g) => g.status === 'live')
   const featuredGame = liveGames.reduce<typeof liveGames[0] | undefined>(

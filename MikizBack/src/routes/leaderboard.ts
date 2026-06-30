@@ -2,21 +2,10 @@ import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
 import {
-  cinemaxdSessions,
   games,
   leaderboardEntries,
-  motivexSessions,
-  politicsSessions,
   users,
-  vinymixSessions,
 } from "../db/schema";
-
-const SESSIONS_BY_SLUG = {
-  motivex: motivexSessions,
-  cinemaxd: cinemaxdSessions,
-  politeki: politicsSessions,
-  vinymix: vinymixSessions,
-} as const;
 
 const leaderboard = new Hono();
 
@@ -136,6 +125,46 @@ leaderboard.get("/cross/stats", async (c) => {
 });
 
 /**
+ * GET /api/leaderboard/counts?date=YYYY-MM-DD
+ * Public. Returns the number of players who completed each active game on the given date,
+ * plus the average number of tries across those completions.
+ */
+leaderboard.get("/counts", async (c) => {
+  const date = c.req.query("date") ?? new Date().toISOString().slice(0, 10);
+
+  const activeGames = await db.query.games.findMany({
+    where: eq(games.active, true),
+  });
+
+  const rows = await Promise.all(
+    activeGames.map(async (game) => {
+      const [result] = await db
+        .select({
+          count: sql<number>`count(*)::int`,
+          avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)`,
+        })
+        .from(leaderboardEntries)
+        .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date)));
+
+      return {
+        slug: game.slug,
+        count: result?.count ?? 0,
+        avgTries: result?.avgTries ?? null,
+      };
+    }),
+  );
+
+  const counts: Record<string, number> = {};
+  const avgTries: Record<string, number | null> = {};
+  for (const { slug, count, avgTries: avg } of rows) {
+    counts[slug] = count;
+    avgTries[slug] = avg;
+  }
+
+  return c.json({ date, counts, avgTries });
+});
+
+/**
  * GET /api/leaderboard/:game/stats
  * Public. Returns all-time aggregate stats per user for a game.
  * Sorted by average points DESC (more = better), users with no wins rank last.
@@ -166,52 +195,6 @@ leaderboard.get("/:game/stats", async (c) => {
     .orderBy(sql`sum(${pointsExpr}) DESC`);
 
   return c.json({ game: gameSlug, total: entries.length, entries });
-});
-
-/**
- * GET /api/leaderboard/counts?date=YYYY-MM-DD
- * Public. Returns the number of players who completed each active game on the given date.
- */
-leaderboard.get("/counts", async (c) => {
-  const date = c.req.query("date") ?? new Date().toISOString().slice(0, 10);
-
-  const activeGames = await db.query.games.findMany({
-    where: eq(games.active, true),
-  });
-
-  const rows = await Promise.all(
-    activeGames.map(async (game) => {
-      const sessionsTable = SESSIONS_BY_SLUG[game.slug as keyof typeof SESSIONS_BY_SLUG];
-
-      const [countResult, avgResult] = await Promise.all([
-        sessionsTable
-          ? db
-              .select({ count: sql<number>`count(*)::int` })
-              .from(sessionsTable)
-              .where(eq(sessionsTable.date, date))
-          : Promise.resolve([{ count: 0 }]),
-        db
-          .select({ avgTries: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)` })
-          .from(leaderboardEntries)
-          .where(and(eq(leaderboardEntries.gameId, game.id), eq(leaderboardEntries.date, date))),
-      ]);
-
-      return {
-        slug: game.slug,
-        count: countResult[0]?.count ?? 0,
-        avgTries: avgResult[0]?.avgTries ?? null,
-      };
-    }),
-  );
-
-  const counts: Record<string, number> = {};
-  const avgTries: Record<string, number | null> = {};
-  for (const { slug, count, avgTries: avg } of rows) {
-    counts[slug] = count;
-    avgTries[slug] = avg;
-  }
-
-  return c.json({ date, counts, avgTries });
 });
 
 /**
