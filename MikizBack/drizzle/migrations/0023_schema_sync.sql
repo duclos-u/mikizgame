@@ -22,7 +22,14 @@ DO $$ BEGIN
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
-  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'politics_sessions_user_id_users_id_fk') THEN
+  IF EXISTS (
+    SELECT 1 FROM pg_constraint c
+    JOIN pg_class t ON t.oid = c.conrelid
+    JOIN pg_namespace n ON n.oid = t.relnamespace
+    WHERE c.conname = 'politics_sessions_user_id_users_id_fk'
+      AND n.nspname = 'public'
+      AND t.relname = 'politeki_sessions'
+  ) THEN
     ALTER TABLE "politeki_sessions" RENAME CONSTRAINT "politics_sessions_user_id_users_id_fk" TO "politeki_sessions_user_id_users_id_fk";
   END IF;
 END $$;
