@@ -96,7 +96,7 @@ export const GAMES: Game[] = [
     tag: 'tag-musique',
     tagLabel: 'Musique',
     accent: 'oklch(0.62 0.18 290)',
-    status: 'live',
+    status: 'soon',
     players: 0,
     avgTries: 0,
     route: internalGamePath('vinymix'),
