@@ -284,7 +284,10 @@ vinymix.post("/daily", async (c) => {
       .values(newArtist)
       .onConflictDoNothing()
       .returning();
-    artist = inserted ?? await db.query.vinymixArtists.findFirst({ where: eq(vinymixArtists.id, artistId) }) ?? null;
+    artist =
+      inserted ??
+      (await db.query.vinymixArtists.findFirst({ where: eq(vinymixArtists.id, artistId) })) ??
+      null;
     if (!artist) return c.json({ error: "Impossible d'insérer l'artiste" }, 500);
   }
 

@@ -6,5 +6,7 @@ export const STORAGE_KEYS = {
   VINYMIX_STATE: (date: string) => `vinymixstate_${date}`,
   VINYMIX_STREAK: 'vinymix_streak',
   POLITICS_STATE: (date: string) => `politeki2_${date}`,
+  FOOTIX_STATE: (date: string) => `footixstate_${date}`,
+  CHAINAPAN_STATE: (date: string) => `chainapanstate_${date}`,
   HUB_SCORES: (gameId: string, date: string) => `hub_scores_${gameId}_${date}`,
 } as const

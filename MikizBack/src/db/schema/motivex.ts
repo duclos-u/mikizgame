@@ -13,21 +13,23 @@ export const motivexDailyWords = pgTable("motivex_daily_words", {
   date: date("date").notNull().unique(),
 });
 
-export const motivexSessions = pgTable("motivex_sessions", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  wordId: uuid("word_id")
-    .notNull()
-    .references(() => motivexDailyWords.id),
-  date: date("date").notNull(),
-  attempts: jsonb("attempts").notNull().default([]),
-  status: motivexSessionStatusEnum("status").notNull().default("in_progress"),
-  completedAt: timestamp("completed_at"),
-}, (table) => [
-  index("idx_motivex_sessions_user_date").on(table.userId, table.date),
-]);
+export const motivexSessions = pgTable(
+  "motivex_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    wordId: uuid("word_id")
+      .notNull()
+      .references(() => motivexDailyWords.id),
+    date: date("date").notNull(),
+    attempts: jsonb("attempts").notNull().default([]),
+    status: motivexSessionStatusEnum("status").notNull().default("in_progress"),
+    completedAt: timestamp("completed_at"),
+  },
+  (table) => [index("idx_motivex_sessions_user_date").on(table.userId, table.date)],
+);
 
 export type MotivexDailyWord = typeof motivexDailyWords.$inferSelect;
 export type MotivexSession = typeof motivexSessions.$inferSelect;

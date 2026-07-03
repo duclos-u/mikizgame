@@ -12,6 +12,8 @@ await db
     { slug: "motivex", name: "Motivex" },
     { slug: "cinemaxd", name: "Cinemaxd" },
     { slug: "politeki", name: "Politeki" },
+    { slug: "footix", name: "Footix" },
+    { slug: "chainapan", name: "Chainapan" },
   ])
   .onConflictDoNothing();
 

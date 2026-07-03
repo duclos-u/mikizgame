@@ -31,7 +31,7 @@ type TmdbCredits = {
 
 export async function fetchFilmById(id: number): Promise<Film | null> {
   const cached = getCache(id);
-  if (cached) return cached;;
+  if (cached) return cached;
 
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) return null;

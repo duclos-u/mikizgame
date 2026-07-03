@@ -11,7 +11,12 @@
 import { and, gte, lte, sql } from "drizzle-orm";
 import { db } from "../src/db";
 import { vinymixArtists, vinymixDaily } from "../src/db/schema";
-import { type SpotifyChartEntry, getArtistInfo, getFrenchArtists, getPopularArtists } from "../src/lib/spotify";
+import {
+  type SpotifyChartEntry,
+  getArtistInfo,
+  getFrenchArtists,
+  getPopularArtists,
+} from "../src/lib/spotify";
 import type { VinymixArtist } from "../src/lib/vinymix";
 
 const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
@@ -66,14 +71,20 @@ const [globalPool, frenchPool] = await Promise.all([
 const eligibleGlobal = globalPool.filter((a) => !recentlyScheduledIds.has(a.id));
 const eligibleFrench = frenchPool.filter((a) => !recentlyScheduledIds.has(a.id));
 
-console.log(`\n  → ${globalPool.length} global artist(s) fetched, ${eligibleGlobal.length} eligible`);
+console.log(
+  `\n  → ${globalPool.length} global artist(s) fetched, ${eligibleGlobal.length} eligible`,
+);
 console.log(`  → ${frenchPool.length} French artist(s) fetched, ${eligibleFrench.length} eligible`);
 
 if (eligibleGlobal.length < globalCount) {
-  console.warn(`\n⚠  Only ${eligibleGlobal.length} eligible global artists for ${globalCount} slots.`);
+  console.warn(
+    `\n⚠  Only ${eligibleGlobal.length} eligible global artists for ${globalCount} slots.`,
+  );
 }
 if (eligibleFrench.length < frenchCount) {
-  console.warn(`\n⚠  Only ${eligibleFrench.length} eligible French artists for ${frenchCount} slots.`);
+  console.warn(
+    `\n⚠  Only ${eligibleFrench.length} eligible French artists for ${frenchCount} slots.`,
+  );
 }
 
 let selectedGlobal = eligibleGlobal.sort(() => Math.random() - 0.5).slice(0, globalCount);

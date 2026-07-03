@@ -27,6 +27,11 @@ export type {
   CrossAllTimeBreakdown,
   CrossAllTimeEntry,
   CrossAllTimeResponse,
+  StepTileResult,
+  ChainapanStep,
+  ChainapanDailyInfo,
+  ChainapanSession,
+  ChainapanStepResponse,
 } from './shared-types'
 
 import type {
@@ -45,6 +50,9 @@ import type {
   DailyCountsResponse,
   CrossLeaderboardResponse,
   CrossAllTimeResponse,
+  ChainapanDailyInfo,
+  ChainapanSession,
+  ChainapanStepResponse,
 } from './shared-types'
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
@@ -232,6 +240,79 @@ export type PoliticsSessionResponse = {
   } | null
 }
 
+// ─── Footix ───────────────────────────────────────────────────────────────────
+
+export type FootixConfederation = 'UEFA' | 'CONMEBOL' | 'CONCACAF' | 'CAF' | 'AFC' | 'OFC'
+export type FootixPoste = 'Gardien' | 'Défenseur' | 'Milieu' | 'Attaquant'
+export type FootixStatus = 'in_progress' | 'won' | 'lost'
+
+export type FootixComparison = {
+  nationalite: {
+    value: string
+    confederation: FootixConfederation
+    match: 'exact' | 'meme-confederation' | 'wrong'
+  }
+  poste: {
+    value: FootixPoste
+    match: 'exact' | 'wrong'
+  }
+  naissance: {
+    value: number
+    direction: 'exact' | 'plus-vieux' | 'plus-jeune'
+    proche: boolean
+  }
+  club: {
+    value: string
+    ligue: string
+    match: 'exact' | 'meme-ligue' | 'wrong'
+  }
+}
+
+export type FootixTentative = {
+  footballerIndex: number
+  footballer: { prenom: string; nom: string }
+  comparison: FootixComparison
+}
+
+export type FootixCible = {
+  prenom: string
+  nom: string
+  nationalite: string
+  confederation: FootixConfederation
+  poste: FootixPoste
+  club: string
+  ligue: string
+  naissance: number
+}
+
+export type FootixSearchResult = {
+  index: number
+  prenom: string
+  nom: string
+  club: string
+  ligue: string
+  nationalite: string
+  poste: FootixPoste
+  popularityScore: number
+}
+
+export type FootixGuessResponse = {
+  correct: boolean
+  comparison: FootixComparison
+  tentativesRestantes: number | null
+  statut: FootixStatus | null
+  footballeurCible: FootixCible | null
+}
+
+export type FootixSessionResponse = {
+  session: {
+    statut: FootixStatus
+    tentatives: FootixTentative[]
+    tentativesRestantes: number
+    footballeurCible: FootixCible | null
+  } | null
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const api = {
@@ -302,6 +383,27 @@ export const api = {
     search: (q: string) =>
       request<PoliticsSearchResult[]>(`/politics/search?q=${encodeURIComponent(q)}`),
     reset: () => request<{ ok: boolean }>('/politics/session', { method: 'DELETE' }),
+  },
+  footix: {
+    session: () => request<FootixSessionResponse>('/footix/session'),
+    guess: (footballerIndex: number) =>
+      request<FootixGuessResponse>('/footix/guess', {
+        method: 'POST',
+        body: JSON.stringify({ footballerIndex }),
+      }),
+    search: (q: string) =>
+      request<FootixSearchResult[]>(`/footix/search?q=${encodeURIComponent(q)}`),
+    reset: () => request<{ ok: boolean }>('/footix/session', { method: 'DELETE' }),
+  },
+  chainapan: {
+    daily: () => request<ChainapanDailyInfo>('/chainapan/daily'),
+    session: () => request<{ session: ChainapanSession | null }>('/chainapan/session'),
+    step: (word: string) =>
+      request<ChainapanStepResponse>('/chainapan/step', {
+        method: 'POST',
+        body: JSON.stringify({ word }),
+      }),
+    reset: () => request<{ ok: boolean }>('/chainapan/session', { method: 'DELETE' }),
   },
   leaderboard: {
     get: (game: string, date?: string) =>

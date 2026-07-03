@@ -8,17 +8,19 @@ export const politicsDaily = pgTable("politeki_daily", {
   politicianIndex: integer("politician_index").notNull(),
 });
 
-export const politicsSessions = pgTable("politeki_sessions", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  date: date("date").notNull(),
-  tentatives: jsonb("tentatives").notNull().default([]),
-  status: politicsStatusEnum("status").notNull().default("in_progress"),
-  completedAt: timestamp("completed_at"),
-}, (table) => [
-  index("idx_politeki_sessions_user_date").on(table.userId, table.date),
-]);
+export const politicsSessions = pgTable(
+  "politeki_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    date: date("date").notNull(),
+    tentatives: jsonb("tentatives").notNull().default([]),
+    status: politicsStatusEnum("status").notNull().default("in_progress"),
+    completedAt: timestamp("completed_at"),
+  },
+  (table) => [index("idx_politeki_sessions_user_date").on(table.userId, table.date)],
+);
 
 export type PoliticsSession = typeof politicsSessions.$inferSelect;

@@ -106,6 +106,80 @@ export type TmdbFilmResult = {
   poster: string | null;
 };
 
+// ─── Footix ───────────────────────────────────────────────────────────────────
+
+export type FootixConfederation = "UEFA" | "CONMEBOL" | "CONCACAF" | "CAF" | "AFC" | "OFC";
+export type FootixPoste = "Gardien" | "Défenseur" | "Milieu" | "Attaquant";
+export type FootixMatchResult = "exact" | "proche" | "wrong";
+export type FootixStatus = "in_progress" | "won" | "lost";
+
+export type FootixComparison = {
+  nationalite: {
+    value: string;
+    confederation: FootixConfederation;
+    match: "exact" | "meme-confederation" | "wrong";
+  };
+  poste: {
+    value: FootixPoste;
+    match: "exact" | "wrong";
+  };
+  naissance: {
+    value: number;
+    direction: "exact" | "plus-vieux" | "plus-jeune";
+    proche: boolean;
+  };
+  club: {
+    value: string;
+    ligue: string;
+    match: "exact" | "meme-ligue" | "wrong";
+  };
+};
+
+export type FootixTentative = {
+  footballerIndex: number;
+  footballer: { prenom: string; nom: string };
+  comparison: FootixComparison;
+};
+
+export type FootixCible = {
+  prenom: string;
+  nom: string;
+  nationalite: string;
+  confederation: FootixConfederation;
+  poste: FootixPoste;
+  club: string;
+  ligue: string;
+  naissance: number;
+};
+
+export type FootixSearchResult = {
+  index: number;
+  prenom: string;
+  nom: string;
+  club: string;
+  ligue: string;
+  nationalite: string;
+  poste: FootixPoste;
+  popularityScore: number;
+};
+
+export type FootixGuessResponse = {
+  correct: boolean;
+  comparison: FootixComparison;
+  tentativesRestantes: number | null;
+  statut: FootixStatus | null;
+  footballeurCible: FootixCible | null;
+};
+
+export type FootixSessionResponse = {
+  session: {
+    statut: FootixStatus;
+    tentatives: FootixTentative[];
+    tentativesRestantes: number;
+    footballeurCible: FootixCible | null;
+  } | null;
+};
+
 // ─── Leaderboard ──────────────────────────────────────────────────────────────
 
 export type LeaderboardEntry = {
@@ -168,3 +242,35 @@ export type CrossAllTimeEntry = {
 };
 
 export type CrossAllTimeResponse = { games: string[]; entries: CrossAllTimeEntry[] };
+
+// ─── Chainapan ────────────────────────────────────────────────────────────────
+
+export type StepTileResult = "correct" | "changed" | "neutral";
+
+export type ChainapanStep = {
+  word: string;
+  tileResults: StepTileResult[];
+};
+
+export type ChainapanDailyInfo = {
+  date: string;
+  wordLength: number;
+  startWord: string;
+  targetWord: string;
+  maxSteps: number;
+};
+
+export type ChainapanSession = {
+  status: "in_progress" | "won" | "lost";
+  steps: ChainapanStep[];
+  stepsLeft: number;
+  startWord: string;
+  targetWord: string;
+  wordLength: number;
+};
+
+export type ChainapanStepResponse = {
+  step: ChainapanStep;
+  status: "in_progress" | "won" | "lost";
+  stepsLeft: number;
+};

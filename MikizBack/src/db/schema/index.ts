@@ -1,5 +1,7 @@
 export * from "./auth";
+export * from "./chainapan";
 export * from "./cinemaxd";
+export * from "./footix";
 export * from "./games";
 export * from "./leaderboard";
 export * from "./motivex";

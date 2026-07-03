@@ -109,13 +109,19 @@ export async function fetchSpotifyArtist(id: string): Promise<SpotifyArtistResul
 const SEARCH_LIMIT = 10;
 const MAX_PAGES_PER_GENRE = 5;
 
-async function fetchArtistsByGenreSeeds(seeds: string[], targetCount: number, label: string): Promise<SpotifyChartEntry[]> {
+async function fetchArtistsByGenreSeeds(
+  seeds: string[],
+  targetCount: number,
+  label: string,
+): Promise<SpotifyChartEntry[]> {
   const seen = new Set<string>();
   const collected: SpotifyChartEntry[] = [];
 
   if (targetCount === 0) return collected;
 
-  console.log(`[Spotify] Searching ${seeds.length} ${label} genre(s) for ~${targetCount} artists...`);
+  console.log(
+    `[Spotify] Searching ${seeds.length} ${label} genre(s) for ~${targetCount} artists...`,
+  );
 
   for (const genre of seeds) {
     if (collected.length >= targetCount) break;
@@ -226,7 +232,9 @@ export function getPopularArtists(targetCount: number): Promise<SpotifyChartEntr
 export async function getFrenchArtists(targetCount: number): Promise<SpotifyChartEntry[]> {
   if (targetCount === 0) return [];
 
-  console.log(`[French] Sampling ${targetCount} artist(s) from curated list of ${FRENCH_ARTIST_IDS.length}...`);
+  console.log(
+    `[French] Sampling ${targetCount} artist(s) from curated list of ${FRENCH_ARTIST_IDS.length}...`,
+  );
 
   // Shuffle and take targetCount IDs
   const shuffled = [...FRENCH_ARTIST_IDS].sort(() => Math.random() - 0.5);
@@ -253,10 +261,7 @@ export async function getArtistInfo(
   name: string,
   imageUrl: string | null,
 ): Promise<VinymixArtist> {
-  const [artist, mb] = await Promise.all([
-    fetchSpotifyArtist(id),
-    fetchMusicBrainzArtist(name),
-  ]);
+  const [artist, mb] = await Promise.all([fetchSpotifyArtist(id), fetchMusicBrainzArtist(name)]);
   const genres = normalizeGenres(mb.genres.length > 0 ? mb.genres : (artist?.genres ?? []));
   const memberCount = mb.memberCount ?? 1;
 

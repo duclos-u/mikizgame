@@ -1,0 +1,1 @@
+ALTER TABLE "chainapan_daily" ADD COLUMN "solution" jsonb;

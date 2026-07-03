@@ -7,9 +7,9 @@
  *   bun artists:delete 2026-07-01               # supprime à partir du 1er juillet
  */
 import { and, gte, lte } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "../src/db";
 import { vinymixArtists, vinymixDaily } from "../src/db/schema";
-import { eq } from "drizzle-orm";
 
 const [fromArg, toArg] = process.argv.slice(2);
 

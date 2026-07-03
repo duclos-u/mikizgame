@@ -35,6 +35,8 @@ const Motivex = lazy(() => import('../games/motivex')) as ComponentType
 const Cinemaxd = lazy(() => import('../games/cinemaxd')) as ComponentType
 const Vinymix = lazy(() => import('../games/vinymix')) as ComponentType
 const Politeki = lazy(() => import('../games/politics')) as ComponentType
+const Footix = lazy(() => import('../games/footix')) as ComponentType
+const Chainapan = lazy(() => import('../games/chainapan')) as ComponentType
 
 export const GAMES: Game[] = [
   {
@@ -88,6 +90,34 @@ export const GAMES: Game[] = [
     },
   },
   {
+    id: 'politics',
+    slug: 'politeki',
+    name: 'Politeki',
+    desc: 'Devine le politicien du jour en 10 essais.',
+    icon: '🗳️',
+    cat: 'politique',
+    tag: 'tag-politique',
+    tagLabel: 'Politique',
+    accent: 'oklch(0.56 0.20 22)',
+    status: 'live',
+    players: 0,
+    avgTries: 0,
+    route: internalGamePath('politics'),
+    maxAttempts: 10,
+    component: Politeki,
+    checkDoneToday: () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.POLITICS_STATE(today()))
+        if (!raw) return false
+        const parsed = JSON.parse(raw) as { statut?: string }
+        return parsed.statut === 'won' || parsed.statut === 'lost'
+      } catch {
+        return false
+      }
+    },
+  },
+
+  {
     id: 'vinymix',
     name: 'Vinymix',
     desc: 'Devine l\'artiste du jour en 6 essais.',
@@ -114,27 +144,49 @@ export const GAMES: Game[] = [
     },
   },
   {
-    id: 'politics',
-    slug: 'politeki',
-    name: 'Politeki',
-    desc: 'Devine le politicien du jour en 10 essais.',
-    icon: '🗳️',
-    cat: 'politique',
-    tag: 'tag-politique',
-    tagLabel: 'Politique',
-    accent: 'oklch(0.56 0.20 22)',
-    status: 'live',
+    id: 'footix',
+    name: 'Footix',
+    desc: 'Devine le footballeur du jour en 8 essais.',
+    icon: '⚽',
+    cat: 'culture',
+    tag: 'tag-sport',
+    tagLabel: 'Sport',
+    accent: 'oklch(0.60 0.18 145)',
+    status: 'soon',
     players: 0,
     avgTries: 0,
-    route: internalGamePath('politics'),
-    maxAttempts: 10,
-    component: Politeki,
+    route: internalGamePath('footix'),
+    maxAttempts: 8,
+    component: Footix,
     checkDoneToday: () => {
       try {
-        const raw = localStorage.getItem(STORAGE_KEYS.POLITICS_STATE(today()))
+        const raw = localStorage.getItem(STORAGE_KEYS.FOOTIX_STATE(today()))
         if (!raw) return false
         const parsed = JSON.parse(raw) as { statut?: string }
         return parsed.statut === 'won' || parsed.statut === 'lost'
+      } catch {
+        return false
+      }
+    },
+  },
+  {
+    id: 'chainapan',
+    name: 'Chainapan',
+    desc: "Transforme le mot de départ en mot cible, une lettre à la fois.",
+    icon: '🔗',
+    cat: 'mots',
+    tag: 'tag-mots',
+    tagLabel: 'Mots',
+    accent: 'oklch(0.62 0.18 200)',
+    status: 'live',
+    players: 0,
+    avgTries: 0,
+    route: internalGamePath('chainapan'),
+    maxAttempts: 8,
+    component: Chainapan,
+    checkDoneToday: () => {
+      try {
+        return localStorage.getItem(STORAGE_KEYS.CHAINAPAN_STATE(today())) === '1'
       } catch {
         return false
       }

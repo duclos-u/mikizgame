@@ -21,10 +21,7 @@ if (!dateArg || !queryArg) {
   process.exit(1);
 }
 
-const dateStr =
-  dateArg.toLowerCase() === "today"
-    ? new Date().toISOString().slice(0, 10)
-    : dateArg;
+const dateStr = dateArg.toLowerCase() === "today" ? new Date().toISOString().slice(0, 10) : dateArg;
 
 // Resolve politician: try numeric index first, then name search
 let politicianIndex: number;
@@ -50,8 +47,10 @@ if (!isNaN(asIndex)) {
     for (const r of results.slice(0, 10)) {
       console.log(`  [${r.index}] ${r.prenom} ${r.nom}  (${r.currentOrLastParti ?? "?"})`);
     }
-    console.log(`\nUsing first match: [${results[0].index}] ${results[0].prenom} ${results[0].nom}`);
-    console.log('Use an index to be explicit: bun politicians:set <date> <index>');
+    console.log(
+      `\nUsing first match: [${results[0].index}] ${results[0].prenom} ${results[0].nom}`,
+    );
+    console.log("Use an index to be explicit: bun politicians:set <date> <index>");
   }
   politicianIndex = results[0].index;
   politicianName = `${results[0].prenom} ${results[0].nom}`;

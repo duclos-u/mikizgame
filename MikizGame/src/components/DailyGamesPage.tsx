@@ -384,7 +384,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           loading={lbLoading}
           currentUser={user?.username ?? null}
         />
-        <StreakPanel doneCount={effectiveDoneIds.length} total={GAMES.length} streak={user?.streak ?? 0} />
+        <StreakPanel doneCount={effectiveDoneIds.filter(id => liveGames.some(g => g.id === id)).length} total={liveGames.length} streak={user?.streak ?? 0} />
       </section>
     </div>
   )

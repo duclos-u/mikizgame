@@ -4027,3 +4027,634 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   & .politeki-btn-primary
     flex: 1
     border-radius: 99px
+
+// ─── Footix ───────────────────────────────────────────────────────────────────
+
+.footix-game
+  display: flex
+  flex-direction: column
+  gap: 18px
+  padding: 16px 0 32px
+
+// Clue board
+.footix-clueboard
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 16px
+  padding: 16px
+
+.footix-clueboard-title
+  font-size: 13px
+  font-weight: 700
+  color: var(--muted)
+  text-transform: uppercase
+  letter-spacing: .04em
+  margin-bottom: 12px
+  display: flex
+  align-items: center
+  gap: 6px
+
+.footix-clueboard-subtitle
+  font-weight: 400
+  text-transform: none
+  letter-spacing: 0
+
+.footix-clue-tiles
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr))
+  gap: 8px
+
+.footix-clue-tile
+  background: oklch(0.965 0.012 84)
+  border-radius: 10px
+  padding: 8px 11px
+
+.footix-clue-tile-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .03em
+  color: var(--muted)
+  margin-bottom: 4px
+
+.footix-clue-tile-val
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+
+// Status bar
+.footix-status
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 10px
+
+.footix-status-right
+  display: flex
+  align-items: center
+  gap: 10px
+
+.footix-dots
+  display: flex
+  gap: 5px
+
+.footix-dot
+  width: 10px
+  height: 10px
+  border-radius: 50%
+
+.footix-counter
+  font-size: 13px
+  font-weight: 700
+  color: var(--muted)
+  white-space: nowrap
+
+// Search
+.footix-search-wrap
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+.footix-search-row
+  display: flex
+  gap: 8px
+  align-items: flex-start
+
+.footix-search-input
+  width: 100%
+  height: 50px
+  border: 1.5px solid var(--border)
+  border-radius: 14px
+  padding: 0 14px
+  font-family: var(--font)
+  font-size: 15px
+  color: var(--text)
+  background: var(--card)
+  outline: none
+  box-sizing: border-box
+  &:focus
+    border-color: oklch(0.60 0.18 145)
+    box-shadow: 0 0 0 3px oklch(0.60 0.18 145 / .15)
+  &::placeholder
+    color: var(--muted)
+  &:disabled
+    opacity: .6
+
+.footix-dropdown
+  position: absolute
+  top: calc(100% + 6px)
+  left: 0
+  right: 0
+  background: var(--card)
+  border: 1.5px solid var(--border)
+  border-radius: 14px
+  box-shadow: 0 8px 24px oklch(0.4 0.03 60 / .14)
+  z-index: 50
+  list-style: none
+  margin: 0
+  padding: 6px 0
+  overflow: hidden
+  max-height: 280px
+  overflow-y: auto
+
+.footix-dropdown-empty
+  padding: 12px 16px
+  font-size: 14px
+  color: var(--muted)
+
+.footix-dropdown-item
+  display: flex
+  align-items: center
+  gap: 10px
+  padding: 9px 14px
+  cursor: pointer
+  transition: background .12s
+  &:hover, &.footix-dropdown-item-active
+    background: oklch(0.965 0.012 84)
+
+.footix-dropdown-nom
+  font-size: 14px
+  font-weight: 600
+  color: var(--text)
+  flex: 1
+
+.footix-dropdown-meta
+  font-size: 12px
+  color: var(--muted)
+
+.footix-error
+  font-size: 13.5px
+  color: oklch(0.55 0.17 25)
+  margin: 0
+
+// Avatar
+.footix-avatar
+  width: 36px
+  height: 36px
+  border-radius: 50%
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 800
+  font-size: 13px
+  color: #fff
+  flex-shrink: 0
+
+.footix-avatar-sm
+  width: 28px
+  height: 28px
+  font-size: 11px
+
+// Guess rows
+.footix-table-wrap
+  overflow-x: auto
+  -webkit-overflow-scrolling: touch
+
+.footix-table
+  min-width: 560px
+
+.footix-table-header
+  display: grid
+  grid-template-columns: 28px 1fr 130px 64px 90px 140px
+  gap: 6px
+  padding: 0 0 6px
+
+.footix-col-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .04em
+  color: var(--muted)
+
+.footix-col-center
+  text-align: center
+
+.footix-col-num
+  text-align: center
+
+.footix-rows
+  display: flex
+  flex-direction: column
+  gap: 5px
+
+.footix-guess-row
+  display: grid
+  grid-template-columns: 28px 1fr 130px 64px 90px 140px
+  gap: 6px
+  align-items: center
+
+.footix-guess-num
+  font-size: 12px
+  font-weight: 700
+  color: var(--muted)
+  text-align: center
+
+.footix-guess-identity
+  display: flex
+  align-items: center
+  gap: 8px
+  min-width: 0
+
+.footix-guess-name
+  display: flex
+  flex-direction: column
+  min-width: 0
+
+.footix-guess-prenom
+  font-size: 12px
+  color: oklch(0.52 0.02 64)
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.footix-guess-nom
+  font-size: 14px
+  font-weight: 700
+  color: var(--text)
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.footix-cell
+  border-radius: 10px
+  padding: 7px 8px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 2px
+  text-align: center
+  min-height: 46px
+
+.footix-cell-main
+  font-size: 12.5px
+  font-weight: 700
+  line-height: 1.2
+
+.footix-cell-sub
+  font-size: 10px
+  font-weight: 500
+  opacity: .8
+
+.footix-cell-arrow
+  font-size: 14px
+  font-weight: 700
+  line-height: 1
+
+.footix-cell-club
+  align-items: flex-start
+  text-align: left
+
+// Legend
+.footix-legend
+  display: flex
+  flex-wrap: wrap
+  gap: 12px
+
+.footix-legend-item
+  display: flex
+  align-items: center
+  gap: 5px
+  font-size: 12.5px
+  color: var(--muted)
+
+.footix-legend-swatch
+  width: 12px
+  height: 12px
+  border-radius: 3px
+  flex-shrink: 0
+
+// Buttons
+.footix-btn-primary
+  border: none
+  border-radius: 12px
+  padding: 0 22px
+  height: 50px
+  font-family: var(--font)
+  font-size: 15px
+  font-weight: 700
+  color: #fff
+  background: oklch(0.60 0.18 145)
+  cursor: pointer
+  box-shadow: 0 2px 0 oklch(0.48 0.17 145), 0 6px 16px oklch(0.60 0.18 145 / .34)
+  white-space: nowrap
+  &:disabled
+    opacity: .5
+    cursor: not-allowed
+
+.footix-btn-secondary
+  flex: 1
+  border: 1px solid var(--border)
+  border-radius: 99px
+  padding: 12px
+  font-family: var(--font)
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  background: oklch(0.965 0.012 84)
+  cursor: pointer
+  text-align: center
+  text-decoration: none
+  display: inline-block
+
+// Footer
+.footix-footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 12px
+  padding-top: 6px
+
+.footix-dev-reset
+  background: none
+  border: none
+  font-family: var(--font)
+  font-size: 12.5px
+  color: var(--muted)
+  cursor: pointer
+  text-decoration: underline
+  text-underline-offset: 2px
+
+// Modal
+.footix-modal-overlay
+  position: fixed
+  inset: 0
+  background: oklch(0.3 0.02 60 / .42)
+  backdrop-filter: blur(3px)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 60
+  padding: 20px
+
+.footix-modal
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 20px
+  padding: 28px
+  max-width: 420px
+  width: 100%
+  box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
+  text-align: center
+  animation: ftFade .3s ease both
+  @keyframes ftFade
+    0%
+      opacity: 0
+      transform: translateY(10px)
+    100%
+      opacity: 1
+      transform: none
+
+.footix-modal-title
+  font-family: var(--font-display)
+  font-size: 22px
+  font-weight: 800
+
+.footix-modal-points
+  display: flex
+  align-items: baseline
+  justify-content: center
+  gap: 5px
+  margin: 10px 0 4px
+
+.footix-modal-points-value
+  font-family: var(--font-display)
+  font-size: 36px
+  font-weight: 800
+  color: oklch(0.60 0.18 145)
+  line-height: 1
+
+.footix-modal-points-label
+  font-size: 16px
+  font-weight: 700
+  color: oklch(0.60 0.18 145)
+
+.footix-modal-points-detail
+  font-size: 13px
+  color: var(--muted)
+  margin-left: 4px
+
+.footix-modal-avatar
+  width: 74px
+  height: 74px
+  border-radius: 50%
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 800
+  font-size: 26px
+  color: #fff
+  margin: 18px auto 12px
+
+.footix-modal-nom
+  font-family: var(--font-display)
+  font-size: 21px
+  font-weight: 700
+  color: var(--text)
+
+.footix-modal-sub
+  font-size: 14px
+  color: oklch(0.48 0.02 62)
+  margin-top: 3px
+
+.footix-modal-grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 8px
+  margin: 18px 0 6px
+  text-align: left
+
+.footix-modal-tile
+  background: oklch(0.965 0.012 84)
+  border-radius: 10px
+  padding: 8px 11px
+
+.footix-modal-tile-label
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  color: var(--muted)
+
+.footix-modal-tile-val
+  font-size: 13.5px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  margin-top: 2px
+
+.footix-modal-actions
+  display: flex
+  gap: 10px
+  margin-top: 18px
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CHAINAPAN
+// ═══════════════════════════════════════════════════════════════════════════
+
+$chainapan-correct: oklch(0.52 0.14 148)
+$chainapan-changed: var(--accent)
+$chainapan-neutral: oklch(0.55 0.01 60)
+
+.chainapan-board
+  width: 100%
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 0
+  user-select: none
+
+.chainapan-message-wrapper
+  display: flex
+  align-items: center
+  justify-content: center
+  min-height: 52px
+  padding: 0 1rem
+
+.chainapan-message
+  color: var(--muted)
+  font-size: 0.95rem
+  text-align: center
+
+.chainapan-anchor-label
+  font-size: 0.65rem
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+  color: var(--muted)
+  text-align: center
+  margin-bottom: 4px
+  margin-top: 0.5rem
+
+.chainapan-anchor-word
+  display: grid
+  gap: 6px
+
+.chainapan-anchor-cell
+  aspect-ratio: 1
+  border-radius: 6px
+  display: grid
+  place-items: center
+  font-weight: 700
+  font-size: 1.05rem
+  text-transform: uppercase
+  border: 2px solid var(--border)
+  background: var(--card)
+  color: var(--text)
+
+  &.is-start
+    border-color: oklch(0.72 0.14 75)
+    background: color-mix(in oklch, oklch(0.72 0.14 75) 12%, var(--card))
+
+  &.is-target
+    border-color: $chainapan-correct
+    background: color-mix(in oklch, $chainapan-correct 12%, var(--card))
+
+.chainapan-grid
+  display: flex
+  flex-direction: column
+  gap: 5px
+  margin: 0.6rem 0
+
+.chainapan-grid-row
+  display: grid
+  gap: 6px
+
+  &-shake
+    animation: row-shake 0.32s ease-in-out
+
+@keyframes chainapan-rowin
+  from
+    opacity: 0
+    transform: translateY(-4px)
+  to
+    opacity: 1
+    transform: none
+
+.chainapan-cell
+  aspect-ratio: 1
+  border: 1px solid var(--border)
+  border-radius: 6px
+  background: var(--card)
+  display: grid
+  place-items: center
+  font-weight: 700
+  font-size: 1.05rem
+  text-transform: uppercase
+  color: var(--text)
+  cursor: pointer
+  transition: border-color 0.1s, background 0.15s
+
+  &:hover
+    border-color: var(--muted)
+
+  &-active
+    border-color: var(--text) !important
+    box-shadow: 0 0 0 2px var(--text)
+
+  &-diff-error
+    border-color: var(--red) !important
+    background: color-mix(in oklch, var(--red) 8%, var(--card))
+
+  &-changed
+    background: $chainapan-changed
+    border-color: $chainapan-changed
+    color: white
+    animation: chainapan-rowin 0.2s ease both
+
+  &-correct
+    background: $chainapan-correct
+    border-color: $chainapan-correct
+    color: white
+    animation: chainapan-rowin 0.2s ease both
+
+  &-neutral
+    background: $chainapan-neutral
+    border-color: $chainapan-neutral
+    color: white
+    animation: chainapan-rowin 0.2s ease both
+
+.chainapan-keyboard
+  display: flex
+  flex-direction: column
+  gap: 6px
+  margin-top: 1rem
+  width: 100%
+  max-width: 480px
+
+.chainapan-keyboard-row
+  display: flex
+  gap: 5px
+
+.chainapan-key
+  flex: 1
+  height: 52px
+  border: 1px solid var(--border)
+  border-radius: 4px
+  background: var(--card-2)
+  color: var(--text)
+  font-family: var(--font)
+  font-weight: 700
+  font-size: 0.875rem
+  cursor: pointer
+  display: flex
+  align-items: center
+  justify-content: center
+  text-transform: uppercase
+  user-select: none
+  touch-action: manipulation
+  transition: background 0.1s, color 0.1s
+
+  &:hover:not(:disabled)
+    background: var(--border)
+
+  &:disabled
+    cursor: default
+    opacity: 0.6
+
+  &-wide
+    flex: 1.5
+    font-size: 1.1rem
+
+@media (max-width: 400px)
+  .chainapan-key
+    height: 44px
+    font-size: 0.8rem

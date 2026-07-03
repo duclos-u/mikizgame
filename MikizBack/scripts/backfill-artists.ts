@@ -26,14 +26,22 @@ if (popularityMode) {
     console.error("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set");
     process.exit(1);
   }
-  const allArtists = await db.select({ id: vinymixArtists.id, name: vinymixArtists.name }).from(vinymixArtists);
-  console.log(`\n${allArtists.length} artist(s) to backfill popularity${dry ? " (dry run)" : ""}.\n`);
+  const allArtists = await db
+    .select({ id: vinymixArtists.id, name: vinymixArtists.name })
+    .from(vinymixArtists);
+  console.log(
+    `\n${allArtists.length} artist(s) to backfill popularity${dry ? " (dry run)" : ""}.\n`,
+  );
   let updated = 0;
   for (const row of allArtists) {
     const artist = await fetchSpotifyArtist(row.id);
     if (artist) {
       console.log(`  ✓ ${row.name} — popularity=${artist.popularity}`);
-      if (!dry) await db.update(vinymixArtists).set({ spotifyPopularity: artist.popularity }).where(eq(vinymixArtists.id, row.id));
+      if (!dry)
+        await db
+          .update(vinymixArtists)
+          .set({ spotifyPopularity: artist.popularity })
+          .where(eq(vinymixArtists.id, row.id));
       updated++;
     } else {
       console.log(`  [skip] ${row.name} — not found on Spotify`);

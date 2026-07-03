@@ -16,7 +16,7 @@ const [dateArg, queryArg] = process.argv.slice(2);
 
 if (!dateArg || !queryArg) {
   console.error("Usage: bun artists:set <YYYY-MM-DD> <spotifyId|artistName>");
-  console.error('  ex: bun artists:set 2026-06-25 1McMsnEElThX1knmY4oliG');
+  console.error("  ex: bun artists:set 2026-06-25 1McMsnEElThX1knmY4oliG");
   console.error('  ex: bun artists:set 2026-06-25 "Daft Punk"');
   process.exit(1);
 }
@@ -101,11 +101,7 @@ await db
   .values({ date: dateArg, artistId: artist.id })
   .onConflictDoUpdate({ target: vinymixDaily.date, set: { artistId: artist.id } });
 
-const meta = [
-  artist.country,
-  artist.creationYear,
-  artist.gender,
-].filter(Boolean).join(", ");
+const meta = [artist.country, artist.creationYear, artist.gender].filter(Boolean).join(", ");
 
 console.log(`\n✓ ${artist.name}${meta ? ` (${meta})` : ""} — ${dateArg}`);
 process.exit(0);

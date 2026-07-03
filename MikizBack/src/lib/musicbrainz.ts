@@ -53,7 +53,9 @@ async function mbFetch<T>(url: string): Promise<T | null> {
   return res.json() as Promise<T>;
 }
 
-async function resolveGroupGender(mbid: string): Promise<{ gender: string | null; memberCount: number | null }> {
+async function resolveGroupGender(
+  mbid: string,
+): Promise<{ gender: string | null; memberCount: number | null }> {
   await new Promise((r) => setTimeout(r, 1100));
   const full = await mbFetch<MBFullArtist>(`${MB_BASE}/artist/${mbid}?inc=artist-rels&fmt=json`);
 

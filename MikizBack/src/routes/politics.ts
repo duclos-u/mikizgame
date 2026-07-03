@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { db } from "../db";
 import { games, leaderboardEntries, politicsDaily, politicsSessions } from "../db/schema";
+import { todayDate } from "../lib/date";
 import {
   type Tentative,
   comparePoliticians,
@@ -12,7 +13,6 @@ import {
   getPolitician,
   searchPoliticians,
 } from "../lib/politics";
-import { todayDate } from "../lib/date";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 10;

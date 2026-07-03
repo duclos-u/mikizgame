@@ -180,7 +180,7 @@
     {
       "idx": 25,
       "version": "7",
-      "when": 1783036800000,
+      "when": 1782834619834,
       "tag": "0025_fuzzy_makkari",
       "breakpoints": true
     },
@@ -189,6 +189,20 @@
       "version": "7",
       "when": 1783040400000,
       "tag": "0026_ensure_politeki_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1783081064128,
+      "tag": "0027_polite_peter_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1783082110680,
+      "tag": "0028_brainy_electro",
       "breakpoints": true
     }
   ]

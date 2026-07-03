@@ -225,7 +225,9 @@ export function LeaderboardPage() {
   })
 
   const currentGame = GAMES.find((g) => g.id === gameId) ?? liveGames[0]
-  const showBreakdown = crossGames.length > 1
+  const liveSlugs = new Set(liveGames.map((g) => g.slug ?? g.id))
+  const visibleCrossGames = crossGames.filter((g) => liveSlugs.has(g))
+  const showBreakdown = visibleCrossGames.length > 1
   const currentUser = user?.username ?? null
 
   return (
@@ -324,7 +326,7 @@ export function LeaderboardPage() {
                     </span>
                     {showBreakdown && (
                       <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                        {crossGames.map((g) => {
+                        {visibleCrossGames.map((g) => {
                           const bd = entry.breakdown[g]
                           return (
                             <span
@@ -420,7 +422,7 @@ export function LeaderboardPage() {
                     </span>
                     {showBreakdown && (
                       <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                        {crossGames.map((g) => {
+                        {visibleCrossGames.map((g) => {
                           const bd = entry.breakdown[g]
                           return (
                             <span

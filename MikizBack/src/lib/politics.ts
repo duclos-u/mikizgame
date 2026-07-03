@@ -47,12 +47,7 @@ export type MandatType =
   | "Sénateur"
   | "Chef de parti";
 
-export type OrientationLabel =
-  | "gauche"
-  | "centre-gauche"
-  | "centre"
-  | "droite"
-  | "extrême droite";
+export type OrientationLabel = "gauche" | "centre-gauche" | "centre" | "droite" | "extrême droite";
 
 export type MatchResult = "exact" | "wrong";
 
@@ -176,10 +171,7 @@ function pastFonctions(p: Politician, currents: MandatType[]): MandatType[] {
     result.push("Président de la République");
   if (!currents.includes("Premier ministre") && (allCodes.has("PM") || allCodes.has("PE")))
     result.push("Premier ministre");
-  if (
-    !currents.includes("Ministre") &&
-    ["ME", "M", "MD", "MC", "SE"].some((c) => allCodes.has(c))
-  )
+  if (!currents.includes("Ministre") && ["ME", "M", "MD", "MC", "SE"].some((c) => allCodes.has(c)))
     result.push("Ministre");
   if (!currents.includes("Député") && allCodes.has("DEP")) result.push("Député");
   if (!currents.includes("Eurodéputé") && allCodes.has("ED")) result.push("Eurodéputé");
@@ -240,16 +232,19 @@ export function comparePoliticians(guess: Politician, target: Politician): Compa
   // Region
   const originRegion: Comparison["originRegion"] = {
     value: guess.originRegion,
-    match: guess.originRegion && target.originRegion && guess.originRegion === target.originRegion
-      ? "exact"
-      : "wrong",
+    match:
+      guess.originRegion && target.originRegion && guess.originRegion === target.originRegion
+        ? "exact"
+        : "wrong",
   };
 
   // Party
   const guessOrientation = orientation(guess.politiscore ?? 50);
   const targetOrientation = orientation(target.politiscore ?? 50);
   const normalizeParti = (s: string | null) => s?.trim().toLowerCase().normalize("NFC") ?? null;
-  const sameParti = normalizeParti(guess.currentOrLastParti) === normalizeParti(target.currentOrLastParti) && guess.currentOrLastParti !== null;
+  const sameParti =
+    normalizeParti(guess.currentOrLastParti) === normalizeParti(target.currentOrLastParti) &&
+    guess.currentOrLastParti !== null;
   const sameFamille = !sameParti && guessOrientation === targetOrientation;
   const currentOrLastParti: Comparison["currentOrLastParti"] = {
     value: guess.currentOrLastParti,
@@ -276,7 +271,8 @@ export function comparePoliticians(guess: Politician, target: Politician): Compa
   let naissanceDir: Comparison["naissance"]["direction"] = "exact";
   let proche = false;
   if (gYear !== null && tYear !== null) {
-    if (gYear > tYear) naissanceDir = "plus-age";        // guess younger, target is older
+    if (gYear > tYear)
+      naissanceDir = "plus-age"; // guess younger, target is older
     else if (gYear < tYear) naissanceDir = "plus-jeune"; // guess older, target is younger
     proche = Math.abs(gYear - tYear) <= 5;
   }

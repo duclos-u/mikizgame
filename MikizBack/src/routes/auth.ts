@@ -6,11 +6,7 @@ import { db } from "../db";
 import { users } from "../db/schema";
 import { signToken } from "../lib/jwt";
 import { authMiddleware } from "../middleware/auth";
-import {
-  createResetToken,
-  resetPassword,
-  sendResetEmail,
-} from "../server/auth/passwordReset";
+import { createResetToken, resetPassword, sendResetEmail } from "../server/auth/passwordReset";
 
 const auth = new Hono();
 
@@ -181,7 +177,9 @@ auth.post("/forgot-password", zValidator("json", forgotPasswordSchema), async (c
     await sendResetEmail(email, resetUrl);
   }
 
-  return c.json({ message: "Si cet email est enregistré, un lien de réinitialisation a été envoyé." });
+  return c.json({
+    message: "Si cet email est enregistré, un lien de réinitialisation a été envoyé.",
+  });
 });
 
 /**

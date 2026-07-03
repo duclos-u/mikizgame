@@ -46,10 +46,10 @@ export function followerTierLabel(n: number): string {
 }
 
 const POPULARITY_TIERS = [
-  { max: 30,  label: "Peu connu" },
-  { max: 50,  label: "Connu" },
-  { max: 65,  label: "Populaire" },
-  { max: 80,  label: "Très populaire" },
+  { max: 30, label: "Peu connu" },
+  { max: 50, label: "Connu" },
+  { max: 65, label: "Populaire" },
+  { max: 80, label: "Très populaire" },
   { max: 101, label: "Star interplanétaire" },
 ];
 
@@ -87,7 +87,8 @@ export function compareArtists(guess: VinymixArtist, target: VinymixArtist): Clu
     key: "country",
     label: "Pays",
     value: guess.country ?? "?",
-    status: guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
+    status:
+      guess.country === null ? "unknown" : guess.country === target.country ? "match" : "miss",
   });
 
   // 3. Member Count

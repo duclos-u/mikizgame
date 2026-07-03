@@ -1,11 +1,7 @@
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db";
-import {
-  games,
-  leaderboardEntries,
-  users,
-} from "../db/schema";
+import { games, leaderboardEntries, users } from "../db/schema";
 
 const leaderboard = new Hono();
 
@@ -40,7 +36,10 @@ leaderboard.get("/cross", async (c) => {
     .innerJoin(users, eq(leaderboardEntries.userId, users.id))
     .where(
       and(
-        inArray(leaderboardEntries.gameId, activeGames.map((g) => g.id)),
+        inArray(
+          leaderboardEntries.gameId,
+          activeGames.map((g) => g.id),
+        ),
         eq(leaderboardEntries.date, date),
       ),
     )

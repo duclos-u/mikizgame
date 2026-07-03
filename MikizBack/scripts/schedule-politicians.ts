@@ -52,7 +52,9 @@ const allGuessable = getGuessablePool();
 const available = allGuessable.filter((p) => !excludedIndices.has(p.index));
 
 if (available.length === 0) {
-  console.error("No available politicians after exclusion. Try a smaller window or clear some entries.");
+  console.error(
+    "No available politicians after exclusion. Try a smaller window or clear some entries.",
+  );
   process.exit(1);
 }
 
@@ -106,17 +108,18 @@ if (entries.length === 0) {
   process.exit(1);
 }
 
-const inserted = await db
-  .insert(politicsDaily)
-  .values(entries)
-  .onConflictDoNothing()
-  .returning();
+const inserted = await db.insert(politicsDaily).values(entries).onConflictDoNothing().returning();
 
-console.log(`\nScheduled ${inserted.length} politician(s) (${entries.length - inserted.length} already existed):`);
+console.log(
+  `\nScheduled ${inserted.length} politician(s) (${entries.length - inserted.length} already existed):`,
+);
 console.log(`Period: ${entries[0].date} → ${entries.at(-1)!.date}\n`);
 
 for (const row of inserted) {
-  const name = names[entries.findIndex((e) => e.date === row.date && e.politicianIndex === row.politicianIndex)];
+  const name =
+    names[
+      entries.findIndex((e) => e.date === row.date && e.politicianIndex === row.politicianIndex)
+    ];
   console.log(`  ${row.date}  ${name ?? `index:${row.politicianIndex}`}`);
 }
 
