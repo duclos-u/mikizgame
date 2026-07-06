@@ -204,6 +204,13 @@
       "when": 1783082110680,
       "tag": "0028_brainy_electro",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1783327583000,
+      "tag": "0029_ensure_chainapan_game",
+      "breakpoints": true
     }
   ]
 }

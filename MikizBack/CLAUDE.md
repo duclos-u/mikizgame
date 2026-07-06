@@ -102,5 +102,14 @@ All code identifiers (variable names, function names, route names) and comments 
 2. `src/lib/<game>.ts` — pure game logic functions
 3. `src/routes/<game>.ts` — Hono router, follow Motivex or Vinymix pattern
 4. `src/index.ts` — mount the new router
-5. `scripts/seed.ts` — add the game row (or create a dedicated seed script like `scripts/seed-politics.ts` for data-heavy games)
-6. `bun db:generate && bun db:migrate`
+5. `scripts/seed.ts` — add the game row to the seed script (for local dev)
+6. **Write a data migration** to insert the game row into the `games` table — this is **mandatory for production**. Railway runs `bun db:migrate` on deploy but does NOT run the seed script. Without this row, `getXxxGameId()` returns `null` and leaderboard entries are never written.
+
+   Create `drizzle/migrations/NNNN_seed_<game>_game.sql`:
+   ```sql
+   INSERT INTO games (slug, name, active) VALUES ('<slug>', '<Name>', true)
+   ON CONFLICT (slug) DO UPDATE SET name = '<Name>', active = true;
+   ```
+   Then add the entry to `drizzle/migrations/meta/_journal.json`.
+
+7. `bun db:generate && bun db:migrate`
