@@ -8,13 +8,24 @@ Phase 3: Normalise + write to politics.json
 """
 
 import json, math, time, urllib.request, urllib.parse, sys, os
+from datetime import date
 
 sys.stdout.reconfigure(line_buffering=True)
+
+def _pageview_window():
+    end = date.today().replace(day=1)
+    m = end.month - 6
+    y = end.year + (m - 1) // 12
+    m = (m - 1) % 12 + 1
+    start = date(y, m, 1)
+    return start.strftime("%Y%m%d"), end.strftime("%Y%m%d")
+
+_start_ym, _end_ym = _pageview_window()
 
 WD_ACTION      = "https://www.wikidata.org/w/api.php"
 PAGEVIEWS_URL  = (
     "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article"
-    "/fr.wikipedia.org/all-access/user/{title}/monthly/20250101/20250701"
+    f"/fr.wikipedia.org/all-access/user/{{title}}/monthly/{_start_ym}/{_end_ym}"
 )
 POLITICS       = "MikizBack/src/data/politics.json"
 QID_CACHE      = "/tmp/qid_cache.json"

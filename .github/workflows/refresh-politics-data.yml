@@ -1,0 +1,45 @@
+name: Refresh Politeki Data
+
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Clear ephemeral caches
+        run: rm -f /tmp/pageviews_cache.json /tmp/genre_progress.json /tmp/birthdates_progress.json
+
+      - name: Run enrichment pipeline
+        run: bash scripts/run_pipeline.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'data: refresh politics.json'
+          title: 'Monthly Politeki data refresh'
+          body: |
+            Automated monthly refresh of `MikizBack/src/data/politics.json`.
+
+            Updates: party affiliations, death dates, birth regions, popularity scores, conviction data.
+
+            Review the diff before merging. Railway will auto-deploy on merge to main.
+          branch: data/refresh-politics
+          base: main
+          delete-branch: true
+          labels: automated

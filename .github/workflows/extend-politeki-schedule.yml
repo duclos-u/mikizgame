@@ -1,0 +1,36 @@
+name: Extend Politeki Schedule
+
+on:
+  schedule:
+    - cron: '30 3 5 * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Number of days to schedule ahead'
+        required: false
+        default: '60'
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: MikizBack
+        run: bun install --frozen-lockfile
+
+      - name: Extend politician schedule
+        working-directory: MikizBack
+        env:
+          DATABASE_URL: ${{ secrets.RAILWAY_DATABASE_URL }}
+          DATABASE_SSL: 'true'
+        run: bun politicians:schedule ${{ github.event.inputs.days || '60' }}

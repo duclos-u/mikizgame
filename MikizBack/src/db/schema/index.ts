@@ -8,3 +8,4 @@ export * from "./motivex";
 export * from "./politics";
 export * from "./vinymix";
 export * from "./users";
+export * from "./yearbox";

@@ -9,7 +9,7 @@ function parse(content: string): string[] {
   return content
     .split("\n")
     .map((line) => normalizeWord(line.trim()))
-    .filter((w) => w.length >= 5 && w.length <= 9);
+    .filter((w) => w.length >= 4 && w.length <= 9);
 }
 
 function load(): void {

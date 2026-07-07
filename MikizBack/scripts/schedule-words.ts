@@ -15,7 +15,7 @@ import { getDailyWordList } from "../src/lib/words";
 const daysArg = Number.parseInt(process.argv[2] ?? "30", 10);
 const startArg = process.argv[3];
 
-const words = getDailyWordList();
+const words = getDailyWordList().filter((w) => w.length >= 5);
 if (words.length === 0) {
   console.error("Word list is empty — check words/fr-daily-words.txt");
   process.exit(1);

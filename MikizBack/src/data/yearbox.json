@@ -1,0 +1,554 @@
+{
+  "puzzles": [
+    {
+      "index": 0,
+      "year": 1969,
+      "facts": [
+        { "domain": "cinema", "text": "Easy Rider de Dennis Hopper marque l'avènement du Nouvel Hollywood" },
+        { "domain": "sport", "text": "Eddy Merckx remporte son premier Tour de France" },
+        { "domain": "musique", "text": "Le festival de Woodstock réunit 400 000 personnes dans l'État de New York" },
+        { "domain": "politique", "text": "Richard Nixon entre à la Maison-Blanche comme 37e président des États-Unis" },
+        { "domain": "tech", "text": "Neil Armstrong devient le premier homme à marcher sur la Lune lors de la mission Apollo 11" }
+      ]
+    },
+    {
+      "index": 1,
+      "year": 1977,
+      "facts": [
+        { "domain": "tech", "text": "Steve Jobs et Steve Wozniak présentent l'Apple II au public" },
+        { "domain": "politique", "text": "Elvis Presley est retrouvé mort à son domicile de Graceland à Memphis" },
+        { "domain": "sport", "text": "Virginia Ruzici remporte Roland-Garros, premier titre de sa carrière en Grand Chelem" },
+        { "domain": "musique", "text": "Les Bee Gees dominent les charts avec la bande originale du film Saturday Night Fever" },
+        { "domain": "cinema", "text": "Star Wars, premier épisode de la saga de George Lucas, sort en salles et devient le film le plus rentable de l'histoire" }
+      ]
+    },
+    {
+      "index": 2,
+      "year": 1984,
+      "facts": [
+        { "domain": "tech", "text": "Apple présente le Macintosh lors d'une publicité légendaire diffusée pendant le Super Bowl" },
+        { "domain": "sport", "text": "Carl Lewis remporte quatre médailles d'or aux Jeux Olympiques de Los Angeles" },
+        { "domain": "musique", "text": "Wham! sort Wake Me Up Before You Go-Go, qui atteint le numéro 1 dans de nombreux pays" },
+        { "domain": "cinema", "text": "Ghostbusters de Ivan Reitman devient un phénomène de culture populaire" },
+        { "domain": "politique", "text": "Ronald Reagan est réélu président des États-Unis avec une victoire écrasante face à Walter Mondale" }
+      ]
+    },
+    {
+      "index": 3,
+      "year": 1986,
+      "facts": [
+        { "domain": "tech", "text": "La navette spatiale Challenger explose 73 secondes après son décollage, tuant ses 7 membres d'équipage" },
+        { "domain": "sport", "text": "Diego Maradona marque le but du siècle et le but de la main de Dieu face à l'Angleterre lors de la Coupe du Monde au Mexique" },
+        { "domain": "politique", "text": "L'explosion du réacteur numéro 4 de la centrale de Tchernobyl provoque la pire catastrophe nucléaire civile de l'histoire" },
+        { "domain": "musique", "text": "True Blue de Madonna se hisse au sommet des charts internationaux" },
+        { "domain": "cinema", "text": "Top Gun avec Tom Cruise en pilote de chasse devient le film le plus vu de l'année aux États-Unis" }
+      ]
+    },
+    {
+      "index": 4,
+      "year": 1989,
+      "facts": [
+        { "domain": "tech", "text": "Tim Berners-Lee propose au CERN un système d'hypertexte distribué, premier jet du World Wide Web" },
+        { "domain": "sport", "text": "Ayrton Senna remporte son premier titre de champion du monde de Formule 1 au volant de la McLaren-Honda" },
+        { "domain": "musique", "text": "Madonna sort Like a Prayer et son clip controversé déclenche un tollé mondial" },
+        { "domain": "politique", "text": "Les manifestants de la place Tian'anmen sont réprimés par l'armée chinoise" },
+        { "domain": "cinema", "text": "Batman de Tim Burton avec Michael Keaton bat tous les records au box-office mondial" }
+      ]
+    },
+    {
+      "index": 5,
+      "year": 1989,
+      "facts": [
+        { "domain": "tech", "text": "Nintendo lance la Game Boy au Japon, inaugurant l'ère des consoles portables de masse" },
+        { "domain": "cinema", "text": "Indiana Jones et la Dernière Croisade sort en salles, clôturant la trilogie originale de Spielberg" },
+        { "domain": "musique", "text": "Taylor Swift naît à West Reading, en Pennsylvanie, le 13 décembre" },
+        { "domain": "sport", "text": "Ayrton Senna remporte son deuxième titre de champion du monde de Formule 1" },
+        { "domain": "politique", "text": "Le mur de Berlin tombe dans la nuit du 9 au 10 novembre, marquant la fin de la Guerre Froide" }
+      ]
+    },
+    {
+      "index": 6,
+      "year": 1991,
+      "facts": [
+        { "domain": "tech", "text": "Linux est rendu public par Linus Torvalds, étudiant finlandais de 21 ans" },
+        { "domain": "sport", "text": "Michael Jordan mène les Chicago Bulls à leur premier titre de champion NBA" },
+        { "domain": "politique", "text": "L'Union soviétique se dissout officiellement le 25 décembre, mettant fin à la Guerre Froide" },
+        { "domain": "cinema", "text": "Le Silence des Agneaux de Jonathan Demme, avec Jodie Foster et Anthony Hopkins, remporte l'Oscar du meilleur film" },
+        { "domain": "musique", "text": "Nirvana publie Nevermind, l'album qui propulse le grunge dans le grand public avec Smells Like Teen Spirit" }
+      ]
+    },
+    {
+      "index": 7,
+      "year": 1994,
+      "facts": [
+        { "domain": "tech", "text": "Jeff Bezos fonde Amazon depuis un garage de Bellevue, dans l'État de Washington" },
+        { "domain": "cinema", "text": "Pulp Fiction de Quentin Tarantino remporte la Palme d'Or au Festival de Cannes" },
+        { "domain": "musique", "text": "Kurt Cobain, chanteur de Nirvana, est retrouvé mort à son domicile de Seattle le 5 avril" },
+        { "domain": "politique", "text": "Nelson Mandela est élu premier président noir d'Afrique du Sud après la fin de l'apartheid" },
+        { "domain": "sport", "text": "La Coupe du Monde de football se déroule aux États-Unis pour la première fois de son histoire" }
+      ]
+    },
+    {
+      "index": 8,
+      "year": 1997,
+      "facts": [
+        { "domain": "tech", "text": "Deep Blue, le superordinateur d'IBM, bat le champion du monde d'échecs Garry Kasparov" },
+        { "domain": "musique", "text": "J.K. Rowling publie Harry Potter à l'école des sorciers, le premier tome de la saga" },
+        { "domain": "sport", "text": "Tiger Woods remporte le Masters d'Augusta à 21 ans, devenant le plus jeune vainqueur de l'histoire" },
+        { "domain": "politique", "text": "La princesse Diana décède dans un accident de voiture à Paris, provoquant un deuil mondial" },
+        { "domain": "cinema", "text": "Titanic de James Cameron avec Leonardo DiCaprio et Kate Winslet pulvérise tous les records au box-office mondial" }
+      ]
+    },
+    {
+      "index": 9,
+      "year": 1998,
+      "facts": [
+        { "domain": "tech", "text": "Larry Page et Sergey Brin fondent Google dans un garage de Menlo Park, en Californie" },
+        { "domain": "cinema", "text": "Il faut sauver le soldat Ryan de Steven Spielberg remporte cinq Oscars dont celui de la mise en scène" },
+        { "domain": "musique", "text": "Lauryn Hill publie The Miseducation of Lauryn Hill, qui remporte cinq Grammy Awards" },
+        { "domain": "sport", "text": "La France remporte sa première Coupe du Monde de football à domicile grâce à un doublé de Zinédine Zidane" },
+        { "domain": "politique", "text": "Le scandale Monica Lewinsky conduit à une procédure d'impeachment contre le président Bill Clinton" }
+      ]
+    },
+    {
+      "index": 10,
+      "year": 2001,
+      "facts": [
+        { "domain": "tech", "text": "Steve Jobs présente l'iPod, révolutionnant l'écoute de musique portable" },
+        { "domain": "cinema", "text": "Le Seigneur des Anneaux : La Communauté de l'Anneau de Peter Jackson ouvre la trilogie en salles" },
+        { "domain": "musique", "text": "Alicia Keys publie Songs in A Minor, son album de début qui la propulse au sommet des charts mondiaux" },
+        { "domain": "politique", "text": "Jimmy Wales et Larry Sanger fondent Wikipédia, l'encyclopédie collaborative en ligne" },
+        { "domain": "politique", "text": "Deux avions percutent les tours jumelles du World Trade Center à New York, tuant près de 3 000 personnes" }
+      ]
+    },
+    {
+      "index": 11,
+      "year": 2004,
+      "facts": [
+        { "domain": "tech", "text": "Mark Zuckerberg lance Facebook depuis sa chambre d'étudiant à Harvard" },
+        { "domain": "sport", "text": "Les Jeux Olympiques d'Athènes marquent le retour de la compétition dans la ville fondatrice des Jeux modernes" },
+        { "domain": "cinema", "text": "Shrek 2 des studios DreamWorks devient le film d'animation le plus rentable de l'histoire à sa sortie" },
+        { "domain": "musique", "text": "Usher publie Confessions, qui se vend à 20 millions d'exemplaires dans le monde" },
+        { "domain": "politique", "text": "George W. Bush est réélu président des États-Unis face au démocrate John Kerry lors d'une campagne très tendue" }
+      ]
+    },
+    {
+      "index": 12,
+      "year": 2007,
+      "facts": [
+        { "domain": "tech", "text": "Steve Jobs présente l'iPhone lors de la MacWorld Conference, révolutionnant l'industrie des smartphones" },
+        { "domain": "cinema", "text": "No Country for Old Men des frères Coen remporte la Palme d'Or à Cannes puis l'Oscar du meilleur film" },
+        { "domain": "musique", "text": "Amy Winehouse publie Back to Black, qui remporte cinq Grammy Awards et la propulse au rang d'icône" },
+        { "domain": "sport", "text": "Roger Federer remporte son cinquième titre consécutif à Wimbledon, égalant le record de Björn Borg" },
+        { "domain": "politique", "text": "Nicolas Sarkozy est élu président de la République française avec 53,06 % des voix face à Ségolène Royal" }
+      ]
+    },
+    {
+      "index": 13,
+      "year": 2008,
+      "facts": [
+        { "domain": "tech", "text": "Spotify est lancé en Europe, inaugurant une nouvelle ère pour l'écoute de musique en streaming" },
+        { "domain": "cinema", "text": "The Dark Knight de Christopher Nolan, avec Heath Ledger dans le rôle du Joker, bat des records au box-office" },
+        { "domain": "musique", "text": "Coldplay publie Viva la Vida or Death and All His Friends, qui remporte le Grammy du meilleur album de l'année" },
+        { "domain": "politique", "text": "Lehman Brothers fait faillite en septembre, déclenchant la pire crise financière mondiale depuis 1929" },
+        { "domain": "sport", "text": "Usain Bolt pulvérise le record du monde du 100 m aux Jeux Olympiques de Pékin avec un temps de 9,69 secondes" }
+      ]
+    },
+    {
+      "index": 14,
+      "year": 2008,
+      "facts": [
+        { "domain": "tech", "text": "Satoshi Nakamoto publie le livre blanc décrivant Bitcoin, la première cryptomonnaie décentralisée" },
+        { "domain": "sport", "text": "Michael Phelps remporte huit médailles d'or en natation lors des Jeux Olympiques de Pékin, un record absolu" },
+        { "domain": "cinema", "text": "WALL-E de Pixar est salué par la critique comme l'un des meilleurs films d'animation de la décennie" },
+        { "domain": "musique", "text": "Kanye West publie 808s & Heartbreak, album qui influence profondément l'esthétique de la pop moderne" },
+        { "domain": "politique", "text": "Barack Obama est élu 44e président des États-Unis, devenant le premier président afro-américain de l'histoire" }
+      ]
+    },
+    {
+      "index": 15,
+      "year": 2009,
+      "facts": [
+        { "domain": "tech", "text": "Whatsapp est fondée par Jan Koum et Brian Acton, deux anciens employés de Yahoo" },
+        { "domain": "cinema", "text": "Avatar de James Cameron révolutionne la 3D cinématographique et devient le film le plus rentable de l'histoire" },
+        { "domain": "musique", "text": "Michael Jackson décède le 25 juin d'un arrêt cardiaque provoqué par une overdose de médicaments" },
+        { "domain": "sport", "text": "Usain Bolt établit le record du monde du 100 m à 9,58 secondes lors des Championnats du Monde de Berlin" },
+        { "domain": "politique", "text": "Barack Obama reçoit le prix Nobel de la paix pour ses efforts extraordinaires en faveur de la diplomatie internationale" }
+      ]
+    },
+    {
+      "index": 16,
+      "year": 2010,
+      "facts": [
+        { "domain": "tech", "text": "Steve Jobs présente l'iPad, première tablette tactile grand public d'Apple" },
+        { "domain": "cinema", "text": "Inception de Christopher Nolan, explorant les rêves à travers l'inconscient, fascine le public mondial" },
+        { "domain": "musique", "text": "Lady Gaga publie Telephone en duo avec Beyoncé, accompagné d'un clip de 9 minutes qui pulvérise les compteurs" },
+        { "domain": "politique", "text": "WikiLeaks publie des centaines de milliers de télégrammes diplomatiques américains confidentiels" },
+        { "domain": "sport", "text": "La Coupe du Monde de football se déroule pour la première fois en Afrique, en Afrique du Sud, remportée par l'Espagne" }
+      ]
+    },
+    {
+      "index": 17,
+      "year": 2012,
+      "facts": [
+        { "domain": "tech", "text": "Les physiciens du CERN annoncent la découverte d'une particule correspondant au boson de Higgs, dite « particule de Dieu »" },
+        { "domain": "sport", "text": "Usain Bolt conserve son titre olympique du 100 m aux Jeux de Londres avec un temps de 9,63 secondes" },
+        { "domain": "cinema", "text": "The Avengers des studios Marvel rassemble pour la première fois les super-héros phares dans un même film" },
+        { "domain": "musique", "text": "PSY bat tous les records de vues sur YouTube avec Gangnam Style, premier clip à dépasser un milliard de vues" },
+        { "domain": "politique", "text": "François Hollande est élu président de la République française face à Nicolas Sarkozy" }
+      ]
+    },
+    {
+      "index": 18,
+      "year": 2013,
+      "facts": [
+        { "domain": "tech", "text": "Edward Snowden révèle au monde les programmes de surveillance massive de la NSA à travers des documents classifiés" },
+        { "domain": "cinema", "text": "Gravity d'Alfonso Cuarón, avec Sandra Bullock et George Clooney, remporte sept Oscars dont celui de la mise en scène" },
+        { "domain": "musique", "text": "Daft Punk publie Random Access Memories avec le titre Get Lucky, qui devient l'une des chansons les plus diffusées de la décennie" },
+        { "domain": "politique", "text": "Nelson Mandela s'éteint à l'âge de 95 ans à Johannesburg, provoquant un deuil mondial" },
+        { "domain": "sport", "text": "Serena Williams remporte trois des quatre tournois du Grand Chelem, dominant le tennis mondial" }
+      ]
+    },
+    {
+      "index": 19,
+      "year": 2015,
+      "facts": [
+        { "domain": "tech", "text": "Netflix lance son service en France, amorçant la révolution du streaming vidéo en Europe" },
+        { "domain": "cinema", "text": "Star Wars : Le Réveil de la Force de J.J. Abrams relance la saga 32 ans après le dernier épisode" },
+        { "domain": "musique", "text": "Adele publie Hello, qui cumule 27 millions de vues en 24 heures, battant tous les records YouTube" },
+        { "domain": "politique", "text": "Les attentats de novembre à Paris font 130 victimes au Bataclan, aux terrasses de cafés et au Stade de France" },
+        { "domain": "sport", "text": "Novak Djokovic remporte trois des quatre tournois du Grand Chelem, dominant le tennis mondial" }
+      ]
+    },
+    {
+      "index": 20,
+      "year": 2016,
+      "facts": [
+        { "domain": "tech", "text": "Pokémon Go est lancé et provoque un phénomène mondial de réalité augmentée" },
+        { "domain": "cinema", "text": "La La Land de Damien Chazelle remporte le Lion d'Or à Venise et récolte 14 nominations aux Oscars" },
+        { "domain": "musique", "text": "David Bowie s'éteint le 10 janvier, deux jours après la sortie de son album Blackstar" },
+        { "domain": "sport", "text": "Leicester City remporte le titre de Premier League contre toute attente, à 5 000 contre 1 en début de saison" },
+        { "domain": "politique", "text": "Donald Trump est élu 45e président des États-Unis face à Hillary Clinton, défiant tous les sondages" }
+      ]
+    },
+    {
+      "index": 21,
+      "year": 2018,
+      "facts": [
+        { "domain": "tech", "text": "Le scandale Cambridge Analytica révèle comment Facebook a permis l'exploitation des données de 87 millions d'utilisateurs" },
+        { "domain": "cinema", "text": "Black Panther de Ryan Coogler devient le premier film de super-héros afro-américain à décrocher une nomination aux Oscars" },
+        { "domain": "musique", "text": "Bohemian Rhapsody, biopic sur Freddie Mercury et Queen, sort en salles et devient un succès mondial inattendu" },
+        { "domain": "politique", "text": "La Russie est exclue du G8 après l'annexion de la Crimée, ramenant le groupe des grandes puissances à sept membres" },
+        { "domain": "sport", "text": "La France remporte la Coupe du Monde de football en Russie, vingt ans après son premier sacre mondial" }
+      ]
+    },
+    {
+      "index": 22,
+      "year": 2019,
+      "facts": [
+        { "domain": "tech", "text": "Boeing cloue au sol ses 737 Max après deux crashs meurtriers causés par un défaut du système de pilotage automatique MCAS" },
+        { "domain": "cinema", "text": "Avengers : Endgame des studios Marvel devient le film le plus rentable de l'histoire avec 2,79 milliards de dollars" },
+        { "domain": "musique", "text": "Billie Eilish publie son premier album studio When We All Fall Asleep, Where Do We Go? et devient une icône générationnelle" },
+        { "domain": "politique", "text": "Notre-Dame de Paris est dévastée par un incendie qui provoque l'effondrement de sa flèche" },
+        { "domain": "politique", "text": "Greta Thunberg, militante suédoise de 16 ans pour le climat, est nommée personnalité de l'année par le magazine Time" }
+      ]
+    },
+    {
+      "index": 23,
+      "year": 2020,
+      "facts": [
+        { "domain": "tech", "text": "Zoom devient l'application téléchargée numéro 1 dans le monde grâce à la généralisation du télétravail" },
+        { "domain": "cinema", "text": "Parasite de Bong Joon-ho remporte l'Oscar du meilleur film, première production non anglophone à décrocher ce titre" },
+        { "domain": "musique", "text": "Billie Eilish remporte les quatre Grammys les plus prestigieux — meilleur album, chanson, enregistrement et nouvel artiste" },
+        { "domain": "politique", "text": "L'Organisation mondiale de la Santé déclare la pandémie de Covid-19, qui paralyse la planète entière" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Tokyo sont reportés d'un an en raison de la pandémie mondiale de Covid-19" }
+      ]
+    },
+    {
+      "index": 24,
+      "year": 2021,
+      "facts": [
+        { "domain": "tech", "text": "Facebook subit une panne mondiale de six heures, coupant l'accès à Facebook, Instagram et WhatsApp simultanément" },
+        { "domain": "cinema", "text": "No Time to Die, dernier film de Daniel Craig dans le rôle de James Bond, sort après deux ans de reports" },
+        { "domain": "cinema", "text": "Squid Game de Netflix devient la série la plus regardée de l'histoire de la plateforme avec 111 millions de spectateurs" },
+        { "domain": "politique", "text": "Des partisans de Donald Trump prennent d'assaut le Capitole des États-Unis pour tenter d'empêcher la certification des résultats électoraux" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Tokyo se déroulent à huis clos en raison de la pandémie de Covid-19" }
+      ]
+    },
+    {
+      "index": 25,
+      "year": 2022,
+      "facts": [
+        { "domain": "tech", "text": "Elon Musk rachète Twitter pour 44 milliards de dollars et rebaptise le réseau social X" },
+        { "domain": "cinema", "text": "Top Gun : Maverick avec Tom Cruise sort 36 ans après le film original et dépasse le milliard de dollars au box-office" },
+        { "domain": "musique", "text": "Beyoncé publie Renaissance, un hommage à la culture afro-américaine et aux musiques de danse qui reçoit 32 nominations aux Grammy" },
+        { "domain": "politique", "text": "La Russie envahit l'Ukraine le 24 février, déclenchant la plus grande guerre en Europe depuis 1945" },
+        { "domain": "sport", "text": "L'Argentine remporte la Coupe du Monde de football au Qatar grâce à Lionel Messi, au terme d'une finale haletante contre la France" }
+      ]
+    },
+    {
+      "index": 26,
+      "year": 2023,
+      "facts": [
+        { "domain": "tech", "text": "ChatGPT d'OpenAI atteint 100 millions d'utilisateurs en seulement deux mois, record de croissance jamais atteint" },
+        { "domain": "cinema", "text": "Barbie de Greta Gerwig et Oppenheimer de Christopher Nolan sortent le même jour, créant le phénomène mondial du Barbenheimer" },
+        { "domain": "musique", "text": "Taylor Swift entame son Eras Tour, qui devient la tournée la plus rentable de l'histoire avec plus d'un milliard de dollars de recettes" },
+        { "domain": "politique", "text": "Giorgia Meloni devient la première femme à occuper le poste de présidente du Conseil en Italie" },
+        { "domain": "sport", "text": "Lionel Messi remporte son huitième Ballon d'Or, record absolu dans l'histoire du football" }
+      ]
+    },
+    {
+      "index": 27,
+      "year": 1975,
+      "facts": [
+        { "domain": "tech", "text": "Bill Gates et Paul Allen fondent Microsoft à Albuquerque, au Nouveau-Mexique" },
+        { "domain": "cinema", "text": "Les Dents de la mer de Steven Spielberg invente le concept de « blockbuster » estival en affolant les caisses" },
+        { "domain": "musique", "text": "Bruce Springsteen publie Born to Run, qui fait sa une du Time et du Newsweek la même semaine" },
+        { "domain": "politique", "text": "La chute de Saigon met fin à la guerre du Vietnam après deux décennies de conflit" },
+        { "domain": "sport", "text": "Muhammad Ali bat George Foreman lors du Rumble in the Jungle à Kinshasa pour reconquérir le titre de champion du monde des lourds" }
+      ]
+    },
+    {
+      "index": 28,
+      "year": 1979,
+      "facts": [
+        { "domain": "tech", "text": "Sony lance le Walkman au Japon, révolutionnant l'écoute de musique portable" },
+        { "domain": "cinema", "text": "Apocalypse Now de Francis Ford Coppola remporte la Palme d'Or à Cannes à ex æquo avec Le Tambour" },
+        { "domain": "musique", "text": "Michael Jackson publie Off the Wall, son premier album solo de musique funk et disco" },
+        { "domain": "politique", "text": "Margaret Thatcher devient la première femme Premier ministre du Royaume-Uni" },
+        { "domain": "sport", "text": "Bjorn Borg remporte son quatrième titre consécutif à Wimbledon, dominant le tennis mondial sur gazon" }
+      ]
+    },
+    {
+      "index": 29,
+      "year": 1985,
+      "facts": [
+        { "domain": "tech", "text": "Microsoft lance Windows 1.0, son premier système d'exploitation à interface graphique" },
+        { "domain": "cinema", "text": "Retour vers le futur de Robert Zemeckis avec Michael J. Fox et sa DeLorean devient un classique instantané" },
+        { "domain": "musique", "text": "Le concert Live Aid organisé par Bob Geldof réunit simultanément Wembley à Londres et le JFK à Philadelphie pour l'aide à l'Éthiopie" },
+        { "domain": "politique", "text": "Mikhaïl Gorbatchev devient secrétaire général du Parti communiste de l'Union soviétique" },
+        { "domain": "sport", "text": "Boris Becker, 17 ans, devient le plus jeune champion de Wimbledon de l'histoire en simple masculin" }
+      ]
+    },
+    {
+      "index": 30,
+      "year": 1995,
+      "facts": [
+        { "domain": "tech", "text": "Windows 95 est lancé avec des queues de plusieurs heures devant les magasins et un partenariat inédit avec les Rolling Stones" },
+        { "domain": "cinema", "text": "Toy Story de Pixar sort en salles, premier long métrage entièrement réalisé en images de synthèse" },
+        { "domain": "musique", "text": "Oasis publie (What's the Story) Morning Glory?, qui devient l'album britpop de référence de la décennie" },
+        { "domain": "politique", "text": "L'attentat à la bombe du bâtiment fédéral d'Oklahoma City fait 168 morts, le pire attentat sur le sol américain avant le 11 septembre" },
+        { "domain": "sport", "text": "O.J. Simpson est acquitté du meurtre de son ex-femme Nicole Brown Simpson lors d'un procès suivi par 100 millions d'Américains" }
+      ]
+    },
+    {
+      "index": 31,
+      "year": 1996,
+      "facts": [
+        { "domain": "tech", "text": "Dolly, la première brebis clonée à partir d'une cellule adulte, naît au Roslin Institute en Écosse" },
+        { "domain": "cinema", "text": "Trainspotting de Danny Boyle, avec Ewan McGregor, devient l'étendard de la génération britannique des années 1990" },
+        { "domain": "musique", "text": "Tupac Shakur est abattu à Las Vegas quelques jours après le match de boxe entre Mike Tyson et Bruce Seldon" },
+        { "domain": "politique", "text": "Les Jeux Olympiques d'Atlanta sont frappés par un attentat à la bombe dans le Centennial Olympic Park" },
+        { "domain": "sport", "text": "Michael Jordan mène les Chicago Bulls à 72 victoires en saison régulière, puis au titre NBA" }
+      ]
+    },
+    {
+      "index": 32,
+      "year": 1999,
+      "facts": [
+        { "domain": "tech", "text": "Shawn Fanning lance Napster, le premier service de partage de fichiers musicaux en peer-to-peer" },
+        { "domain": "cinema", "text": "Matrix des sœurs Wachowski révolutionne les effets spéciaux avec la technique du bullet time" },
+        { "domain": "musique", "text": "Ricky Martin ouvre la cérémonie des Grammy Awards en interprétant Livin' la Vida Loca devant des centaines de millions de téléspectateurs" },
+        { "domain": "politique", "text": "L'euro est introduit comme monnaie unique virtuelle dans 11 pays européens avant son lancement en pièces et billets" },
+        { "domain": "sport", "text": "Lance Armstrong remporte son premier Tour de France, deux ans après avoir survécu à un cancer des testicules au stade 4" }
+      ]
+    },
+    {
+      "index": 33,
+      "year": 2003,
+      "facts": [
+        { "domain": "tech", "text": "Skype est lancé par des développeurs estoniens, permettant les appels vidéo gratuits via Internet" },
+        { "domain": "cinema", "text": "Le Retour du Roi de Peter Jackson remporte 11 Oscars dont ceux du meilleur film et de la meilleure mise en scène" },
+        { "domain": "musique", "text": "Beyoncé publie Dangerously in Love après la séparation de Destiny's Child, décrochant cinq Grammy Awards" },
+        { "domain": "politique", "text": "Les États-Unis et le Royaume-Uni envahissent l'Irak, renversant Saddam Hussein en moins de trois semaines" },
+        { "domain": "sport", "text": "Roger Federer remporte son premier titre à Wimbledon, début d'une domination sur le tennis mondial" }
+      ]
+    },
+    {
+      "index": 34,
+      "year": 2005,
+      "facts": [
+        { "domain": "tech", "text": "YouTube est fondé par Chad Hurley, Steve Chen et Jawed Karim, trois anciens employés de PayPal" },
+        { "domain": "cinema", "text": "Brokeback Mountain d'Ang Lee remporte le Lion d'Or à Venise et lance un débat sur la représentation LGBTQ+ au cinéma" },
+        { "domain": "musique", "text": "Mariah Carey opère un retour triomphal avec l'album The Emancipation of Mimi et le single We Belong Together" },
+        { "domain": "politique", "text": "L'ouragan Katrina frappe la Nouvelle-Orléans, révélant les défaillances du gouvernement américain face aux catastrophes" },
+        { "domain": "sport", "text": "Rafael Nadal remporte son premier titre à Roland-Garros à l'âge de 19 ans, commençant une série de domination sur la terre battue" }
+      ]
+    },
+    {
+      "index": 35,
+      "year": 2006,
+      "facts": [
+        { "domain": "tech", "text": "Jack Dorsey publie le premier tweet de l'histoire sur Twitter, plateforme qu'il vient de cofonder" },
+        { "domain": "cinema", "text": "Casino Royale réinvente James Bond avec Daniel Craig dans le rôle de l'espion britannique" },
+        { "domain": "musique", "text": "Amy Winehouse sort Rehab, premier single de l'album Back to Black qui la propulsera au rang de légende" },
+        { "domain": "politique", "text": "Saddam Hussein est pendu le 30 décembre après sa condamnation à mort par le tribunal pénal irakien" },
+        { "domain": "sport", "text": "L'Italie remporte la Coupe du Monde de football en Allemagne aux tirs au but face à la France, après le coup de tête de Zidane" }
+      ]
+    },
+    {
+      "index": 36,
+      "year": 2011,
+      "facts": [
+        { "domain": "tech", "text": "Steve Jobs s'éteint le 5 octobre à l'âge de 56 ans, quelques heures après la présentation de l'iPhone 4S" },
+        { "domain": "cinema", "text": "The Artist de Michel Hazanavicius, film muet en noir et blanc, remporte cinq Oscars dont celui du meilleur film" },
+        { "domain": "musique", "text": "Adele publie 21, qui devient l'album le plus vendu de la décennie avec 31 millions d'exemplaires écoulés" },
+        { "domain": "politique", "text": "Ben Laden est éliminé lors d'une opération des forces spéciales américaines à Abbottabad, au Pakistan" },
+        { "domain": "sport", "text": "Novak Djokovic remporte trois des quatre tournois du Grand Chelem et détrône Roger Federer au classement mondial" }
+      ]
+    },
+    {
+      "index": 37,
+      "year": 2014,
+      "facts": [
+        { "domain": "tech", "text": "Apple rachète Beats Electronics de Dr. Dre pour 3 milliards de dollars, la plus importante acquisition de son histoire" },
+        { "domain": "cinema", "text": "Interstellar de Christopher Nolan explore les théories de la relativité et du voyage dans le temps" },
+        { "domain": "musique", "text": "Taylor Swift supprime tout son catalogue de Spotify pour protester contre les faibles rémunérations des artistes" },
+        { "domain": "politique", "text": "L'épidémie d'Ebola en Afrique de l'Ouest fait plus de 11 000 morts, la pire de l'histoire du virus" },
+        { "domain": "sport", "text": "L'Allemagne écrase le Brésil 7 à 1 lors de la demi-finale de la Coupe du Monde, un résultat sans précédent dans l'histoire du tournoi" }
+      ]
+    },
+    {
+      "index": 38,
+      "year": 2017,
+      "facts": [
+        { "domain": "tech", "text": "Bitcoin atteint un sommet historique de 19 783 dollars en décembre avant de s'effondrer" },
+        { "domain": "cinema", "text": "Get Out de Jordan Peele, film d'horreur social à petit budget, devient un phénomène culturel et critique" },
+        { "domain": "musique", "text": "Le mouvement #MeToo, lancé par Tarana Burke et popularisé après les accusations contre Harvey Weinstein, déferle sur les réseaux sociaux" },
+        { "domain": "politique", "text": "Emmanuel Macron est élu président de la République française à 39 ans, le plus jeune chef d'État de l'histoire moderne du pays" },
+        { "domain": "sport", "text": "Roger Federer remporte Wimbledon et l'Open d'Australie pour revenir au premier rang mondial à 35 ans" }
+      ]
+    },
+    {
+      "index": 39,
+      "year": 1980,
+      "facts": [
+        { "domain": "tech", "text": "Pac-Man sort dans les salles d'arcade japonaises, devenant rapidement l'un des jeux les plus populaires de l'histoire" },
+        { "domain": "cinema", "text": "L'Empire contre-attaque de Irvin Kershner révèle la filiation entre Dark Vador et Luke Skywalker" },
+        { "domain": "musique", "text": "John Lennon est assassiné devant son immeuble du Dakota à New York par Mark David Chapman" },
+        { "domain": "politique", "text": "Ronald Reagan est élu président des États-Unis, inaugurant une ère néo-conservatrice" },
+        { "domain": "sport", "text": "Les États-Unis boycottent les Jeux Olympiques de Moscou pour protester contre l'invasion soviétique de l'Afghanistan" }
+      ]
+    },
+    {
+      "index": 40,
+      "year": 1982,
+      "facts": [
+        { "domain": "tech", "text": "Le CD audio est commercialisé pour la première fois en Europe par Philips et Sony" },
+        { "domain": "cinema", "text": "E.T. l'Extra-Terrestre de Steven Spielberg devient le film le plus rentable de l'histoire à sa sortie" },
+        { "domain": "musique", "text": "Michael Jackson publie Thriller, qui devient l'album le plus vendu de l'histoire avec 66 millions de copies" },
+        { "domain": "politique", "text": "La guerre des Malouines oppose l'Argentine au Royaume-Uni pour la souveraineté de l'archipel dans l'Atlantique Sud" },
+        { "domain": "sport", "text": "L'Italie remporte la Coupe du Monde de football en Espagne grâce à un triplé de Paolo Rossi en finale" }
+      ]
+    },
+    {
+      "index": 41,
+      "year": 1990,
+      "facts": [
+        { "domain": "tech", "text": "Tim Berners-Lee crée le premier site web de l'histoire au CERN, sur un ordinateur NeXT" },
+        { "domain": "cinema", "text": "Home Alone de Chris Columbus avec Macaulay Culkin devient le film le plus rentable de l'année aux États-Unis" },
+        { "domain": "musique", "text": "Sinéad O'Connor publie Nothing Compares 2 U, dont le clip en plan fixe devient une des images les plus iconiques de la décennie" },
+        { "domain": "politique", "text": "L'Allemagne se réunifie officiellement le 3 octobre, moins d'un an après la chute du mur de Berlin" },
+        { "domain": "sport", "text": "La Coupe du Monde de football en Italie est remportée par l'Allemagne de l'Ouest face à l'Argentine" }
+      ]
+    },
+    {
+      "index": 42,
+      "year": 1993,
+      "facts": [
+        { "domain": "tech", "text": "Marc Andreessen crée Mosaic, le premier navigateur web à interface graphique accessible au grand public" },
+        { "domain": "cinema", "text": "La Liste de Schindler de Steven Spielberg remporte sept Oscars dont ceux du meilleur film et de la meilleure mise en scène" },
+        { "domain": "musique", "text": "Whitney Houston publie la bande originale de The Bodyguard, qui devient l'une des plus vendues de l'histoire" },
+        { "domain": "politique", "text": "Nelson Mandela et Frederik de Klerk reçoivent conjointement le prix Nobel de la paix pour leurs efforts pour démanteler l'apartheid" },
+        { "domain": "sport", "text": "Chicago Bulls avec Michael Jordan remportent leur troisième titre NBA consécutif" }
+      ]
+    },
+    {
+      "index": 43,
+      "year": 1963,
+      "facts": [
+        { "domain": "tech", "text": "Valentina Tereshkova devient la première femme à voyager dans l'espace à bord du Vostok 6" },
+        { "domain": "cinema", "text": "Le Guépard de Luchino Visconti, avec Burt Lancaster, remporte la Palme d'Or à Cannes" },
+        { "domain": "musique", "text": "Les Beatles publient leur premier single Love Me Do et débutent leur ascension mondiale" },
+        { "domain": "politique", "text": "Martin Luther King Jr. prononce son discours I Have a Dream lors de la Marche sur Washington" },
+        { "domain": "politique", "text": "Le président John F. Kennedy est assassiné à Dallas le 22 novembre lors d'une motorcade" }
+      ]
+    },
+    {
+      "index": 44,
+      "year": 1968,
+      "facts": [
+        { "domain": "tech", "text": "La mission Apollo 8 réalise le premier vol habité autour de la Lune, transmettant des images en direct" },
+        { "domain": "cinema", "text": "2001 : L'Odyssée de l'espace de Stanley Kubrick révolutionne la science-fiction au cinéma" },
+        { "domain": "musique", "text": "The Beatles publient leur double album blanc, simplement intitulé The Beatles" },
+        { "domain": "politique", "text": "Martin Luther King Jr. est assassiné à Memphis le 4 avril, déclenchant des émeutes dans de nombreuses villes américaines" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Mexico sont marqués par le salut du Black Power de Tommie Smith et John Carlos sur le podium du 200 m" }
+      ]
+    },
+    {
+      "index": 45,
+      "year": 1972,
+      "facts": [
+        { "domain": "tech", "text": "Atari publie Pong, premier jeu d'arcade commercial de l'histoire à rencontrer un succès de masse" },
+        { "domain": "cinema", "text": "Le Parrain de Francis Ford Coppola remporte l'Oscar du meilleur film et reste l'un des meilleurs films jamais réalisés" },
+        { "domain": "musique", "text": "David Bowie crée le personnage de Ziggy Stardust lors d'une tournée qui marque durablement la culture rock" },
+        { "domain": "politique", "text": "Le scandale du Watergate éclate après l'arrestation de cinq hommes ayant cambriolé le siège du Parti démocrate" },
+        { "domain": "sport", "text": "Onze athlètes israéliens sont assassinés lors d'une prise d'otages commise par le groupe Septembre Noir aux Jeux Olympiques de Munich" }
+      ]
+    },
+    {
+      "index": 46,
+      "year": 1974,
+      "facts": [
+        { "domain": "tech", "text": "L'Intel 8080, premier microprocesseur universel 8 bits, est commercialisé et ouvre la voie aux micro-ordinateurs" },
+        { "domain": "cinema", "text": "Chinatown de Roman Polanski avec Jack Nicholson remporte le César du meilleur film étranger" },
+        { "domain": "musique", "text": "ABBA remporte le Concours Eurovision de la Chanson à Brighton avec Waterloo" },
+        { "domain": "politique", "text": "Richard Nixon démissionne de la présidence des États-Unis après la révélation de son implication dans le Watergate" },
+        { "domain": "sport", "text": "Muhammad Ali bat George Foreman lors du Rumble in the Jungle à Kinshasa pour reconquérir son titre de champion du monde des lourds" }
+      ]
+    },
+    {
+      "index": 47,
+      "year": 1992,
+      "facts": [
+        { "domain": "tech", "text": "IBM lance le Simon Personal Communicator, considéré comme le premier smartphone de l'histoire" },
+        { "domain": "cinema", "text": "Basic Instinct de Paul Verhoeven avec Sharon Stone et Michael Douglas est le sujet de toutes les polémiques" },
+        { "domain": "musique", "text": "Whitney Houston publie I Will Always Love You pour la bande originale de The Bodyguard, qui devient la chanson la plus vendue de l'histoire" },
+        { "domain": "politique", "text": "Bill Clinton est élu président des États-Unis avec le slogan It's the economy, stupid" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Barcelone voient l'équipe américaine de basket, la Dream Team, remporter l'or haut la main" }
+      ]
+    },
+    {
+      "index": 48,
+      "year": 2000,
+      "facts": [
+        { "domain": "tech", "text": "L'éclatement de la bulle Internet provoque l'effondrement du Nasdaq et la faillite de nombreuses start-up" },
+        { "domain": "cinema", "text": "Gladiator de Ridley Scott avec Russell Crowe remporte l'Oscar du meilleur film" },
+        { "domain": "musique", "text": "Eminem publie The Marshall Mathers LP, qui se vend à 1,76 million d'exemplaires la première semaine aux États-Unis" },
+        { "domain": "politique", "text": "George W. Bush est élu président des États-Unis au terme d'un recomptage controversé des voix en Floride" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Sydney sont salués comme les meilleurs Jeux de l'ère moderne par le Comité international olympique" }
+      ]
+    },
+    {
+      "index": 49,
+      "year": 2016,
+      "facts": [
+        { "domain": "tech", "text": "Snapchat lance les Stories, fonctionnalité aussitôt copiée par Instagram, Facebook et WhatsApp" },
+        { "domain": "cinema", "text": "Moonlight de Barry Jenkins remporte l'Oscar du meilleur film lors d'une cérémonie marquée par la confusion avec La La Land" },
+        { "domain": "musique", "text": "Prince s'éteint le 21 avril à l'âge de 57 ans dans son studio de Paisley Park, victime d'une overdose de fentanyl" },
+        { "domain": "politique", "text": "Le Royaume-Uni vote pour quitter l'Union européenne lors du référendum sur le Brexit avec 51,9 % des voix" },
+        { "domain": "sport", "text": "Les Jeux Olympiques de Rio de Janeiro marquent les premiers Jeux d'été organisés en Amérique du Sud" }
+      ]
+    }
+  ]
+}

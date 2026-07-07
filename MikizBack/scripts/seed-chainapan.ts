@@ -2,7 +2,7 @@
 /**
  * Seeds chainapan_daily with BFS-generated word-ladder puzzles.
  * Uses the exact same word set as the backend validation layer (fr-daily-words.txt +
- * fr-valid-words.txt, normalized and filtered to 5 letters). Stores the BFS-shortest
+ * fr-valid-words.txt, normalized and filtered to 4 letters). Stores the BFS-shortest
  * solution path in the `solution` column, proving each puzzle is solvable within 8 steps.
  *
  * Usage:
@@ -35,20 +35,20 @@ function parse(content: string): string[] {
   return content
     .split("\n")
     .map((line) => normalizeWord(line.trim()))
-    .filter((w) => w.length >= 5 && w.length <= 9);
+    .filter((w) => w.length >= 4 && w.length <= 9);
 }
 
 const dailyList = parse(readFileSync(join(wordsDir, "fr-daily-words.txt"), "utf-8")).filter(
-  (w) => w.length === 5,
+  (w) => w.length === 4,
 );
 const validSet = new Set([
   ...parse(readFileSync(join(wordsDir, "fr-valid-words.txt"), "utf-8")),
   ...dailyList,
 ]);
-const words5 = [...validSet].filter((w) => w.length === 5);
+const words4 = [...validSet].filter((w) => w.length === 4);
 const dailySet = new Set(dailyList);
 
-console.log(`Loaded ${words5.length} valid 5-letter words, ${dailyList.length} daily candidates.`);
+console.log(`Loaded ${words4.length} valid 4-letter words, ${dailyList.length} daily candidates.`);
 
 /**
  * BFS from start, returns the shortest path to a reachable target in [minSteps, maxSteps]
@@ -67,10 +67,10 @@ function bfsPath(start: string, minSteps: number, maxSteps: number): string[] | 
     const d = dist.get(cur) ?? 0;
     if (d >= maxSteps) continue;
 
-    for (const w of words5) {
+    for (const w of words4) {
       if (prev.has(w)) continue;
       let diff = 0;
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < cur.length; i++) {
         if (cur[i] !== w[i]) diff++;
       }
       if (diff !== 1) continue;

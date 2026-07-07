@@ -6,6 +6,7 @@ import { chainapan } from "./routes/chainapan";
 import { cinemaxdSearch, filmdujour } from "./routes/filmdujour";
 import { footix } from "./routes/footix";
 import { leaderboard } from "./routes/leaderboard";
+import { yearbox } from "./routes/yearbox";
 import { motivex } from "./routes/motivex";
 import { politics } from "./routes/politics";
 import { vinymix } from "./routes/vinymix";
@@ -32,6 +33,7 @@ app.route("/api/vinymix", vinymix);
 app.route("/api/politics", politics);
 app.route("/api/chainapan", chainapan);
 app.route("/api/footix", footix);
+app.route("/api/yearbox", yearbox);
 app.route("/api/leaderboard", leaderboard);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));

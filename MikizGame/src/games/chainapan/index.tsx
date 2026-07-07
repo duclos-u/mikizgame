@@ -15,7 +15,7 @@ import { useGameSession } from '../../hooks/useGameSession'
 import { useHubScores } from '../../hooks/useHubScores'
 
 const MAX_STEPS = 8
-const WORD_LENGTH = 5
+const WORD_LENGTH = 4
 
 const KEYBOARD_ROWS = [
   ['A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],

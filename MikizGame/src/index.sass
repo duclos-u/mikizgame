@@ -4658,3 +4658,333 @@ $chainapan-neutral: oklch(0.55 0.01 60)
   .chainapan-key
     height: 44px
     font-size: 0.8rem
+
+// ═══════════════════════════════════════════════════════════════════════════
+// YEARBOX
+// ═══════════════════════════════════════════════════════════════════════════
+
+$yb-accent: oklch(0.62 0.17 60)
+$yb-accent-dark: oklch(0.50 0.16 58)
+
+// Game wrapper
+.yearbox-game
+  display: flex
+  flex-direction: column
+  gap: 18px
+  padding: 16px 0 32px
+
+// Facts panel
+.yearbox-facts
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 16px
+  padding: 16px
+
+.yearbox-facts-title
+  font-size: 13px
+  font-weight: 700
+  color: var(--muted)
+  text-transform: uppercase
+  letter-spacing: .04em
+  margin-bottom: 12px
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.yearbox-facts-count
+  font-weight: 600
+  text-transform: none
+  letter-spacing: 0
+
+.yearbox-facts-list
+  display: flex
+  flex-direction: column
+  gap: 10px
+
+.yearbox-fact
+  background: oklch(0.965 0.012 84)
+  border-radius: 12px
+  padding: 12px 14px
+  border-left: 4px solid transparent
+
+.yearbox-fact-reveal
+  animation: ybReveal 0.35s ease-out both
+
+@keyframes ybReveal
+  0%
+    opacity: 0
+    transform: translateY(-6px)
+  100%
+    opacity: 1
+    transform: none
+
+.yearbox-fact-header
+  display: flex
+  align-items: center
+  gap: 8px
+  margin-bottom: 6px
+
+.yearbox-fact-icon
+  font-size: 18px
+  line-height: 1
+  flex-shrink: 0
+
+.yearbox-fact-domain
+  font-size: 10px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: .04em
+  color: var(--muted)
+
+.yearbox-fact-text
+  font-size: 14.5px
+  color: var(--text)
+  line-height: 1.5
+  margin: 0
+
+// Status bar
+.yearbox-status
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 10px
+
+.yearbox-dots
+  display: flex
+  gap: 5px
+
+.yearbox-dot
+  width: 10px
+  height: 10px
+  border-radius: 50%
+
+// Input
+.yearbox-input-wrap
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+.yearbox-input-row
+  display: flex
+  gap: 8px
+  align-items: flex-start
+
+.yearbox-input
+  width: 100%
+  height: 50px
+  border: 1.5px solid var(--border)
+  border-radius: 14px
+  padding: 0 14px
+  font-family: var(--font)
+  font-size: 15px
+  font-weight: 700
+  font-variant-numeric: tabular-nums
+  color: var(--text)
+  background: var(--card)
+  outline: none
+  box-sizing: border-box
+  appearance: textfield
+  -moz-appearance: textfield
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
+  &:focus
+    border-color: $yb-accent
+    box-shadow: 0 0 0 3px oklch(0.62 0.17 60 / .15)
+  &::placeholder
+    color: var(--muted)
+  &:disabled
+    opacity: .6
+
+.yearbox-error
+  font-size: 13.5px
+  color: oklch(0.55 0.17 25)
+  margin: 0
+
+// Buttons
+.yearbox-btn-primary
+  border: none
+  border-radius: 12px
+  padding: 0 22px
+  height: 50px
+  font-family: var(--font)
+  font-size: 15px
+  font-weight: 700
+  color: #fff
+  background: $yb-accent
+  cursor: pointer
+  box-shadow: 0 2px 0 $yb-accent-dark, 0 6px 16px oklch(0.62 0.17 60 / .34)
+  white-space: nowrap
+  &:disabled
+    opacity: .5
+    cursor: not-allowed
+
+.yearbox-btn-secondary
+  flex: 1
+  border: 1px solid var(--border)
+  border-radius: 99px
+  padding: 12px
+  font-family: var(--font)
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  background: oklch(0.965 0.012 84)
+  cursor: pointer
+  text-align: center
+  text-decoration: none
+  display: inline-block
+
+// Guess history
+.yearbox-history
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+.yearbox-history-title
+  font-size: 13px
+  font-weight: 700
+  color: var(--muted)
+  text-transform: uppercase
+  letter-spacing: .04em
+  margin-bottom: 2px
+
+.yearbox-guess-row
+  display: flex
+  align-items: center
+  gap: 10px
+  padding: 8px 12px
+  background: oklch(0.965 0.012 84)
+  border-radius: 10px
+
+.yearbox-guess-num
+  font-size: 12px
+  font-weight: 700
+  color: var(--muted)
+  min-width: 18px
+  text-align: center
+
+.yearbox-guess-year
+  font-size: 16px
+  font-weight: 700
+  font-variant-numeric: tabular-nums
+  color: var(--text)
+  flex: 1
+
+.yearbox-guess-badge
+  font-size: 12px
+  font-weight: 700
+  border-radius: 99px
+  padding: 4px 10px
+  white-space: nowrap
+
+// Footer
+.yearbox-footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 12px
+  padding-top: 6px
+
+.yearbox-dev-reset
+  background: none
+  border: none
+  font-family: var(--font)
+  font-size: 12.5px
+  color: var(--muted)
+  cursor: pointer
+  text-decoration: underline
+  text-underline-offset: 2px
+
+// Modal
+.yearbox-modal-overlay
+  position: fixed
+  inset: 0
+  background: oklch(0.3 0.02 60 / .42)
+  backdrop-filter: blur(3px)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 60
+  padding: 20px
+
+.yearbox-modal
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 20px
+  padding: 28px
+  max-width: 440px
+  width: 100%
+  box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
+  text-align: center
+  animation: ybFade .3s ease both
+  @keyframes ybFade
+    0%
+      opacity: 0
+      transform: translateY(10px)
+    100%
+      opacity: 1
+      transform: none
+
+.yearbox-modal-title
+  font-family: var(--font-display)
+  font-size: 22px
+  font-weight: 800
+
+.yearbox-modal-points
+  display: flex
+  align-items: baseline
+  justify-content: center
+  gap: 5px
+  margin: 10px 0 4px
+
+.yearbox-modal-points-value
+  font-family: var(--font-display)
+  font-size: 36px
+  font-weight: 800
+  color: $yb-accent
+  line-height: 1
+
+.yearbox-modal-points-label
+  font-size: 16px
+  font-weight: 700
+  color: $yb-accent
+
+.yearbox-modal-points-detail
+  font-size: 13px
+  color: var(--muted)
+  margin-left: 4px
+
+.yearbox-modal-answer
+  margin: 18px 0 6px
+  text-align: left
+
+.yearbox-modal-year
+  font-family: var(--font-display)
+  font-size: 52px
+  font-weight: 800
+  color: $yb-accent
+  text-align: center
+  line-height: 1
+  margin-bottom: 18px
+
+.yearbox-modal-facts
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+.yearbox-modal-fact-line
+  display: flex
+  align-items: flex-start
+  gap: 10px
+  font-size: 13px
+  color: var(--text-2)
+  line-height: 1.45
+  & > span:first-child
+    flex-shrink: 0
+    font-size: 15px
+
+.yearbox-modal-actions
+  display: flex
+  gap: 10px
+  margin-top: 20px

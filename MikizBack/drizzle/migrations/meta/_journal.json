@@ -211,6 +211,13 @@
       "when": 1783327583000,
       "tag": "0029_ensure_chainapan_game",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1783420000000,
+      "tag": "0030_yearbox",
+      "breakpoints": true
     }
   ]
 }
