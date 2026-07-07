@@ -37,6 +37,7 @@ const Vinymix = lazy(() => import('../games/vinymix')) as ComponentType
 const Politeki = lazy(() => import('../games/politics')) as ComponentType
 const Footix = lazy(() => import('../games/footix')) as ComponentType
 const Chainapan = lazy(() => import('../games/chainapan')) as ComponentType
+const Yearbox = lazy(() => import('../games/yearbox')) as ComponentType
 
 export const GAMES: Game[] = [
   {
@@ -187,6 +188,32 @@ export const GAMES: Game[] = [
     checkDoneToday: () => {
       try {
         return localStorage.getItem(STORAGE_KEYS.CHAINAPAN_STATE(today())) === '1'
+      } catch {
+        return false
+      }
+    },
+  },
+  {
+    id: 'yearbox',
+    name: 'Yearbox',
+    desc: 'Devine l\'année mystère à partir de 5 faits culturels.',
+    icon: '📅',
+    cat: 'culture',
+    tag: 'tag-culture',
+    tagLabel: 'Culture',
+    accent: 'oklch(0.62 0.17 60)',
+    status: 'live',
+    players: 0,
+    avgTries: 0,
+    route: internalGamePath('yearbox'),
+    maxAttempts: 5,
+    component: Yearbox,
+    checkDoneToday: () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.YEARBOX_STATE(today()))
+        if (!raw) return false
+        const parsed = JSON.parse(raw) as { statut?: string }
+        return parsed.statut === 'won' || parsed.statut === 'lost'
       } catch {
         return false
       }

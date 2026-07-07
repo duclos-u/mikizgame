@@ -53,7 +53,7 @@ for (const line of lines.slice(1)) {
   // Skip multi-word expressions (hyphens, spaces, apostrophes create false concatenations)
   if (/[-\s']/.test(ortho)) continue;
   const normalized = normalizeWord(ortho);
-  if (normalized.length < 5 || normalized.length > 9) continue;
+  if (normalized.length < 4 || normalized.length > 9) continue;
 
   const freq =
     (Number.parseFloat(parts[iFreqFilms]) || 0) + (Number.parseFloat(parts[iFreqLivres]) || 0);

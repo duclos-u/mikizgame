@@ -14,6 +14,7 @@ await db
     { slug: "politeki", name: "Politeki" },
     { slug: "footix", name: "Footix" },
     { slug: "chainapan", name: "Chainapan" },
+    { slug: "yearbox", name: "Yearbox" },
   ])
   .onConflictDoNothing();
 

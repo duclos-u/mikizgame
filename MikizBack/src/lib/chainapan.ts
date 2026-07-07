@@ -2,7 +2,7 @@ import { normalizeWord } from "./normalize";
 import { isValidWord } from "./words";
 
 export const MAX_STEPS = 8;
-export const WORD_LENGTH = 5;
+export const WORD_LENGTH = 4;
 
 export type StepTileResult = "correct" | "changed" | "neutral";
 

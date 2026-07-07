@@ -8,5 +8,6 @@ export const STORAGE_KEYS = {
   POLITICS_STATE: (date: string) => `politeki2_${date}`,
   FOOTIX_STATE: (date: string) => `footixstate_${date}`,
   CHAINAPAN_STATE: (date: string) => `chainapanstate_${date}`,
+  YEARBOX_STATE: (date: string) => `yearboxstate_${date}`,
   HUB_SCORES: (gameId: string, date: string) => `hub_scores_${gameId}_${date}`,
 } as const

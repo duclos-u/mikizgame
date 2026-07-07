@@ -313,6 +313,32 @@ export type FootixSessionResponse = {
   } | null
 }
 
+// ─── Yearbox ──────────────────────────────────────────────────────────────────
+
+export type YearboxDomain = 'cinema' | 'musique' | 'sport' | 'politique' | 'tech'
+export type YearboxFact = { domain: YearboxDomain; text: string }
+export type YearboxStatus = 'in_progress' | 'won' | 'lost'
+export type YearboxDirection = 'exact' | 'trop-tot' | 'trop-tard'
+export type YearboxCible = { year: number; facts: YearboxFact[] }
+
+export type YearboxGuessResponse = {
+  direction: YearboxDirection
+  factsRevealed: YearboxFact[]
+  tentativesRestantes: number | null
+  statut: YearboxStatus | null
+  cible: YearboxCible | null
+}
+
+export type YearboxSessionResponse = {
+  session: {
+    statut: YearboxStatus
+    guesses: number[]
+    factsRevealed: YearboxFact[]
+    tentativesRestantes: number
+    cible: YearboxCible | null
+  } | null
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const api = {
@@ -394,6 +420,16 @@ export const api = {
     search: (q: string) =>
       request<FootixSearchResult[]>(`/footix/search?q=${encodeURIComponent(q)}`),
     reset: () => request<{ ok: boolean }>('/footix/session', { method: 'DELETE' }),
+  },
+  yearbox: {
+    daily: () => request<{ factsRevealed: YearboxFact[] }>('/yearbox/daily'),
+    session: () => request<YearboxSessionResponse>('/yearbox/session'),
+    guess: (year: number, wrongGuessesSoFar?: number) =>
+      request<YearboxGuessResponse>('/yearbox/guess', {
+        method: 'POST',
+        body: JSON.stringify({ year, wrongGuessesSoFar }),
+      }),
+    reset: () => request<{ ok: boolean }>('/yearbox/session', { method: 'DELETE' }),
   },
   chainapan: {
     daily: () => request<ChainapanDailyInfo>('/chainapan/daily'),
