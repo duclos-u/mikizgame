@@ -3,7 +3,7 @@
  * Pins a specific word-ladder puzzle to a given date.
  *
  * Usage:
- *   bun chainapan:set 2026-08-01 CHIEN LAPIN
+ *   bun chainapan:set 2026-08-01 CHAT LOUP
  */
 
 import { db } from "../src/db";
@@ -26,8 +26,8 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(dateArg)) {
 const startWord = normalizeWord(startArg);
 const targetWord = normalizeWord(targetArg);
 
-if (startWord.length !== 5 || targetWord.length !== 5) {
-  console.error("Both words must be 5 letters");
+if (startWord.length !== 4 || targetWord.length !== 4) {
+  console.error("Both words must be 4 letters");
   process.exit(1);
 }
 
