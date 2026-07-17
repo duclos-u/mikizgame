@@ -76,6 +76,7 @@ politics.get("/search", (c) => {
       nom: p.nom,
       currentOrLastParti: p.currentOrLastParti,
       popularityScore: p.popularityScore,
+      deces: p.deces ?? null,
     })),
   );
 });

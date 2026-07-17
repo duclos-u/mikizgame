@@ -1,5 +1,5 @@
 import confetti from 'canvas-confetti'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   type CinemaxdFilm,
@@ -64,9 +64,10 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 export default function FilmDuJour() {
   // ── Session hook: localStorage-first + API refresh when authed ────────────
-  const { data, setData, loading, error } = useGameSession<CinemaxdData>({
+  const { data, setData, loading, error, authenticated } = useGameSession<CinemaxdData>({
     cacheKey: STORAGE_KEYS.CINEMAXD_STATE(today()),
     fetch: () => api.cinemaxd.session(),
+    requireAuth: true,
   })
 
   // Derive game state from loaded data
@@ -174,6 +175,21 @@ export default function FilmDuJour() {
 
   // ─────────────────────────────────────────────────────────────────────────
 
+  if (!authenticated) {
+    return (
+      <Shell>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--muted)', marginBottom: '1rem' }}>
+            Connecte-toi pour jouer et sauvegarder ton score.
+          </p>
+          <Link to="/" className="btn btn-primary">
+            ← Retour à l&apos;accueil
+          </Link>
+        </div>
+      </Shell>
+    )
+  }
+
   if (loading) {
     return (
       <Shell>
@@ -194,13 +210,23 @@ export default function FilmDuJour() {
     )
   }
 
+  const acteurPhotos = useMemo(() => {
+    const map = new Map<string, string | null>()
+    tentatives.forEach((t) => {
+      t.filmSoumis.acteurs.forEach((a) => {
+        if (!map.has(a.nom)) map.set(a.nom, a.photo)
+      })
+    })
+    return map
+  }, [tentatives])
+
   const dejaJoueIds = tentatives.map((t) => t.tmdbId)
 
   return (
     <Shell>
       <div className="cinemaxd-game">
         {/* Persona épinglée en haut */}
-        <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} pitySlots={pitySlots} />
+        <PersonaBoard indices={indices} filmCible={filmCible} totalIndices={totalIndices} pitySlots={pitySlots} acteurPhotos={acteurPhotos} />
 
         {/* Message + compteur + dots */}
         <div className="cinemaxd-status">

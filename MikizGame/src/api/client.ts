@@ -219,6 +219,7 @@ export type PoliticsSearchResult = {
   nom: string
   currentOrLastParti: string | null
   popularityScore: number
+  deces: string | null
 }
 
 export type PoliticsGuessResponse = {

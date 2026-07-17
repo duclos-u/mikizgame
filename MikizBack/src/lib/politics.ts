@@ -139,9 +139,10 @@ export function searchPoliticians(q: string): Politician[] {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function birthYear(p: Politician): number | null {
+function effectiveAge(p: Politician): number | null {
   if (!p.naissance) return null;
-  return Number(p.naissance.slice(0, 4));
+  const refYear = p.deces ? Number(p.deces.slice(0, 4)) : new Date().getFullYear();
+  return refYear - Number(p.naissance.slice(0, 4));
 }
 
 function currentFonctions(p: Politician): MandatType[] {
@@ -265,16 +266,15 @@ export function comparePoliticians(guess: Politician, target: Politician): Compa
     matching: gPast.filter((f) => tPast.includes(f)),
   };
 
-  // Naissance
-  const gYear = birthYear(guess);
-  const tYear = birthYear(target);
+  // Naissance — compare by effective age (age at death for deceased, current age for living)
+  const gAge = effectiveAge(guess);
+  const tAge = effectiveAge(target);
   let naissanceDir: Comparison["naissance"]["direction"] = "exact";
   let proche = false;
-  if (gYear !== null && tYear !== null) {
-    if (gYear > tYear)
-      naissanceDir = "plus-age"; // guess younger, target is older
-    else if (gYear < tYear) naissanceDir = "plus-jeune"; // guess older, target is younger
-    proche = Math.abs(gYear - tYear) <= 5;
+  if (gAge !== null && tAge !== null) {
+    if (gAge < tAge) naissanceDir = "plus-age"; // guess is younger, target is older
+    else if (gAge > tAge) naissanceDir = "plus-jeune"; // guess is older, target is younger
+    proche = Math.abs(gAge - tAge) <= 5;
   }
   const naissance: Comparison["naissance"] = {
     value: guess.naissance,
