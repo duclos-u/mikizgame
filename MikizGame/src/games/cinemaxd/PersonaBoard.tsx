@@ -7,6 +7,7 @@ type Props = {
   filmCible: CinemaxdFilm | null
   totalIndices?: CinemaxdTotaux
   pitySlots?: Set<string>
+  acteurPhotos?: Map<string, string | null>
 }
 
 // ─── Slot générique ──────────────────────────────────────────────────────────
@@ -60,27 +61,22 @@ export function SlotGenre({
 
   return (
     <Slot label="Genres" pity={pity}>
-      <div className="cinemaxd-tags">
+      <div className="cinemaxd-chip-row">
         {cibleGenres
           ? cibleGenres.map((g) => {
               const revele = indicesGenres.includes(g)
               return (
-                <span
-                  key={g}
-                  className={`cinemaxd-tag${revele ? ' cinemaxd-tag-on cinemaxd-flip' : ''}`}
-                >
+                <span key={g} className={`cinemaxd-chip ${revele ? 'match cinemaxd-flip' : 'miss'}`}>
                   {revele ? g : '?'}
                 </span>
               )
             })
           : <>
               {indicesGenres.map((g) => (
-                <span key={g} className="cinemaxd-tag cinemaxd-tag-on cinemaxd-flip">
-                  {g}
-                </span>
+                <span key={g} className="cinemaxd-chip match cinemaxd-flip">{g}</span>
               ))}
               {Array.from({ length: hiddenCount }, (_, i) => (
-                <span key={`hidden-genre-${i}`} className="cinemaxd-tag">?</span>
+                <span key={`hidden-genre-${i}`} className="cinemaxd-chip miss">?</span>
               ))}
             </>}
       </div>
@@ -91,13 +87,6 @@ export function SlotGenre({
 // ─── Nationalités / Langues ───────────────────────────────────────────────────
 
 const countryNames = new Intl.DisplayNames(['fr'], { type: 'region' })
-
-function isoToFlag(code: string): string {
-  if (!/^[A-Za-z]{2}$/.test(code)) return '🏳️'
-  return [...code.toUpperCase()]
-    .map((c) => String.fromCodePoint(0x1f1e6 - 65 + c.charCodeAt(0)))
-    .join('')
-}
 
 export function countryLabel(code: string): string {
   try {
@@ -129,28 +118,22 @@ export function SlotNationalite({
 
   return (
     <Slot label="Pays">
-      <div className="cinemaxd-flags">
+      <div className="cinemaxd-chip-row">
         {ciblePays
           ? ciblePays.map((p) => {
               const revele = indicesPays.includes(p)
               return (
-                <span
-                  key={p}
-                  title={revele ? countryLabel(p) : '?'}
-                  className={`cinemaxd-flag${revele ? ' cinemaxd-flag-on cinemaxd-flip' : ''}`}
-                >
-                  {revele ? isoToFlag(p) : '🏴'}
+                <span key={p} className={`cinemaxd-chip ${revele ? 'match cinemaxd-flip' : 'miss'}`}>
+                  {revele ? countryLabel(p) : '?'}
                 </span>
               )
             })
           : <>
               {indicesPays.map((p) => (
-                <span key={p} title={countryLabel(p)} className="cinemaxd-flag cinemaxd-flag-on cinemaxd-flip">
-                  {isoToFlag(p)}
-                </span>
+                <span key={p} className="cinemaxd-chip match cinemaxd-flip">{countryLabel(p)}</span>
               ))}
               {Array.from({ length: hiddenCount }, (_, i) => (
-                <span key={`hidden-pays-${i}`} className="cinemaxd-flag" title="Pays inconnu">🏴</span>
+                <span key={`hidden-pays-${i}`} className="cinemaxd-chip miss">?</span>
               ))}
             </>}
       </div>
@@ -160,14 +143,16 @@ export function SlotNationalite({
 
 // ─── Langue ──────────────────────────────────────────────────────────────────
 
-const LANGUES: Record<string, string> = {
-  en: '🇬🇧', fr: '🇫🇷', ja: '🇯🇵', ko: '🇰🇷',
-  de: '🇩🇪', it: '🇮🇹', es: '🇪🇸', zh: '🇨🇳',
-  pt: '🇵🇹', ru: '🇷🇺', sv: '🇸🇪', da: '🇩🇰',
-  no: '🇳🇴', fi: '🇫🇮', nl: '🇳🇱', pl: '🇵🇱',
-  hi: '🇮🇳', ar: '🇸🇦', he: '🇮🇱', tr: '🇹🇷',
-  fa: '🇮🇷', cs: '🇨🇿', ro: '🇷🇴', hu: '🇭🇺',
-  el: '🇬🇷',
+const languageNames = new Intl.DisplayNames(['fr'], { type: 'language' })
+
+export function languageLabel(code: string): string {
+  try {
+    const name = languageNames.of(code)
+    if (!name) return code
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  } catch {
+    return code
+  }
 }
 
 export function SlotLangue({
@@ -187,11 +172,10 @@ export function SlotLangue({
       </Slot>
     )
   }
-  const flag = LANGUES[code] ?? '🏳️'
   return (
     <Slot label="Langue" pity={pity}>
-      <span className="cinemaxd-revealed cinemaxd-flip">
-        {flag} {code.toUpperCase()}
+      <span className="cinemaxd-chip match cinemaxd-flip">
+        {languageLabel(code)}
       </span>
     </Slot>
   )
@@ -304,10 +288,12 @@ export function SlotActeurs({
   indicesActeurs,
   filmCible,
   totalActeurs = 0,
+  acteurPhotos,
 }: {
   indicesActeurs: string[]
   filmCible: CinemaxdFilm | null
   totalActeurs?: number
+  acteurPhotos?: Map<string, string | null>
 }) {
   if (filmCible) {
     if (filmCible.acteurs.length === 0) {
@@ -356,16 +342,24 @@ export function SlotActeurs({
   return (
     <Slot label="Acteurs">
       <div className="cinemaxd-acteurs">
-        {indicesActeurs.map((nom) => (
-          <div key={nom} className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip" title={nom}>
-            <div className="cinemaxd-acteur-photo">
-              <span className="cinemaxd-acteur-initiales">
-                {nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
-              </span>
+        {indicesActeurs.map((nom) => {
+          const photo = acteurPhotos?.get(nom) ?? null
+          const src = photo ? `${TMDB_IMG}${photo}` : null
+          return (
+            <div key={nom} className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip" title={nom}>
+              <div className="cinemaxd-acteur-photo">
+                {src ? (
+                  <img src={src} alt={nom} loading="lazy" />
+                ) : (
+                  <span className="cinemaxd-acteur-initiales">
+                    {nom.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+                  </span>
+                )}
+              </div>
+              <span className="cinemaxd-acteur-nom">{nom}</span>
             </div>
-            <span className="cinemaxd-acteur-nom">{nom}</span>
-          </div>
-        ))}
+          )
+        })}
         {Array.from({ length: hiddenCount }, (_, i) => (
           <div key={`hidden-acteur-${i}`} className="cinemaxd-acteur" title="Acteur non découvert">
             <div className="cinemaxd-acteur-photo">
@@ -397,20 +391,19 @@ export function SlotReal({
   return (
     <Slot label="Réalisateur" pity={pity}>
       {real ? (
-        <div className="cinemaxd-real cinemaxd-flip">
-          {real.photo ? (
-            <img
-              src={`${TMDB_IMG}${real.photo}`}
-              alt={real.nom}
-              className="cinemaxd-real-photo"
-              loading="lazy"
-            />
-          ) : (
-            <span className="cinemaxd-real-initials">
-              {real.nom.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
-            </span>
-          )}
-          <span className="cinemaxd-revealed">{real.nom}</span>
+        <div className="cinemaxd-acteurs">
+          <div className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip">
+            <div className="cinemaxd-acteur-photo">
+              {real.photo ? (
+                <img src={`${TMDB_IMG}${real.photo}`} alt={real.nom} loading="lazy" />
+              ) : (
+                <span className="cinemaxd-acteur-initiales">
+                  {real.nom.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
+                </span>
+              )}
+            </div>
+            <span className="cinemaxd-acteur-nom">{real.nom}</span>
+          </div>
         </div>
       ) : (
         <span className="cinemaxd-hidden">--</span>
@@ -421,7 +414,7 @@ export function SlotReal({
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots }: Props) {
+export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots, acteurPhotos }: Props) {
   return (
     <div className="cinemaxd-persona">
       <SlotTitre film={filmCible} />
@@ -451,7 +444,7 @@ export function PersonaBoard({ indices, filmCible, totalIndices, pitySlots }: Pr
         />
         <SlotLangue langue={indices.langue} filmCible={filmCible} pity={pitySlots?.has('langue')} />
       </div>
-      <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} totalActeurs={totalIndices?.acteurs} />
+      <SlotActeurs indicesActeurs={indices.acteurs} filmCible={filmCible} totalActeurs={totalIndices?.acteurs} acteurPhotos={acteurPhotos} />
       <SlotReal
         realisateurRevele={indices.realisateurRevele}
         realisateurInfo={indices.realisateurInfo}

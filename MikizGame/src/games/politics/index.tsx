@@ -45,6 +45,7 @@ const O_IDX = Object.fromEntries(ORIENTATION_ORDER.map((o, i) => [o, i])) as Rec
 >
 
 const FRENCH_REGIONS = new Set([
+  // Current regions (post-2016)
   'Auvergne-Rhône-Alpes',
   'Bourgogne-Franche-Comté',
   'Bretagne',
@@ -63,6 +64,23 @@ const FRENCH_REGIONS = new Set([
   'Occitanie',
   'Pays de la Loire',
   "Provence-Alpes-Côte d'Azur",
+  // Pre-2016 historical regions still returned by some Wikipedia extracts
+  'Lorraine',
+  'Alsace',
+  'Champagne-Ardenne',
+  'Franche-Comté',
+  'Bourgogne',
+  'Nord-Pas-de-Calais',
+  'Picardie',
+  'Haute-Normandie',
+  'Basse-Normandie',
+  'Midi-Pyrénées',
+  'Languedoc-Roussillon',
+  'Poitou-Charentes',
+  'Limousin',
+  'Aquitaine',
+  'Rhône-Alpes',
+  'Auvergne',
 ])
 
 const PARTI_COLOR_MAP: [string, string][] = [
@@ -232,14 +250,21 @@ function deriveClues(tentatives: PoliticsTentative[]) {
     if (c.orientation.match === 'exact') {
       oMin = gOIdx
       oMax = gOIdx
-      scoreMin = gScore
-      scoreMax = gScore
+      if (!c.orientation.direction) {
+        // Same bucket AND same exact score — pin completely
+        scoreMin = gScore
+        scoreMax = gScore
+      } else if (c.orientation.direction === 'plus-gauche') {
+        // Same bucket but target score < guess score
+        scoreMax = Math.min(scoreMax, gScore - 1)
+      } else if (c.orientation.direction === 'plus-droite') {
+        // Same bucket but target score > guess score
+        scoreMin = Math.max(scoreMin, gScore + 1)
+      }
     } else if (c.orientation.direction === 'plus-gauche') {
-      // target score < guess score
       oMax = Math.min(oMax, gOIdx - 1)
       scoreMax = Math.min(scoreMax, gScore - 1)
     } else if (c.orientation.direction === 'plus-droite') {
-      // target score > guess score
       oMin = Math.max(oMin, gOIdx + 1)
       scoreMin = Math.max(scoreMin, gScore + 1)
     }
@@ -373,7 +398,9 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
           </span>
           <div className="politeki-namecell-text">
             <span className="politeki-nom-prenom">{t.politicien.prenom}</span>
-            <span className="politeki-nom">{t.politicien.nom}</span>
+            <span className="politeki-nom">
+              {t.politicien.nom}{c.naissance.deces ? ' †' : ''}
+            </span>
           </div>
         </div>
         <div className="politeki-cell" style={{ cssText: genreStyle } as React.CSSProperties}>
@@ -548,6 +575,14 @@ function ResultModal({
               {cibleAge != null ? `${cible.deces ? '†' : ''}${cibleAge} ans · ` : ''}
               {cible.genre === 'M' ? 'Homme' : 'Femme'}
             </div>
+            {cible.deces && (
+              <div className="politeki-modal-deces">
+                Décédé(e) le{' '}
+                {new Date(cible.deces).toLocaleDateString('fr-FR', {
+                  day: 'numeric', month: 'long', year: 'numeric',
+                })}
+              </div>
+            )}
 
             <div className="politeki-modal-grid">
               <div className="politeki-modal-tile">
@@ -962,7 +997,7 @@ export default function Politeki() {
                               {mkInitials(s.prenom, s.nom)}
                             </span>
                             <span className="politeki-dropdown-nom">
-                              {s.prenom} {s.nom}
+                              {s.prenom} {s.nom}{s.deces ? ' †' : ''}
                             </span>
                             <span className="politeki-dropdown-parti">
                               {s.currentOrLastParti ?? ''}
