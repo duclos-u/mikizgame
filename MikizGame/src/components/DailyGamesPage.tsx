@@ -273,8 +273,9 @@ function StreakPanel({
   const [history, setHistory] = useState<StreakDay[] | null>(null)
   const [shareOpen, setShareOpen] = useState(false)
   const weekdayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-  // Monday = 0 ... Sunday = 6, based on JS's Sunday-first getDay().
-  const daysSinceMonday = (new Date().getDay() + 6) % 7
+  // Monday = 0 ... Sunday = 6, based on JS's Sunday-first getUTCDay().
+  // Uses UTC to match the backend's UTC-based day boundary (see MikizBack/src/lib/date.ts).
+  const daysSinceMonday = (new Date().getUTCDay() + 6) % 7
 
   useEffect(() => {
     if (!user) {
@@ -292,7 +293,7 @@ function StreakPanel({
   // "upcoming" placeholders (not yet played, not a missed day).
   const weekCells = Array.from({ length: 7 }, (_, i) => {
     const d = new Date()
-    d.setDate(d.getDate() - (daysSinceMonday - i))
+    d.setUTCDate(d.getUTCDate() - (daysSinceMonday - i))
     const date = d.toISOString().slice(0, 10)
     if (i <= daysSinceMonday && history) return history[i] ?? { date, played: false }
     return { date, played: false }
