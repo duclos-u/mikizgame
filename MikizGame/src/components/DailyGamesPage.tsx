@@ -367,7 +367,7 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           </span>
         </div>
         <div className="game-grid">
-          {gamesWithCounts.map((g) => (
+          {[...gamesWithCounts].sort((a, b) => (a.status === 'live' ? 0 : 1) - (b.status === 'live' ? 0 : 1)).map((g) => (
             <GameCard
               key={g.id}
               game={g}
