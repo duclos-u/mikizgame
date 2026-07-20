@@ -44,12 +44,12 @@ const excludedIndices = new Set(existing.map((r) => r.puzzleIndex));
 console.log(`\n${excludedIndices.size} puzzle(s) excluded (already used within ±60 days)`);
 
 const total = getPuzzleCount();
-const available = Array.from({ length: total }, (_, i) => i).filter(
-  (i) => !excludedIndices.has(i),
-);
+const available = Array.from({ length: total }, (_, i) => i).filter((i) => !excludedIndices.has(i));
 
 if (available.length === 0) {
-  console.error("No available puzzles after exclusion. Try a smaller window or clear some entries.");
+  console.error(
+    "No available puzzles after exclusion. Try a smaller window or clear some entries.",
+  );
   process.exit(1);
 }
 
@@ -99,7 +99,7 @@ console.log(`Period: ${entries[0].date} → ${entries.at(-1)!.date}\n`);
 
 for (const row of inserted) {
   const puzzle = getPuzzle(row.puzzleIndex);
-  console.log(`  ${row.date}  [${row.puzzleIndex}] ${puzzle?.year ?? '?'}`);
+  console.log(`  ${row.date}  [${row.puzzleIndex}] ${puzzle?.year ?? "?"}`);
 }
 
 process.exit(0);

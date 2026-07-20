@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import { AdminPage } from './components/AdminPage'
 import { AuthModal } from './components/AuthModal'
 import { DailyGamesPage } from './components/DailyGamesPage'
 import { Header } from './components/Header'
@@ -94,6 +95,19 @@ export default function App() {
         />
         <Route path="/games/:gameId" element={<GameRoutePage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route
+          path="/admin"
+          element={
+            <div className="app-root">
+              <Header onLoginClick={() => setAuthModalOpen(true)} />
+              <main className="app-main">
+                <AdminPage />
+              </main>
+              <AppFooter />
+              <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+            </div>
+          }
+        />
       </Routes>
     </AuthProvider>
   )

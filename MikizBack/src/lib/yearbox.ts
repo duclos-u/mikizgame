@@ -33,3 +33,7 @@ export function compareYear(guess: number, target: number): YearboxDirection {
   if (guess === target) return "exact";
   return guess < target ? "trop-tot" : "trop-tard";
 }
+
+export function findPuzzleByYear(year: number): YearboxPuzzle | null {
+  return ALL_PUZZLES.find((p) => p.year === year) ?? null;
+}

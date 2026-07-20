@@ -3,7 +3,13 @@
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
-export type User = { id: string; username: string; email: string; streak: number };
+export type User = {
+  id: string;
+  username: string;
+  email: string;
+  streak: number;
+  isAdmin: boolean;
+};
 export type AuthResponse = { user: User; token: string };
 
 // ─── Motivex ──────────────────────────────────────────────────────────────────
@@ -299,4 +305,46 @@ export type ChainapanStepResponse = {
   step: ChainapanStep;
   status: "in_progress" | "won" | "lost";
   stepsLeft: number;
+};
+
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+export type YearboxSuggestionStatus = "pending" | "approved" | "rejected";
+
+export type YearboxEventSuggestion = {
+  id: string;
+  userId: string;
+  username: string;
+  year: number;
+  domain: YearboxDomain;
+  text: string;
+  status: YearboxSuggestionStatus;
+  adminNote: string | null;
+  createdAt: string;
+  reviewedAt: string | null;
+};
+
+export type SuggestYearboxEventRequest = { year: number; domain: YearboxDomain; text: string };
+export type SuggestYearboxEventResponse = { id: string; status: YearboxSuggestionStatus };
+
+export type AdminSuggestionsResponse = {
+  suggestions: YearboxEventSuggestion[];
+  total: number;
+  page: number;
+};
+
+export type AdminReviewSuggestionRequest = {
+  status: "approved" | "rejected";
+  adminNote?: string;
+};
+
+export type ScheduledEntry = {
+  date: string;
+  label: string;
+  payload: Record<string, unknown>;
+};
+
+export type AdminScheduleResponse = {
+  game: string;
+  entries: ScheduledEntry[];
 };

@@ -22,6 +22,29 @@ Each sub-project has its own `CLAUDE.md` with detailed commands and architecture
 | Cinemaxd | Daily film guessing | `/api/filmdujour` + `/api/cinemaxd` | `src/games/cinemaxd/` |
 | Vinymix | Daily music artist guessing | `/api/vinymix` | `src/games/vinymix/` |
 | Politeki | Daily French politician guessing | `/api/politics` | `src/games/politics/` |
+| Yearbox | Daily year-guessing (facts revealed per wrong guess) | `/api/yearbox` | `src/games/yearbox/` |
+| Chainapan | Daily word-ladder (4-letter chain) | `/api/chainapan` | `src/games/chainapan/` |
+
+## Admin Backoffice
+
+Accessible at `/admin` (frontend) — guarded by `user.isAdmin === true`.
+
+**Promote a user to admin:**
+```bash
+cd MikizBack && bun admin:set <email>           # promote
+cd MikizBack && bun admin:set <email> --revoke  # revoke
+```
+
+**Features:**
+- **Suggestions Yearbox** — review user-submitted event suggestions (approve / reject with optional note)
+- **Planning des jeux** — view, set, edit, and delete the daily schedule for Yearbox, Politeki, Motivex, Chainapan, and Cinemaxd; solutions are blurred by default and revealed on hover or via a global checkbox
+
+**Backend routes** (`/api/admin`, guarded by `adminAuthMiddleware`):
+- `GET /api/admin/suggestions` — list suggestions by status with pagination
+- `PATCH /api/admin/suggestions/:id` — approve or reject a suggestion
+- `GET /api/admin/schedule/:game` — list scheduled entries for a 30-day window
+- `POST /api/admin/schedule/:game` — upsert a day's content (game-specific payload)
+- `DELETE /api/admin/schedule/:game/:date` — remove a scheduled day
 
 ## Type-Sync Contract
 

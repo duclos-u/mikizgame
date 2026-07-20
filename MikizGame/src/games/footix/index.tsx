@@ -213,13 +213,11 @@ function ResultModal({
   cible,
   tentatives,
   onClose,
-  onReset,
 }: {
   statut: FootixStatus
   cible: FootixCible | null
   tentatives: FootixTentative[]
   onClose: () => void
-  onReset: () => void
 }) {
   const [shared, setShared] = useState(false)
   const won = statut === 'won'
@@ -310,11 +308,6 @@ function ResultModal({
           <a href="/leaderboard" className="footix-btn-secondary">
             Classement
           </a>
-          {import.meta.env.DEV && (
-            <button type="button" className="footix-btn-primary" onClick={onReset}>
-              Rejouer
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -718,7 +711,6 @@ export default function Footix() {
           cible={cible}
           tentatives={tentatives}
           onClose={() => setShowModal(false)}
-          onReset={handleReset}
         />
       )}
     </div>

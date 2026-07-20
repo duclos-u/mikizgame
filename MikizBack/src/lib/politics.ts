@@ -272,7 +272,8 @@ export function comparePoliticians(guess: Politician, target: Politician): Compa
   let naissanceDir: Comparison["naissance"]["direction"] = "exact";
   let proche = false;
   if (gAge !== null && tAge !== null) {
-    if (gAge < tAge) naissanceDir = "plus-age"; // guess is younger, target is older
+    if (gAge < tAge)
+      naissanceDir = "plus-age"; // guess is younger, target is older
     else if (gAge > tAge) naissanceDir = "plus-jeune"; // guess is older, target is younger
     proche = Math.abs(gAge - tAge) <= 5;
   }
