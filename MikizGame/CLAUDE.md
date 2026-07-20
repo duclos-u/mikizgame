@@ -24,11 +24,12 @@ This is a React + TypeScript SPA (Vite) — a daily games dashboard for a small 
 
 ### Routing
 
-Four routes, defined in `src/App.tsx`:
+Routes defined in `src/App.tsx`:
 - `/` → `DailyGamesPage` (the hub)
 - `/leaderboard` → `LeaderboardPage`
 - `/games/:gameId` → `GameRoutePage`, which calls `renderGame()` from `src/routes/gameRegistry.tsx`
 - `/reset-password` → `ResetPasswordPage`
+- `/admin` → `AdminPage` (backoffice; access controlled by `user.isAdmin` in-component)
 
 `gameRegistry.tsx` exports `renderGame(gameId)` — a function, not a component. It looks up the matching game in `GAMES` from `src/data/games.ts` and calls `createElement` on its `component`. `GameRoutePage.tsx` is the actual route component that wraps the result.
 
@@ -52,6 +53,14 @@ The optional `slug` field overrides the backend DB slug when it differs from the
 | `cinemaxd` | `src/games/cinemaxd/index.tsx` |
 | `vinymix` | `src/games/vinymix/index.tsx` |
 | `politics` | `src/games/politics/index.tsx` |
+| `yearbox` | `src/games/yearbox/index.tsx` |
+| `chainapan` | `src/games/chainapan/index.tsx` |
+
+### Admin Backoffice
+
+`src/components/AdminPage.tsx` — rendered at `/admin`. Access is guarded in-component (`user.isAdmin`). Two sections:
+- **Suggestions Yearbox** — review user-submitted event suggestions (tabs: pending / approved / rejected, pagination)
+- **Planning des jeux** — schedule view/edit/delete for Yearbox, Politeki, Motivex, Chainapan, Cinemaxd; solutions are blurred by default, revealed on hover or via a global "Afficher les solutions" checkbox
 
 ### Auth
 

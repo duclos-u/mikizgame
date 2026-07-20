@@ -3,14 +3,15 @@ import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { db } from "../db";
-import { games, leaderboardEntries, yearboxDaily, yearboxSessions } from "../db/schema";
-import { todayDate } from "../lib/date";
 import {
-  type YearboxPuzzle,
-  compareYear,
-  getFactsRevealed,
-  getPuzzle,
-} from "../lib/yearbox";
+  games,
+  leaderboardEntries,
+  yearboxDaily,
+  yearboxEventSuggestions,
+  yearboxSessions,
+} from "../db/schema";
+import { todayDate } from "../lib/date";
+import { type YearboxPuzzle, compareYear, getFactsRevealed, getPuzzle } from "../lib/yearbox";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
 const MAX_GUESSES = 5;
@@ -114,7 +115,9 @@ yearbox.get("/session", optionalAuthMiddleware, async (c) => {
 
   if (!session) return c.json({ session: null });
 
-  return c.json({ session: buildSessionPayload(puzzle, session.guesses as number[], session.status) });
+  return c.json({
+    session: buildSessionPayload(puzzle, session.guesses as number[], session.status),
+  });
 });
 
 /**
@@ -261,6 +264,30 @@ yearbox.delete("/session", authMiddleware, async (c) => {
   }
 
   return c.json({ ok: true });
+});
+
+// ─── Event suggestion ─────────────────────────────────────────────────────────
+
+const suggestSchema = z.object({
+  year: z.number().int().min(1900).max(2024),
+  domain: z.enum(["cinema", "musique", "sport", "politique", "tech"]),
+  text: z.string().min(1).max(500).trim(),
+});
+
+/**
+ * POST /api/yearbox/suggest
+ * Auth required. Submits an event suggestion for admin review.
+ */
+yearbox.post("/suggest", authMiddleware, zValidator("json", suggestSchema), async (c) => {
+  const userId = c.get("userId") as string;
+  const { year, domain, text } = c.req.valid("json");
+
+  const [suggestion] = await db
+    .insert(yearboxEventSuggestions)
+    .values({ userId, year, domain, text })
+    .returning({ id: yearboxEventSuggestions.id, status: yearboxEventSuggestions.status });
+
+  return c.json({ id: suggestion.id, status: suggestion.status }, 201);
 });
 
 export { yearbox };

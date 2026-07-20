@@ -1,15 +1,16 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { admin } from "./routes/admin";
 import { auth } from "./routes/auth";
 import { chainapan } from "./routes/chainapan";
 import { cinemaxdSearch, filmdujour } from "./routes/filmdujour";
 import { footix } from "./routes/footix";
 import { leaderboard } from "./routes/leaderboard";
-import { yearbox } from "./routes/yearbox";
 import { motivex } from "./routes/motivex";
 import { politics } from "./routes/politics";
 import { vinymix } from "./routes/vinymix";
+import { yearbox } from "./routes/yearbox";
 
 const app = new Hono();
 
@@ -34,6 +35,7 @@ app.route("/api/politics", politics);
 app.route("/api/chainapan", chainapan);
 app.route("/api/footix", footix);
 app.route("/api/yearbox", yearbox);
+app.route("/api/admin", admin);
 app.route("/api/leaderboard", leaderboard);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));

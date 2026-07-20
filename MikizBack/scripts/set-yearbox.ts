@@ -21,8 +21,7 @@ if (!dateArg || !queryArg) {
   process.exit(1);
 }
 
-const dateStr =
-  dateArg.toLowerCase() === "today" ? new Date().toISOString().slice(0, 10) : dateArg;
+const dateStr = dateArg.toLowerCase() === "today" ? new Date().toISOString().slice(0, 10) : dateArg;
 
 const query = Number.parseInt(queryArg, 10);
 if (isNaN(query)) {

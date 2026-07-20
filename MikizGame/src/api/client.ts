@@ -32,6 +32,12 @@ export type {
   ChainapanDailyInfo,
   ChainapanSession,
   ChainapanStepResponse,
+  YearboxSuggestionStatus,
+  YearboxEventSuggestion,
+  SuggestYearboxEventResponse,
+  AdminSuggestionsResponse,
+  ScheduledEntry,
+  AdminScheduleResponse,
 } from './shared-types'
 
 import type {
@@ -53,6 +59,10 @@ import type {
   ChainapanDailyInfo,
   ChainapanSession,
   ChainapanStepResponse,
+  SuggestYearboxEventResponse,
+  AdminSuggestionsResponse,
+  ScheduledEntry,
+  AdminScheduleResponse,
 } from './shared-types'
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
@@ -431,6 +441,31 @@ export const api = {
         body: JSON.stringify({ year, wrongGuessesSoFar }),
       }),
     reset: () => request<{ ok: boolean }>('/yearbox/session', { method: 'DELETE' }),
+    suggest: (data: { year: number; domain: YearboxDomain; text: string }) =>
+      request<SuggestYearboxEventResponse>('/yearbox/suggest', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+  },
+  admin: {
+    getSuggestions: (status: 'pending' | 'approved' | 'rejected' = 'pending', page = 1) =>
+      request<AdminSuggestionsResponse>(`/admin/suggestions?status=${status}&page=${page}`),
+    reviewSuggestion: (id: string, data: { status: 'approved' | 'rejected'; adminNote?: string }) =>
+      request<{ ok: boolean }>(`/admin/suggestions/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }),
+    getSchedule: (game: string, from?: string, to?: string) => {
+      const qs = from || to ? `?${new URLSearchParams({ ...(from ? { from } : {}), ...(to ? { to } : {}) }).toString()}` : ''
+      return request<AdminScheduleResponse>(`/admin/schedule/${game}${qs}`)
+    },
+    setSchedule: (game: string, data: Record<string, unknown>) =>
+      request<{ ok: boolean; entry: ScheduledEntry }>(`/admin/schedule/${game}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    deleteSchedule: (game: string, date: string) =>
+      request<{ ok: boolean }>(`/admin/schedule/${game}/${date}`, { method: 'DELETE' }),
   },
   chainapan: {
     daily: () => request<ChainapanDailyInfo>('/chainapan/daily'),

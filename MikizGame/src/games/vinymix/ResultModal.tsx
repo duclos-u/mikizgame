@@ -71,10 +71,9 @@ type Props = {
   guesses: VinymixGuess[]
   targetArtist: VinymixArtist | null
   onClose: () => void
-  onReset?: () => void
 }
 
-export function ResultModal({ status, guesses, targetArtist, onClose, onReset }: Props) {
+export function ResultModal({ status, guesses, targetArtist, onClose }: Props) {
   const [copied, setCopied] = useState(false)
   const countdown = useCountdown()
 
@@ -171,11 +170,6 @@ export function ResultModal({ status, guesses, targetArtist, onClose, onReset }:
           <button type="button" className="vinymix-btn-primary" onClick={handleShare}>
             {copied ? 'Copié ✓' : 'Copier le résultat'}
           </button>
-          {import.meta.env.DEV && onReset && (
-            <button type="button" className="vinymix-btn-secondary" onClick={() => { onClose(); onReset() }}>
-              [dev] Rejouer
-            </button>
-          )}
         </div>
       </div>
     </div>

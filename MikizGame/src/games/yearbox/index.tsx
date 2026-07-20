@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   type YearboxCible,
   type YearboxDirection,
+  type YearboxDomain,
   type YearboxFact,
   type YearboxStatus,
   api,
@@ -112,6 +113,108 @@ function GuessRow({ entry, num }: { entry: GuessEntry; num: number }) {
   )
 }
 
+// ─── Suggestion form ──────────────────────────────────────────────────────────
+
+type SuggestState = 'idle' | 'open' | 'loading' | 'done' | 'error'
+
+const DOMAINS: { value: YearboxDomain; label: string }[] = [
+  { value: 'cinema', label: 'Cinéma' },
+  { value: 'musique', label: 'Musique' },
+  { value: 'sport', label: 'Sport' },
+  { value: 'politique', label: 'Politique' },
+  { value: 'tech', label: 'Technologie' },
+]
+
+function SuggestionForm({ targetYear }: { targetYear: number | null }) {
+  const currentYear = new Date().getFullYear()
+  const [state, setState] = useState<SuggestState>('idle')
+  const [domain, setDomain] = useState<YearboxDomain>('cinema')
+  const [year, setYear] = useState(String(targetYear ?? ''))
+  const [text, setText] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const y = parseInt(year, 10)
+    if (Number.isNaN(y) || y < 1900 || y > currentYear) {
+      setErrorMsg(`Année invalide (1900–${currentYear}).`)
+      return
+    }
+    if (text.trim().length === 0) {
+      setErrorMsg('Le texte ne peut pas être vide.')
+      return
+    }
+    setState('loading')
+    try {
+      await api.yearbox.suggest({ year: y, domain, text: text.trim() })
+      setState('done')
+    } catch {
+      setErrorMsg('Une erreur est survenue.')
+      setState('error')
+    }
+  }
+
+  if (state === 'idle') {
+    return (
+      <button
+        type="button"
+        className="yearbox-suggest-toggle"
+        onClick={() => setState('open')}
+      >
+        Suggérer un événement +
+      </button>
+    )
+  }
+
+  if (state === 'done') {
+    return <p className="yearbox-suggest-done">Merci pour ta suggestion !</p>
+  }
+
+  return (
+    <form className="yearbox-suggest-form" onSubmit={(e) => void handleSubmit(e)}>
+      <p className="yearbox-suggest-label">Suggérer un événement pour une année</p>
+      <div className="yearbox-suggest-row">
+        <select
+          value={domain}
+          onChange={(e) => setDomain(e.target.value as YearboxDomain)}
+          className="yearbox-suggest-select"
+        >
+          {DOMAINS.map((d) => (
+            <option key={d.value} value={d.value}>{d.label}</option>
+          ))}
+        </select>
+        <input
+          type="number"
+          min={1900}
+          max={currentYear}
+          value={year}
+          onChange={(e) => { setYear(e.target.value); setErrorMsg('') }}
+          placeholder="Année"
+          className="yearbox-suggest-year"
+        />
+      </div>
+      <textarea
+        value={text}
+        onChange={(e) => { setText(e.target.value); setErrorMsg('') }}
+        placeholder="Décris l'événement en une phrase…"
+        maxLength={500}
+        rows={2}
+        className="yearbox-suggest-text"
+      />
+      {(state === 'error' || errorMsg) && (
+        <p className="yearbox-error">{errorMsg}</p>
+      )}
+      <button
+        type="submit"
+        className="yearbox-btn-secondary"
+        disabled={state === 'loading'}
+      >
+        {state === 'loading' ? 'Envoi…' : 'Envoyer'}
+      </button>
+    </form>
+  )
+}
+
 // ─── Result modal ─────────────────────────────────────────────────────────────
 
 function ResultModal({
@@ -119,14 +222,13 @@ function ResultModal({
   cible,
   guesses,
   onClose,
-  onReset,
 }: {
   statut: YearboxStatus
   cible: YearboxCible | null
   guesses: GuessEntry[]
   onClose: () => void
-  onReset: () => void
 }) {
+  const { user } = useAuth()
   const [shared, setShared] = useState(false)
   const won = statut === 'won'
   const points = won ? (RANK_POINTS[guesses.length - 1] ?? 1) : 0
@@ -190,12 +292,13 @@ function ResultModal({
           <a href="/leaderboard" className="yearbox-btn-secondary">
             Classement
           </a>
-          {import.meta.env.DEV && (
-            <button type="button" className="yearbox-btn-primary" onClick={onReset}>
-              Rejouer
-            </button>
-          )}
         </div>
+
+        {user && (
+          <div className="yearbox-suggest-section">
+            <SuggestionForm targetYear={cible?.year ?? null} />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -521,7 +624,6 @@ export default function Yearbox() {
           cible={cible}
           guesses={guesses}
           onClose={() => setShowModal(false)}
-          onReset={() => void handleReset()}
         />
       )}
     </div>

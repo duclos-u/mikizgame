@@ -398,7 +398,6 @@ export default function Vinymix() {
           guesses={guesses}
           targetArtist={targetArtist}
           onClose={() => setShowModal(false)}
-          onReset={handleReset}
         />
       )}
     </Shell>

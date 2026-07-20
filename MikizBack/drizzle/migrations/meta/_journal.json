@@ -218,6 +218,13 @@
       "when": 1783420000000,
       "tag": "0030_yearbox",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1783510000000,
+      "tag": "0031_admin_suggestions",
+      "breakpoints": true
     }
   ]
 }

@@ -56,10 +56,15 @@ auth.post("/register", zValidator("json", registerSchema), async (c) => {
   const [user] = await db
     .insert(users)
     .values({ username, email, passwordHash })
-    .returning({ id: users.id, username: users.username, email: users.email });
+    .returning({
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      isAdmin: users.isAdmin,
+    });
 
   const token = await signToken({ sub: user.id, username: user.username });
-  return c.json({ user, token }, 201);
+  return c.json({ user: { ...user, streak: 0 }, token }, 201);
 });
 
 /**
@@ -91,7 +96,13 @@ auth.post("/login", zValidator("json", loginSchema), async (c) => {
 
   const token = await signToken({ sub: user.id, username: user.username });
   return c.json({
-    user: { id: user.id, username: user.username, email: user.email, streak: streakCount },
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      streak: streakCount,
+      isAdmin: user.isAdmin,
+    },
     token,
   });
 });
@@ -111,6 +122,7 @@ auth.get("/me", authMiddleware, async (c) => {
       createdAt: true,
       lastLoginDate: true,
       streakCount: true,
+      isAdmin: true,
     },
   });
 
@@ -136,6 +148,7 @@ auth.get("/me", authMiddleware, async (c) => {
       email: user.email,
       createdAt: user.createdAt,
       streak: streakCount,
+      isAdmin: user.isAdmin,
     },
   });
 });

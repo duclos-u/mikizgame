@@ -37,11 +37,21 @@ bun films:delete <from> [to]       # delete scheduled films in date range
 bun politicians:schedule [days] [start]  # bulk-schedule daily politicians
 bun politicians:set <date> <id>          # pin a specific politician to a date
 bun politicians:delete <from> [to]       # delete scheduled politicians in date range
+
+bun chainapan:set <date> <start> <target>  # set a word-ladder puzzle for a date
+bun chainapan:delete <from> [to]           # delete scheduled chainapan puzzles
+
+bun yearbox:set <date> <puzzleIndex>    # pin a yearbox puzzle to a date
+bun yearbox:schedule [days] [start]     # bulk-schedule yearbox puzzles
+bun yearbox:delete <from> [to]          # delete scheduled yearbox puzzles
+
+bun admin:set <email>           # promote a user to admin
+bun admin:set <email> --revoke  # revoke admin status
 ```
 
 ## Architecture
 
-Hono app with 7 route groups mounted in `src/index.ts`:
+Hono app with route groups mounted in `src/index.ts`:
 
 ```
 /api/auth        → src/routes/auth.ts
@@ -50,20 +60,28 @@ Hono app with 7 route groups mounted in `src/index.ts`:
 /api/cinemaxd    → src/routes/filmdujour.ts    (film autocomplete search)
 /api/vinymix     → src/routes/vinymix.ts       (Vinymix game)
 /api/politics    → src/routes/politics.ts      (Politeki game)
+/api/yearbox     → src/routes/yearbox.ts       (Yearbox game + event suggestions)
+/api/chainapan   → src/routes/chainapan.ts     (Chainapan word-ladder game)
 /api/leaderboard → src/routes/leaderboard.ts
+/api/admin       → src/routes/admin.ts         (backoffice: suggestions + scheduling)
 ```
 
 **Auth middleware** (`src/middleware/auth.ts`):
 - `authMiddleware` — requires a valid JWT; rejects unauthenticated requests. Attaches `c.var.userId`.
 - `optionalAuthMiddleware` — attaches `c.var.userId` if a valid token is present, but does not reject if missing. Used for routes that work both logged-in and anonymous.
+- `adminAuthMiddleware` (`src/middleware/adminAuth.ts`) — verifies JWT **and** checks `users.isAdmin = true`; returns 403 if not admin.
 
-Both read the `Authorization: Bearer <token>` header and verify the JWT.
+All three read the `Authorization: Bearer <token>` header and verify the JWT.
 
 **Game logic** lives in pure functions in `src/lib/`:
 - `src/lib/motivex.ts` — `evaluateGuess(guess, word)` returns per-letter result
 - `src/lib/cinemaxd.ts` — `compareFilms(submitted, target, prev)` accumulates hints; `indicesFinaux(target)` reveals everything on game end
 - `src/lib/vinymix.ts` — `compareArtists()`, `followerTier()`, `dailySeed()`
-- `src/lib/politics.ts` — Politeki comparison logic
+- `src/lib/politics.ts` — `getPolitician(index)`, `searchPoliticians(q)`, Politeki comparison logic
+- `src/lib/yearbox.ts` — `getPuzzle(index)`, `getPuzzleCount()`, `findPuzzleByYear(year)`, `compareYear()`
+- `src/lib/chainapan.ts` — `validateStep()`, `letterDiff()`, word-ladder logic
+- `src/lib/words.ts` — `isValidWord(word)` against the French 4-letter word list
+- `src/lib/normalize.ts` — `normalizeWord(raw)` strips accents and uppercases
 - `src/lib/tmdb.ts` — `fetchFilmById(id)` fetches from TMDB API with an in-memory Map cache
 - `src/lib/spotify.ts` — Spotify API client (artist search + token management)
 - `src/lib/musicbrainz.ts` — MusicBrainz API client

@@ -4992,3 +4992,408 @@ $yb-accent-dark: oklch(0.50 0.16 58)
   display: flex
   gap: 10px
   margin-top: 20px
+
+.yearbox-suggest-section
+  margin-top: 20px
+  padding-top: 16px
+  border-top: 1px solid var(--border)
+
+.yearbox-suggest-toggle
+  background: none
+  border: 1px dashed var(--border)
+  border-radius: 8px
+  color: var(--muted)
+  cursor: pointer
+  font-size: 13px
+  padding: 8px 12px
+  width: 100%
+  &:hover
+    border-color: var(--accent)
+    color: var(--text)
+
+.yearbox-suggest-form
+  display: flex
+  flex-direction: column
+  gap: 10px
+
+.yearbox-suggest-label
+  color: var(--muted)
+  font-size: 13px
+  margin: 0
+
+.yearbox-suggest-row
+  display: flex
+  gap: 8px
+
+.yearbox-suggest-select
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  flex: 1
+  font-size: 14px
+  padding: 8px 10px
+
+.yearbox-suggest-year
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  font-size: 14px
+  padding: 8px 10px
+  width: 90px
+
+.yearbox-suggest-text
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  font-family: inherit
+  font-size: 14px
+  padding: 8px 10px
+  resize: vertical
+
+.yearbox-suggest-done
+  color: oklch(0.55 0.13 150)
+  font-size: 14px
+  margin: 0
+  text-align: center
+
+// ─── Admin backoffice ─────────────────────────────────────────────────────────
+
+.admin-shell
+  max-width: 800px
+  margin: 0 auto
+  padding: 2rem 1.5rem
+
+.admin-title
+  font-size: 24px
+  font-weight: 700
+  margin: 0 0 2rem
+
+.admin-denied, .admin-loading, .admin-empty
+  color: var(--muted)
+  font-size: 15px
+  text-align: center
+  padding: 3rem 0
+
+.admin-section
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 14px
+  padding: 1.5rem
+
+.admin-section-title
+  font-size: 16px
+  font-weight: 600
+  margin: 0 0 1.25rem
+
+.admin-tabs
+  display: flex
+  gap: 8px
+  margin-bottom: 1.25rem
+
+.admin-tab
+  background: none
+  border: 1px solid var(--border)
+  border-radius: 20px
+  color: var(--muted)
+  cursor: pointer
+  font-size: 13px
+  padding: 5px 14px
+  &:hover
+    border-color: var(--accent)
+    color: var(--text)
+
+.admin-tab-active
+  background: var(--accent)
+  border-color: var(--accent)
+  color: #fff
+  &:hover
+    color: #fff
+
+.admin-suggestions-list
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+.admin-suggestion-row
+  background: var(--bg)
+  border: 1px solid var(--border)
+  border-radius: 10px
+  padding: 12px 14px
+
+.admin-suggestion-meta
+  align-items: center
+  display: flex
+  flex-wrap: wrap
+  font-size: 13px
+  gap: 10px
+  margin-bottom: 8px
+
+.admin-suggestion-domain
+  font-weight: 600
+
+.admin-suggestion-year
+  background: oklch(0.92 0.04 240)
+  border-radius: 6px
+  color: oklch(0.38 0.10 240)
+  font-weight: 700
+  padding: 2px 8px
+
+.admin-suggestion-user
+  color: var(--muted)
+
+.admin-suggestion-date
+  color: var(--muted)
+  margin-left: auto
+
+.admin-suggestion-text
+  font-size: 14.5px
+  margin: 0 0 10px
+
+.admin-suggestion-note
+  color: var(--muted)
+  font-size: 13px
+  font-style: italic
+  margin: 0 0 10px
+
+.admin-suggestion-actions
+  align-items: center
+  display: flex
+  gap: 8px
+  flex-wrap: wrap
+
+.admin-note-input
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  flex: 1
+  font-size: 13px
+  min-width: 140px
+  padding: 6px 10px
+
+.admin-btn-approve
+  background: oklch(0.55 0.13 150)
+  border: none
+  border-radius: 8px
+  color: #fff
+  cursor: pointer
+  font-size: 13px
+  font-weight: 600
+  padding: 6px 14px
+  &:disabled
+    opacity: 0.5
+
+.admin-btn-reject
+  background: oklch(0.58 0.18 25)
+  border: none
+  border-radius: 8px
+  color: #fff
+  cursor: pointer
+  font-size: 13px
+  font-weight: 600
+  padding: 6px 14px
+  &:disabled
+    opacity: 0.5
+
+.admin-pagination
+  align-items: center
+  display: flex
+  gap: 12px
+  justify-content: center
+  margin-top: 1rem
+
+.admin-page-info
+  color: var(--muted)
+  font-size: 13px
+
+.admin-btn-page
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  cursor: pointer
+  font-size: 15px
+  padding: 5px 12px
+  &:disabled
+    opacity: 0.4
+
+// ─── Schedule ─────────────────────────────────────────────────────────────────
+
+.schedule-reveal-row
+  align-items: center
+  display: flex
+  margin-bottom: 1rem
+
+.schedule-reveal-label
+  align-items: center
+  color: var(--muted)
+  cursor: pointer
+  display: flex
+  font-size: 13px
+  gap: 7px
+  user-select: none
+
+.schedule-list
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.schedule-row
+  border-radius: 8px
+  border: 1px solid transparent
+  padding: 8px 10px
+  transition: background 0.15s
+  &:hover
+    background: var(--bg)
+    border-color: var(--border)
+
+.schedule-row-filled
+  background: var(--bg)
+  border-color: var(--border)
+
+.schedule-row-header
+  align-items: center
+  display: flex
+  gap: 10px
+  flex-wrap: wrap
+
+.schedule-date
+  color: var(--muted)
+  flex-shrink: 0
+  font-family: monospace
+  font-size: 13px
+  min-width: 100px
+
+.schedule-label
+  filter: blur(5px)
+  font-size: 14px
+  font-weight: 600
+  transition: filter 0.2s
+  user-select: none
+  &:hover
+    filter: none
+
+.schedule-label-visible
+  filter: none
+  user-select: auto
+
+.schedule-empty
+  color: var(--muted)
+  font-size: 13px
+  font-style: italic
+
+.schedule-row-actions
+  align-items: center
+  display: flex
+  gap: 6px
+  margin-left: auto
+
+.schedule-btn-edit
+  background: none
+  border: 1px solid var(--border)
+  border-radius: 6px
+  color: var(--muted)
+  cursor: pointer
+  font-size: 12px
+  padding: 3px 9px
+  &:hover
+    border-color: var(--accent)
+    color: var(--accent)
+
+.schedule-btn-delete
+  background: none
+  border: 1px solid transparent
+  border-radius: 6px
+  color: oklch(0.60 0.18 25)
+  cursor: pointer
+  font-size: 12px
+  padding: 3px 9px
+  &:hover
+    background: oklch(0.96 0.03 25)
+    border-color: oklch(0.60 0.18 25)
+  &:disabled
+    opacity: 0.4
+
+.schedule-form
+  border-top: 1px solid var(--border)
+  display: flex
+  flex-direction: column
+  gap: 8px
+  margin-top: 8px
+  padding-top: 10px
+
+.schedule-input
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  color: var(--text)
+  font-size: 14px
+  padding: 7px 11px
+  width: 100%
+  max-width: 320px
+  &:focus
+    border-color: var(--accent)
+    outline: none
+
+.schedule-input-short
+  max-width: 140px
+  text-align: center
+  text-transform: uppercase
+
+.schedule-chainapan-inputs
+  align-items: center
+  display: flex
+  gap: 8px
+  flex-wrap: wrap
+
+.schedule-arrow
+  color: var(--muted)
+  font-size: 16px
+
+.schedule-form-actions
+  display: flex
+  gap: 8px
+
+.schedule-error
+  color: oklch(0.58 0.18 25)
+  font-size: 13px
+
+.schedule-searching
+  color: var(--muted)
+  font-size: 13px
+
+.schedule-search-results
+  background: var(--card)
+  border: 1px solid var(--border)
+  border-radius: 8px
+  list-style: none
+  margin: 0
+  max-width: 360px
+  overflow: hidden
+  padding: 4px
+
+.schedule-result-btn
+  align-items: center
+  background: none
+  border: none
+  border-radius: 6px
+  color: var(--text)
+  cursor: pointer
+  display: flex
+  font-size: 13px
+  gap: 8px
+  padding: 6px 8px
+  text-align: left
+  width: 100%
+  &:hover
+    background: var(--bg)
+  &:disabled
+    opacity: 0.5
+
+.schedule-result-sub
+  color: var(--muted)
+  font-size: 12px
+  margin-left: auto
