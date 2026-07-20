@@ -10,9 +10,10 @@ import { eq } from "drizzle-orm";
 import { db } from "../src/db";
 import { users } from "../src/db/schema";
 
-const [email, flag] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const [email, flag, ...extra] = args;
 
-if (!email) {
+if (!email || extra.length > 0 || (flag !== undefined && flag !== "--revoke")) {
   console.error("Usage: bun admin:set <email> [--revoke]");
   process.exit(1);
 }

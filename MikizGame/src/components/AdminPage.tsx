@@ -112,7 +112,10 @@ function getDaysRange(days = 30): string[] {
   for (let i = 0; i < days; i++) {
     const d = new Date(today)
     d.setDate(today.getDate() + i)
-    result.push(d.toISOString().slice(0, 10))
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    result.push(`${yyyy}-${mm}-${dd}`)
   }
   return result
 }

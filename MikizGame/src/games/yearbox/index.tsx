@@ -126,6 +126,7 @@ const DOMAINS: { value: YearboxDomain; label: string }[] = [
 ]
 
 function SuggestionForm({ targetYear }: { targetYear: number | null }) {
+  const currentYear = new Date().getFullYear()
   const [state, setState] = useState<SuggestState>('idle')
   const [domain, setDomain] = useState<YearboxDomain>('cinema')
   const [year, setYear] = useState(String(targetYear ?? ''))
@@ -135,8 +136,8 @@ function SuggestionForm({ targetYear }: { targetYear: number | null }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const y = parseInt(year, 10)
-    if (Number.isNaN(y) || y < 1900 || y > 2024) {
-      setErrorMsg('Année invalide (1900–2024).')
+    if (Number.isNaN(y) || y < 1900 || y > currentYear) {
+      setErrorMsg(`Année invalide (1900–${currentYear}).`)
       return
     }
     if (text.trim().length === 0) {
@@ -185,7 +186,7 @@ function SuggestionForm({ targetYear }: { targetYear: number | null }) {
         <input
           type="number"
           min={1900}
-          max={2024}
+          max={currentYear}
           value={year}
           onChange={(e) => { setYear(e.target.value); setErrorMsg('') }}
           placeholder="Année"
