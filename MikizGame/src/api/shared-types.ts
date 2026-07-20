@@ -8,9 +8,18 @@ export type User = {
   username: string;
   email: string;
   streak: number;
+  longestStreak: number;
   isAdmin: boolean;
 };
 export type AuthResponse = { user: User; token: string };
+
+// ─── Streak ───────────────────────────────────────────────────────────────────
+
+export type StreakDay = { date: string; played: boolean };
+export type StreakHistoryResponse = { days: StreakDay[] };
+
+export type StreakMilestoneEntry = { milestone: number; achievedAt: string; shownAt: string | null };
+export type StreakMilestonesResponse = { achieved: StreakMilestoneEntry[]; next: number | null };
 
 // ─── Motivex ──────────────────────────────────────────────────────────────────
 
@@ -30,6 +39,7 @@ export type GuessResponse = {
   status: "in_progress" | "won" | "lost";
   attemptsLeft: number;
   word?: string;
+  streakMilestone?: number;
 };
 
 export type DailyInfo = {
@@ -103,6 +113,7 @@ export type CinemaxdGuessResponse = {
   filmCible: CinemaxdFilm | null;
   totalIndices: CinemaxdTotaux;
   pityCluesRevealed: string[];
+  streakMilestone?: number;
 };
 
 export type TmdbFilmResult = {
@@ -175,6 +186,7 @@ export type FootixGuessResponse = {
   tentativesRestantes: number | null;
   statut: FootixStatus | null;
   footballeurCible: FootixCible | null;
+  streakMilestone?: number;
 };
 
 export type FootixSessionResponse = {
@@ -260,9 +272,10 @@ export type YearboxCible = { year: number; facts: YearboxFact[] };
 export type YearboxGuessResponse = {
   direction: YearboxDirection;
   factsRevealed: YearboxFact[];
-  tentativesRestantes: number | null;
-  statut: YearboxStatus | null;
+  tentativesRestantes: number;
+  statut: YearboxStatus;
   cible: YearboxCible | null;
+  streakMilestone?: number;
 };
 
 export type YearboxSessionResponse = {
@@ -290,6 +303,7 @@ export type ChainapanDailyInfo = {
   startWord: string;
   targetWord: string;
   maxSteps: number;
+  minSteps: number;
 };
 
 export type ChainapanSession = {
@@ -305,6 +319,7 @@ export type ChainapanStepResponse = {
   step: ChainapanStep;
   status: "in_progress" | "won" | "lost";
   stepsLeft: number;
+  streakMilestone?: number;
 };
 
 // ─── Admin ────────────────────────────────────────────────────────────────────

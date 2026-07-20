@@ -11,6 +11,7 @@ import {
 import { GameHeader } from '../../components/GameHeader'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { useAuth } from '../../context/AuthContext'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { today } from '../../utils/date'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -307,7 +308,8 @@ function ResultModal({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function Yearbox() {
-  const { token } = useAuth()
+  const { token, loading: authLoading } = useAuth()
+  const { notifyMilestone } = useMilestoneToast()
 
   const [guesses, setGuesses] = useState<GuessEntry[]>([])
   const [factsRevealed, setFactsRevealed] = useState<YearboxFact[]>([])
@@ -344,41 +346,14 @@ export default function Yearbox() {
       setCible(local.cible)
       setLoading(false)
 
-      if (token) {
-        api.yearbox
-          .session()
-          .then(({ session }) => {
-            if (!session) return
-            const synced: GuessEntry[] = session.guesses.map((y) => {
-              const existing = local.guesses.find((g) => g.year === y)
-              if (existing) return existing
-              return {
-                year: y,
-                direction:
-                  y === session.cible?.year
-                    ? 'exact'
-                    : y < (session.cible?.year ?? 0)
-                      ? 'trop-tot'
-                      : 'trop-tard',
-              }
-            })
-            setGuesses(synced)
-            setFactsRevealed(session.factsRevealed)
-            setStatut(session.statut)
-            setCible(session.cible)
-            persist(synced, session.factsRevealed, session.statut, session.cible)
-          })
-          .catch(() => {})
-      }
-      return
-    }
-
-    const loadInitial = async () => {
-      try {
-        if (token) {
-          const { session } = await api.yearbox.session()
-          if (session) {
-            const recovered: GuessEntry[] = session.guesses.map((y) => ({
+      api.yearbox
+        .session()
+        .then(({ session }) => {
+          if (!session) return
+          const synced: GuessEntry[] = session.guesses.map((y) => {
+            const existing = local.guesses.find((g) => g.year === y)
+            if (existing) return existing
+            return {
               year: y,
               direction:
                 y === session.cible?.year
@@ -386,14 +361,37 @@ export default function Yearbox() {
                   : y < (session.cible?.year ?? 0)
                     ? 'trop-tot'
                     : 'trop-tard',
-            }))
-            setGuesses(recovered)
-            setFactsRevealed(session.factsRevealed)
-            setStatut(session.statut)
-            setCible(session.cible)
-            persist(recovered, session.factsRevealed, session.statut, session.cible)
-            return
-          }
+            }
+          })
+          setGuesses(synced)
+          setFactsRevealed(session.factsRevealed)
+          setStatut(session.statut)
+          setCible(session.cible)
+          persist(synced, session.factsRevealed, session.statut, session.cible)
+        })
+        .catch(() => {})
+      return
+    }
+
+    const loadInitial = async () => {
+      try {
+        const { session } = await api.yearbox.session()
+        if (session) {
+          const recovered: GuessEntry[] = session.guesses.map((y) => ({
+            year: y,
+            direction:
+              y === session.cible?.year
+                ? 'exact'
+                : y < (session.cible?.year ?? 0)
+                  ? 'trop-tot'
+                  : 'trop-tard',
+          }))
+          setGuesses(recovered)
+          setFactsRevealed(session.factsRevealed)
+          setStatut(session.statut)
+          setCible(session.cible)
+          persist(recovered, session.factsRevealed, session.statut, session.cible)
+          return
         }
         const { factsRevealed: initial } = await api.yearbox.daily()
         setFactsRevealed(initial)
@@ -401,7 +399,7 @@ export default function Yearbox() {
     }
 
     loadInitial().finally(() => setLoading(false))
-  }, [token, persist])
+  }, [persist])
 
   // ── Guess submission ──────────────────────────────────────────────────────
 
@@ -421,8 +419,7 @@ export default function Yearbox() {
     setError(null)
 
     try {
-      const wrongSoFar = guesses.filter((g) => g.direction !== 'exact').length
-      const result = await api.yearbox.guess(year, wrongSoFar)
+      const result = await api.yearbox.guess(year)
 
       const newEntry: GuessEntry = { year, direction: result.direction }
       const newGuesses = [...guesses, newEntry]
@@ -431,13 +428,7 @@ export default function Yearbox() {
       const nextFactCount = result.factsRevealed.length
       setNewFactCount(Math.max(0, nextFactCount - prevFactCount))
 
-      const newStatut: YearboxStatus =
-        result.statut ??
-        (result.direction === 'exact'
-          ? 'won'
-          : newGuesses.length >= MAX_GUESSES
-            ? 'lost'
-            : 'in_progress')
+      const newStatut = result.statut
 
       setGuesses(newGuesses)
       setFactsRevealed(result.factsRevealed)
@@ -445,6 +436,8 @@ export default function Yearbox() {
       setCible(result.cible)
       setYearInput('')
       persist(newGuesses, result.factsRevealed, newStatut, result.cible)
+
+      if (result.streakMilestone) notifyMilestone(result.streakMilestone)
 
       if (newStatut === 'won') {
         confetti({ particleCount: 170, spread: 72, origin: { y: 0.6 } })
@@ -462,7 +455,7 @@ export default function Yearbox() {
     } finally {
       setSubmitting(false)
     }
-  }, [gameOver, submitting, yearInput, guesses, factsRevealed, persist])
+  }, [gameOver, submitting, yearInput, guesses, factsRevealed, persist, notifyMilestone])
 
   // ── Dev reset ─────────────────────────────────────────────────────────────
 
@@ -498,6 +491,19 @@ export default function Yearbox() {
     messageColor = 'oklch(0.58 0.18 25)'
   } else if (guessCount > 0) {
     message = `${guessesLeft} essai${guessesLeft > 1 ? 's' : ''} restant${guessesLeft > 1 ? 's' : ''}.`
+  }
+
+  if (!authLoading && !token) {
+    return (
+      <div className="game-shell">
+        <GameHeader title="Yearbox" subtitle="Devine l'année mystère en 5 essais" />
+        <main className="container">
+          <p style={{ color: 'var(--muted)', textAlign: 'center', paddingTop: '3rem' }}>
+            Connecte-toi pour jouer.
+          </p>
+        </main>
+      </div>
+    )
   }
 
   if (loading) {

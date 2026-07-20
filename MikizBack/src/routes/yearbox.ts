@@ -11,8 +11,9 @@ import {
   yearboxSessions,
 } from "../db/schema";
 import { todayDate } from "../lib/date";
+import { recordDailyPlay } from "../lib/streak";
 import { type YearboxPuzzle, compareYear, getFactsRevealed, getPuzzle } from "../lib/yearbox";
-import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
+import { authMiddleware } from "../middleware/auth";
 
 const MAX_GUESSES = 5;
 
@@ -47,7 +48,6 @@ async function getYearboxGameId(): Promise<string | null> {
 
 const guessSchema = z.object({
   year: z.number().int().min(1900).max(2030),
-  wrongGuessesSoFar: z.number().int().nonnegative().optional(),
 });
 
 const dailySchema = z.object({
@@ -95,11 +95,10 @@ yearbox.get("/daily", async (c) => {
 
 /**
  * GET /api/yearbox/session
- * Optional auth. Returns the current player's session for today.
+ * Auth required. Returns the current player's session for today.
  */
-yearbox.get("/session", optionalAuthMiddleware, async (c) => {
-  const userId = c.get("userId") as string | undefined;
-  if (!userId) return c.json({ session: null });
+yearbox.get("/session", authMiddleware, async (c) => {
+  const userId = c.get("userId");
 
   const today = todayDate();
 
@@ -122,12 +121,12 @@ yearbox.get("/session", optionalAuthMiddleware, async (c) => {
 
 /**
  * POST /api/yearbox/guess
- * Optional auth. Submit a year guess. Body: { year: number }
+ * Auth required. Submit a year guess. Body: { year: number }
  */
-yearbox.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema), async (c) => {
-  const userId = c.get("userId") as string | undefined;
+yearbox.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c) => {
+  const userId = c.get("userId");
   const today = todayDate();
-  const { year, wrongGuessesSoFar } = c.req.valid("json");
+  const { year } = c.req.valid("json");
 
   const puzzleIndex = await getDailyPuzzleIndex();
   if (puzzleIndex === null) return c.json({ error: "Puzzle du jour non configuré" }, 503);
@@ -138,76 +137,67 @@ yearbox.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema), 
   const direction = compareYear(year, puzzle.year);
   const correct = direction === "exact";
 
-  if (userId) {
-    const session = await db.query.yearboxSessions.findFirst({
-      where: and(eq(yearboxSessions.userId, userId), eq(yearboxSessions.date, today)),
-    });
+  const session = await db.query.yearboxSessions.findFirst({
+    where: and(eq(yearboxSessions.userId, userId), eq(yearboxSessions.date, today)),
+  });
 
-    if (session && session.status !== "in_progress") {
-      return c.json({ error: "Partie déjà terminée aujourd'hui" }, 409);
-    }
-
-    const prevGuesses = (session?.guesses ?? []) as number[];
-
-    if (prevGuesses.includes(year)) {
-      return c.json({ error: "Année déjà soumise" }, 400);
-    }
-
-    const newGuesses = [...prevGuesses, year];
-    const lost = !correct && newGuesses.length >= MAX_GUESSES;
-    const newStatus = correct ? "won" : lost ? "lost" : "in_progress";
-    const completedAt = newStatus !== "in_progress" ? new Date() : null;
-
-    const wrongCount = newGuesses.filter((g) => g !== puzzle.year).length;
-    const factsRevealed = getFactsRevealed(puzzle, wrongCount);
-
-    if (!session) {
-      await db.insert(yearboxSessions).values({
-        userId,
-        date: today,
-        guesses: newGuesses,
-        status: newStatus,
-        completedAt,
-      });
-    } else {
-      await db
-        .update(yearboxSessions)
-        .set({ guesses: newGuesses, status: newStatus, completedAt })
-        .where(eq(yearboxSessions.id, session.id));
-    }
-
-    if (newStatus !== "in_progress") {
-      const gameId = await getYearboxGameId();
-      if (gameId) {
-        await db
-          .insert(leaderboardEntries)
-          .values({
-            userId,
-            gameId,
-            date: today,
-            score: correct ? newGuesses.length : null,
-          })
-          .onConflictDoNothing();
-      }
-    }
-
-    return c.json({
-      direction,
-      factsRevealed,
-      tentativesRestantes: MAX_GUESSES - newGuesses.length,
-      statut: newStatus,
-      cible: newStatus !== "in_progress" ? { year: puzzle.year, facts: puzzle.facts } : null,
-    });
+  if (session && session.status !== "in_progress") {
+    return c.json({ error: "Partie déjà terminée aujourd'hui" }, 409);
   }
 
-  // Guest: stateless, no DB writes. Client sends wrongGuessesSoFar to compute reveals correctly.
-  const wrongCount = correct ? (wrongGuessesSoFar ?? 0) : (wrongGuessesSoFar ?? 0) + 1;
+  const prevGuesses = (session?.guesses ?? []) as number[];
+
+  if (prevGuesses.includes(year)) {
+    return c.json({ error: "Année déjà soumise" }, 400);
+  }
+
+  const newGuesses = [...prevGuesses, year];
+  const lost = !correct && newGuesses.length >= MAX_GUESSES;
+  const newStatus = correct ? "won" : lost ? "lost" : "in_progress";
+  const completedAt = newStatus !== "in_progress" ? new Date() : null;
+
+  const wrongCount = newGuesses.filter((g) => g !== puzzle.year).length;
+  const factsRevealed = getFactsRevealed(puzzle, wrongCount);
+
+  if (!session) {
+    await db.insert(yearboxSessions).values({
+      userId,
+      date: today,
+      guesses: newGuesses,
+      status: newStatus,
+      completedAt,
+    });
+  } else {
+    await db
+      .update(yearboxSessions)
+      .set({ guesses: newGuesses, status: newStatus, completedAt })
+      .where(eq(yearboxSessions.id, session.id));
+  }
+
+  let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
+  if (newStatus !== "in_progress") {
+    const gameId = await getYearboxGameId();
+    if (gameId) {
+      await db
+        .insert(leaderboardEntries)
+        .values({
+          userId,
+          gameId,
+          date: today,
+          score: correct ? newGuesses.length : null,
+        })
+        .onConflictDoNothing();
+    }
+    streakUpdate = await recordDailyPlay(userId);
+  }
+
   return c.json({
     direction,
-    factsRevealed: getFactsRevealed(puzzle, wrongCount),
-    tentativesRestantes: null,
-    statut: null,
-    cible: correct ? { year: puzzle.year, facts: puzzle.facts } : null,
+    factsRevealed,
+    tentativesRestantes: MAX_GUESSES - newGuesses.length,
+    statut: newStatus,
+    cible: newStatus !== "in_progress" ? { year: puzzle.year, facts: puzzle.facts } : null,
+    ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
   });
 });
 

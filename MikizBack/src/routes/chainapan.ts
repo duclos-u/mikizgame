@@ -7,6 +7,7 @@ import { chainapanDaily, chainapanSessions, games, leaderboardEntries } from "..
 import { type ChainapanStep, MAX_STEPS, computeStepTiles, validateStep } from "../lib/chainapan";
 import { todayDate } from "../lib/date";
 import { normalizeWord } from "../lib/normalize";
+import { recordDailyPlay } from "../lib/streak";
 import { authMiddleware } from "../middleware/auth";
 
 let chainapanGameId: string | null = null;
@@ -39,6 +40,7 @@ chainapan.get("/daily", async (c) => {
     startWord: daily.startWord,
     targetWord: daily.targetWord,
     maxSteps: MAX_STEPS,
+    minSteps: (daily.solution?.length ?? 2) - 1,
   });
 });
 
@@ -140,25 +142,29 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
       .where(eq(chainapanSessions.id, existing.id));
   }
 
+  let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
   if (newStatus !== "in_progress") {
     const gameId = await getChainapanGameId();
     if (gameId) {
+      const minSteps = (daily.solution?.length ?? 2) - 1;
       await db
         .insert(leaderboardEntries)
         .values({
           userId,
           gameId,
           date: today,
-          score: isWon ? updatedSteps.length : null,
+          score: isWon ? updatedSteps.length - minSteps + 1 : null,
         })
         .onConflictDoNothing();
     }
+    streakUpdate = await recordDailyPlay(userId);
   }
 
   return c.json({
     step: { word, tileResults },
     status: newStatus,
     stepsLeft: MAX_STEPS - updatedSteps.length,
+    ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
   });
 });
 

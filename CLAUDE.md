@@ -9,7 +9,8 @@ MikizStack/
 ├── MikizBack/   # Bun + Hono REST API
 ├── MikizGame/   # React + TypeScript SPA (Vite)
 ├── data/        # Raw CSV datasets for Politeki (deputies, government members, presidents)
-└── scripts/     # Python data-enrichment scripts that produce MikizBack/src/data/politics.json
+├── scripts/     # Python data-enrichment scripts that produce MikizBack/src/data/politics.json
+└── .github/     # GitHub Actions workflows (CI/CD)
 ```
 
 Each sub-project has its own `CLAUDE.md` with detailed commands and architecture.
@@ -24,6 +25,7 @@ Each sub-project has its own `CLAUDE.md` with detailed commands and architecture
 | Politeki | Daily French politician guessing | `/api/politics` | `src/games/politics/` |
 | Yearbox | Daily year-guessing (facts revealed per wrong guess) | `/api/yearbox` | `src/games/yearbox/` |
 | Chainapan | Daily word-ladder (4-letter chain) | `/api/chainapan` | `src/games/chainapan/` |
+| Footix | Daily footballer guessing | `/api/footix` | `src/games/footix/` |
 
 ## Admin Backoffice
 
@@ -56,8 +58,14 @@ When modifying response shapes, always update `MikizBack/src/types/api.ts` first
 
 ## Politeki Data Pipeline
 
-Raw CSV data in `data/` (French deputies, government members, presidents since the 5th Republic) is enriched by Python scripts in `scripts/` (fetching birthdates, birth locations, origin regions, party affiliations, popularity scores, etc.) and produces the static dataset at `MikizBack/src/data/politics.json` (~1.4 MB). This file is loaded by the backend at startup and must not be hand-edited.
+Raw CSV data in `data/` (French deputies, government members, presidents since the 5th Republic) is enriched by Python scripts in `scripts/` (fetching birthdates, birth locations, origin regions, party affiliations, popularity scores, etc.) and produces the static dataset at `MikizBack/src/data/politics.json` (~1.4 MB). This file is loaded by the backend at startup and must not be hand-edited. Run `scripts/run_pipeline.sh` to execute the full enrichment pipeline end-to-end.
 
 ## Deployment
 
 Both sub-projects deploy independently on [Railway](https://railway.app). Each has its own `railway.toml` at the sub-project root.
+
+## CI/CD
+
+GitHub Actions workflows in `.github/workflows/`:
+- **extend-politeki-schedule.yml** — automatically extends the Politeki game schedule
+- **refresh-politics-data.yml** — periodically re-runs the Politeki data enrichment pipeline

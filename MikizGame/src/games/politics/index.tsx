@@ -13,6 +13,7 @@ import {
 import { GameHeader } from '../../components/GameHeader'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { useAuth } from '../../context/AuthContext'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { today } from '../../utils/date'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -629,6 +630,7 @@ function ResultModal({
 
 export default function Politeki() {
   const { token } = useAuth()
+  const { notifyMilestone } = useMilestoneToast()
 
   const [tentatives, setTentatives] = useState<PoliticsTentative[]>([])
   const [statut, setStatut] = useState<PoliticsStatus>('in_progress')
@@ -758,6 +760,8 @@ export default function Politeki() {
         setCible(result.politicienCible)
         persist(newTentatives, newStatut, result.politicienCible)
 
+        if (result.streakMilestone) notifyMilestone(result.streakMilestone)
+
         if (newStatut === 'won') {
           confetti({ particleCount: 170, spread: 72, origin: { y: 0.6 } })
           setTimeout(() => setShowModal(true), 1050)
@@ -775,7 +779,7 @@ export default function Politeki() {
         setSubmitting(false)
       }
     },
-    [gameOver, submitting, tentatives, persist],
+    [gameOver, submitting, tentatives, persist, notifyMilestone],
   )
 
   // ── Dev reset ─────────────────────────────────────────────────────────────

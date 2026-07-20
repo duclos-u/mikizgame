@@ -13,6 +13,7 @@ import {
   getPolitician,
   searchPoliticians,
 } from "../lib/politics";
+import { recordDailyPlay } from "../lib/streak";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 10;
@@ -179,6 +180,7 @@ politics.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema),
         .where(eq(politicsSessions.id, session.id));
     }
 
+    let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
     if (nouveauStatut !== "in_progress") {
       const gameId = await getPoliticsGameId();
       if (gameId) {
@@ -192,6 +194,7 @@ politics.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema),
           })
           .onConflictDoNothing();
       }
+      streakUpdate = await recordDailyPlay(userId);
     }
 
     return c.json({
@@ -202,6 +205,7 @@ politics.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema),
       tentativesRestantes: MAX_TENTATIVES - nouvellesTentatives.length,
       statut: nouveauStatut,
       politicienCible: nouveauStatut !== "in_progress" ? target : null,
+      ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
     });
   }
 

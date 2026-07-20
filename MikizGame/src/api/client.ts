@@ -38,6 +38,10 @@ export type {
   AdminSuggestionsResponse,
   ScheduledEntry,
   AdminScheduleResponse,
+  StreakDay,
+  StreakHistoryResponse,
+  StreakMilestoneEntry,
+  StreakMilestonesResponse,
 } from './shared-types'
 
 import type {
@@ -63,6 +67,8 @@ import type {
   AdminSuggestionsResponse,
   ScheduledEntry,
   AdminScheduleResponse,
+  StreakHistoryResponse,
+  StreakMilestonesResponse,
 } from './shared-types'
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
@@ -127,6 +133,7 @@ export type VinymixGuessResponse = {
   status: VinymixStatus
   guessesLeft: number
   targetArtist: VinymixArtist | null
+  streakMilestone?: number
 }
 
 export type VinymixSessionResponse = {
@@ -240,6 +247,7 @@ export type PoliticsGuessResponse = {
   tentativesRestantes: number | null
   statut: PoliticsStatus | null
   politicienCible: PoliticsCible | null
+  streakMilestone?: number
 }
 
 export type PoliticsSessionResponse = {
@@ -335,9 +343,10 @@ export type YearboxCible = { year: number; facts: YearboxFact[] }
 export type YearboxGuessResponse = {
   direction: YearboxDirection
   factsRevealed: YearboxFact[]
-  tentativesRestantes: number | null
-  statut: YearboxStatus | null
+  tentativesRestantes: number
+  statut: YearboxStatus
   cible: YearboxCible | null
+  streakMilestone?: number
 }
 
 export type YearboxSessionResponse = {
@@ -435,10 +444,10 @@ export const api = {
   yearbox: {
     daily: () => request<{ factsRevealed: YearboxFact[] }>('/yearbox/daily'),
     session: () => request<YearboxSessionResponse>('/yearbox/session'),
-    guess: (year: number, wrongGuessesSoFar?: number) =>
+    guess: (year: number) =>
       request<YearboxGuessResponse>('/yearbox/guess', {
         method: 'POST',
-        body: JSON.stringify({ year, wrongGuessesSoFar }),
+        body: JSON.stringify({ year }),
       }),
     reset: () => request<{ ok: boolean }>('/yearbox/session', { method: 'DELETE' }),
     suggest: (data: { year: number; domain: YearboxDomain; text: string }) =>
@@ -476,6 +485,12 @@ export const api = {
         body: JSON.stringify({ word }),
       }),
     reset: () => request<{ ok: boolean }>('/chainapan/session', { method: 'DELETE' }),
+  },
+  streak: {
+    history: (days = 7) => request<StreakHistoryResponse>(`/streak/history?days=${days}`),
+    milestones: () => request<StreakMilestonesResponse>('/streak/milestones'),
+    ackMilestone: (milestone: number) =>
+      request<{ ok: boolean }>(`/streak/milestones/${milestone}/ack`, { method: 'POST' }),
   },
   leaderboard: {
     get: (game: string, date?: string) =>

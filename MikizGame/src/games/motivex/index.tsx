@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { api, type DailyInfo, type GuessResult, type MotivexSession, type TileResult } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
 import { useGameSession } from '../../hooks/useGameSession'
@@ -39,6 +40,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 const Motivex = () => {
   const { user } = useAuth()
+  const { notifyMilestone } = useMilestoneToast()
   const { saveScore } = useHubScores()
   const hiddenInputRef = useRef<HTMLInputElement>(null)
   const physicalKeyHandled = useRef(false)
@@ -128,6 +130,7 @@ const Motivex = () => {
         if (res.status !== 'in_progress') {
           markMotivexComplete()
           if (user) saveScore('motivex', user.username, res.status === 'won' ? newAttempts.length : null)
+          if (res.streakMilestone) notifyMilestone(res.streakMilestone)
         }
         if (res.status === 'won') {
           setMessage('Bravo ! Tu as trouvé le mot.')
@@ -151,7 +154,7 @@ const Motivex = () => {
     if (!/^[A-Z]$/.test(key)) return
     if (currentInput.length >= wordLength) return
     setCurrentInput((prev) => prev + key)
-  }, [gameOver, loading, wordLength, revealingRow, submitting, currentInput, firstLetter, attempts, user, saveScore])
+  }, [gameOver, loading, wordLength, revealingRow, submitting, currentInput, firstLetter, attempts, user, saveScore, notifyMilestone])
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
