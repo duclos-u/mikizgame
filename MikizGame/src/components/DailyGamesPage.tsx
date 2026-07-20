@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type CrossGameEntry } from '../api/client'
+import { api, type CrossGameEntry, type StreakDay } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
+import { StreakShareCard } from './StreakShareCard'
 
 // ── Pill ─────────────────────────────────────────────────────────────────────
 function Pill({
@@ -257,10 +258,45 @@ function MiniLeaderboard({
 }
 
 // ── Streak panel ──────────────────────────────────────────────────────────────
-function StreakPanel({ doneCount, total, streak }: { doneCount: number; total: number; streak: number }) {
-  const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-  const today = new Date().getDay()
-  const todayIdx = today === 0 ? 6 : today - 1
+function StreakPanel({
+  doneCount,
+  total,
+  streak,
+  longestStreak,
+}: {
+  doneCount: number
+  total: number
+  streak: number
+  longestStreak: number
+}) {
+  const { user } = useAuth()
+  const [history, setHistory] = useState<StreakDay[] | null>(null)
+  const [shareOpen, setShareOpen] = useState(false)
+  const weekdayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
+  // Monday = 0 ... Sunday = 6, based on JS's Sunday-first getDay().
+  const daysSinceMonday = (new Date().getDay() + 6) % 7
+
+  useEffect(() => {
+    if (!user) {
+      setHistory(null)
+      return
+    }
+    api.streak
+      .history(daysSinceMonday + 1)
+      .then(({ days }) => setHistory(days))
+      .catch(() => setHistory(null))
+  }, [user, daysSinceMonday])
+
+  // Always show the current Monday-Sunday calendar week. `history` covers
+  // Monday..today (oldest first); days later this week are synthesized as
+  // "upcoming" placeholders (not yet played, not a missed day).
+  const weekCells = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - (daysSinceMonday - i))
+    const date = d.toISOString().slice(0, 10)
+    if (i <= daysSinceMonday && history) return history[i] ?? { date, played: false }
+    return { date, played: false }
+  })
 
   return (
     <div className="streak-panel">
@@ -271,15 +307,26 @@ function StreakPanel({ doneCount, total, streak }: { doneCount: number; total: n
         <b>{streak}</b>
         <span>jours d'affilée</span>
       </div>
+      {longestStreak > streak && (
+        <div
+          style={{ fontSize: '0.75rem', color: 'var(--text-2)', marginTop: '-0.4rem', marginBottom: '0.4rem' }}
+        >
+          Record : {longestStreak} jours
+        </div>
+      )}
       <div className="streak-week">
-        {days.map((d, i) => (
-          <div
-            key={i}
-            className={`streak-day${i <= todayIdx ? ' on' : ''}${i === todayIdx ? ' today' : ''}`}
-          >
-            <span>{d}</span>
-          </div>
-        ))}
+        {weekCells.map((cell, i) => {
+          const isToday = i === daysSinceMonday
+          const isUpcoming = i > daysSinceMonday
+          return (
+            <div
+              key={cell.date}
+              className={`streak-day${cell.played ? ' on' : ''}${isToday ? ' today' : ''}${isUpcoming ? ' upcoming' : ''}`}
+            >
+              <span>{weekdayLabels[i]}</span>
+            </div>
+          )
+        })}
       </div>
       <div
         style={{
@@ -291,7 +338,23 @@ function StreakPanel({ doneCount, total, streak }: { doneCount: number; total: n
       >
         {doneCount} / {total} jeux aujourd'hui
       </div>
+      {user && streak > 0 && (
+        <button
+          type="button"
+          className="btn"
+          style={{ width: '100%', marginBottom: '0.75rem' }}
+          onClick={() => setShareOpen(true)}
+        >
+          Partager ma série
+        </button>
+      )}
       <p className="streak-note">Reviens chaque jour avant minuit pour ne pas perdre ta série.</p>
+      <StreakShareCard
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        streak={streak}
+        milestone={null}
+      />
     </div>
   )
 }
@@ -384,7 +447,12 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
           loading={lbLoading}
           currentUser={user?.username ?? null}
         />
-        <StreakPanel doneCount={effectiveDoneIds.filter(id => liveGames.some(g => g.id === id)).length} total={liveGames.length} streak={user?.streak ?? 0} />
+        <StreakPanel
+          doneCount={effectiveDoneIds.filter(id => liveGames.some(g => g.id === id)).length}
+          total={liveGames.length}
+          streak={user?.streak ?? 0}
+          longestStreak={user?.longestStreak ?? 0}
+        />
       </section>
     </div>
   )

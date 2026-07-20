@@ -6,6 +6,7 @@ import { DailyGamesPage } from './components/DailyGamesPage'
 import { Header } from './components/Header'
 import { LeaderboardPage } from './components/LeaderboardPage'
 import { AuthProvider } from './context/AuthContext'
+import { MilestoneToastProvider } from './context/MilestoneToastContext'
 import { useJdj2State } from './hooks/useJdj2State'
 import { GameRoutePage } from './routes/GameRoutePage'
 
@@ -66,49 +67,51 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="app-root">
-              <Header onLoginClick={() => setAuthModalOpen(true)} />
-              <main className="app-main">
-                <DailyGamesPage doneIds={state.done} onPlayExternal={markGameDone} />
-              </main>
-              <AppFooter />
-              <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
-            </div>
-          }
-        />
-        <Route
-          path="/leaderboard"
-          element={
-            <div className="app-root">
-              <Header onLoginClick={() => setAuthModalOpen(true)} />
-              <main className="app-main">
-                <LeaderboardPage />
-              </main>
-              <AppFooter />
-              <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
-            </div>
-          }
-        />
-        <Route path="/games/:gameId" element={<GameRoutePage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route
-          path="/admin"
-          element={
-            <div className="app-root">
-              <Header onLoginClick={() => setAuthModalOpen(true)} />
-              <main className="app-main">
-                <AdminPage />
-              </main>
-              <AppFooter />
-              <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
-            </div>
-          }
-        />
-      </Routes>
+      <MilestoneToastProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="app-root">
+                <Header onLoginClick={() => setAuthModalOpen(true)} />
+                <main className="app-main">
+                  <DailyGamesPage doneIds={state.done} onPlayExternal={markGameDone} />
+                </main>
+                <AppFooter />
+                {authModalOpen && <AuthModal open onClose={() => setAuthModalOpen(false)} />}
+              </div>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <div className="app-root">
+                <Header onLoginClick={() => setAuthModalOpen(true)} />
+                <main className="app-main">
+                  <LeaderboardPage />
+                </main>
+                <AppFooter />
+                {authModalOpen && <AuthModal open onClose={() => setAuthModalOpen(false)} />}
+              </div>
+            }
+          />
+          <Route path="/games/:gameId" element={<GameRoutePage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route
+            path="/admin"
+            element={
+              <div className="app-root">
+                <Header onLoginClick={() => setAuthModalOpen(true)} />
+                <main className="app-main">
+                  <AdminPage />
+                </main>
+                <AppFooter />
+                {authModalOpen && <AuthModal open onClose={() => setAuthModalOpen(false)} />}
+              </div>
+            }
+          />
+        </Routes>
+      </MilestoneToastProvider>
     </AuthProvider>
   )
 }

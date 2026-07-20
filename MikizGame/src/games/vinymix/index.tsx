@@ -9,6 +9,7 @@ import {
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
 import { artistColors } from '../../utils/artistColors'
@@ -170,7 +171,8 @@ function Shell({ children, streak }: { children: React.ReactNode; streak: number
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function Vinymix() {
-  const { token } = useAuth()
+  const { token, loading: authLoading } = useAuth()
+  const { notifyMilestone } = useMilestoneToast()
 
   const [guesses, setGuesses] = useState<VinymixGuess[]>([])
   const [status, setStatus] = useState<VinymixStatus>('in_progress')
@@ -203,46 +205,38 @@ export default function Vinymix() {
       setStreak(loadStreak())
       setLoading(false)
 
-      if (token) {
-        api.vinymix
-          .session()
-          .then(({ session }) => {
-            if (!session) return
-            setGuesses(session.guesses)
-            setStatus(session.status)
-            setTargetArtist(session.targetArtist)
-            persist(session.guesses, session.status, session.targetArtist)
-          })
-          .catch(() => {})
-      }
-      return
-    }
-
-    if (token) {
       api.vinymix
         .session()
         .then(({ session }) => {
-          if (session) {
-            setGuesses(session.guesses)
-            setStatus(session.status)
-            setTargetArtist(session.targetArtist)
-            persist(session.guesses, session.status, session.targetArtist)
-          }
+          if (!session) return
+          setGuesses(session.guesses)
+          setStatus(session.status)
+          setTargetArtist(session.targetArtist)
+          persist(session.guesses, session.status, session.targetArtist)
         })
         .catch(() => {})
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false)
+      return
     }
-  }, [token, persist])
+
+    api.vinymix
+      .session()
+      .then(({ session }) => {
+        if (session) {
+          setGuesses(session.guesses)
+          setStatus(session.status)
+          setTargetArtist(session.targetArtist)
+          persist(session.guesses, session.status, session.targetArtist)
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [persist])
 
   // ── Guess submission ──────────────────────────────────────────────────────
 
   const handleGuess = useCallback(
     async (artistId: string) => {
       if (gameOver || submitting) return
-
-      if (!token && guesses.length >= MAX_GUESSES) return
 
       setSubmitting(true)
       setGuessError(null)
@@ -251,23 +245,15 @@ export default function Vinymix() {
         const result = await api.vinymix.guess(artistId)
 
         const newGuesses = [...guesses, result.guess]
-
-        let newStatus = result.status
-        let resolvedTarget = result.targetArtist
-        if (!token) {
-          const correct = result.status === 'won'
-          const lost = !correct && newGuesses.length >= MAX_GUESSES
-          newStatus = correct ? 'won' : lost ? 'lost' : 'in_progress'
-          // Fetch the daily artist for guests on computed loss (backend withholds it until then)
-          if (newStatus === 'lost' && !resolvedTarget) {
-            resolvedTarget = await api.vinymix.today().then((r) => r.targetArtist).catch(() => null)
-          }
-        }
+        const newStatus = result.status
+        const resolvedTarget = result.targetArtist
 
         setGuesses(newGuesses)
         setStatus(newStatus)
         setTargetArtist(resolvedTarget)
         persist(newGuesses, newStatus, resolvedTarget)
+
+        if (result.streakMilestone) notifyMilestone(result.streakMilestone)
 
         if (newStatus === 'won') {
           const newStreak = updateStreak(true)
@@ -288,7 +274,7 @@ export default function Vinymix() {
         setSubmitting(false)
       }
     },
-    [gameOver, submitting, token, guesses, persist],
+    [gameOver, submitting, guesses, persist, notifyMilestone],
   )
 
   // ── Dev reset ─────────────────────────────────────────────────────────────
@@ -310,6 +296,16 @@ export default function Vinymix() {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+
+  if (!authLoading && !token) {
+    return (
+      <Shell streak={0}>
+        <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+          <p style={{ color: 'var(--muted)' }}>Connecte-toi pour jouer.</p>
+        </div>
+      </Shell>
+    )
+  }
 
   if (loading) {
     return (

@@ -9,6 +9,7 @@ import {
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { useAuth } from '../../context/AuthContext'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
 import { useGameSession } from '../../hooks/useGameSession'
@@ -43,6 +44,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 const Chainapan = () => {
   const { user } = useAuth()
+  const { notifyMilestone } = useMilestoneToast()
   const { saveScore } = useHubScores()
   const hiddenInputRef = useRef<HTMLInputElement>(null)
   const physicalKeyHandled = useRef(false)
@@ -84,7 +86,8 @@ const Chainapan = () => {
       setStatus(session.status)
       if (session.status === 'won') {
         markChainapanComplete()
-        setMessage('Bravo ! Tu as trouvé le chemin.')
+        const isOptimal = (session.steps?.length ?? 0) === data.daily.minSteps
+        setMessage(isOptimal ? 'Bravo ! Tu as trouvé le chemin optimal !' : 'Bravo ! Tu as trouvé le chemin.')
       } else if (session.status === 'lost') {
         markChainapanComplete()
         setMessage(`Perdu ! Tu n'as plus d'étapes.`)
@@ -128,9 +131,11 @@ const Chainapan = () => {
             markChainapanComplete()
             if (user)
               saveScore('chainapan', user.username, res.status === 'won' ? newSteps.length : null)
+            if (res.streakMilestone) notifyMilestone(res.streakMilestone)
           }
           if (res.status === 'won') {
-            setMessage('Bravo ! Tu as trouvé le chemin.')
+            const isOptimal = data?.daily.minSteps !== undefined && newSteps.length === data.daily.minSteps
+            setMessage(isOptimal ? 'Bravo ! Tu as trouvé le chemin optimal !' : 'Bravo ! Tu as trouvé le chemin.')
             setPendingConfetti(true)
           } else if (res.status === 'lost') {
             setMessage(`Perdu ! Tu n'as plus d'étapes.`)
@@ -154,7 +159,7 @@ const Chainapan = () => {
       if (currentInput.length >= WORD_LENGTH) return
       setCurrentInput((prev) => prev + key)
     },
-    [gameOver, loading, submitting, currentInput, steps, user, saveScore],
+    [gameOver, loading, submitting, currentInput, steps, user, saveScore, notifyMilestone],
   )
 
   useEffect(() => {

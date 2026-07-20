@@ -6,8 +6,9 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  lastLoginDate: date("last_login_date"),
+  lastPlayedDate: date("last_played_date"),
   streakCount: integer("streak_count").notNull().default(0),
+  longestStreakCount: integer("longest_streak_count").notNull().default(0),
   isAdmin: boolean("is_admin").notNull().default(false),
 });
 

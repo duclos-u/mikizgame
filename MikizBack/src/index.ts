@@ -9,6 +9,7 @@ import { footix } from "./routes/footix";
 import { leaderboard } from "./routes/leaderboard";
 import { motivex } from "./routes/motivex";
 import { politics } from "./routes/politics";
+import { streak } from "./routes/streak";
 import { vinymix } from "./routes/vinymix";
 import { yearbox } from "./routes/yearbox";
 
@@ -37,6 +38,7 @@ app.route("/api/footix", footix);
 app.route("/api/yearbox", yearbox);
 app.route("/api/admin", admin);
 app.route("/api/leaderboard", leaderboard);
+app.route("/api/streak", streak);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));
 app.onError((err, c) => {

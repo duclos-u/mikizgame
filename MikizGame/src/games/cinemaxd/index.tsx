@@ -13,6 +13,7 @@ import {
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
 import { STORAGE_KEYS } from '../../constants/storage'
+import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { today } from '../../utils/date'
 import { useGameSession } from '../../hooks/useGameSession'
 import { PersonaBoard } from './PersonaBoard'
@@ -63,6 +64,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function FilmDuJour() {
+  const { notifyMilestone } = useMilestoneToast()
   // ── Session hook: localStorage-first + API refresh when authed ────────────
   const { data, setData, loading, error, authenticated } = useGameSession<CinemaxdData>({
     cacheKey: STORAGE_KEYS.CINEMAXD_STATE(today()),
@@ -131,6 +133,8 @@ export default function FilmDuJour() {
       }
       setData({ session: updatedSession, totalIndices: result.totalIndices })
 
+      if (result.streakMilestone) notifyMilestone(result.streakMilestone)
+
       if (result.pityCluesRevealed?.length > 0) {
         setPitySlots(new Set(result.pityCluesRevealed))
         if (!isPityPopupDismissed()) {
@@ -153,7 +157,7 @@ export default function FilmDuJour() {
 
       setSubmitting(false)
     },
-    [gameOver, submitting, tentatives, setData],
+    [gameOver, submitting, tentatives, setData, notifyMilestone],
   )
 
   // ── Dev reset ─────────────────────────────────────────────────────────────

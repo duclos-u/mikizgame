@@ -13,6 +13,7 @@ import {
   indicesVides,
 } from "../lib/cinemaxd";
 import { todayDate } from "../lib/date";
+import { recordDailyPlay } from "../lib/streak";
 import { fetchFilmById } from "../lib/tmdb";
 import { authMiddleware } from "../middleware/auth";
 
@@ -180,6 +181,7 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
       .where(eq(cinemaxdSessions.id, session.id));
   }
 
+  let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
   if (nouveauStatut !== "in_progress") {
     const gameId = await getCinemaxdGameId();
     if (gameId) {
@@ -193,6 +195,7 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
         })
         .onConflictDoNothing();
     }
+    streakUpdate = await recordDailyPlay(userId);
   }
 
   return c.json({
@@ -210,6 +213,7 @@ filmdujour.post("/guess", authMiddleware, zValidator("json", guessSchema), async
       acteurs: cible.acteurs.length,
     },
     pityCluesRevealed,
+    ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
   });
 });
 

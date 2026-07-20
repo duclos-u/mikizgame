@@ -6,6 +6,7 @@ export * from "./games";
 export * from "./leaderboard";
 export * from "./motivex";
 export * from "./politics";
+export * from "./streak";
 export * from "./vinymix";
 export * from "./users";
 export * from "./yearbox";

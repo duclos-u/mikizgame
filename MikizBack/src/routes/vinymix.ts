@@ -10,8 +10,9 @@ import {
 } from "../db/schema";
 import { todayDate } from "../lib/date";
 import { fetchSpotifyArtist, getArtistInfo, searchSpotifyArtists } from "../lib/spotify";
+import { recordDailyPlay } from "../lib/streak";
 import { type VinymixArtist, type VinymixGuess, compareArtists, dailySeed } from "../lib/vinymix";
-import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
+import { authMiddleware } from "../middleware/auth";
 
 const MAX_GUESSES = 6;
 
@@ -83,12 +84,10 @@ const vinymix = new Hono();
 
 /**
  * GET /api/vinymix/session
- * Optional auth. Returns today's session state for logged-in users.
+ * Auth required. Returns today's session state for the current user.
  */
-vinymix.get("/session", optionalAuthMiddleware, async (c) => {
-  const userId = c.get("userId") as string | undefined;
-  if (!userId) return c.json({ session: null });
-
+vinymix.get("/session", authMiddleware, async (c) => {
+  const userId = c.get("userId");
   const today = todayDate();
   const session = await db.query.vinymixSessions.findFirst({
     where: and(eq(vinymixSessions.userId, userId), eq(vinymixSessions.date, today)),
@@ -111,12 +110,10 @@ vinymix.get("/session", optionalAuthMiddleware, async (c) => {
 
 /**
  * POST /api/vinymix/guess
- * Optional auth. Body: { artistId: string }
- * Authenticated: saves session, enforces limits.
- * Guest: stateless comparison only.
+ * Auth required. Body: { artistId: string }
  */
-vinymix.post("/guess", optionalAuthMiddleware, async (c) => {
-  const userId = c.get("userId") as string | undefined;
+vinymix.post("/guess", authMiddleware, async (c) => {
+  const userId = c.get("userId");
   const today = todayDate();
 
   const body = await c.req.json<{ artistId?: string }>();
@@ -146,79 +143,62 @@ vinymix.post("/guess", optionalAuthMiddleware, async (c) => {
   const clues = compareArtists(guessArtist, target);
   const correct = guessArtist.id === target.id;
 
-  if (userId) {
-    const session = await db.query.vinymixSessions.findFirst({
-      where: and(eq(vinymixSessions.userId, userId), eq(vinymixSessions.date, today)),
-    });
+  const session = await db.query.vinymixSessions.findFirst({
+    where: and(eq(vinymixSessions.userId, userId), eq(vinymixSessions.date, today)),
+  });
 
-    if (session && session.status !== "in_progress") {
-      return c.json({ error: "Partie déjà terminée aujourd'hui" }, 409);
-    }
-
-    const prevGuesses = (session?.guesses ?? []) as VinymixGuess[];
-    if (prevGuesses.some((g) => g.artist.id === body.artistId)) {
-      return c.json({ error: "Artiste déjà deviné" }, 400);
-    }
-
-    const newGuess: VinymixGuess = { artist: guessArtist, clues };
-    const newGuesses = [...prevGuesses, newGuess];
-    const newCount = newGuesses.length;
-    const lost = !correct && newCount >= MAX_GUESSES;
-    const newStatus = correct ? "won" : lost ? "lost" : "in_progress";
-    const completedAt = newStatus !== "in_progress" ? new Date() : null;
-
-    if (!session) {
-      await db.insert(vinymixSessions).values({
-        userId,
-        date: today,
-        guesses: newGuesses,
-        status: newStatus,
-        completedAt,
-      });
-    } else {
-      await db
-        .update(vinymixSessions)
-        .set({ guesses: newGuesses, status: newStatus, completedAt })
-        .where(eq(vinymixSessions.id, session.id));
-    }
-
-    if (newStatus !== "in_progress") {
-      const gameId = await getVinymixGameId();
-      if (gameId) {
-        await db.insert(leaderboardEntries).values({
-          userId,
-          gameId,
-          date: today,
-          score: correct ? newCount : null,
-        });
-      }
-    }
-
-    return c.json({
-      guess: newGuess,
-      status: newStatus,
-      guessesLeft: MAX_GUESSES - newCount,
-      targetArtist: newStatus !== "in_progress" ? target : null,
-    });
+  if (session && session.status !== "in_progress") {
+    return c.json({ error: "Partie déjà terminée aujourd'hui" }, 409);
   }
 
-  // Stateless guest path
-  return c.json({
-    guess: { artist: guessArtist, clues },
-    status: correct ? "won" : "in_progress",
-    guessesLeft: -1,
-    targetArtist: correct ? target : null,
-  });
-});
+  const prevGuesses = (session?.guesses ?? []) as VinymixGuess[];
+  if (prevGuesses.some((g) => g.artist.id === body.artistId)) {
+    return c.json({ error: "Artiste déjà deviné" }, 400);
+  }
 
-/**
- * GET /api/vinymix/today
- * Public. Returns today's target artist — used by guests after game over to reveal the answer.
- */
-vinymix.get("/today", async (c) => {
-  const artist = await getDailyArtist();
-  if (!artist) return c.json({ error: "Aucun artiste configuré aujourd'hui" }, 503);
-  return c.json({ targetArtist: artist });
+  const newGuess: VinymixGuess = { artist: guessArtist, clues };
+  const newGuesses = [...prevGuesses, newGuess];
+  const newCount = newGuesses.length;
+  const lost = !correct && newCount >= MAX_GUESSES;
+  const newStatus = correct ? "won" : lost ? "lost" : "in_progress";
+  const completedAt = newStatus !== "in_progress" ? new Date() : null;
+
+  if (!session) {
+    await db.insert(vinymixSessions).values({
+      userId,
+      date: today,
+      guesses: newGuesses,
+      status: newStatus,
+      completedAt,
+    });
+  } else {
+    await db
+      .update(vinymixSessions)
+      .set({ guesses: newGuesses, status: newStatus, completedAt })
+      .where(eq(vinymixSessions.id, session.id));
+  }
+
+  let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
+  if (newStatus !== "in_progress") {
+    const gameId = await getVinymixGameId();
+    if (gameId) {
+      await db.insert(leaderboardEntries).values({
+        userId,
+        gameId,
+        date: today,
+        score: correct ? newCount : null,
+      });
+    }
+    streakUpdate = await recordDailyPlay(userId);
+  }
+
+  return c.json({
+    guess: newGuess,
+    status: newStatus,
+    guessesLeft: MAX_GUESSES - newCount,
+    targetArtist: newStatus !== "in_progress" ? target : null,
+    ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
+  });
 });
 
 /**

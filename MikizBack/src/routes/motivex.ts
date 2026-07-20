@@ -6,6 +6,7 @@ import { db } from "../db";
 import { games, leaderboardEntries, motivexDailyWords, motivexSessions } from "../db/schema";
 import { todayDate } from "../lib/date";
 import { type GuessResult, evaluateGuess } from "../lib/motivex";
+import { recordDailyPlay } from "../lib/streak";
 import { isValidWord } from "../lib/words";
 import { authMiddleware } from "../middleware/auth";
 
@@ -137,6 +138,7 @@ motivex.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c
       .where(eq(motivexSessions.id, existing.id));
   }
 
+  let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
   if (newStatus !== "in_progress") {
     const gameId = await getMotivexGameId();
     if (gameId) {
@@ -150,6 +152,7 @@ motivex.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c
         })
         .onConflictDoNothing();
     }
+    streakUpdate = await recordDailyPlay(userId);
   }
 
   return c.json({
@@ -157,6 +160,7 @@ motivex.post("/guess", authMiddleware, zValidator("json", guessSchema), async (c
     status: newStatus,
     attemptsLeft: MAX_ATTEMPTS - updatedAttempts.length,
     ...(newStatus !== "in_progress" ? { word: daily.word } : {}),
+    ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
   });
 });
 

@@ -11,6 +11,7 @@ import {
   getFootballer,
   searchFootballers,
 } from "../lib/footix";
+import { recordDailyPlay } from "../lib/streak";
 import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 8;
@@ -177,6 +178,7 @@ footix.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema), a
         .where(eq(footixSessions.id, session.id));
     }
 
+    let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
     if (nouveauStatut !== "in_progress") {
       const gameId = await getFootixGameId();
       if (gameId) {
@@ -190,6 +192,7 @@ footix.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema), a
           })
           .onConflictDoNothing();
       }
+      streakUpdate = await recordDailyPlay(userId);
     }
 
     return c.json({
@@ -198,6 +201,7 @@ footix.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema), a
       tentativesRestantes: MAX_TENTATIVES - nouvellesTentatives.length,
       statut: nouveauStatut,
       footballeurCible: nouveauStatut !== "in_progress" ? target : null,
+      ...(streakUpdate?.newMilestone ? { streakMilestone: streakUpdate.newMilestone } : {}),
     });
   }
 
