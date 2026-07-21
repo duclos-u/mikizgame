@@ -184,7 +184,7 @@ body
   border-radius: 50%
   display: inline-flex
 
-// User chip (logged-in state)
+// User chip (logged-in state) — links to /profile
 .user-chip
   font-size: 13px
   font-weight: 600
@@ -193,6 +193,11 @@ body
   border: 1px solid color-mix(in oklch, var(--accent) 28%, var(--border))
   border-radius: 99px
   padding: 6px 12px
+  text-decoration: none
+  transition: background 0.15s
+
+  &:hover
+    background: color-mix(in oklch, var(--accent) 20%, var(--card))
 
 // ─── BUTTONS ────────────────────────────────────────────────────────────────
 .btn
@@ -1027,6 +1032,32 @@ body
   letter-spacing: 0.02em
   color: var(--muted)
 
+.lb-sort-btn
+  background: none
+  border: none
+  padding: 0
+  font: inherit
+  font-size: 11.5px
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: 0.02em
+  color: var(--muted)
+  cursor: pointer
+  text-align: right
+  white-space: nowrap
+
+  .lb-sort-arrow
+    visibility: hidden
+
+  &.active
+    color: var(--text)
+
+    .lb-sort-arrow
+      visibility: visible
+
+  &:hover
+    color: var(--text)
+
 .lb-row
   display: grid
   gap: 12px
@@ -1100,26 +1131,6 @@ body
 .mini-flame
   font-size: 0.85em
   margin-right: 4px
-
-// Sticky me bar (floating pill)
-.lb-sticky-me
-  position: sticky
-  bottom: 16px
-  margin-top: 16px
-  display: grid
-  grid-template-columns: 48px auto 1fr auto
-  align-items: center
-  gap: 14px
-  background: color-mix(in oklch, var(--accent) 14%, var(--card))
-  border: 1px solid color-mix(in oklch, var(--accent) 45%, var(--border))
-  border-radius: 99px
-  padding: 10px 16px 10px 22px
-  box-shadow: var(--shadow-lift)
-  z-index: 40
-
-.lb-me-note
-  font-size: 13.5px
-  color: var(--text-2)
 
 // Tags (keep for DailyGamesPage filter-less compat)
 .tag
@@ -5449,3 +5460,455 @@ $yb-accent-dark: oklch(0.50 0.16 58)
   color: var(--muted)
   font-size: 12px
   margin-left: auto
+
+// ─── PROFILE PAGE ───────────────────────────────────────────────────────────
+.profile-page
+  max-width: 920px
+  margin: 0 auto
+  padding: 28px 20px 60px
+  display: flex
+  flex-direction: column
+  gap: 18px
+
+.profile-loading
+  color: var(--muted)
+  text-align: center
+  padding: 40px 0
+
+.profile-card
+  background: var(--card)
+  border: 1px solid var(--line-soft)
+  border-radius: calc(var(--radius) + 4px)
+  padding: 22px
+  box-shadow: var(--shadow-soft)
+
+.profile-card-hint
+  font-size: 13px
+  color: var(--muted)
+  margin: 6px 0 14px
+
+.profile-error
+  font-size: 13px
+  color: oklch(0.55 0.2 25)
+
+.profile-login-prompt
+  text-align: center
+  padding: 40px 22px
+
+  h2
+    font-family: var(--font-display)
+    margin: 0 0 8px
+
+  p
+    color: var(--muted)
+    font-size: 14px
+    margin: 0 0 18px
+
+// Identity
+.profile-identity
+  display: flex
+  align-items: center
+  gap: 16px
+
+.profile-avatar
+  width: 56px
+  height: 56px
+  font-size: 24px
+  font-family: var(--font-display)
+  color: var(--card)
+  background: var(--accent)
+
+.profile-username
+  font-family: var(--font-display)
+  font-size: 26px
+  margin: 0
+  line-height: 1.2
+
+.profile-meta
+  font-size: 13px
+  color: var(--muted)
+  margin: 4px 0 0
+
+// Streaks & milestones
+.profile-streaks
+  display: flex
+  gap: 28px
+  margin: 14px 0 16px
+
+.profile-streak-stat
+  display: flex
+  flex-direction: column
+  gap: 2px
+
+  b
+    font-family: var(--font-display)
+    font-size: 28px
+    font-weight: 700
+    line-height: 1
+
+  span
+    font-size: 12.5px
+    color: var(--muted)
+
+.profile-milestones
+  display: flex
+  flex-wrap: wrap
+  gap: 8px
+
+.milestone-badge
+  font-size: 12.5px
+  font-weight: 600
+  color: var(--muted)
+  background: var(--bg-2)
+  border: 1px solid var(--line-soft)
+  border-radius: 99px
+  padding: 5px 12px
+
+  &.achieved
+    color: var(--text)
+    background: color-mix(in oklch, var(--accent) 18%, var(--card-2))
+    border-color: color-mix(in oklch, var(--accent) 40%, transparent)
+
+// Heatmap (GitHub-style, weeks as columns)
+.heatmap
+  --heat-cell: 12px
+  --heat-gap: 3px
+
+.heatmap-body
+  display: flex
+  gap: 6px
+
+.heatmap-weekdays
+  display: grid
+  grid-template-rows: repeat(7, var(--heat-cell))
+  gap: var(--heat-gap)
+  padding-top: 18px
+  flex-shrink: 0
+
+  span
+    font-size: 10px
+    color: var(--muted)
+    line-height: var(--heat-cell)
+
+.heatmap-scroll
+  overflow-x: auto
+  padding-bottom: 4px
+
+.heatmap-months
+  display: grid
+  gap: var(--heat-gap)
+  height: 15px
+  margin-bottom: 3px
+
+  span
+    grid-row: 1
+    font-size: 10px
+    color: var(--muted)
+    white-space: nowrap
+
+.heatmap-grid
+  display: grid
+  grid-auto-flow: column
+  grid-template-rows: repeat(7, var(--heat-cell))
+  grid-auto-columns: var(--heat-cell)
+  gap: var(--heat-gap)
+  padding-right: 4px
+
+.heatmap-cell
+  width: var(--heat-cell)
+  height: var(--heat-cell)
+  border-radius: 3px
+  border: 1px solid var(--line-soft)
+  padding: 0
+  cursor: pointer
+
+  &.future
+    visibility: hidden
+    cursor: default
+
+  &.heat-0
+    background: var(--bg-2)
+
+  &.heat-1
+    background: color-mix(in oklch, var(--accent) 25%, var(--card-2))
+    border-color: color-mix(in oklch, var(--accent) 35%, transparent)
+
+  &.heat-2
+    background: color-mix(in oklch, var(--accent) 45%, var(--card-2))
+    border-color: color-mix(in oklch, var(--accent) 55%, transparent)
+
+  &.heat-3
+    background: color-mix(in oklch, var(--accent) 65%, var(--card-2))
+    border-color: color-mix(in oklch, var(--accent) 75%, transparent)
+
+  &.heat-4
+    background: color-mix(in oklch, var(--accent) 85%, var(--card-2))
+    border-color: var(--accent)
+
+  &.today
+    border: 2px solid var(--accent)
+
+  &.selected
+    outline: 2px solid var(--text)
+    outline-offset: 1px
+
+.heatmap-legend
+  display: flex
+  align-items: center
+  gap: 4px
+  margin-top: 10px
+  font-size: 11px
+  color: var(--muted)
+
+  .heatmap-cell
+    cursor: default
+
+  span:first-child
+    margin-right: 4px
+
+  span:last-child
+    margin-left: 4px
+
+// Day detail
+.day-detail
+  margin-top: 16px
+  border-top: 1px solid var(--line-soft)
+  padding-top: 14px
+
+.day-detail-title
+  font-weight: 700
+  font-size: 14px
+  margin-bottom: 8px
+  text-transform: capitalize
+
+.day-detail-empty
+  font-size: 13px
+  color: var(--muted)
+  margin: 0
+
+.day-detail-list
+  list-style: none
+  margin: 0
+  padding: 0
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+.day-detail-item
+  display: flex
+  align-items: center
+  justify-content: space-between
+  font-size: 13.5px
+  background: var(--bg-2)
+  border: 1px solid var(--line-soft)
+  border-radius: 8px
+  padding: 8px 12px
+
+.day-detail-game
+  display: flex
+  align-items: center
+  gap: 8px
+  font-weight: 600
+
+.day-detail-score
+  font-family: var(--mono)
+  font-size: 12.5px
+  color: var(--text-2)
+
+  &.lost
+    color: oklch(0.55 0.2 25)
+
+// Per-game stats
+.profile-stats-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+  gap: 12px
+  margin-top: 12px
+
+.profile-game-card
+  background: var(--bg-2)
+  border: 1px solid var(--line-soft)
+  border-radius: calc(var(--radius) * 0.8)
+  padding: 14px
+
+.profile-game-name
+  display: flex
+  align-items: center
+  gap: 8px
+  font-weight: 700
+  font-size: 14px
+  margin-bottom: 10px
+
+.rank-badge
+  margin-left: auto
+  font-family: var(--mono)
+  font-size: 11px
+  font-weight: 700
+  color: var(--text)
+  background: color-mix(in oklch, var(--accent) 18%, var(--card-2))
+  border: 1px solid color-mix(in oklch, var(--accent) 40%, transparent)
+  border-radius: 99px
+  padding: 3px 9px
+  cursor: default
+
+.rank-badge-total
+  font-weight: 600
+  color: var(--muted)
+
+.profile-streak-stat-sub
+  font-family: var(--mono)
+  font-size: 15px
+  font-weight: 600
+  color: var(--muted)
+  margin-left: 2px
+
+.guess-distribution
+  margin-top: 12px
+  padding-top: 12px
+  border-top: 1px solid var(--line-soft)
+
+.guess-distribution-win-rate
+  font-size: 11.5px
+  font-weight: 700
+  color: oklch(0.55 0.15 152)
+  margin-bottom: 8px
+
+.guess-distribution-body
+  display: flex
+  gap: 4px
+  align-items: flex-start
+
+.guess-distribution-yaxis
+  flex-shrink: 0
+  width: 20px
+  height: 100px
+  margin-top: 14px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: flex-end
+
+.guess-distribution-yaxis-label
+  font-size: 9px
+  font-family: var(--mono)
+  color: var(--muted)
+  line-height: 1
+
+.guess-distribution-chart
+  flex: 1
+  min-width: 0
+  display: flex
+  gap: 3px
+  align-items: stretch
+
+.guess-distribution-col
+  flex: 1
+  min-width: 0
+  display: flex
+  flex-direction: column
+  align-items: center
+
+  &.loss
+    .guess-distribution-col-bar
+      background: oklch(0.55 0.2 25)
+    .guess-distribution-col-label
+      color: oklch(0.55 0.2 25)
+
+.guess-distribution-col-count
+  height: 14px
+  font-size: 10px
+  font-weight: 700
+  font-family: var(--mono)
+  color: var(--text-2)
+  line-height: 14px
+  text-align: center
+
+.guess-distribution-col-track
+  width: 100%
+  height: 100px
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  border-bottom: 1px solid color-mix(in oklch, var(--text) 18%, transparent)
+
+.guess-distribution-col-bar
+  width: 100%
+  background: var(--accent)
+  border-radius: 3px 3px 0 0
+
+.guess-distribution-col-label
+  height: 16px
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 10px
+  font-family: var(--mono)
+  color: var(--muted)
+
+.profile-game-stats
+  display: flex
+  justify-content: space-between
+  gap: 12px
+  margin: 0
+
+  > div
+    display: flex
+    flex-direction: column
+    gap: 2px
+
+  dt
+    font-size: 10px
+    text-transform: uppercase
+    letter-spacing: 0.04em
+    color: var(--muted)
+    white-space: nowrap
+
+  dd
+    margin: 0
+    font-family: var(--mono)
+    font-weight: 700
+    font-size: 15px
+
+// Account settings
+.profile-form
+  margin-top: 12px
+  max-width: 420px
+
+.profile-form-label
+  display: block
+  font-size: 13px
+  font-weight: 700
+  margin-bottom: 8px
+
+.profile-form-row
+  display: flex
+  gap: 8px
+  align-items: flex-start
+
+  .modal-input
+    margin-bottom: 0
+
+  .btn
+    flex-shrink: 0
+
+.profile-form-message
+  font-size: 12.5px
+  margin: 8px 0 0
+
+  &.ok
+    color: oklch(0.55 0.15 152)
+
+  &.error
+    color: oklch(0.55 0.2 25)
+
+.profile-divider
+  border: none
+  border-top: 1px solid var(--line-soft)
+  margin: 20px 0
+
+.profile-logout-btn
+  color: oklch(0.58 0.19 25)
+  border: 1px solid oklch(0.58 0.19 25 / 0.3)
+  width: 100%
+  &:hover
+    background: oklch(0.58 0.19 25 / 0.08)

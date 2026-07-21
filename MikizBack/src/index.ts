@@ -9,6 +9,7 @@ import { footix } from "./routes/footix";
 import { leaderboard } from "./routes/leaderboard";
 import { motivex } from "./routes/motivex";
 import { politics } from "./routes/politics";
+import { profile } from "./routes/profile";
 import { streak } from "./routes/streak";
 import { vinymix } from "./routes/vinymix";
 import { yearbox } from "./routes/yearbox";
@@ -21,7 +22,7 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN ?? "*",
     allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
 
@@ -39,6 +40,7 @@ app.route("/api/yearbox", yearbox);
 app.route("/api/admin", admin);
 app.route("/api/leaderboard", leaderboard);
 app.route("/api/streak", streak);
+app.route("/api/profile", profile);
 
 app.notFound((c) => c.json({ error: "Not found" }, 404));
 app.onError((err, c) => {

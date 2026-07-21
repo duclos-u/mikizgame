@@ -16,6 +16,7 @@ type AuthState = {
   login: (email: string, password: string) => Promise<void>
   register: (username: string, email: string, password: string) => Promise<void>
   logout: () => void
+  updateAuth: (user: User, token?: string) => void
 }
 
 const AuthContext = createContext<AuthState | null>(null)
@@ -65,8 +66,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }, [])
 
+  const updateAuth = useCallback((user: User, token?: string) => {
+    setUser(user)
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token)
+      setToken(token)
+    }
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateAuth }}>
       {children}
     </AuthContext.Provider>
   )

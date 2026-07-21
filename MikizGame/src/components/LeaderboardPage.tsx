@@ -16,6 +16,7 @@ const GAME_LABELS: Record<string, string> = {
   vinymix: 'Vinymix',
 }
 
+
 function gameLabel(slug: string) {
   return GAME_LABELS[slug] ?? slug.charAt(0).toUpperCase() + slug.slice(1)
 }
@@ -162,6 +163,8 @@ export function LeaderboardPage() {
 
   const [allTimeEntries, setAllTimeEntries] = useState<AllTimeEntry[]>([])
   const [allTimeLoading, setAllTimeLoading] = useState(true)
+  type AllTimeSort = 'points' | 'wins' | 'avg'
+  const [allTimeSort, setAllTimeSort] = useState<AllTimeSort>('points')
 
   const [crossAllTimeEntries, setCrossAllTimeEntries] = useState<CrossAllTimeEntry[]>([])
   const [crossAllTimeLoading, setCrossAllTimeLoading] = useState(false)
@@ -201,6 +204,7 @@ export function LeaderboardPage() {
   useEffect(() => {
     if (gameId === 'general' || scope !== 'all') return
     setAllTimeLoading(true)
+    setAllTimeSort('points')
     api.leaderboard
       .getStats(getGameSlug(gameId))
       .then(({ entries }) => setAllTimeEntries(entries))
@@ -222,6 +226,19 @@ export function LeaderboardPage() {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
+  })
+
+  const sortedAllTimeEntries = [...allTimeEntries].sort((a, b) => {
+    if (allTimeSort === 'wins') {
+      return b.wins - a.wins || b.totalPoints - a.totalPoints || a.username.localeCompare(b.username)
+    }
+    if (allTimeSort === 'avg') {
+      if (a.avgAttempts === null && b.avgAttempts === null) return 0
+      if (a.avgAttempts === null) return 1
+      if (b.avgAttempts === null) return -1
+      return a.avgAttempts - b.avgAttempts || b.wins - a.wins || a.username.localeCompare(b.username)
+    }
+    return b.totalPoints - a.totalPoints || a.username.localeCompare(b.username)
   })
 
   const currentGame = GAMES.find((g) => g.id === gameId) ?? liveGames[0]
@@ -537,9 +554,27 @@ export function LeaderboardPage() {
           >
             <span>#</span>
             <span>Joueur</span>
-            <span className="ta-r">Victoires</span>
-            <span className="ta-r">Moy.</span>
-            <span className="ta-r">Points</span>
+            <button
+              type="button"
+              className={`lb-sort-btn${allTimeSort === 'wins' ? ' active' : ''}`}
+              onClick={() => setAllTimeSort('wins')}
+            >
+              Victoires <span className="lb-sort-arrow">▼</span>
+            </button>
+            <button
+              type="button"
+              className={`lb-sort-btn${allTimeSort === 'avg' ? ' active' : ''}`}
+              onClick={() => setAllTimeSort('avg')}
+            >
+              Moy. <span className="lb-sort-arrow">▲</span>
+            </button>
+            <button
+              type="button"
+              className={`lb-sort-btn${allTimeSort === 'points' ? ' active' : ''}`}
+              onClick={() => setAllTimeSort('points')}
+            >
+              Points <span className="lb-sort-arrow">▼</span>
+            </button>
           </div>
           <div>
             {allTimeLoading ? (
@@ -552,7 +587,7 @@ export function LeaderboardPage() {
                 {!user && <span>Connecte-toi pour apparaître ici.</span>}
               </div>
             ) : (
-              allTimeEntries.map((entry, i) => {
+              sortedAllTimeEntries.map((entry, i) => {
                 const isMe = currentUser === entry.username
                 return (
                   <div
@@ -583,46 +618,6 @@ export function LeaderboardPage() {
         </div>
       )}
 
-      {/* Sticky me bar */}
-      {currentUser && (() => {
-        const activeEntries =
-          gameId === 'general' && scope === 'all' ? crossAllTimeEntries : crossEntries
-        const meIdx = activeEntries.findIndex((r) => r.username === currentUser)
-        if (meIdx === -1) return null
-        const meEntry = activeEntries[meIdx]
-        return (
-        <div className="lb-sticky-me">
-          <span className={`lb-rank${meIdx < 3 ? ' top' : ''}`}>
-            {meIdx + 1}
-          </span>
-          <span className="lb-player">
-            <Avatar name={currentUser} size={30} color="var(--accent)" />
-            <span className="lb-player-name">Toi</span>
-          </span>
-          <span className="lb-me-note">
-            {gameId === 'general' && scope === 'all'
-              ? `${meEntry.total} points au total`
-              : `${meEntry.total} points aujourd'hui`}
-          </span>
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            style={{
-              background: currentGame?.accent,
-              borderColor: currentGame?.accent,
-              color: 'oklch(0.15 0.01 55)',
-            }}
-            onClick={() => {
-              if (currentGame?.route) {
-                window.location.href = currentGame.route
-              }
-            }}
-          >
-            Rejouer
-          </button>
-        </div>
-        )
-      })()}
     </div>
   )
 }

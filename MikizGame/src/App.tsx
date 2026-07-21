@@ -5,6 +5,7 @@ import { AuthModal } from './components/AuthModal'
 import { DailyGamesPage } from './components/DailyGamesPage'
 import { Header } from './components/Header'
 import { LeaderboardPage } from './components/LeaderboardPage'
+import { ProfilePage } from './components/ProfilePage'
 import { AuthProvider } from './context/AuthContext'
 import { MilestoneToastProvider } from './context/MilestoneToastContext'
 import { useJdj2State } from './hooks/useJdj2State'
@@ -89,6 +90,19 @@ export default function App() {
                 <Header onLoginClick={() => setAuthModalOpen(true)} />
                 <main className="app-main">
                   <LeaderboardPage />
+                </main>
+                <AppFooter />
+                {authModalOpen && <AuthModal open onClose={() => setAuthModalOpen(false)} />}
+              </div>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <div className="app-root">
+                <Header onLoginClick={() => setAuthModalOpen(true)} />
+                <main className="app-main">
+                  <ProfilePage onLoginClick={() => setAuthModalOpen(true)} />
                 </main>
                 <AppFooter />
                 {authModalOpen && <AuthModal open onClose={() => setAuthModalOpen(false)} />}
