@@ -200,14 +200,25 @@ profile.patch("/username", authMiddleware, zValidator("json", updateUsernameSche
     return c.json({ error: "Ce nom d'utilisateur est déjà pris" }, 409);
   }
 
-  const [user] = await db.update(users).set({ username }).where(eq(users.id, userId)).returning({
-    id: users.id,
-    username: users.username,
-    email: users.email,
-    streakCount: users.streakCount,
-    longestStreakCount: users.longestStreakCount,
-    isAdmin: users.isAdmin,
-  });
+  const updateUsername = () =>
+    db.update(users).set({ username }).where(eq(users.id, userId)).returning({
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      streakCount: users.streakCount,
+      longestStreakCount: users.longestStreakCount,
+      isAdmin: users.isAdmin,
+    });
+
+  let user: Awaited<ReturnType<typeof updateUsername>>[number] | undefined;
+  try {
+    [user] = await updateUsername();
+  } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === "23505") {
+      return c.json({ error: "Ce nom d'utilisateur est déjà pris" }, 409);
+    }
+    throw err;
+  }
   if (!user) return c.json({ error: "User not found" }, 404);
 
   const token = await signToken({ sub: user.id, username: user.username });
