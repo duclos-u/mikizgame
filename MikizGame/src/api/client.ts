@@ -42,6 +42,11 @@ export type {
   StreakHistoryResponse,
   StreakMilestoneEntry,
   StreakMilestonesResponse,
+  ProfileHistoryEntry,
+  ProfileGameStats,
+  ProfileGameRank,
+  ProfileSummaryResponse,
+  UpdateUsernameResponse,
 } from './shared-types'
 
 import type {
@@ -69,6 +74,8 @@ import type {
   AdminScheduleResponse,
   StreakHistoryResponse,
   StreakMilestonesResponse,
+  ProfileSummaryResponse,
+  UpdateUsernameResponse,
 } from './shared-types'
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
@@ -485,6 +492,19 @@ export const api = {
         body: JSON.stringify({ word }),
       }),
     reset: () => request<{ ok: boolean }>('/chainapan/session', { method: 'DELETE' }),
+  },
+  profile: {
+    summary: () => request<ProfileSummaryResponse>('/profile/summary'),
+    updateUsername: (username: string) =>
+      request<UpdateUsernameResponse>('/profile/username', {
+        method: 'PATCH',
+        body: JSON.stringify({ username }),
+      }),
+    updatePassword: (currentPassword: string, newPassword: string) =>
+      request<{ message: string }>('/profile/password', {
+        method: 'PATCH',
+        body: JSON.stringify({ currentPassword, newPassword }),
+      }),
   },
   streak: {
     history: (days = 7) => request<StreakHistoryResponse>(`/streak/history?days=${days}`),

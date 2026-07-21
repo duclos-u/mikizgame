@@ -81,6 +81,16 @@ export default function FilmDuJour() {
 
   const gameOver = statut !== 'in_progress'
 
+  const acteurPhotos = useMemo(() => {
+    const map = new Map<string, string | null>()
+    tentatives.forEach((t) => {
+      t.filmSoumis.acteurs.forEach((a) => {
+        if (!map.has(a.nom)) map.set(a.nom, a.photo)
+      })
+    })
+    return map
+  }, [tentatives])
+
   // ── UI-only state (not part of game session) ──────────────────────────────
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -213,16 +223,6 @@ export default function FilmDuJour() {
       </Shell>
     )
   }
-
-  const acteurPhotos = useMemo(() => {
-    const map = new Map<string, string | null>()
-    tentatives.forEach((t) => {
-      t.filmSoumis.acteurs.forEach((a) => {
-        if (!map.has(a.nom)) map.set(a.nom, a.photo)
-      })
-    })
-    return map
-  }, [tentatives])
 
   const dejaJoueIds = tentatives.map((t) => t.tmdbId)
 

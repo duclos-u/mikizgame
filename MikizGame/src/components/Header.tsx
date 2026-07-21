@@ -19,7 +19,7 @@ function Logo() {
 }
 
 export function Header({ onLoginClick }: HeaderProps) {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const { pathname } = useLocation()
 
   return (
@@ -51,12 +51,9 @@ export function Header({ onLoginClick }: HeaderProps) {
           )}
 
           {user ? (
-            <>
-              <span className="user-chip">{user.username}</span>
-              <button type="button" className="btn btn-ghost btn-sm" onClick={logout}>
-                Déco
-              </button>
-            </>
+            <Link className="user-chip" to="/profile" title="Voir mon profil">
+              {user.username}
+            </Link>
           ) : (
             <button type="button" className="btn btn-primary btn-sm" onClick={onLoginClick}>
               Se connecter

@@ -13,12 +13,43 @@ export type User = {
 };
 export type AuthResponse = { user: User; token: string };
 
+// ─── Profile ──────────────────────────────────────────────────────────────────
+
+export type ProfileHistoryEntry = { date: string; game: string; score: number | null };
+
+export type ProfileGameRank = { rank: number; totalPlayers: number; percentile: number };
+
+export type ProfileGameStats = {
+  game: string;
+  name: string;
+  played: number;
+  wins: number;
+  avgAttempts: number | null;
+  // Win counts keyed by attempt count, e.g. { 1: 2, 2: 5 }. Object keys are strings over JSON.
+  distribution: Record<number, number>;
+  losses: number;
+  rank: ProfileGameRank | null;
+};
+
+export type ProfileSummaryResponse = {
+  memberSince: string;
+  history: ProfileHistoryEntry[];
+  games: ProfileGameStats[];
+  crossRank: ProfileGameRank | null;
+};
+
+export type UpdateUsernameResponse = { user: User; token: string };
+
 // ─── Streak ───────────────────────────────────────────────────────────────────
 
 export type StreakDay = { date: string; played: boolean };
 export type StreakHistoryResponse = { days: StreakDay[] };
 
-export type StreakMilestoneEntry = { milestone: number; achievedAt: string; shownAt: string | null };
+export type StreakMilestoneEntry = {
+  milestone: number;
+  achievedAt: string;
+  shownAt: string | null;
+};
 export type StreakMilestonesResponse = { achieved: StreakMilestoneEntry[]; next: number | null };
 
 // ─── Motivex ──────────────────────────────────────────────────────────────────
