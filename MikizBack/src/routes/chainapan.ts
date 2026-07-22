@@ -187,7 +187,7 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
             userId,
             gameId,
             date: today,
-            score: isWon ? updatedSteps.length - minSteps + 1 : null,
+            score: isWon ? Math.max(1, updatedSteps.length - minSteps + 1) : null,
           })
           .onConflictDoNothing();
       }
