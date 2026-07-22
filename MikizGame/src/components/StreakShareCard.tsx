@@ -29,6 +29,30 @@ function drawCard(canvas: HTMLCanvasElement, streak: number, milestone?: number 
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, CARD_SIZE, CARD_SIZE)
 
+  // Logo lockup (top)
+  const logoFontSize = 58
+  ctx.font = `700 ${logoFontSize}px "Baloo 2", sans-serif`
+  const dotR = 20, dotGap = 14
+  const dotsW = 3 * dotR * 2 + 2 * dotGap
+  const logoGap = 22
+  const logoTextW = ctx.measureText('MikizGame').width
+  const logoTotalW = dotsW + logoGap + logoTextW
+  const logoX = (CARD_SIZE - logoTotalW) / 2
+  const logoY = 110
+  const dotColors = ['oklch(0.70 0.17 45)', 'oklch(0.66 0.15 152)', 'oklch(0.62 0.16 292)']
+  dotColors.forEach((c, i) => {
+    ctx.fillStyle = c
+    ctx.beginPath()
+    ctx.arc(logoX + dotR + i * (dotR * 2 + dotGap), logoY, dotR, 0, Math.PI * 2)
+    ctx.fill()
+  })
+  const logoTextX = logoX + dotsW + logoGap
+  const logoTextY = logoY + logoFontSize * 0.36
+  ctx.textAlign = 'left'
+  ctx.fillStyle = text
+  ctx.fillText('Mikiz', logoTextX, logoTextY)
+  ctx.fillStyle = accent
+  ctx.fillText('Game', logoTextX + ctx.measureText('Mikiz').width, logoTextY)
   ctx.textAlign = 'center'
 
   ctx.font = '220px sans-serif'
@@ -47,7 +71,7 @@ function drawCard(canvas: HTMLCanvasElement, streak: number, milestone?: number 
   }
 
   ctx.font = '500 36px "Hanken Grotesk", sans-serif'
-  ctx.fillText('mikiz.fr', CARD_SIZE / 2, CARD_SIZE - 80)
+  ctx.fillText('🌐 www.mikizgame.fr', CARD_SIZE / 2, CARD_SIZE - 80)
 }
 
 export function StreakShareCard({ open, onClose, streak, milestone }: StreakShareCardProps) {

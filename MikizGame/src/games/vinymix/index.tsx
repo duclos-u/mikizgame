@@ -4,21 +4,73 @@ import { Link } from 'react-router-dom'
 import {
   type VinymixArtist,
   type VinymixGuess,
+  type VinymixMatchStatus,
   type VinymixStatus,
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { useAuth } from '../../context/AuthContext'
 import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 import { artistColors } from '../../utils/artistColors'
 import { ArtistSearchBar } from './ArtistSearchBar'
 import { GuessHistoryTable } from './GuessHistoryTable'
 import { PersonaBoard } from './PersonaBoard'
-import { ResultModal } from './ResultModal'
 
 const MAX_GUESSES = 6
+
+const SHARE_EMOJI: Record<VinymixMatchStatus, string> = {
+  match: '🟩',
+  close: '🟨',
+  miss: '⬛',
+  info: '🔵',
+  unknown: '⬜',
+}
+
+const SHARE_COLOR: Record<VinymixMatchStatus, string> = {
+  match: 'oklch(0.80 0.13 150)',
+  close: 'oklch(0.85 0.14 80)',
+  miss: 'oklch(0.88 0.012 80)',
+  info: 'oklch(0.78 0.07 252)',
+  unknown: 'var(--border)',
+}
+
+const GAME_URL = import.meta.env.VITE_APP_URL ?? 'https://mikiz.fr/vinymix'
+
+function buildShareText(status: VinymixStatus, guesses: VinymixGuess[]): string {
+  const scoreLine = status === 'won' ? `${guesses.length}/6` : 'X/6'
+  const lines = guesses.map((g) => g.clues.map((c) => SHARE_EMOJI[c.status] ?? '⬜').join(''))
+  return `${buildShareHeader('vinymix', scoreLine)}\n${lines.join('\n')}\n\n${GAME_URL}`
+}
+
+// ─── Countdown to midnight ─────────────────────────────────────────────────
+
+function useCountdown(): string {
+  const [label, setLabel] = useState('')
+
+  useEffect(() => {
+    function compute() {
+      const now = new Date()
+      const midnight = new Date(now)
+      midnight.setHours(24, 0, 0, 0)
+      const diff = Math.max(0, Math.floor((midnight.getTime() - now.getTime()) / 1000))
+      const h = Math.floor(diff / 3600)
+      const m = Math.floor((diff % 3600) / 60)
+      const s = diff % 60
+      setLabel(
+        `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+      )
+    }
+    compute()
+    const id = setInterval(compute, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  return label
+}
 
 // ─── localStorage persistence ─────────────────────────────────────────────────
 
@@ -173,6 +225,7 @@ function Shell({ children, streak }: { children: React.ReactNode; streak: number
 export default function Vinymix() {
   const { token, loading: authLoading } = useAuth()
   const { notifyMilestone } = useMilestoneToast()
+  const countdown = useCountdown()
 
   const [guesses, setGuesses] = useState<VinymixGuess[]>([])
   const [status, setStatus] = useState<VinymixStatus>('in_progress')
@@ -337,14 +390,10 @@ export default function Vinymix() {
         </>
       )}
 
-      {gameOver && !showModal && (
-        <div className="vinymix-gameover-actions">
-          <button
-            type="button"
-            className="vinymix-btn-primary"
-            onClick={() => setShowModal(true)}
-          >
-            Voir le résultat
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
           </button>
         </div>
       )}
@@ -388,14 +437,80 @@ export default function Vinymix() {
         )}
       </div>
 
-      {showModal && status !== 'in_progress' && (
-        <ResultModal
-          status={status}
-          guesses={guesses}
-          targetArtist={targetArtist}
-          onClose={() => setShowModal(false)}
-        />
-      )}
+      {showModal && status !== 'in_progress' && (() => {
+        const won = status === 'won'
+        const targetColors = targetArtist ? artistColors(targetArtist.name) : null
+        const targetMeta = targetArtist
+          ? [targetArtist.creationYear, targetArtist.genres.slice(0, 2).join(', ')]
+              .filter(Boolean)
+              .join(' · ')
+          : ''
+        const shareRows = guesses.map((g, i) => ({
+          num: i + 1,
+          squares: g.clues.map((c) => SHARE_COLOR[c.status] ?? SHARE_COLOR.unknown),
+        }))
+
+        return (
+          <GameResultModal
+            classPrefix="vinymix"
+            won={won}
+            title={null}
+            headerExtra={
+              <div className="vinymix-modal-header">
+                <div className="vinymix-modal-emoji">{won ? '🎉' : '🎵'}</div>
+                <h2>{won ? 'Bravo !' : 'Perdu !'}</h2>
+                <p>
+                  {won
+                    ? `Artiste trouvé en ${guesses.length} essai${guesses.length > 1 ? 's' : ''}`
+                    : "L'artiste mystère était :"}
+                </p>
+              </div>
+            }
+            shareText={buildShareText(status, guesses)}
+            showSharePreview={false}
+            shareLabel="Copier le résultat"
+            shareButtonClassName="vinymix-btn-primary"
+            showLeaderboardLink={false}
+            preActionsExtra={
+              <div className="vinymix-modal-countdown">
+                <span className="vinymix-modal-countdown-label">Prochain vinyle dans</span>
+                <span className="vinymix-modal-countdown-timer">{countdown}</span>
+              </div>
+            }
+            onClose={() => setShowModal(false)}
+          >
+            {targetArtist && (
+              <div className="vinymix-modal-artist-banner">
+                <div className="vinymix-modal-artist-vinyl">
+                  <div
+                    className="vinymix-modal-artist-vinyl-label"
+                    style={{ background: targetColors?.avBg, color: targetColors?.avFg }}
+                  >
+                    {targetArtist.name[0]}
+                  </div>
+                </div>
+                <div className="vinymix-modal-artist-info">
+                  <strong className="vinymix-modal-artist-name">{targetArtist.name}</strong>
+                  <span className="vinymix-modal-artist-meta">{targetMeta}</span>
+                </div>
+              </div>
+            )}
+
+            <div className="vinymix-modal-share-grid">
+              {shareRows.map((row) => (
+                <div key={row.num} className="vinymix-modal-share-row">
+                  <span className="vinymix-modal-share-num">#{row.num}</span>
+                  <div className="vinymix-modal-share-squares">
+                    {row.squares.map((col, j) => (
+                      <span key={j} className="vinymix-modal-share-sq" style={{ background: col }} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </GameResultModal>
+        )
+      })()}
     </Shell>
   )
 }

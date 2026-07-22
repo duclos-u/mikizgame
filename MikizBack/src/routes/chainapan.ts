@@ -126,37 +126,54 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
   const newStatus = isWon ? "won" : isLost ? "lost" : "in_progress";
   const completedAt = newStatus !== "in_progress" ? new Date() : null;
 
-  if (!existing) {
-    await db.insert(chainapanSessions).values({
-      userId,
-      dailyId: daily.id,
-      date: today,
-      steps: updatedSteps,
-      status: newStatus,
-      completedAt,
-    });
-  } else {
-    await db
-      .update(chainapanSessions)
-      .set({ steps: updatedSteps, status: newStatus, completedAt })
-      .where(eq(chainapanSessions.id, existing.id));
-  }
-
   let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
-  if (newStatus !== "in_progress") {
-    const gameId = await getChainapanGameId();
-    if (gameId) {
-      const minSteps = (daily.solution?.length ?? 2) - 1;
+  if (newStatus === "in_progress") {
+    if (!existing) {
+      await db.insert(chainapanSessions).values({
+        userId,
+        dailyId: daily.id,
+        date: today,
+        steps: updatedSteps,
+        status: newStatus,
+        completedAt,
+      });
+    } else {
       await db
-        .insert(leaderboardEntries)
-        .values({
-          userId,
-          gameId,
-          date: today,
-          score: isWon ? updatedSteps.length - minSteps + 1 : null,
-        })
-        .onConflictDoNothing();
+        .update(chainapanSessions)
+        .set({ steps: updatedSteps, status: newStatus, completedAt })
+        .where(eq(chainapanSessions.id, existing.id));
     }
+  } else {
+    const gameId = await getChainapanGameId();
+    const minSteps = (daily.solution?.length ?? 2) - 1;
+    await db.transaction(async (tx) => {
+      if (!existing) {
+        await tx.insert(chainapanSessions).values({
+          userId,
+          dailyId: daily.id,
+          date: today,
+          steps: updatedSteps,
+          status: newStatus,
+          completedAt,
+        });
+      } else {
+        await tx
+          .update(chainapanSessions)
+          .set({ steps: updatedSteps, status: newStatus, completedAt })
+          .where(eq(chainapanSessions.id, existing.id));
+      }
+      if (gameId) {
+        await tx
+          .insert(leaderboardEntries)
+          .values({
+            userId,
+            gameId,
+            date: today,
+            score: isWon ? updatedSteps.length - minSteps + 1 : null,
+          })
+          .onConflictDoNothing();
+      }
+    });
     streakUpdate = await recordDailyPlay(userId);
   }
 

@@ -9,9 +9,11 @@ import {
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { useAuth } from '../../context/AuthContext'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -206,112 +208,21 @@ function GuessRow({ t, num }: { t: FootixTentative; num: number }) {
   )
 }
 
-// ─── Result modal ─────────────────────────────────────────────────────────────
+// ─── Share text ───────────────────────────────────────────────────────────────
 
-function ResultModal({
-  statut,
-  cible,
-  tentatives,
-  onClose,
-}: {
-  statut: FootixStatus
-  cible: FootixCible | null
-  tentatives: FootixTentative[]
-  onClose: () => void
-}) {
-  const [shared, setShared] = useState(false)
-  const won = statut === 'won'
-  const points = won ? (RANK_POINTS[tentatives.length - 1] ?? 1) : 0
-
-  function share() {
-    const sym = { match: '🟩', close: '🟨', miss: '🟥' } as const
-    const lines = tentatives.map((t) => {
-      const c = t.comparison
-      return [
-        c.nationalite.match === 'exact' ? sym.match : c.nationalite.match === 'meme-confederation' ? sym.close : sym.miss,
-        c.poste.match === 'exact' ? sym.match : sym.miss,
-        c.naissance.direction === 'exact' ? sym.match : c.naissance.proche ? sym.close : sym.miss,
-        c.club.match === 'exact' ? sym.match : c.club.match === 'meme-ligue' ? sym.close : sym.miss,
-      ].join('')
-    })
-    const head = `Footix ⚽ ${won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`}`
-    try {
-      navigator.clipboard.writeText(`${head}\n${lines.join('\n')}`)
-      setShared(true)
-      setTimeout(() => setShared(false), 1800)
-    } catch {}
-  }
-
-  const color = cible ? ligueColor(cible.ligue) : 'oklch(0.55 0.08 240)'
-
-  return (
-    <div className="footix-modal-overlay" onClick={onClose}>
-      <div
-        className="footix-modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div
-          className="footix-modal-title"
-          style={{ color: won ? 'oklch(0.55 0.13 150)' : 'oklch(0.58 0.18 25)' }}
-        >
-          {won ? 'But ! 🎉' : 'Hors jeu !'}
-        </div>
-
-        <div className="footix-modal-points">
-          <span className="footix-modal-points-value">{points}</span>
-          <span className="footix-modal-points-label">pts</span>
-          {won && (
-            <span className="footix-modal-points-detail">
-              en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
-            </span>
-          )}
-        </div>
-
-        {cible && (
-          <>
-            <div className="footix-modal-avatar" style={{ background: color }}>
-              {mkInitials(cible.prenom, cible.nom)}
-            </div>
-            <div className="footix-modal-nom">
-              {cible.prenom} {cible.nom}
-            </div>
-            <div className="footix-modal-sub">
-              {cible.poste} · {cible.naissance} · {cible.nationalite}
-            </div>
-            <div className="footix-modal-grid">
-              <div className="footix-modal-tile">
-                <div className="footix-modal-tile-label">Club</div>
-                <div className="footix-modal-tile-val">{cible.club}</div>
-              </div>
-              <div className="footix-modal-tile">
-                <div className="footix-modal-tile-label">Ligue</div>
-                <div className="footix-modal-tile-val">{cible.ligue}</div>
-              </div>
-              <div className="footix-modal-tile">
-                <div className="footix-modal-tile-label">Poste</div>
-                <div className="footix-modal-tile-val">{cible.poste}</div>
-              </div>
-              <div className="footix-modal-tile">
-                <div className="footix-modal-tile-label">Confédération</div>
-                <div className="footix-modal-tile-val">{CONFEDERATION_FLAG[cible.confederation] ?? ''} {cible.confederation}</div>
-              </div>
-            </div>
-          </>
-        )}
-
-        <div className="footix-modal-actions">
-          <button type="button" className="footix-btn-secondary" onClick={share}>
-            {shared ? 'Copié ✓' : 'Partager'}
-          </button>
-          <a href="/leaderboard" className="footix-btn-secondary">
-            Classement
-          </a>
-        </div>
-      </div>
-    </div>
-  )
+function buildShareText(won: boolean, tentatives: FootixTentative[]): string {
+  const sym = { match: '🟩', close: '🟨', miss: '🟥' } as const
+  const lines = tentatives.map((t) => {
+    const c = t.comparison
+    return [
+      c.nationalite.match === 'exact' ? sym.match : c.nationalite.match === 'meme-confederation' ? sym.close : sym.miss,
+      c.poste.match === 'exact' ? sym.match : sym.miss,
+      c.naissance.direction === 'exact' ? sym.match : c.naissance.proche ? sym.close : sym.miss,
+      c.club.match === 'exact' ? sym.match : c.club.match === 'meme-ligue' ? sym.close : sym.miss,
+    ].join('')
+  })
+  const scoreLine = won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`
+  return `${buildShareHeader('footix', scoreLine)}\n${lines.join('\n')}`
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -705,14 +616,70 @@ export default function Footix() {
       </main>
 
       {/* ── Modal ──────────────────────────────────────────────────────────── */}
-      {showModal && statut !== 'in_progress' && (
-        <ResultModal
-          statut={statut}
-          cible={cible}
-          tentatives={tentatives}
-          onClose={() => setShowModal(false)}
-        />
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
+          </button>
+        </div>
       )}
+      {showModal && statut !== 'in_progress' && (() => {
+        const won = statut === 'won'
+        const points = won ? (RANK_POINTS[tentatives.length - 1] ?? 1) : 0
+        const color = cible ? ligueColor(cible.ligue) : 'oklch(0.55 0.08 240)'
+        return (
+          <GameResultModal
+            classPrefix="footix"
+            won={won}
+            title={won ? 'But ! 🎉' : 'Hors jeu !'}
+            headerExtra={
+              <div className="footix-modal-points">
+                <span className="footix-modal-points-value">{points}</span>
+                <span className="footix-modal-points-label">pts</span>
+                {won && (
+                  <span className="footix-modal-points-detail">
+                    en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
+            }
+            shareText={buildShareText(won, tentatives)}
+            onClose={() => setShowModal(false)}
+          >
+            {cible && (
+              <>
+                <div className="footix-modal-avatar" style={{ background: color }}>
+                  {mkInitials(cible.prenom, cible.nom)}
+                </div>
+                <div className="footix-modal-nom">
+                  {cible.prenom} {cible.nom}
+                </div>
+                <div className="footix-modal-sub">
+                  {cible.poste} · {cible.naissance} · {cible.nationalite}
+                </div>
+                <div className="footix-modal-grid">
+                  <div className="footix-modal-tile">
+                    <div className="footix-modal-tile-label">Club</div>
+                    <div className="footix-modal-tile-val">{cible.club}</div>
+                  </div>
+                  <div className="footix-modal-tile">
+                    <div className="footix-modal-tile-label">Ligue</div>
+                    <div className="footix-modal-tile-val">{cible.ligue}</div>
+                  </div>
+                  <div className="footix-modal-tile">
+                    <div className="footix-modal-tile-label">Poste</div>
+                    <div className="footix-modal-tile-val">{cible.poste}</div>
+                  </div>
+                  <div className="footix-modal-tile">
+                    <div className="footix-modal-tile-label">Confédération</div>
+                    <div className="footix-modal-tile-val">{CONFEDERATION_FLAG[cible.confederation] ?? ''} {cible.confederation}</div>
+                  </div>
+                </div>
+              </>
+            )}
+          </GameResultModal>
+        )
+      })()}
     </div>
   )
 }
