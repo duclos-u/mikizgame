@@ -44,7 +44,8 @@
       "Bash(uuidgen)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(rg *)"
+      "Bash(rg *)",
+      "Bash(find /Users/ulysseduclos/Super_dossier/MikizStack/MikizGame/src -type f '\\(' -name *.tsx -o -name *.ts '\\)')"
     ]
   }
 }

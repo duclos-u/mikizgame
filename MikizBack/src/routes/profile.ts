@@ -41,54 +41,6 @@ profile.get("/summary", authMiddleware, async (c) => {
   start.setUTCDate(start.getUTCDate() - (HISTORY_DAYS - 1));
   const startDate = start.toISOString().slice(0, 10);
 
-  const history = await db
-    .select({
-      date: leaderboardEntries.date,
-      game: games.slug,
-      score: leaderboardEntries.score,
-    })
-    .from(leaderboardEntries)
-    .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
-    .where(and(eq(leaderboardEntries.userId, userId), gte(leaderboardEntries.date, startDate)))
-    .orderBy(asc(leaderboardEntries.date));
-
-  const gameStats = await db
-    .select({
-      game: games.slug,
-      name: games.name,
-      played: sql<number>`count(*)::int`,
-      wins: sql<number>`count(${leaderboardEntries.score})::int`,
-      avgAttempts: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)`,
-    })
-    .from(leaderboardEntries)
-    .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
-    .where(eq(leaderboardEntries.userId, userId))
-    .groupBy(games.slug, games.name)
-    .orderBy(sql`count(*) DESC`);
-
-  // Win-distribution by attempt count (e.g. { 1: 2, 2: 5, 3: 1 }), plus losses, per game.
-  const distributionRows = await db
-    .select({
-      game: games.slug,
-      score: leaderboardEntries.score,
-      count: sql<number>`count(*)::int`,
-    })
-    .from(leaderboardEntries)
-    .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
-    .where(eq(leaderboardEntries.userId, userId))
-    .groupBy(games.slug, leaderboardEntries.score);
-
-  const distributionByGame: Record<string, { distribution: Record<number, number>; losses: number }> =
-    {};
-  for (const row of distributionRows) {
-    if (!distributionByGame[row.game]) distributionByGame[row.game] = { distribution: {}, losses: 0 };
-    if (row.score === null) {
-      distributionByGame[row.game].losses += row.count;
-    } else {
-      distributionByGame[row.game].distribution[row.score] = row.count;
-    }
-  }
-
   // Rank + percentile within each game's all-time points leaderboard.
   const pointsByUserGame = db
     .select({
@@ -115,24 +67,6 @@ profile.get("/summary", authMiddleware, async (c) => {
     .from(pointsByUserGame)
     .as("ranked_by_game");
 
-  const perGameRankRows = await db
-    .select({
-      game: rankedByGame.game,
-      rank: rankedByGame.rank,
-      totalPlayers: rankedByGame.totalPlayers,
-    })
-    .from(rankedByGame)
-    .where(eq(rankedByGame.userId, userId));
-
-  const rankByGame: Record<string, { rank: number; totalPlayers: number; percentile: number }> = {};
-  for (const row of perGameRankRows) {
-    rankByGame[row.game] = {
-      rank: row.rank,
-      totalPlayers: row.totalPlayers,
-      percentile: rankToPercentile(row.rank, row.totalPlayers),
-    };
-  }
-
   // Cross-game (overall) rank + percentile, same points barème summed across all games.
   const pointsByUser = db
     .select({
@@ -152,10 +86,75 @@ profile.get("/summary", authMiddleware, async (c) => {
     .from(pointsByUser)
     .as("ranked_cross");
 
-  const [crossRankRow] = await db
-    .select({ rank: rankedCross.rank, totalPlayers: rankedCross.totalPlayers })
-    .from(rankedCross)
-    .where(eq(rankedCross.userId, userId));
+  // Independent queries — none depend on another's result, so run them concurrently.
+  const [history, gameStats, distributionRows, perGameRankRows, [crossRankRow]] = await Promise.all([
+    db
+      .select({
+        date: leaderboardEntries.date,
+        game: games.slug,
+        score: leaderboardEntries.score,
+      })
+      .from(leaderboardEntries)
+      .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
+      .where(and(eq(leaderboardEntries.userId, userId), gte(leaderboardEntries.date, startDate)))
+      .orderBy(asc(leaderboardEntries.date)),
+    db
+      .select({
+        game: games.slug,
+        name: games.name,
+        played: sql<number>`count(*)::int`,
+        wins: sql<number>`count(${leaderboardEntries.score})::int`,
+        avgAttempts: sql<number | null>`round(avg(${leaderboardEntries.score})::numeric, 1)`,
+      })
+      .from(leaderboardEntries)
+      .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
+      .where(eq(leaderboardEntries.userId, userId))
+      .groupBy(games.slug, games.name)
+      .orderBy(sql`count(*) DESC`),
+    // Win-distribution by attempt count (e.g. { 1: 2, 2: 5, 3: 1 }), plus losses, per game.
+    db
+      .select({
+        game: games.slug,
+        score: leaderboardEntries.score,
+        count: sql<number>`count(*)::int`,
+      })
+      .from(leaderboardEntries)
+      .innerJoin(games, eq(leaderboardEntries.gameId, games.id))
+      .where(eq(leaderboardEntries.userId, userId))
+      .groupBy(games.slug, leaderboardEntries.score),
+    db
+      .select({
+        game: rankedByGame.game,
+        rank: rankedByGame.rank,
+        totalPlayers: rankedByGame.totalPlayers,
+      })
+      .from(rankedByGame)
+      .where(eq(rankedByGame.userId, userId)),
+    db
+      .select({ rank: rankedCross.rank, totalPlayers: rankedCross.totalPlayers })
+      .from(rankedCross)
+      .where(eq(rankedCross.userId, userId)),
+  ]);
+
+  const distributionByGame: Record<string, { distribution: Record<number, number>; losses: number }> =
+    {};
+  for (const row of distributionRows) {
+    if (!distributionByGame[row.game]) distributionByGame[row.game] = { distribution: {}, losses: 0 };
+    if (row.score === null) {
+      distributionByGame[row.game].losses += row.count;
+    } else {
+      distributionByGame[row.game].distribution[row.score] = row.count;
+    }
+  }
+
+  const rankByGame: Record<string, { rank: number; totalPlayers: number; percentile: number }> = {};
+  for (const row of perGameRankRows) {
+    rankByGame[row.game] = {
+      rank: row.rank,
+      totalPlayers: row.totalPlayers,
+      percentile: rankToPercentile(row.rank, row.totalPlayers),
+    };
+  }
 
   const crossRank = crossRankRow
     ? {
