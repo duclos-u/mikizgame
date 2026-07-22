@@ -33,13 +33,13 @@ export function PityCluePopup({ onClose }: Props) {
         </div>
 
         <p className="cinemaxd-pity-description">
-          Pour t'aider à ne pas rester bloqué, le jeu te révèle automatiquement un indice à certaines étapes :
+          Pour t'éviter de rester bloqué·e, le jeu te révèle automatiquement un indice à certaines étapes :
         </p>
 
         <ul className="cinemaxd-pity-list">
           <li><strong>3e tentative</strong> — la langue du film</li>
           <li><strong>5e tentative</strong> — le premier genre du film</li>
-          <li><strong>7e tentative</strong> — le réalisateur</li>
+          <li><strong>7e tentative</strong> — le·la réalisateur·rice</li>
         </ul>
 
         <label className="cinemaxd-pity-checkbox">

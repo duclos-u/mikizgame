@@ -298,13 +298,13 @@ export function SlotActeurs({
   if (filmCible) {
     if (filmCible.acteurs.length === 0) {
       return (
-        <Slot label="Acteurs">
+        <Slot label="Acteurs·rices">
           <span className="cinemaxd-hidden">--</span>
         </Slot>
       )
     }
     return (
-      <Slot label="Acteurs">
+      <Slot label="Acteurs·rices">
         <div className="cinemaxd-acteurs">
           {filmCible.acteurs.map((a) => {
             const src = a.photo ? `${TMDB_IMG}${a.photo}` : null
@@ -333,14 +333,14 @@ export function SlotActeurs({
 
   if (!hasAny) {
     return (
-      <Slot label="Acteurs">
+      <Slot label="Acteurs·rices">
         <span className="cinemaxd-hidden">--</span>
       </Slot>
     )
   }
 
   return (
-    <Slot label="Acteurs">
+    <Slot label="Acteurs·rices">
       <div className="cinemaxd-acteurs">
         {indicesActeurs.map((nom) => {
           const photo = acteurPhotos?.get(nom) ?? null
@@ -361,7 +361,7 @@ export function SlotActeurs({
           )
         })}
         {Array.from({ length: hiddenCount }, (_, i) => (
-          <div key={`hidden-acteur-${i}`} className="cinemaxd-acteur" title="Acteur non découvert">
+          <div key={`hidden-acteur-${i}`} className="cinemaxd-acteur" title="Acteur·rice non découvert·e">
             <div className="cinemaxd-acteur-photo">
               <span className="cinemaxd-acteur-initiales">?</span>
             </div>
@@ -389,7 +389,7 @@ export function SlotReal({
   const real = filmCible?.realisateurs[0] ?? (realisateurRevele ? realisateurInfo : null) ?? null
 
   return (
-    <Slot label="Réalisateur" pity={pity}>
+    <Slot label="Réalisateur·rice" pity={pity}>
       {real ? (
         <div className="cinemaxd-acteurs">
           <div className="cinemaxd-acteur cinemaxd-acteur-on cinemaxd-flip">

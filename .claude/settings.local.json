@@ -45,7 +45,9 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(rg *)",
-      "Bash(find /Users/ulysseduclos/Super_dossier/MikizStack/MikizGame/src -type f '\\(' -name *.tsx -o -name *.ts '\\)')"
+      "Bash(find /Users/ulysseduclos/Super_dossier/MikizStack/MikizGame/src -type f '\\(' -name *.tsx -o -name *.ts '\\)')",
+      "Bash(python3 *)",
+      "Bash(grep -viE \"^\\\\s*$\")"
     ]
   }
 }

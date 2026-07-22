@@ -29,7 +29,7 @@ function RankBadge({ rank }: { rank: ProfileGameRank }) {
   return (
     <span
       className="rank-badge"
-      title={`${rank.rank}e sur ${rank.totalPlayers} joueur${rank.totalPlayers > 1 ? 's' : ''}`}
+      title={`${rank.rank}e sur ${rank.totalPlayers} joueur·euse${rank.totalPlayers > 1 ? 's' : ''}`}
     >
       #{rank.rank}
       <span className="rank-badge-total">/{rank.totalPlayers}</span>
@@ -153,7 +153,7 @@ function UsernameForm() {
     try {
       const { user: updated, token } = await api.profile.updateUsername(trimmed)
       updateAuth(updated, token)
-      setMessage({ ok: true, text: 'Nom d’utilisateur modifié.' })
+      setMessage({ ok: true, text: 'Pseudo modifié.' })
     } catch (err) {
       setMessage({ ok: false, text: err instanceof Error ? err.message : 'Erreur inconnue' })
     } finally {
@@ -164,7 +164,7 @@ function UsernameForm() {
   return (
     <form className="profile-form" onSubmit={(e) => void submit(e)}>
       <label className="profile-form-label" htmlFor="profile-username">
-        Nom d'utilisateur
+        Pseudo
       </label>
       <div className="profile-form-row">
         <input
