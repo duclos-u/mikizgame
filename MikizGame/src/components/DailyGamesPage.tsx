@@ -94,7 +94,7 @@ function HeroDaily({
               <b style={{ color: `color-mix(in oklch, ${game.accent} 90%, var(--text))` }}>
                 {game.players.toLocaleString('fr-FR')}
               </b>
-              <span>parties aujourd'hui</span>
+              <span>joueur·euses aujourd'hui</span>
             </div>
             <div>
               <b>{avgTries != null ? avgTries : '—'}</b>
@@ -148,7 +148,7 @@ function GameCard({
             className="game-card-players"
             style={{ color: `color-mix(in oklch, ${game.accent} 80%, var(--muted))` }}
           >
-            ● {game.players.toLocaleString('fr-FR')} parties
+            ● {game.players.toLocaleString('fr-FR')} joueur·euses
           </span>
         )}
       </div>
