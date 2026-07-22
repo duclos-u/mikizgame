@@ -43,7 +43,8 @@
       "Bash(bunx drizzle-kit *)",
       "Bash(uuidgen)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(rg *)"
     ]
   }
 }

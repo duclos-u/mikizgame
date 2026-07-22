@@ -1482,6 +1482,11 @@ header
   text-transform: none
   letter-spacing: 0
 
+.game-share-btn-row
+  display: flex
+  justify-content: center
+  padding: 0.5rem 0
+
 // ═══════════════════════════════════════════════════════════════════════════
 // SIMPLE WORDLE GRID
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1723,6 +1728,82 @@ header
   .motivex-key
     height: 44px
     font-size: 0.8rem
+
+// ─── Result modal ─────────────────────────────────────────────────────────────
+.motivex-modal-overlay
+  position: fixed
+  inset: 0
+  background: oklch(0.25 0.01 60 / 0.50)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 200
+  padding: 1rem
+
+.motivex-modal
+  background: var(--card)
+  border-radius: calc(var(--radius) * 1.5)
+  padding: 2rem 1.75rem
+  max-width: 420px
+  width: 100%
+  position: relative
+  box-shadow: 0 8px 32px rgba(0,0,0,.4)
+  display: flex
+  flex-direction: column
+  gap: 1.25rem
+  text-align: center
+
+.motivex-modal-close
+  position: absolute
+  top: 0.85rem
+  right: 0.85rem
+  background: none
+  border: none
+  font-size: 1rem
+  color: var(--muted)
+  cursor: pointer
+  padding: 0.25rem 0.5rem
+
+.motivex-modal-title
+  font-size: 1.4rem
+  font-weight: 700
+
+.motivex-modal-word
+  font-family: var(--mono)
+  font-size: 1.6rem
+  font-weight: 700
+  letter-spacing: 0.12em
+  text-transform: uppercase
+
+.motivex-modal-share-text
+  background: var(--card-2)
+  border-radius: var(--radius)
+  padding: 0.75rem 1rem
+  font-size: 0.85rem
+  font-family: var(--mono)
+  white-space: pre-wrap
+  color: var(--text)
+  text-align: left
+
+.motivex-modal-actions
+  display: flex
+  gap: 0.75rem
+  justify-content: center
+
+.motivex-btn-secondary
+  flex: 1
+  border: 1px solid var(--border)
+  border-radius: 99px
+  padding: 12px
+  font-family: var(--font)
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  background: oklch(0.965 0.012 84)
+  cursor: pointer
+  text-align: center
+  text-decoration: none
+  display: inline-block
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Cinemaxd
@@ -2136,10 +2217,6 @@ $flip-duration: 400ms
     background: color-mix(in oklch, var(--accent) 14%, var(--card))
     color: var(--accent)
     border: 1px solid color-mix(in oklch, var(--accent) 28%, var(--border))
-
-.cinemaxd-gameover-actions
-  display: flex
-  justify-content: center
 
 .cinemaxd-footer
   display: flex
@@ -3119,11 +3196,6 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   font-weight: 500
 
 // ─── Game over actions ────────────────────────────────────────────────────────
-.vinymix-gameover-actions
-  display: flex
-  justify-content: center
-  padding: 0.5rem 0
-
 // ─── Footer ───────────────────────────────────────────────────────────────────
 .vinymix-footer
   display: flex
@@ -3995,6 +4067,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   padding: 28px
   max-width: 420px
   width: 100%
+  position: relative
   box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
   text-align: center
   animation: pcFade .3s ease both
@@ -4005,6 +4078,28 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     100%
       opacity: 1
       transform: none
+
+.politeki-modal-close
+  position: absolute
+  top: 0.85rem
+  right: 0.85rem
+  background: none
+  border: none
+  font-size: 1rem
+  color: var(--muted)
+  cursor: pointer
+  padding: 0.25rem 0.5rem
+
+.politeki-modal-share-text
+  background: var(--card-2)
+  border-radius: var(--radius)
+  padding: 0.75rem 1rem
+  font-size: 0.85rem
+  font-family: var(--mono)
+  white-space: pre-wrap
+  color: var(--text)
+  text-align: left
+  margin: 14px 0
 
 .politeki-modal-title
   font-family: var(--font-display)
@@ -4461,6 +4556,7 @@ $vinymix-info-text: oklch(0.52 0.06 255)
   padding: 28px
   max-width: 420px
   width: 100%
+  position: relative
   box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
   text-align: center
   animation: ftFade .3s ease both
@@ -4471,6 +4567,28 @@ $vinymix-info-text: oklch(0.52 0.06 255)
     100%
       opacity: 1
       transform: none
+
+.footix-modal-close
+  position: absolute
+  top: 0.85rem
+  right: 0.85rem
+  background: none
+  border: none
+  font-size: 1rem
+  color: var(--muted)
+  cursor: pointer
+  padding: 0.25rem 0.5rem
+
+.footix-modal-share-text
+  background: var(--card-2)
+  border-radius: var(--radius)
+  padding: 0.75rem 1rem
+  font-size: 0.85rem
+  font-family: var(--mono)
+  white-space: pre-wrap
+  color: var(--text)
+  text-align: left
+  margin: 14px 0
 
 .footix-modal-title
   font-family: var(--font-display)
@@ -4725,6 +4843,81 @@ $chainapan-neutral: oklch(0.55 0.01 60)
   .chainapan-key
     height: 44px
     font-size: 0.8rem
+
+// ─── Result modal ─────────────────────────────────────────────────────────────
+.chainapan-modal-overlay
+  position: fixed
+  inset: 0
+  background: oklch(0.25 0.01 60 / 0.50)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 200
+  padding: 1rem
+
+.chainapan-modal
+  background: var(--card)
+  border-radius: calc(var(--radius) * 1.5)
+  padding: 2rem 1.75rem
+  max-width: 420px
+  width: 100%
+  position: relative
+  box-shadow: 0 8px 32px rgba(0,0,0,.4)
+  display: flex
+  flex-direction: column
+  gap: 1.25rem
+  text-align: center
+
+.chainapan-modal-close
+  position: absolute
+  top: 0.85rem
+  right: 0.85rem
+  background: none
+  border: none
+  font-size: 1rem
+  color: var(--muted)
+  cursor: pointer
+  padding: 0.25rem 0.5rem
+
+.chainapan-modal-title
+  font-size: 1.4rem
+  font-weight: 700
+
+.chainapan-modal-chain
+  font-family: var(--mono)
+  font-size: 1.1rem
+  font-weight: 700
+  letter-spacing: 0.08em
+
+.chainapan-modal-share-text
+  background: var(--card-2)
+  border-radius: var(--radius)
+  padding: 0.75rem 1rem
+  font-size: 0.85rem
+  font-family: var(--mono)
+  white-space: pre-wrap
+  color: var(--text)
+  text-align: left
+
+.chainapan-modal-actions
+  display: flex
+  gap: 0.75rem
+  justify-content: center
+
+.chainapan-btn-secondary
+  flex: 1
+  border: 1px solid var(--border)
+  border-radius: 99px
+  padding: 12px
+  font-family: var(--font)
+  font-size: 14px
+  font-weight: 700
+  color: oklch(0.32 0.02 60)
+  background: oklch(0.965 0.012 84)
+  cursor: pointer
+  text-align: center
+  text-decoration: none
+  display: inline-block
 
 // ═══════════════════════════════════════════════════════════════════════════
 // YEARBOX
@@ -4982,6 +5175,7 @@ $yb-accent-dark: oklch(0.50 0.16 58)
   padding: 28px
   max-width: 440px
   width: 100%
+  position: relative
   box-shadow: 0 18px 40px oklch(0.5 0.03 60 / .22)
   text-align: center
   animation: ybFade .3s ease both
@@ -4992,6 +5186,28 @@ $yb-accent-dark: oklch(0.50 0.16 58)
     100%
       opacity: 1
       transform: none
+
+.yearbox-modal-close
+  position: absolute
+  top: 0.85rem
+  right: 0.85rem
+  background: none
+  border: none
+  font-size: 1rem
+  color: var(--muted)
+  cursor: pointer
+  padding: 0.25rem 0.5rem
+
+.yearbox-modal-share-text
+  background: var(--card-2)
+  border-radius: var(--radius)
+  padding: 0.75rem 1rem
+  font-size: 0.85rem
+  font-family: var(--mono)
+  white-space: pre-wrap
+  color: var(--text)
+  text-align: left
+  margin: 14px 0
 
 .yearbox-modal-title
   font-family: var(--font-display)

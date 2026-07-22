@@ -6,12 +6,15 @@ import {
   type ChainapanDailyInfo,
   type ChainapanSession,
   type ChainapanStep,
+  type StepTileResult,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { useAuth } from '../../context/AuthContext'
 import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 import { useGameSession } from '../../hooks/useGameSession'
 import { useHubScores } from '../../hooks/useHubScores'
 
@@ -29,6 +32,18 @@ type ChainapanLoadData = { daily: ChainapanDailyInfo; session: ChainapanSession 
 
 function markChainapanComplete() {
   try { localStorage.setItem(STORAGE_KEYS.CHAINAPAN_STATE(today()), '1') } catch { /* ignore */ }
+}
+
+function buildShareText(
+  won: boolean,
+  steps: ChainapanStep[],
+  startWord: string,
+  targetWord: string,
+): string {
+  const sym: Record<StepTileResult, string> = { correct: '🟩', changed: '🟨', neutral: '⬛' }
+  const lines = steps.map((s) => s.tileResults.map((r) => sym[r]).join(''))
+  const scoreLine = won ? `${steps.length}/${MAX_STEPS}` : `X/${MAX_STEPS}`
+  return `${buildShareHeader('chainapan', scoreLine)}\n${startWord} → ${targetWord}\n${lines.join('\n')}`
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -73,6 +88,7 @@ const Chainapan = () => {
   const [submitting, setSubmitting] = useState(false)
   const [resetting, setResetting] = useState(false)
   const [pendingConfetti, setPendingConfetti] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
   const gameInitialized = useRef(false)
   useEffect(() => {
@@ -137,8 +153,10 @@ const Chainapan = () => {
             const isOptimal = data?.daily.minSteps !== undefined && newSteps.length === data.daily.minSteps
             setMessage(isOptimal ? 'Bravo ! Tu as trouvé le chemin optimal !' : 'Bravo ! Tu as trouvé le chemin.')
             setPendingConfetti(true)
+            setTimeout(() => setShowModal(true), 1050)
           } else if (res.status === 'lost') {
             setMessage(`Perdu ! Tu n'as plus d'étapes.`)
+            setTimeout(() => setShowModal(true), 650)
           } else {
             setMessage(
               `${res.stepsLeft} étape${res.stepsLeft > 1 ? 's' : ''} restante${res.stepsLeft > 1 ? 's' : ''}.`,
@@ -256,6 +274,7 @@ const Chainapan = () => {
       setStatus('in_progress')
       setShakingRow(null)
       setPendingConfetti(false)
+      setShowModal(false)
       setMessage('Change une lettre à la fois pour atteindre le mot cible.')
       gameInitialized.current = false
     } catch (e) {
@@ -420,6 +439,37 @@ const Chainapan = () => {
           </button>
         )}
       </div>
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
+          </button>
+        </div>
+      )}
+      {showModal && status !== 'in_progress' && (() => {
+        const won = status === 'won'
+        const minSteps = data?.daily.minSteps
+        const isOptimal = won && minSteps !== undefined && steps.length === minSteps
+        return (
+          <GameResultModal
+            classPrefix="chainapan"
+            won={won}
+            title={won ? (isOptimal ? 'Chemin optimal ! ✨' : 'Bravo ! 🎉') : 'Perdu…'}
+            headerExtra={
+              <div className="chainapan-modal-chain">
+                {startWord} → {targetWord}
+                {won && minSteps !== undefined && (
+                  <span style={{ color: 'var(--muted)', fontWeight: 400, marginLeft: '0.5rem' }}>
+                    ({steps.length} étape{steps.length > 1 ? 's' : ''}, min&nbsp;{minSteps})
+                  </span>
+                )}
+              </div>
+            }
+            shareText={buildShareText(won, steps, startWord, targetWord)}
+            onClose={() => setShowModal(false)}
+          />
+        )
+      })()}
     </Shell>
   )
 }

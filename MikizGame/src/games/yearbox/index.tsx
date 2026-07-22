@@ -9,10 +9,12 @@ import {
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { useAuth } from '../../context/AuthContext'
 import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -216,99 +218,21 @@ function SuggestionForm({ targetYear }: { targetYear: number | null }) {
   )
 }
 
-// ─── Result modal ─────────────────────────────────────────────────────────────
+// ─── Share text ───────────────────────────────────────────────────────────────
 
-function ResultModal({
-  statut,
-  cible,
-  guesses,
-  onClose,
-}: {
-  statut: YearboxStatus
-  cible: YearboxCible | null
-  guesses: GuessEntry[]
-  onClose: () => void
-}) {
-  const { user } = useAuth()
-  const [shared, setShared] = useState(false)
-  const won = statut === 'won'
-  const points = won ? (RANK_POINTS[guesses.length - 1] ?? 1) : 0
-
-  function share() {
-    const lines = guesses.map((g) => {
-      if (g.direction === 'exact') return `${g.year} ✅`
-      return `${g.year} ${g.direction === 'trop-tot' ? '↑ Trop tôt' : '↓ Trop tard'}`
-    })
-    const head = `Yearbox 📅 ${won ? `${guesses.length}/${MAX_GUESSES}` : `X/${MAX_GUESSES}`}`
-    try {
-      navigator.clipboard.writeText(`${head}\n${lines.join('\n')}`)
-      setShared(true)
-      setTimeout(() => setShared(false), 1800)
-    } catch {}
-  }
-
-  return (
-    <div className="yearbox-modal-overlay" onClick={onClose}>
-      <div
-        className="yearbox-modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div
-          className="yearbox-modal-title"
-          style={{ color: won ? 'oklch(0.55 0.13 150)' : 'oklch(0.58 0.18 25)' }}
-        >
-          {won ? 'Bonne année ! 🎉' : 'Raté…'}
-        </div>
-
-        <div className="yearbox-modal-points">
-          <span className="yearbox-modal-points-value">{points}</span>
-          <span className="yearbox-modal-points-label">pts</span>
-          {won && (
-            <span className="yearbox-modal-points-detail">
-              en {guesses.length} essai{guesses.length > 1 ? 's' : ''}
-            </span>
-          )}
-        </div>
-
-        {cible && (
-          <div className="yearbox-modal-answer">
-            <div className="yearbox-modal-year">{cible.year}</div>
-            <div className="yearbox-modal-facts">
-              {cible.facts.map((f, i) => (
-                <div key={i} className="yearbox-modal-fact-line">
-                  <span>{DOMAIN_ICON[f.domain]}</span>
-                  <span>{f.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="yearbox-modal-actions">
-          <button type="button" className="yearbox-btn-secondary" onClick={share}>
-            {shared ? 'Copié ✓' : 'Partager'}
-          </button>
-          <a href="/leaderboard" className="yearbox-btn-secondary">
-            Classement
-          </a>
-        </div>
-
-        {user && (
-          <div className="yearbox-suggest-section">
-            <SuggestionForm targetYear={cible?.year ?? null} />
-          </div>
-        )}
-      </div>
-    </div>
-  )
+function buildShareText(won: boolean, guesses: GuessEntry[]): string {
+  const symbols = guesses.map((g) => {
+    if (g.direction === 'exact') return '✅'
+    return g.direction === 'trop-tot' ? '↑' : '↓'
+  })
+  const scoreLine = won ? `${guesses.length}/${MAX_GUESSES}` : `X/${MAX_GUESSES}`
+  return `${buildShareHeader('yearbox', scoreLine)}\n${symbols.join('')}`
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function Yearbox() {
-  const { token, loading: authLoading } = useAuth()
+  const { token, user, loading: authLoading } = useAuth()
   const { notifyMilestone } = useMilestoneToast()
 
   const [guesses, setGuesses] = useState<GuessEntry[]>([])
@@ -624,14 +548,58 @@ export default function Yearbox() {
       </main>
 
       {/* ── Modal ──────────────────────────────────────────────────────────── */}
-      {showModal && statut !== 'in_progress' && (
-        <ResultModal
-          statut={statut}
-          cible={cible}
-          guesses={guesses}
-          onClose={() => setShowModal(false)}
-        />
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
+          </button>
+        </div>
       )}
+      {showModal && statut !== 'in_progress' && (() => {
+        const won = statut === 'won'
+        const points = won ? (RANK_POINTS[guesses.length - 1] ?? 1) : 0
+        return (
+          <GameResultModal
+            classPrefix="yearbox"
+            won={won}
+            title={won ? 'Bonne année ! 🎉' : 'Raté…'}
+            headerExtra={
+              <div className="yearbox-modal-points">
+                <span className="yearbox-modal-points-value">{points}</span>
+                <span className="yearbox-modal-points-label">pts</span>
+                {won && (
+                  <span className="yearbox-modal-points-detail">
+                    en {guesses.length} essai{guesses.length > 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
+            }
+            shareText={buildShareText(won, guesses)}
+            footerExtra={
+              user && (
+                <div className="yearbox-suggest-section">
+                  <SuggestionForm targetYear={cible?.year ?? null} />
+                </div>
+              )
+            }
+            onClose={() => setShowModal(false)}
+          >
+            {cible && (
+              <div className="yearbox-modal-answer">
+                <div className="yearbox-modal-year">{cible.year}</div>
+                <div className="yearbox-modal-facts">
+                  {cible.facts.map((f, i) => (
+                    <div key={i} className="yearbox-modal-fact-line">
+                      <span>{DOMAIN_ICON[f.domain]}</span>
+                      <span>{f.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </GameResultModal>
+        )
+      })()}
     </div>
   )
 }

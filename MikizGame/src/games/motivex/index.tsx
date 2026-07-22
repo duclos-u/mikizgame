@@ -3,10 +3,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, type DailyInfo, type GuessResult, type MotivexSession, type TileResult } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { useAuth } from '../../context/AuthContext'
 import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 import { useGameSession } from '../../hooks/useGameSession'
 import { useHubScores } from '../../hooks/useHubScores'
 
@@ -69,6 +71,7 @@ const Motivex = () => {
   const [submitting, setSubmitting] = useState(false)
   const [resetting, setResetting] = useState(false)
   const [pendingConfetti, setPendingConfetti] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
   // Initialize game state once from loaded session (fires on first non-null data)
   const gameInitialized = useRef(false)
@@ -135,8 +138,10 @@ const Motivex = () => {
         if (res.status === 'won') {
           setMessage('Bravo ! Tu as trouvé le mot.')
           setPendingConfetti(true)
+          setTimeout(() => setShowModal(true), 1600)
         } else if (res.status === 'lost') {
           setMessage(`Perdu. Le mot était ${res.word ?? '?'}.`)
+          setTimeout(() => setShowModal(true), 1400)
         } else {
           setMessage(`${res.attemptsLeft} essai${res.attemptsLeft > 1 ? 's' : ''} restant${res.attemptsLeft > 1 ? 's' : ''}.`)
         }
@@ -274,6 +279,7 @@ const Motivex = () => {
       setRevealingRow(null)
       setShakingRow(null)
       setPendingConfetti(false)
+      setShowModal(false)
       setMessage('Tape les lettres restantes puis appuie sur Entrée.')
     } catch (e) {
       setMessage(e instanceof Error ? e.message : 'Erreur reset')
@@ -431,8 +437,34 @@ const Motivex = () => {
           </button>
         )}
       </div>
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
+          </button>
+        </div>
+      )}
+      {showModal && status !== 'in_progress' && (
+        <GameResultModal
+          classPrefix="motivex"
+          won={status === 'won'}
+          title={status === 'won' ? 'Bravo ! 🎉' : 'Raté…'}
+          shareText={buildShareText(status, attempts)}
+          onClose={() => setShowModal(false)}
+        >
+          {revealedWord && <div className="motivex-modal-word">{revealedWord}</div>}
+        </GameResultModal>
+      )}
     </Shell>
   )
+}
+
+function buildShareText(status: GameStatus, attempts: GuessResult[]): string {
+  const won = status === 'won'
+  const sym: Record<TileResult, string> = { correct: '🟩', present: '🟨', absent: '⬛' }
+  const lines = attempts.map((a) => a.result.map((r) => sym[r]).join(''))
+  const scoreLine = won ? `${attempts.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`
+  return `${buildShareHeader('motivex', scoreLine)}\n${lines.join('\n')}`
 }
 
 export default Motivex

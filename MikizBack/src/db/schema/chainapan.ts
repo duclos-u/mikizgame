@@ -1,4 +1,4 @@
-import { date, index, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { date, jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 // solution stores the BFS-shortest path as a text array (startWord included), proving solvability.
 import { users } from "./users";
 
@@ -31,7 +31,7 @@ export const chainapanSessions = pgTable(
     status: chainapanSessionStatusEnum("status").notNull().default("in_progress"),
     completedAt: timestamp("completed_at"),
   },
-  (table) => [index("idx_chainapan_sessions_user_date").on(table.userId, table.date)],
+  (table) => [uniqueIndex("uq_chainapan_sessions_user_date").on(table.userId, table.date)],
 );
 
 export type ChainapanDailyRow = typeof chainapanDaily.$inferSelect;

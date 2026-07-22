@@ -11,10 +11,12 @@ import {
   api,
 } from '../../api/client'
 import { GameHeader } from '../../components/GameHeader'
+import { GameResultModal } from '../../components/GameResultModal'
 import { STORAGE_KEYS } from '../../constants/storage'
 import { useAuth } from '../../context/AuthContext'
 import { useMilestoneToast } from '../../context/MilestoneToastContext'
 import { today } from '../../utils/date'
+import { buildShareHeader } from '../../utils/shareText'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -488,142 +490,23 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
   )
 }
 
-// ─── Result modal ──────────────────────────────────────────────────────────────
+// ─── Share text ───────────────────────────────────────────────────────────────
 
-function ResultModal({
-  statut,
-  cible,
-  tentatives,
-  onClose,
-}: {
-  statut: PoliticsStatus
-  cible: PoliticsCible | null
-  tentatives: PoliticsTentative[]
-  onClose: () => void
-}) {
-  const [shared, setShared] = useState(false)
-  const won = statut === 'won'
-  const points = won ? (RANK_POINTS[tentatives.length - 1] ?? 1) : 0
-
-  const lastAnciennes = tentatives.at(-1)?.comparison.anciennesFonctions.value ?? []
-  const lastFonctions = tentatives.at(-1)?.comparison.fonctionActuelle.value ?? []
-  const cibleAge = ageOf(cible?.naissance ?? null, cible?.deces)
-  const cibleOri =
-    cible != null
-      ? ORIENTATION_ORDER[Math.round((cible.politiscore / 100) * 4)]
-      : null
-
-  function share() {
-    const sym = { match: '🟩', close: '🟨', miss: '🟥' } as const
-    const lines = tentatives.map((t) => {
-      const c = t.comparison
-      return [
-        c.genre.match === 'exact' ? sym.match : sym.miss,
-        c.currentOrLastParti.match === 'exact' ? sym.match : c.currentOrLastParti.match === 'meme-famille' ? sym.close : sym.miss,
-        c.orientation.match === 'exact' ? sym.match : sym.miss,
-        c.naissance.direction === 'exact' ? sym.match : c.naissance.proche ? sym.close : sym.miss,
-        c.originRegion.match === 'exact' ? sym.match : sym.miss,
-        c.fonctionActuelle.matching.length === c.fonctionActuelle.value.length && c.fonctionActuelle.matching.length > 0 ? sym.match : c.fonctionActuelle.matching.length > 0 ? sym.close : sym.miss,
-      ].join('')
-    })
-    const head = `Politeki ${won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`}`
-    try {
-      navigator.clipboard.writeText(`${head}\n${lines.join('\n')}`)
-      setShared(true)
-      setTimeout(() => setShared(false), 1800)
-    } catch {}
-  }
-
-  return (
-    <div className="politeki-modal-overlay" onClick={onClose}>
-      <div
-        className="politeki-modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div
-          className="politeki-modal-title"
-          style={{ color: won ? 'oklch(0.55 0.13 150)' : 'oklch(0.58 0.18 25)' }}
-        >
-          {won ? 'Trouvé 🎉' : 'Dommage !'}
-        </div>
-
-        <div className="politeki-modal-points">
-          <span className="politeki-modal-points-value">{points}</span>
-          <span className="politeki-modal-points-label">pts</span>
-          {won && (
-            <span className="politeki-modal-points-detail">
-              en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
-            </span>
-          )}
-        </div>
-
-        {cible && (
-          <>
-            <div
-              className="politeki-modal-avatar"
-              style={{ background: partiColor(cible.currentOrLastParti) }}
-            >
-              {mkInitials(cible.prenom, cible.nom)}
-            </div>
-            <div className="politeki-modal-nom">
-              {cible.prenom} {cible.nom}
-            </div>
-            <div className="politeki-modal-sub">
-              {cibleAge != null ? `${cible.deces ? '†' : ''}${cibleAge} ans · ` : ''}
-              {cible.genre === 'M' ? 'Homme' : 'Femme'}
-            </div>
-            {cible.deces && (
-              <div className="politeki-modal-deces">
-                Décédé(e) le{' '}
-                {new Date(cible.deces).toLocaleDateString('fr-FR', {
-                  day: 'numeric', month: 'long', year: 'numeric',
-                })}
-              </div>
-            )}
-
-            <div className="politeki-modal-grid">
-              <div className="politeki-modal-tile">
-                <div className="politeki-modal-tile-label">Parti</div>
-                <div className="politeki-modal-tile-val">{cible.currentOrLastParti ?? '—'}</div>
-              </div>
-              <div className="politeki-modal-tile">
-                <div className="politeki-modal-tile-label">Positionnement</div>
-                <div className="politeki-modal-tile-val">{cibleOri ?? '—'}</div>
-              </div>
-              <div className="politeki-modal-tile">
-                <div className="politeki-modal-tile-label">Région</div>
-                <div className="politeki-modal-tile-val">{cible.originRegion ?? '—'}</div>
-              </div>
-              <div className="politeki-modal-tile">
-                <div className="politeki-modal-tile-label">Fonction</div>
-                <div className="politeki-modal-tile-val">
-                  {lastFonctions.length > 0 ? lastFonctions.join(' · ') : '—'}
-                </div>
-              </div>
-            </div>
-
-            {lastAnciennes.length > 0 && (
-              <div className="politeki-modal-tile" style={{ textAlign: 'left', marginTop: 8 }}>
-                <div className="politeki-modal-tile-label">Anciennes fonctions</div>
-                <div className="politeki-modal-tile-val">{lastAnciennes.join(' · ')}</div>
-              </div>
-            )}
-          </>
-        )}
-
-        <div className="politeki-modal-actions">
-          <button type="button" className="politeki-btn-secondary" onClick={share}>
-            {shared ? 'Copié ✓' : 'Partager'}
-          </button>
-          <a href="/leaderboard" className="politeki-btn-secondary">
-            Classement
-          </a>
-        </div>
-      </div>
-    </div>
-  )
+function buildShareText(won: boolean, tentatives: PoliticsTentative[]): string {
+  const sym = { match: '🟩', close: '🟨', miss: '🟥' } as const
+  const lines = tentatives.map((t) => {
+    const c = t.comparison
+    return [
+      c.genre.match === 'exact' ? sym.match : sym.miss,
+      c.currentOrLastParti.match === 'exact' ? sym.match : c.currentOrLastParti.match === 'meme-famille' ? sym.close : sym.miss,
+      c.orientation.match === 'exact' ? sym.match : sym.miss,
+      c.naissance.direction === 'exact' ? sym.match : c.naissance.proche ? sym.close : sym.miss,
+      c.originRegion.match === 'exact' ? sym.match : sym.miss,
+      c.fonctionActuelle.matching.length === c.fonctionActuelle.value.length && c.fonctionActuelle.matching.length > 0 ? sym.match : c.fonctionActuelle.matching.length > 0 ? sym.close : sym.miss,
+    ].join('')
+  })
+  const scoreLine = won ? `${tentatives.length}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`
+  return `${buildShareHeader('politics', scoreLine)}\n${lines.join('\n')}`
 }
 
 // ─── Main component ────────────────────────────────────────────────────────────
@@ -1082,14 +965,97 @@ export default function Politeki() {
       </main>
 
       {/* ── Modal ─────────────────────────────────────────────────────────── */}
-      {showModal && statut !== 'in_progress' && (
-        <ResultModal
-          statut={statut}
-          cible={cible}
-          tentatives={tentatives}
-          onClose={() => setShowModal(false)}
-        />
+      {gameOver && (
+        <div className="game-share-btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Partager le résultat
+          </button>
+        </div>
       )}
+      {showModal && statut !== 'in_progress' && (() => {
+        const won = statut === 'won'
+        const points = won ? (RANK_POINTS[tentatives.length - 1] ?? 1) : 0
+        const lastAnciennes = tentatives.at(-1)?.comparison.anciennesFonctions.value ?? []
+        const lastFonctions = tentatives.at(-1)?.comparison.fonctionActuelle.value ?? []
+        const cibleAge = ageOf(cible?.naissance ?? null, cible?.deces)
+        const cibleOri =
+          cible != null ? ORIENTATION_ORDER[Math.round((cible.politiscore / 100) * 4)] : null
+
+        return (
+          <GameResultModal
+            classPrefix="politeki"
+            won={won}
+            title={won ? 'Trouvé 🎉' : 'Dommage !'}
+            headerExtra={
+              <div className="politeki-modal-points">
+                <span className="politeki-modal-points-value">{points}</span>
+                <span className="politeki-modal-points-label">pts</span>
+                {won && (
+                  <span className="politeki-modal-points-detail">
+                    en {tentatives.length} essai{tentatives.length > 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
+            }
+            shareText={buildShareText(won, tentatives)}
+            onClose={() => setShowModal(false)}
+          >
+            {cible && (
+              <>
+                <div
+                  className="politeki-modal-avatar"
+                  style={{ background: partiColor(cible.currentOrLastParti) }}
+                >
+                  {mkInitials(cible.prenom, cible.nom)}
+                </div>
+                <div className="politeki-modal-nom">
+                  {cible.prenom} {cible.nom}
+                </div>
+                <div className="politeki-modal-sub">
+                  {cibleAge != null ? `${cible.deces ? '†' : ''}${cibleAge} ans · ` : ''}
+                  {cible.genre === 'M' ? 'Homme' : 'Femme'}
+                </div>
+                {cible.deces && (
+                  <div className="politeki-modal-deces">
+                    Décédé(e) le{' '}
+                    {new Date(cible.deces).toLocaleDateString('fr-FR', {
+                      day: 'numeric', month: 'long', year: 'numeric',
+                    })}
+                  </div>
+                )}
+
+                <div className="politeki-modal-grid">
+                  <div className="politeki-modal-tile">
+                    <div className="politeki-modal-tile-label">Parti</div>
+                    <div className="politeki-modal-tile-val">{cible.currentOrLastParti ?? '—'}</div>
+                  </div>
+                  <div className="politeki-modal-tile">
+                    <div className="politeki-modal-tile-label">Positionnement</div>
+                    <div className="politeki-modal-tile-val">{cibleOri ?? '—'}</div>
+                  </div>
+                  <div className="politeki-modal-tile">
+                    <div className="politeki-modal-tile-label">Région</div>
+                    <div className="politeki-modal-tile-val">{cible.originRegion ?? '—'}</div>
+                  </div>
+                  <div className="politeki-modal-tile">
+                    <div className="politeki-modal-tile-label">Fonction</div>
+                    <div className="politeki-modal-tile-val">
+                      {lastFonctions.length > 0 ? lastFonctions.join(' · ') : '—'}
+                    </div>
+                  </div>
+                </div>
+
+                {lastAnciennes.length > 0 && (
+                  <div className="politeki-modal-tile" style={{ textAlign: 'left', marginTop: 8 }}>
+                    <div className="politeki-modal-tile-label">Anciennes fonctions</div>
+                    <div className="politeki-modal-tile-val">{lastAnciennes.join(' · ')}</div>
+                  </div>
+                )}
+              </>
+            )}
+          </GameResultModal>
+        )
+      })()}
     </div>
   )
 }

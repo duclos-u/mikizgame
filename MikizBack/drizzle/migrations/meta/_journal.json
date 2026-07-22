@@ -232,6 +232,13 @@
       "when": 1783600000000,
       "tag": "0032_streak_from_gameplay",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1783690000000,
+      "tag": "0033_chainapan_sessions_unique_user_date",
+      "breakpoints": true
     }
   ]
 }

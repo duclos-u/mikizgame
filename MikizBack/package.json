@@ -17,6 +17,7 @@
     "artists:set": "bun run scripts/set-artist.ts",
     "artists:delete": "bun run scripts/delete-artists.ts",
     "artists:backfill": "bun run scripts/backfill-artists.ts",
+    "streaks:backfill": "bun run scripts/backfill-streaks.ts",
     "films:set": "bun run scripts/set-film.ts",
     "films:schedule": "bun run scripts/schedule-films.ts",
     "films:delete": "bun run scripts/delete-films.ts",
