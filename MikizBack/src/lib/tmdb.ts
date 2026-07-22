@@ -37,7 +37,15 @@ export type TmdbSearchResult = {
 };
 
 const SEARCH_CACHE_TTL_MS = 90_000;
+const SEARCH_CACHE_MAX_SIZE = 200;
 const searchCache = new Map<string, { results: TmdbSearchResult[]; expiresAt: number }>();
+
+function pruneSearchCache() {
+  const now = Date.now();
+  for (const [key, entry] of searchCache) {
+    if (entry.expiresAt <= now) searchCache.delete(key);
+  }
+}
 
 export async function searchTmdbMovies(q: string): Promise<TmdbSearchResult[]> {
   const key = q.trim().toLowerCase();
@@ -68,6 +76,11 @@ export async function searchTmdbMovies(q: string): Promise<TmdbSearchResult[]> {
     poster: m.poster_path ? `https://image.tmdb.org/t/p/w92${m.poster_path}` : null,
   }));
 
+  pruneSearchCache();
+  if (searchCache.size >= SEARCH_CACHE_MAX_SIZE) {
+    const oldestKey = searchCache.keys().next().value;
+    if (oldestKey !== undefined) searchCache.delete(oldestKey);
+  }
   searchCache.set(key, { results, expiresAt: Date.now() + SEARCH_CACHE_TTL_MS });
   return results;
 }

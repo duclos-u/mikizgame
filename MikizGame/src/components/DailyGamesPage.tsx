@@ -278,7 +278,7 @@ function StreakPanel({
   const daysSinceMonday = (new Date().getUTCDay() + 6) % 7
 
   const { data: history } = useCachedFetch<StreakDay[] | null>(
-    'streak-history',
+    `streak-history-${user?.id ?? 'anon'}`,
     () =>
       user
         ? api.streak.history(daysSinceMonday + 1).then(({ days }) => days)

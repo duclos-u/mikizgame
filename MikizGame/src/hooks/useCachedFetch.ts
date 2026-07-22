@@ -26,6 +26,13 @@ export function useCachedFetch<T>(
   const [error, setError] = useState(false)
 
   useEffect(() => {
+    // Resync to the (possibly new) key's cached value before doing anything else,
+    // so switching keys repaints from cache instead of showing the previous key's data.
+    const hasCachedForKey = memoryCache.has(key)
+    setData(hasCachedForKey ? (memoryCache.get(key) as T) : null)
+    setLoading(enabled && !hasCachedForKey)
+    setError(false)
+
     if (!enabled) return
     let cancelled = false
 
@@ -35,6 +42,7 @@ export function useCachedFetch<T>(
         memoryCache.set(key, result)
         setData(result)
         setLoading(false)
+        setError(false)
       })
       .catch(() => {
         if (cancelled) return
