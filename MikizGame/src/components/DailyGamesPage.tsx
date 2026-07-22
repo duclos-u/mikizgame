@@ -69,7 +69,7 @@ function HeroDaily({
             Un nouveau défi<br />chaque jour à minuit.
           </h1>
           <p className="hero-sub">
-            {todayLabel}. Joue, compare ton score avec tes amis et garde ta série en vie.
+            {todayLabel}. Joue, compare ton score avec tes ami·es et garde ta série en vie.
           </p>
           <div className="hero-cta">
             <Link to="/leaderboard" className="btn btn-ghost btn-lg">
@@ -94,7 +94,7 @@ function HeroDaily({
               <b style={{ color: `color-mix(in oklch, ${game.accent} 90%, var(--text))` }}>
                 {game.players.toLocaleString('fr-FR')}
               </b>
-              <span>joueurs aujourd'hui</span>
+              <span>joueur·euses aujourd'hui</span>
             </div>
             <div>
               <b>{avgTries != null ? avgTries : '—'}</b>
@@ -148,7 +148,7 @@ function GameCard({
             className="game-card-players"
             style={{ color: `color-mix(in oklch, ${game.accent} 80%, var(--muted))` }}
           >
-            ● {game.players.toLocaleString('fr-FR')} joueurs
+            ● {game.players.toLocaleString('fr-FR')} joueur·euses
           </span>
         )}
       </div>
@@ -206,7 +206,7 @@ function MiniLeaderboard({
     <div className="mini-lb">
       <div className="mini-lb-head">
         <div>
-          <div className="section-kicker">Entre amis</div>
+          <div className="section-kicker">Entre ami·es</div>
           <div className="mini-lb-title">Classement du jour</div>
         </div>
         <Link to="/leaderboard" className="btn btn-ghost btn-sm">

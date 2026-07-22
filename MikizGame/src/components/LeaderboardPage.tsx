@@ -7,21 +7,14 @@ import {
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
 import { useCachedFetch } from '../hooks/useCachedFetch'
+import { ScoringInfoModal } from './ScoringInfoModal'
 
-const GAME_LABELS: Record<string, string> = {
-  motivex: 'Motivex',
-  cinemaxd: 'Cinemaxd',
-  politeki: 'Politeki',
-  vinymix: 'Vinymix',
+function gameBySlug(slug: string): Game | undefined {
+  return GAMES.find((g) => (g.slug ?? g.id) === slug)
 }
 
-
-function gameLabel(slug: string) {
-  return GAME_LABELS[slug] ?? slug.charAt(0).toUpperCase() + slug.slice(1)
-}
-
-function gameShort(slug: string) {
-  return (GAME_LABELS[slug] ?? slug).slice(0, 1).toUpperCase()
+function gameLabel(slug: string): string {
+  return gameBySlug(slug)?.name ?? slug.charAt(0).toUpperCase() + slug.slice(1)
 }
 
 function getGameSlug(gameId: string): string {
@@ -142,6 +135,21 @@ function GameTabStrip({
   )
 }
 
+// ── Cross-game breakdown chip ─────────────────────────────────────────────────
+function GameChip({ slug, points, played }: { slug: string; points: number; played: boolean }) {
+  const game = gameBySlug(slug)
+  return (
+    <span
+      className={`lb-chip${played ? ' lb-chip-highlight' : ''}`}
+      style={{ '--g': game?.accent } as React.CSSProperties}
+      title={gameLabel(slug)}
+    >
+      <span className="lb-chip-icon">{game?.icon ?? '❔'}</span>
+      <span className="lb-chip-pts">{points}</span>
+    </span>
+  )
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 export function LeaderboardPage() {
   const { user } = useAuth()
@@ -154,6 +162,7 @@ export function LeaderboardPage() {
   const [scope, setScope] = useState<'daily' | 'all'>('daily')
   type AllTimeSort = 'points' | 'wins' | 'avg'
   const [allTimeSort, setAllTimeSort] = useState<AllTimeSort>('points')
+  const [scoringModalOpen, setScoringModalOpen] = useState(false)
 
   const { data: dailyBoard, loading: dailyLoading } = useCachedFetch(
     'lb-daily',
@@ -233,6 +242,9 @@ export function LeaderboardPage() {
         <div className="section-kicker">Classement</div>
         <h1 className="lb-title">Qui domine aujourd'hui ?</h1>
         <p className="lb-sub">Compare tes scores par jeu, en quotidien ou sur tous les temps.</p>
+        <button type="button" className="lb-info-btn" onClick={() => setScoringModalOpen(true)}>
+          <span aria-hidden="true">ⓘ</span> Comment sont calculés les points ?
+        </button>
       </div>
 
       <div className="lb-controls">
@@ -284,7 +296,7 @@ export function LeaderboardPage() {
             }}
           >
             <span>#</span>
-            <span>Joueur</span>
+            <span>Joueur·euse</span>
             {showBreakdown && <span>Détail</span>}
             <span className="ta-r">Points</span>
           </div>
@@ -325,15 +337,7 @@ export function LeaderboardPage() {
                       <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                         {visibleCrossGames.map((g) => {
                           const bd = entry.breakdown[g]
-                          return (
-                            <span
-                              key={g}
-                              className={`lb-chip${bd ? ' lb-chip-highlight' : ''}`}
-                              title={gameLabel(g)}
-                            >
-                              {gameShort(g)}: {bd ? bd.points : 0}
-                            </span>
-                          )
+                          return <GameChip key={g} slug={g} points={bd ? bd.points : 0} played={!!bd} />
                         })}
                       </span>
                     )}
@@ -380,7 +384,7 @@ export function LeaderboardPage() {
             }}
           >
             <span>#</span>
-            <span>Joueur</span>
+            <span>Joueur·euse</span>
             {showBreakdown && <span>Détail</span>}
             <span className="ta-r">Points</span>
           </div>
@@ -421,15 +425,7 @@ export function LeaderboardPage() {
                       <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                         {visibleCrossGames.map((g) => {
                           const bd = entry.breakdown[g]
-                          return (
-                            <span
-                              key={g}
-                              className={`lb-chip${bd ? ' lb-chip-highlight' : ''}`}
-                              title={gameLabel(g)}
-                            >
-                              {gameShort(g)}: {bd ? bd.points : 0}
-                            </span>
-                          )
+                          return <GameChip key={g} slug={g} points={bd ? bd.points : 0} played={!!bd} />
                         })}
                       </span>
                     )}
@@ -462,7 +458,7 @@ export function LeaderboardPage() {
               style={{ gridTemplateColumns: '32px 1fr 70px 70px' }}
             >
               <span>#</span>
-              <span>Joueur</span>
+              <span>Joueur·euse</span>
               <span className="ta-r">Essais</span>
               <span className="ta-r">Points</span>
             </div>
@@ -533,7 +529,7 @@ export function LeaderboardPage() {
             style={{ gridTemplateColumns: '32px 1fr 70px 70px 80px' }}
           >
             <span>#</span>
-            <span>Joueur</span>
+            <span>Joueur·euse</span>
             <button
               type="button"
               className={`lb-sort-btn${allTimeSort === 'wins' ? ' active' : ''}`}
@@ -598,6 +594,7 @@ export function LeaderboardPage() {
         </div>
       )}
 
+      <ScoringInfoModal open={scoringModalOpen} onClose={() => setScoringModalOpen(false)} />
     </div>
   )
 }

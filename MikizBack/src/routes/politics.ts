@@ -94,14 +94,14 @@ politics.get("/session", optionalAuthMiddleware, async (c) => {
   const today = todayDate();
 
   const targetIndex = await getDailyPoliticianIndex();
-  if (targetIndex === null) return c.json({ error: "Politicien du jour non configuré" }, 503);
+  if (targetIndex === null) return c.json({ error: "Politicien·ne du jour non configuré·e" }, 503);
 
   const session = await db.query.politicsSessions.findFirst({
     where: and(eq(politicsSessions.userId, userId), eq(politicsSessions.date, today)),
   });
 
   const target = getPolitician(targetIndex);
-  if (!target) return c.json({ error: "Politicien introuvable" }, 500);
+  if (!target) return c.json({ error: "Politicien·ne introuvable" }, 500);
 
   if (!session) return c.json({ session: null });
 
@@ -126,12 +126,12 @@ politics.post("/guess", optionalAuthMiddleware, zValidator("json", guessSchema),
   const { politicianIndex } = c.req.valid("json");
 
   const targetIndex = await getDailyPoliticianIndex();
-  if (targetIndex === null) return c.json({ error: "Politicien du jour non configuré" }, 503);
+  if (targetIndex === null) return c.json({ error: "Politicien·ne du jour non configuré·e" }, 503);
 
   const guess = getPolitician(politicianIndex);
   const target = getPolitician(targetIndex);
 
-  if (!guess) return c.json({ error: "Politicien introuvable" }, 404);
+  if (!guess) return c.json({ error: "Politicien·ne introuvable" }, 404);
   if (!target) return c.json({ error: "Erreur serveur" }, 500);
 
   const correct = politicianIndex === targetIndex;
@@ -234,7 +234,7 @@ politics.post("/daily", zValidator("json", dailySchema), async (c) => {
   const targetDate = date ?? todayDate();
 
   const politician = getPolitician(politicianIndex);
-  if (!politician) return c.json({ error: "Politicien introuvable" }, 404);
+  if (!politician) return c.json({ error: "Politicien·ne introuvable" }, 404);
 
   await db
     .insert(politicsDaily)

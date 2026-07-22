@@ -60,6 +60,10 @@ When modifying response shapes, always update `MikizBack/src/types/api.ts` first
 
 Raw CSV data in `data/` (French deputies, government members, presidents since the 5th Republic) is enriched by Python scripts in `scripts/` (fetching birthdates, birth locations, origin regions, party affiliations, popularity scores, etc.) and produces the static dataset at `MikizBack/src/data/politics.json` (~1.4 MB). This file is loaded by the backend at startup and must not be hand-edited. Run `scripts/run_pipeline.sh` to execute the full enrichment pipeline end-to-end.
 
+## Inclusive Language
+
+For any user-facing text describing a job title, role, or status (French UI copy, game labels, credits, hints), use inclusive writing (point médian, e.g. "Sénateur·rice", "Réalisateur·rice") whenever the gender of the person(s) concerned is unknown or can vary (e.g. game data covering both men and women). Do not rewrite historical facts about a specific, named real person whose gender is known — match their actual gender instead (e.g. keep "présidente" for a woman who held the office).
+
 ## Deployment
 
 Both sub-projects deploy independently on [Railway](https://railway.app). Each has its own `railway.toml` at the sub-project root.

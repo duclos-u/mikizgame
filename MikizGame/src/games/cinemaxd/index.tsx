@@ -314,7 +314,7 @@ export default function FilmDuJour() {
             </span>
             <span className="cinemaxd-legend-item">
               <span className="cinemaxd-legend-actor-dot" />
-              acteur en commun
+              acteur·rice en commun
             </span>
           </div>
         )}

@@ -292,7 +292,7 @@ function PolitikiForm({ date, onSaved, onCancel }: { date: string; onSaved: (ent
     <div className="schedule-form">
       <input
         type="text"
-        placeholder="Rechercher un politicien…"
+        placeholder="Rechercher un·e politicien·ne…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="schedule-input"

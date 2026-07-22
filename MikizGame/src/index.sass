@@ -853,6 +853,24 @@ body
   font-size: 16px
   color: var(--text-2)
 
+.lb-info-btn
+  display: inline-flex
+  align-items: center
+  gap: 6px
+  margin-top: 10px
+  background: none
+  border: none
+  padding: 0
+  font-family: var(--font)
+  font-size: 13px
+  font-weight: 600
+  color: var(--muted)
+  cursor: pointer
+  transition: color 0.15s
+
+  &:hover
+    color: var(--accent)
+
 .lb-controls
   display: flex
   align-items: center
@@ -1255,6 +1273,53 @@ label
 .streak-share-modal
   max-width: 420px
 
+.scoring-modal
+  max-width: 440px
+
+.scoring-table-split
+  display: grid
+  grid-template-columns: 1fr 1fr
+  border: 1px solid var(--border)
+  border-radius: calc(var(--radius) * 0.6)
+  overflow: hidden
+  margin-bottom: 0.5rem
+
+.scoring-col
+  display: flex
+  flex-direction: column
+
+  &:first-child
+    border-right: 1px solid var(--border)
+
+.scoring-row
+  display: flex
+  justify-content: space-between
+  gap: 0.5rem
+  padding: 0.35rem 0.75rem
+  font-size: 0.8rem
+  font-family: var(--mono)
+  border-bottom: 1px solid var(--border)
+
+  &:last-child
+    border-bottom: none
+
+.scoring-row-muted
+  display: flex
+  justify-content: flex-end
+  font-size: 0.78rem
+  font-family: var(--mono)
+  color: var(--muted)
+  margin-bottom: 1.1rem
+
+.scoring-footnote
+  font-size: 0.78rem
+  color: var(--muted)
+  line-height: 1.45
+  margin-bottom: 1.1rem
+
+  strong
+    color: var(--text)
+
 .streak-share-canvas
   width: 100%
   height: auto
@@ -1456,20 +1521,27 @@ header
 .lb-chip
   display: inline-flex
   align-items: center
-  font-size: 0.66rem
+  gap: 4px
+  font-size: 0.74rem
   font-weight: 600
   font-family: var(--mono)
-  padding: 1px 5px
-  border-radius: 3px
+  padding: 2px 6px
+  border-radius: 4px
   background: var(--card-2)
   border: 1px solid var(--border)
-  color: var(--muted)
+  color: var(--text-2)
   white-space: nowrap
 
   &-highlight
-    background: color-mix(in oklch, var(--accent) 12%, var(--card))
-    border-color: color-mix(in oklch, var(--accent) 28%, var(--border))
-    color: var(--accent)
+    color: var(--text)
+
+.lb-chip-icon
+  font-size: 0.85rem
+  line-height: 1
+
+.lb-chip-pts
+  min-width: 1.6em
+  text-align: left
 
 .mock-badge
   font-size: 0.68rem

@@ -188,10 +188,21 @@ function abbrevRegion(region: string | null): string {
 }
 
 function abbrevFonction(f: PoliticsMandatType): string {
-  if (f === 'Président de la République') return 'Président'
-  if (f === 'Premier ministre') return 'Premier min.'
+  if (f === 'Président de la République') return 'Président·e'
+  if (f === 'Premier ministre') return 'Premier·ère min.'
   if (f === 'Chef de parti') return 'Chef parti'
-  if (f === 'Sénateur') return 'Sénateur'
+  if (f === 'Sénateur') return 'Sénateur·rice'
+  if (f === 'Député') return 'Député·e'
+  if (f === 'Eurodéputé') return 'Eurodéputé·e'
+  return f
+}
+
+function inclusiveFonction(f: PoliticsMandatType): string {
+  if (f === 'Président de la République') return 'Président·e de la République'
+  if (f === 'Premier ministre') return 'Premier·ère ministre'
+  if (f === 'Sénateur') return 'Sénateur·rice'
+  if (f === 'Député') return 'Député·e'
+  if (f === 'Eurodéputé') return 'Eurodéputé·e'
   return f
 }
 
@@ -451,7 +462,7 @@ function TableauRow({ t }: { t: PoliticsTentative }) {
               className="politeki-chip"
               style={{ cssText: matching.includes(a as PoliticsMandatType) ? CHIP.match : CHIP.grey } as React.CSSProperties}
             >
-              {a}
+              {inclusiveFonction(a as PoliticsMandatType)}
             </span>
           ))}
         </div>
@@ -655,7 +666,7 @@ export default function Politeki() {
         const msg = err instanceof Error ? err.message : String(err)
         setError(
           msg.toLowerCase().includes('configuré')
-            ? "Aucun politicien configuré pour aujourd'hui."
+            ? "Aucun·e politicien·ne configuré·e pour aujourd'hui."
             : 'Une erreur est survenue. Réessaie.',
         )
       } finally {
@@ -715,7 +726,7 @@ export default function Politeki() {
   if (loading) {
     return (
       <div className="game-shell">
-        <GameHeader title="Politeki" subtitle={`Devine le politicien du jour en ${MAX_ATTEMPTS} essais`} />
+        <GameHeader title="Politeki" subtitle={`Devine le·la politicien·ne du jour en ${MAX_ATTEMPTS} essais`} />
         <main className="container">
           <p style={{ color: 'var(--muted)', textAlign: 'center', paddingTop: '3rem' }}>
             Chargement…
@@ -729,7 +740,7 @@ export default function Politeki() {
     <div className="game-shell">
       <GameHeader
         title="Politeki"
-        subtitle={`Devine le politicien du jour en ${MAX_ATTEMPTS} essais`}
+        subtitle={`Devine le·la politicien·ne du jour en ${MAX_ATTEMPTS} essais`}
       />
 
       <main className="container">
@@ -800,7 +811,7 @@ export default function Politeki() {
                           className="politeki-chip"
                           style={{ cssText: CHIP.match } as React.CSSProperties}
                         >
-                          {a}
+                          {inclusiveFonction(a as PoliticsMandatType)}
                         </span>
                       ))
                     : <span style={{ fontSize: 14, fontWeight: 700, color: 'oklch(0.55 0.02 64)' }}>—</span>}
@@ -854,7 +865,7 @@ export default function Politeki() {
                     }}
                     onFocus={() => query.trim().length >= 2 && setOpen(true)}
                     onBlur={() => setTimeout(() => setOpen(false), 150)}
-                    placeholder="Tape le nom d'un politicien…"
+                    placeholder="Tape le nom d'un·e politicien·ne…"
                     autoComplete="off"
                     disabled={submitting}
                     className="politeki-search-input"
@@ -862,7 +873,7 @@ export default function Politeki() {
                   {open && (
                     <ul className="politeki-dropdown">
                       {suggestions.length === 0 ? (
-                        <li className="politeki-dropdown-empty">Aucun politicien trouvé</li>
+                        <li className="politeki-dropdown-empty">Aucun·e politicien·ne trouvé·e</li>
                       ) : (
                         suggestions.map((s, i) => (
                           <li
@@ -949,7 +960,7 @@ export default function Politeki() {
           {/* ── Footer ────────────────────────────────────────────────────── */}
           <div className="politeki-footer">
             <span style={{ fontSize: 13, color: 'var(--muted)' }}>
-              Un nouveau politicien chaque jour.
+              Un·e nouveau·elle politicien·ne chaque jour.
             </span>
             {import.meta.env.DEV && (
               <button
@@ -1040,7 +1051,7 @@ export default function Politeki() {
                   <div className="politeki-modal-tile">
                     <div className="politeki-modal-tile-label">Fonction</div>
                     <div className="politeki-modal-tile-val">
-                      {lastFonctions.length > 0 ? lastFonctions.join(' · ') : '—'}
+                      {lastFonctions.length > 0 ? lastFonctions.map(inclusiveFonction).join(' · ') : '—'}
                     </div>
                   </div>
                 </div>
@@ -1048,7 +1059,7 @@ export default function Politeki() {
                 {lastAnciennes.length > 0 && (
                   <div className="politeki-modal-tile" style={{ textAlign: 'left', marginTop: 8 }}>
                     <div className="politeki-modal-tile-label">Anciennes fonctions</div>
-                    <div className="politeki-modal-tile-val">{lastAnciennes.join(' · ')}</div>
+                    <div className="politeki-modal-tile-val">{lastAnciennes.map(inclusiveFonction).join(' · ')}</div>
                   </div>
                 )}
               </>

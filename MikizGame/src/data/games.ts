@@ -94,7 +94,7 @@ export const GAMES: Game[] = [
     id: 'politics',
     slug: 'politeki',
     name: 'Politeki',
-    desc: 'Devine le politicien du jour en 10 essais.',
+    desc: 'Devine le·la politicien·ne du jour en 10 essais.',
     icon: '🗳️',
     cat: 'politique',
     tag: 'tag-politique',
