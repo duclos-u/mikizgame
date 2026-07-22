@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, type CrossGameEntry, type StreakDay } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
+import { useCachedFetch } from '../hooks/useCachedFetch'
 import { StreakShareCard } from './StreakShareCard'
 
 // ── Pill ─────────────────────────────────────────────────────────────────────
@@ -270,23 +271,20 @@ function StreakPanel({
   longestStreak: number
 }) {
   const { user } = useAuth()
-  const [history, setHistory] = useState<StreakDay[] | null>(null)
   const [shareOpen, setShareOpen] = useState(false)
   const weekdayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
   // Monday = 0 ... Sunday = 6, based on JS's Sunday-first getUTCDay().
   // Uses UTC to match the backend's UTC-based day boundary (see MikizBack/src/lib/date.ts).
   const daysSinceMonday = (new Date().getUTCDay() + 6) % 7
 
-  useEffect(() => {
-    if (!user) {
-      setHistory(null)
-      return
-    }
-    api.streak
-      .history(daysSinceMonday + 1)
-      .then(({ days }) => setHistory(days))
-      .catch(() => setHistory(null))
-  }, [user, daysSinceMonday])
+  const { data: history } = useCachedFetch<StreakDay[] | null>(
+    `streak-history-${user?.id ?? 'anon'}`,
+    () =>
+      user
+        ? api.streak.history(daysSinceMonday + 1).then(({ days }) => days)
+        : Promise.resolve(null),
+    [user, daysSinceMonday],
+  )
 
   // Always show the current Monday-Sunday calendar week. `history` covers
   // Monday..today (oldest first); days later this week are synthesized as
@@ -368,7 +366,6 @@ type DailyGamesPageProps = {
 
 export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps) {
   const { user } = useAuth()
-  const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
 
   const internalDone: Record<string, boolean> = Object.fromEntries(
     GAMES.filter((g) => g.checkDoneToday).map((g) => [g.id, g.checkDoneToday!()]),
@@ -377,20 +374,21 @@ export function DailyGamesPage({ doneIds, onPlayExternal }: DailyGamesPageProps)
     ...doneIds.filter((id) => !(id in internalDone)),
     ...Object.entries(internalDone).filter(([, v]) => v).map(([id]) => id),
   ]
-  const [lbLoading, setLbLoading] = useState(true)
-  const [playerCounts, setPlayerCounts] = useState<Record<string, number>>({})
-  const [dailyAvgTries, setDailyAvgTries] = useState<Record<string, number | null>>({})
 
-  useEffect(() => {
-    Promise.all([
-      api.leaderboard.getCross().catch(() => ({ entries: [] as CrossGameEntry[] })),
-      api.leaderboard.getCounts().catch(() => ({ counts: {} as Record<string, number>, avgTries: {} as Record<string, number | null> })),
-    ]).then(([{ entries }, { counts, avgTries }]) => {
-      setCrossEntries(entries)
-      setPlayerCounts(counts)
-      setDailyAvgTries(avgTries)
-    }).finally(() => setLbLoading(false))
-  }, [])
+  const { data: hubLeaderboard, loading: lbLoading } = useCachedFetch(
+    'hub-leaderboard',
+    () =>
+      Promise.all([
+        api.leaderboard.getCross().catch(() => ({ entries: [] as CrossGameEntry[] })),
+        api.leaderboard
+          .getCounts()
+          .catch(() => ({ counts: {} as Record<string, number>, avgTries: {} as Record<string, number | null> })),
+      ]).then(([{ entries }, { counts, avgTries }]) => ({ entries, counts, avgTries })),
+    [],
+  )
+  const crossEntries = hubLeaderboard?.entries ?? []
+  const playerCounts = hubLeaderboard?.counts ?? {}
+  const dailyAvgTries = hubLeaderboard?.avgTries ?? {}
 
   const todayLabel = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',

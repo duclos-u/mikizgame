@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import {
   api,
   type ProfileGameRank,
@@ -8,6 +8,7 @@ import {
 } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { GAMES } from '../data/games'
+import { useCachedFetch } from '../hooks/useCachedFetch'
 import { formatDayFr } from '../utils/date'
 import { PlayHeatmap } from './PlayHeatmap'
 
@@ -282,17 +283,19 @@ type ProfileData = {
 
 export function ProfilePage({ onLoginClick }: ProfilePageProps) {
   const { user, logout, loading: authLoading } = useAuth()
-  const [data, setData] = useState<ProfileData | null>(null)
-  const [error, setError] = useState(false)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const userId = user?.id
 
-  useEffect(() => {
-    if (!userId) return
-    Promise.all([api.profile.summary(), api.streak.milestones()])
-      .then(([summary, milestones]) => setData({ userId, summary, milestones }))
-      .catch(() => setError(true))
-  }, [userId])
+  const { data, error } = useCachedFetch<ProfileData | null>(
+    `profile-summary-${userId ?? 'anon'}`,
+    () =>
+      userId
+        ? Promise.all([api.profile.summary(), api.streak.milestones()]).then(
+            ([summary, milestones]) => ({ userId, summary, milestones }),
+          )
+        : Promise.resolve(null),
+    [userId],
+  )
 
   // Ignore data fetched for a previously logged-in account.
   const current = userId && data?.userId === userId ? data : null

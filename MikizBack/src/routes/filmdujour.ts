@@ -14,7 +14,7 @@ import {
 } from "../lib/cinemaxd";
 import { todayDate } from "../lib/date";
 import { recordDailyPlay } from "../lib/streak";
-import { fetchFilmById } from "../lib/tmdb";
+import { fetchFilmById, searchTmdbMovies } from "../lib/tmdb";
 import { authMiddleware } from "../middleware/auth";
 
 const MAX_TENTATIVES = 10;
@@ -288,30 +288,8 @@ cinemaxdSearch.get("/search", async (c) => {
     return c.json({ error: "q doit faire au moins 3 caractères" }, 400);
   }
 
-  const apiKey = process.env.TMDB_API_KEY;
-  if (!apiKey) return c.json({ error: "TMDB non configuré" }, 502);
-
   try {
-    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(q)}&language=fr-FR&page=1&api_key=${apiKey}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`TMDB HTTP ${res.status}`);
-
-    const data = (await res.json()) as {
-      results: Array<{
-        id: number;
-        title: string;
-        release_date: string;
-        poster_path: string | null;
-      }>;
-    };
-
-    const films = data.results.slice(0, 20).map((m) => ({
-      tmdbId: m.id,
-      titre: m.title,
-      annee: m.release_date ? Number(m.release_date.slice(0, 4)) : null,
-      poster: m.poster_path ? `https://image.tmdb.org/t/p/w92${m.poster_path}` : null,
-    }));
-
+    const films = await searchTmdbMovies(q);
     return c.json(films);
   } catch (err) {
     console.error("[cinemaxd/search] TMDB error:", err);

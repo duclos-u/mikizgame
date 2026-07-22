@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   api,
-  type AllTimeEntry,
-  type CrossAllTimeEntry,
   type CrossGameEntry,
   type LeaderboardEntry,
 } from '../api/client'
 import { GAMES, type Game } from '../data/games'
 import { useAuth } from '../context/AuthContext'
+import { useCachedFetch } from '../hooks/useCachedFetch'
 
 const GAME_LABELS: Record<string, string> = {
   motivex: 'Motivex',
@@ -153,74 +152,55 @@ export function LeaderboardPage() {
   ]
   const [gameId, setGameId] = useState('general')
   const [scope, setScope] = useState<'daily' | 'all'>('daily')
-
-  const [crossEntries, setCrossEntries] = useState<CrossGameEntry[]>([])
-  const [crossGames, setCrossGames] = useState<string[]>([])
-  const [crossLoading, setCrossLoading] = useState(true)
-
-  const [perGameEntries, setPerGameEntries] = useState<Record<string, LeaderboardEntry[]>>({})
-  const [perGameLoading, setPerGameLoading] = useState(true)
-
-  const [allTimeEntries, setAllTimeEntries] = useState<AllTimeEntry[]>([])
-  const [allTimeLoading, setAllTimeLoading] = useState(true)
   type AllTimeSort = 'points' | 'wins' | 'avg'
   const [allTimeSort, setAllTimeSort] = useState<AllTimeSort>('points')
 
-  const [crossAllTimeEntries, setCrossAllTimeEntries] = useState<CrossAllTimeEntry[]>([])
-  const [crossAllTimeLoading, setCrossAllTimeLoading] = useState(false)
-
-  useEffect(() => {
-    api.leaderboard
-      .getCross()
-      .then(({ entries, games }) => {
-        setCrossEntries(entries)
-        setCrossGames(games)
-        return games
-      })
-      .then((games) =>
-        Promise.all(
+  const { data: dailyBoard, loading: dailyLoading } = useCachedFetch(
+    'lb-daily',
+    () =>
+      api.leaderboard.getCross().then(async ({ entries, games }) => {
+        const results = await Promise.all(
           games.map((g) =>
             api.leaderboard
               .get(g)
-              .then(({ entries }) => ({ game: g, entries }))
-              .catch(() => ({ game: g, entries: [] as LeaderboardEntry[] }))
-          )
+              .then(({ entries: gameEntries }) => ({ game: g, entries: gameEntries }))
+              .catch(() => ({ game: g, entries: [] as LeaderboardEntry[] })),
+          ),
         )
-      )
-      .then((results) => {
-        const map: Record<string, LeaderboardEntry[]> = {}
-        results.forEach(({ game, entries }) => {
-          map[game] = entries
+        const perGame: Record<string, LeaderboardEntry[]> = {}
+        results.forEach(({ game, entries: gameEntries }) => {
+          perGame[game] = gameEntries
         })
-        setPerGameEntries(map)
-      })
-      .catch(() => {})
-      .finally(() => {
-        setCrossLoading(false)
-        setPerGameLoading(false)
-      })
-  }, [])
+        return { entries, games, perGame }
+      }),
+    [],
+  )
+  const crossEntries = dailyBoard?.entries ?? []
+  const crossGames = dailyBoard?.games ?? []
+  const perGameEntries = dailyBoard?.perGame ?? {}
+  const crossLoading = dailyLoading
+  const perGameLoading = dailyLoading
 
-  useEffect(() => {
-    if (gameId === 'general' || scope !== 'all') return
-    setAllTimeLoading(true)
+  const { data: allTimeData, loading: allTimeLoading } = useCachedFetch(
+    `lb-alltime-${gameId}`,
+    () => api.leaderboard.getStats(getGameSlug(gameId)).then(({ entries }) => entries),
+    [gameId],
+    { enabled: gameId !== 'general' && scope === 'all' },
+  )
+  const allTimeEntries = allTimeData ?? []
+
+  const { data: crossAllTimeData, loading: crossAllTimeLoading } = useCachedFetch(
+    'lb-alltime-cross',
+    () => api.leaderboard.getCrossStats().then(({ entries }) => entries),
+    [],
+    { enabled: gameId === 'general' && scope === 'all' },
+  )
+  const crossAllTimeEntries = crossAllTimeData ?? []
+
+  function selectGame(id: string) {
+    setGameId(id)
     setAllTimeSort('points')
-    api.leaderboard
-      .getStats(getGameSlug(gameId))
-      .then(({ entries }) => setAllTimeEntries(entries))
-      .catch(() => {})
-      .finally(() => setAllTimeLoading(false))
-  }, [scope, gameId])
-
-  useEffect(() => {
-    if (gameId !== 'general' || scope !== 'all') return
-    setCrossAllTimeLoading(true)
-    api.leaderboard
-      .getCrossStats()
-      .then(({ entries }) => setCrossAllTimeEntries(entries))
-      .catch(() => {})
-      .finally(() => setCrossAllTimeLoading(false))
-  }, [scope, gameId])
+  }
 
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -259,7 +239,7 @@ export function LeaderboardPage() {
         <GameTabStrip
           activeId={gameId}
           games={allTabs}
-          onChange={setGameId}
+          onChange={selectGame}
         />
         <div className="lb-control-right">
           <div className="seg">

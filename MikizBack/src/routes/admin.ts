@@ -149,14 +149,15 @@ admin.get("/schedule/:game", adminAuthMiddleware, async (c) => {
       .from(cinemaxdDaily)
       .where(between(cinemaxdDaily.date, from, to))
       .orderBy(cinemaxdDaily.date);
-    for (const r of rows) {
-      const film = await fetchFilmById(r.tmdbId);
+    const films = await Promise.all(rows.map((r) => fetchFilmById(r.tmdbId)));
+    rows.forEach((r, i) => {
+      const film = films[i];
       entries.push({
         date: r.date,
         label: film?.titre ?? `Film #${r.tmdbId}`,
         payload: { tmdbId: r.tmdbId },
       });
-    }
+    });
   } else if (game === "politeki") {
     const rows = await db
       .select({ date: politicsDaily.date, politicianIndex: politicsDaily.politicianIndex })

@@ -29,6 +29,62 @@ type TmdbCredits = {
   crew: { name: string; job: string; profile_path: string | null }[];
 };
 
+export type TmdbSearchResult = {
+  tmdbId: number;
+  titre: string;
+  annee: number | null;
+  poster: string | null;
+};
+
+const SEARCH_CACHE_TTL_MS = 90_000;
+const SEARCH_CACHE_MAX_SIZE = 200;
+const searchCache = new Map<string, { results: TmdbSearchResult[]; expiresAt: number }>();
+
+function pruneSearchCache() {
+  const now = Date.now();
+  for (const [key, entry] of searchCache) {
+    if (entry.expiresAt <= now) searchCache.delete(key);
+  }
+}
+
+export async function searchTmdbMovies(q: string): Promise<TmdbSearchResult[]> {
+  const key = q.trim().toLowerCase();
+
+  const cached = searchCache.get(key);
+  if (cached && cached.expiresAt > Date.now()) return cached.results;
+
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) throw new Error("TMDB non configuré");
+
+  const url = `${BASE}/search/movie?query=${encodeURIComponent(q)}&language=fr-FR&page=1&api_key=${apiKey}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`TMDB HTTP ${res.status}`);
+
+  const data = (await res.json()) as {
+    results: Array<{
+      id: number;
+      title: string;
+      release_date: string;
+      poster_path: string | null;
+    }>;
+  };
+
+  const results: TmdbSearchResult[] = data.results.slice(0, 20).map((m) => ({
+    tmdbId: m.id,
+    titre: m.title,
+    annee: m.release_date ? Number(m.release_date.slice(0, 4)) : null,
+    poster: m.poster_path ? `https://image.tmdb.org/t/p/w92${m.poster_path}` : null,
+  }));
+
+  pruneSearchCache();
+  if (searchCache.size >= SEARCH_CACHE_MAX_SIZE) {
+    const oldestKey = searchCache.keys().next().value;
+    if (oldestKey !== undefined) searchCache.delete(oldestKey);
+  }
+  searchCache.set(key, { results, expiresAt: Date.now() + SEARCH_CACHE_TTL_MS });
+  return results;
+}
+
 export async function fetchFilmById(id: number): Promise<Film | null> {
   const cached = getCache(id);
   if (cached) return cached;
