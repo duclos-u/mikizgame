@@ -129,14 +129,21 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
   let streakUpdate: Awaited<ReturnType<typeof recordDailyPlay>> | null = null;
   if (newStatus === "in_progress") {
     if (!existing) {
-      await db.insert(chainapanSessions).values({
-        userId,
-        dailyId: daily.id,
-        date: today,
-        steps: updatedSteps,
-        status: newStatus,
-        completedAt,
-      });
+      const [claimed] = await db
+        .insert(chainapanSessions)
+        .values({
+          userId,
+          dailyId: daily.id,
+          date: today,
+          steps: updatedSteps,
+          status: newStatus,
+          completedAt,
+        })
+        .onConflictDoNothing({ target: [chainapanSessions.userId, chainapanSessions.date] })
+        .returning({ id: chainapanSessions.id });
+      if (!claimed) {
+        return c.json({ error: "Game already completed for today" }, 409);
+      }
     } else {
       await db
         .update(chainapanSessions)
@@ -146,23 +153,34 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
   } else {
     const gameId = await getChainapanGameId();
     const minSteps = (daily.solution?.length ?? 2) - 1;
-    await db.transaction(async (tx) => {
+    const claimed = await db.transaction(async (tx) => {
+      let ownsSession: boolean;
       if (!existing) {
-        await tx.insert(chainapanSessions).values({
-          userId,
-          dailyId: daily.id,
-          date: today,
-          steps: updatedSteps,
-          status: newStatus,
-          completedAt,
-        });
+        const [row] = await tx
+          .insert(chainapanSessions)
+          .values({
+            userId,
+            dailyId: daily.id,
+            date: today,
+            steps: updatedSteps,
+            status: newStatus,
+            completedAt,
+          })
+          .onConflictDoNothing({ target: [chainapanSessions.userId, chainapanSessions.date] })
+          .returning({ id: chainapanSessions.id });
+        ownsSession = !!row;
       } else {
-        await tx
+        const [row] = await tx
           .update(chainapanSessions)
           .set({ steps: updatedSteps, status: newStatus, completedAt })
-          .where(eq(chainapanSessions.id, existing.id));
+          .where(
+            and(eq(chainapanSessions.id, existing.id), eq(chainapanSessions.status, "in_progress")),
+          )
+          .returning({ id: chainapanSessions.id });
+        ownsSession = !!row;
       }
-      if (gameId) {
+
+      if (ownsSession && gameId) {
         await tx
           .insert(leaderboardEntries)
           .values({
@@ -173,7 +191,12 @@ chainapan.post("/step", authMiddleware, zValidator("json", stepSchema), async (c
           })
           .onConflictDoNothing();
       }
+      return ownsSession;
     });
+
+    if (!claimed) {
+      return c.json({ error: "Game already completed for today" }, 409);
+    }
     streakUpdate = await recordDailyPlay(userId);
   }
 
