@@ -49,10 +49,10 @@ for (const session of completedSessions) {
     if (existing.score !== null && existing.score <= 0) {
       await db
         .update(leaderboardEntries)
-        .set({ score: Math.max(1, existing.score) })
+        .set({ score })
         .where(eq(leaderboardEntries.id, existing.id));
       console.log(
-        `  FIX   userId=${session.userId} date=${session.date} score ${existing.score} -> ${Math.max(1, existing.score)}`,
+        `  FIX   userId=${session.userId} date=${session.date} score ${existing.score} -> ${score ?? "null (loss)"}`,
       );
       corrected++;
     } else {
